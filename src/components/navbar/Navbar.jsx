@@ -23,19 +23,19 @@ function Navbar() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className={`collapse navbar-collapse ${isCollapsed ? '' : 'show'}`} id="navbarSupportedContent">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
                         <li className="nav-item">
 
-                            <Link to="/applicant"><a className="nav-link active" aria-current="page">Home</a></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/applicant">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/applicant/jobs"><a className="nav-link active" aria-current="page">Jobs</a></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/applicant/jobs">Jobs</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/applicant/saved"><a className="nav-link active" aria-current="page">Saved</a></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/applicant/saved">Saved</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/applicant/applications"><a className="nav-link active" aria-current="page">Applications</a></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/applicant/applications">Applications</Link>
                         </li>
                     </ul>
                 </div>

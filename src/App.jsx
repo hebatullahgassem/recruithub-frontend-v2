@@ -2,8 +2,8 @@ import React, { useState, Suspense } from 'react'
 import './App.css'
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Navbar from './components/Navbar/Navbar';
-import Footer from './components/Footer/Footer';
+import Navbar from './components/navbar/Navbar';
+import Footer from './components/footer/Footer';
 
 function App() {
   const Home = React.lazy(() => import("./pages/home/Home"));
@@ -14,6 +14,8 @@ function App() {
   const UserSaved = React.lazy(() => import("./pages/user/saved/Saved"));
   const UserApplications = React.lazy(() => import("./pages/user/applications/Applications"));
   const UserSingleApplications = React.lazy(() => import("./pages/user/singleApplication/SingleApplication"));
+  const Login = React.lazy(() => import("./pages/login/Login"));
+  const Register = React.lazy(() => import("./pages/register/Register"));
   return (
     <>
       <BrowserRouter>
@@ -23,6 +25,8 @@ function App() {
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/applicant" element={<UserHome />} />
               <Route path="/applicant/jobs" element={<UserJobs />} />
               <Route path="/applicant/saved" element={<UserSaved />} />
