@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import JobCard from "../../../components/job/JobCard"
 
 function CompanyJobs() {

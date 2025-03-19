@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router";
 import ApplicantFooter from "./ApplicantFooter";
 import CompanyFooter from "./CompanyFooter";
 
 function JobCard({ job, user }) {
   const keywords = job?.keywords?.join(" · ") || "";
+  const navigate = useNavigate();
   return (
     <div
       className="job-card"
@@ -16,7 +18,9 @@ function JobCard({ job, user }) {
         marginBottom: "16px",
         display: "flex",
         flexDirection: "column",
+        cursor: "pointer",
       }}
+      onClick={() => navigate(`/company/jobs/${job._id}`)}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
