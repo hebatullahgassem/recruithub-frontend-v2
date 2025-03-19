@@ -17,8 +17,8 @@ function JobDetails() {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhO-fRJWu5psjEYHnr8-cuBso-97hktHGIRwBXmSiDHN8w8-FX8G4eemvPvt6kgan2kTc&usqp=CAU",
   };
   return (
-    <>
-      <div className="container mt-4">
+    
+      <div className="mt-4" style={{maxWidth:'100vw'}}>
         <div className="card p-4 shadow-sm">
           <h2 className="text-primary">{dummyJob.title}</h2>
           <div className="d-flex align-items-center mt-1">
@@ -60,7 +60,6 @@ function JobDetails() {
           </div>
         </div>
       </div>
-    </>
   );
 }
 

@@ -4,25 +4,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import Voice from "../../../components/question/Voice";
+import Text from "../../../components/question/Text";
+import Boolean from "../../../components/question/Boolean";
 
 const JobApplication = () => {
-  const [radioValue, setRadioValue] = useState("");
-  const [textValue, setTextValue] = useState("");
-  const [voiceFile, setVoiceFile] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // Handle file upload
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size <= 5 * 1024 * 1024) {
-        setVoiceFile(file);
-        console.log("Uploaded file:", file.name);
-      } else {
-        alert("File size must be less than 5MB");
-      }
-    }
-  };
+  
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -31,34 +21,11 @@ const JobApplication = () => {
           Job Application
         </Typography>
 
-        {/* Question 1: Yes/No Radio */}
-        <Typography variant="h6" gutterBottom>Are you currently employed?</Typography>
-        <RadioGroup value={radioValue} onChange={(e) => setRadioValue(e.target.value)}>
-          <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-          <FormControlLabel value="no" control={<Radio />} label="No" />
-        </RadioGroup>
+        <Boolean/>
 
-        {/* Question 2: Text Input */}
-        <Typography variant="h6" gutterBottom>Tell us about yourself:</Typography>
-        <TextField
-          multiline
-          rows={4}
-          fullWidth
-          margin="normal"
-          value={textValue}
-          onChange={(e) => setTextValue(e.target.value)}
-          placeholder="Write a short introduction..."
-        />
+        <Text/>
 
-        {/* Question 3: Voice Input */}
-        <Typography variant="h6" gutterBottom>Record your introduction (Audio file, max 5MB):</Typography>
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          style={{ marginBottom: 10 }}
-        />
-        {voiceFile && <Typography variant="body2">Uploaded: {voiceFile.name}</Typography>}
+        <Voice />
 
         {/* Question 4: Date Picker */}
         <Typography variant="h6" gutterBottom>When can you start?</Typography>

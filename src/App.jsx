@@ -11,7 +11,6 @@ function App() {
   const CompanyJobs = React.lazy(() => import("./pages/company/jobs/Jobs"));
   const UserHome = React.lazy(() => import("./pages/user/home/Home"));
   const CompanyHome = React.lazy(() => import("./pages/company/home/Home"));
-  const CompanySchedule = React.lazy(() => import("./pages/company/Schedule/Schedule"));
   const UserSaved = React.lazy(() => import("./pages/user/saved/Saved"));
   const UserApplications = React.lazy(() => import("./pages/user/applications/Applications"));
   const UserSingleApplications = React.lazy(() => import("./pages/user/singleApplication/SingleApplication"));
@@ -35,7 +34,7 @@ function App() {
               <Route path="/applicant/jobs" element={<UserJobs />} />
               <Route path="/applicant/saved" element={<UserSaved />} />
               <Route path="/applicant/applications" element={<UserApplications />} />
-              <Route path='/applicant/applications/:id' element={<UserSingleApplications />} />
+              <Route path='/applicant/applications/:id' element={<JobApplication />} />
               <Route path="/company" element={<CompanyHome />} />
               <Route path="/company/jobs" element={<CompanyJobs />} />
               <Route path='/company/jobs/:id' element={<SingleJob />} />

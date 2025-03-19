@@ -5,7 +5,7 @@ function UserJobs() {
    return (
     <div>
       <h2>Available Jobs</h2>
-      <Link to="/singleApplication/singleApplication.jsx">
+      <Link to="/applicant/applications/1">
         <button>Apply for a Job</button>
       </Link>
     </div>

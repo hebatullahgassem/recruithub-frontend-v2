@@ -9,7 +9,7 @@ function SingleJob() {
     const { id } = useParams();
     const [clickedColumn, setClickedColumn] = useState(1);
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', maxWidth:'100vw' }}>
             <JobDetails />
             <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases}/>
             <ProcessCard column={clickedColumn} phases={phases}/>

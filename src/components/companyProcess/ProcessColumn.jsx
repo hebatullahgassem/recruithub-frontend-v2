@@ -4,13 +4,10 @@ import { useState } from "react";
 function ProcessColumn({setter, column, phases}) {
 
     return (
-        <>
         
         <ToggleButtonGroup
             orientation="horizontal"
-            exclusive
-            fullWidth
-            sx={{width: "90vw", mt:2}}
+            sx={{ mt:2, scale:0.8}}
             // onChange={handleChange}
         >
             {[1, 2, 3, 4, 5].map((val) => (
@@ -19,7 +16,6 @@ function ProcessColumn({setter, column, phases}) {
                 </ToggleButton>
             ))}
         </ToggleButtonGroup>
-        </>
     );
 }
 
