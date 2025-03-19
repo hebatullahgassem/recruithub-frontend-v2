@@ -37,6 +37,12 @@ function Navbar() {
                         <li className="nav-item">
                             <Link style={{ textDecoration: 'none' }} to="/applicant/applications">Applications</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link style={{ textDecoration: 'none' }} to="/company/talents">Talents</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link style={{ textDecoration: 'none' }} to="/company/jobs">My Jobs</Link>
+                        </li>
                     </ul>
                 </div>
             </div>

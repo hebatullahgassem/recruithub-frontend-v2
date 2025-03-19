@@ -16,6 +16,7 @@ function App() {
   const UserSingleApplications = React.lazy(() => import("./pages/user/singleApplication/SingleApplication"));
   const Login = React.lazy(() => import("./pages/login/Login"));
   const Register = React.lazy(() => import("./pages/register/Register"));
+  const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
   return (
     <>
       <BrowserRouter>
@@ -34,6 +35,7 @@ function App() {
               <Route path='/applicant/applications/:id' element={<UserSingleApplications />} />
               <Route path="/company" element={<CompanyHome />} />
               <Route path="/company/jobs" element={<CompanyJobs />} />
+              <Route path="/company/talents" element={<CompanyTalents />} />
             </Routes>
           </Suspense>
         </div>
