@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";  
 import { Button, Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
+import { ProfileContext } from "../../../context/ProfileContext";  
 
 const UserProfile = () => {
   const navigate = useNavigate();  
+  const { profileData } = useContext(ProfileContext); // ✅ Get updated profile data
 
   // Navigation functions
   const goToEditEducation = () => navigate("/user/profile/edit-education");
@@ -11,24 +13,14 @@ const UserProfile = () => {
   const goToEditSkills = () => navigate("/user/profile/edit-skills");
   const goToEditCV = () => navigate("/user/profile/edit-cv");
 
-  const [userData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    profileImage: "https://via.placeholder.com/150",
-    education: "B.Sc. in Computer Science",
-    experience: "3 years as a Software Engineer",
-    skills: "React, Node.js, MongoDB, Python",
-    cv: null,
-  });
-
   return (
     <Grid container sx={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card sx={{ width: "80%", maxWidth: "900px", height: "90vh", overflowY: "auto", padding: "20px" }}>
         {/* Top Section */}
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar src={userData.profileImage} sx={{ width: 100, height: 100, mr: 2 }} />
-            <Typography variant="h5">{userData.name}</Typography>
+            <Avatar src={profileData.profileImage} sx={{ width: 100, height: 100, mr: 2 }} />
+            <Typography variant="h5">{profileData.name}</Typography>
           </Grid>
           <Button variant="contained" color="primary" onClick={() => navigate("/user/profile/edit-personal")}>
             Edit Profile
@@ -42,7 +34,13 @@ const UserProfile = () => {
             <Card sx={{ mb: 2 }}>
               <CardContent>
                 <Typography variant="h6">Education</Typography>
-                <Typography>{userData.education}</Typography>
+                {profileData.education.length > 0 ? (
+                  profileData.education.map((edu, index) => (
+                    <Typography key={index}>{`${edu.degree} at ${edu.university}`}</Typography>
+                  ))
+                ) : (
+                  <Typography>No education added</Typography>
+                )}
                 <Button variant="outlined" color="primary" onClick={goToEditEducation} sx={{ mt: 1 }}>
                   Edit Education
                 </Button>
@@ -52,7 +50,13 @@ const UserProfile = () => {
             <Card sx={{ mb: 2 }}>
               <CardContent>
                 <Typography variant="h6">Experience</Typography>
-                <Typography>{userData.experience}</Typography>
+                {profileData.experience.length > 0 ? (
+                  profileData.experience.map((exp, index) => (
+                    <Typography key={index}>{`${exp.jobTitle} at ${exp.company}`}</Typography>
+                  ))
+                ) : (
+                  <Typography>No experience added</Typography>
+                )}
                 <Button variant="outlined" color="primary" onClick={goToEditExperience} sx={{ mt: 1 }}>
                   Edit Experience
                 </Button>
@@ -62,7 +66,11 @@ const UserProfile = () => {
             <Card sx={{ mb: 2 }}>
               <CardContent>
                 <Typography variant="h6">Skills</Typography>
-                <Typography>{userData.skills}</Typography>
+                {profileData.skills.length > 0 ? (
+                  profileData.skills.map((skill, index) => <Typography key={index}>{skill}</Typography>)
+                ) : (
+                  <Typography>No skills added</Typography>
+                )}
                 <Button variant="outlined" color="primary" onClick={goToEditSkills} sx={{ mt: 1 }}>
                   Edit Skills
                 </Button>
@@ -75,8 +83,8 @@ const UserProfile = () => {
             <Card>
               <CardContent>
                 <Typography variant="h6">CV</Typography>
-                {userData.cv ? (
-                  <a href={URL.createObjectURL(userData.cv)} target="_blank" rel="noopener noreferrer">
+                {profileData.cv ? (
+                  <a href={profileData.cv} target="_blank" rel="noopener noreferrer">
                     View CV
                   </a>
                 ) : (
