@@ -1,13 +1,12 @@
 import React, { useContext, useState } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
-import { useNavigate } from "react-router-dom";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
+import { Button } from "@mui/material";
 
 const EditSkills = () => {
-  const { profile, setProfile } = useContext(ProfileContext);
-  const [skills, setSkills] = useState(profile.skills || []);
+  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
+  const [skills, setSkills] = useState(profileData?.skills || []);
   const [newSkill, setNewSkill] = useState("");
-  const navigate = useNavigate();
 
   const handleAddSkill = () => {
     if (newSkill.trim()) {
@@ -17,13 +16,13 @@ const EditSkills = () => {
   };
 
   const handleSave = () => {
-    setProfile((prev) => ({ ...prev, skills }));
-    navigate("/user/profile");
+    updateProfile("skills", skills);  // ✅ Correct function from ProfileContext
+    goToNextStep("/user/profile/edit-cv"); // ✅ Correct navigation function
   };
 
   return (
     <div>
-    <ProfileStepper activeStep={3} /> 
+      <ProfileStepper activeStep={3} />
       <h2>Edit Skills</h2>
       <input
         type="text"
@@ -38,7 +37,6 @@ const EditSkills = () => {
           <li key={index}>{skill}</li>
         ))}
       </ul>
-
       <Button variant="contained" onClick={handleSave}>Next: CV</Button>
     </div>
   );

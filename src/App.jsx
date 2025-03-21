@@ -20,6 +20,7 @@ function App() {
   const EditExperience = React.lazy(() => import("./pages/user/profile/edit-profile/edit-experience"));
   const EditSkills = React.lazy(() => import("./pages/user/profile/edit-profile/edit-skills"));
   const EditCV = React.lazy(() => import("./pages/user/profile/edit-profile/edit-cv"));
+  const ReviewProfile = React.lazy(() => import("./pages/user/profile/edit-profile/review"));
   const UserSaved = React.lazy(() => import("./pages/user/saved/Saved"));
   const UserApplications = React.lazy(() => import("./pages/user/applications/Applications"));
   const UserSingleApplications = React.lazy(() => import("./pages/user/singleApplication/SingleApplication"));
@@ -54,6 +55,8 @@ function App() {
               <Route path="/user/profile/edit-experience" element={<EditExperience />} />
               <Route path="/user/profile/edit-skills" element={<EditSkills />} />
               <Route path="/user/profile/edit-cv" element={<EditCV />} />
+              <Route path="/user/profile/review" element={<ReviewProfile />} />
+
             </Routes>
           </Suspense>
         </div>

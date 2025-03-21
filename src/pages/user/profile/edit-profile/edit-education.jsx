@@ -19,7 +19,7 @@ const EditEducation = () => {
 
   const handleSave = () => {
     updateProfile("education", education);
-    goToNextStep("/edit-profile/experience");
+    goToNextStep("user/profile/edit-experience");
   };
 
   return (

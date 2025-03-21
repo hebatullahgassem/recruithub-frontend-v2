@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 
 const EditExperience = () => {
-  const { profile, setProfile } = useContext(ProfileContext);
-  const [experiences, setExperiences] = useState(profile?.experience || []);
-  const navigate = useNavigate();
+  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext); // ✅ Correct context usage
+  const [experiences, setExperiences] = useState(profileData.experience || []);
 
   const handleAddExperience = () => {
     setExperiences([...experiences, { title: "", company: "", years: "" }]);
@@ -19,16 +18,16 @@ const EditExperience = () => {
   };
 
   const handleSave = () => {
-    setProfile((prev) => ({ ...prev, experience: experiences }));
-    navigate("/user/profile");
+    updateProfile("experience", experiences); // ✅ Correctly updating context
+    goToNextStep("/user/profile/edit-skills"); // ✅ Consistent navigation
   };
 
   return (
     <div>
-     <ProfileStepper activeStep={2} /> 
+    <ProfileStepper activeStep={2} /> 
       <h2>Edit Experience</h2>
       {experiences.map((exp, index) => (
-        <div key={index} style={{ marginBottom: "10px" }}>
+        <div key={index}>
           <input
             type="text"
             placeholder="Job Title"
@@ -50,7 +49,7 @@ const EditExperience = () => {
         </div>
       ))}
       <button onClick={handleAddExperience}>+ Add Experience</button>
-      <button onClick={handleSave}>Save</button>
+      <Button variant="contained" onClick={handleSave}>Next: Skills</Button>
     </div>
   );
 };

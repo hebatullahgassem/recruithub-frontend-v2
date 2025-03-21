@@ -14,7 +14,7 @@ const EditPersonal = () => {
   const handleSave = () => {
     updateProfile("name", localData.name);
     updateProfile("email", localData.email);
-    goToNextStep("/edit-profile/education");
+    goToNextStep("user/profile/edit-education");
   };
 
   return (

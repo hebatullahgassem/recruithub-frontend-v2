@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
-import { useNavigate } from "react-router-dom";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
+import { Button } from "@mui/material";
 
 const EditCV = () => {
-  const { profile, setProfile } = useContext(ProfileContext);
-  const [cv, setCv] = useState(profile.cv || null);
-  const navigate = useNavigate();
+  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
+  const [cv, setCv] = useState(profileData?.cv || null);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -17,13 +16,13 @@ const EditCV = () => {
   };
 
   const handleSave = () => {
-    setProfile((prev) => ({ ...prev, cv }));
-    navigate("/user/profile");
+    updateProfile("cv", cv);
+    goToNextStep("/user/profile/review");
   };
 
   return (
     <div>
-    <ProfileStepper activeStep={4} /> 
+      <ProfileStepper activeStep={4} />
       <h2>Upload CV</h2>
       <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileUpload} />
       {cv && (
@@ -32,7 +31,7 @@ const EditCV = () => {
         </p>
       )}
       <Button variant="contained" onClick={handleSave}>Next: Review</Button>
-      </div>
+    </div>
   );
 };
 

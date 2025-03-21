@@ -2,9 +2,16 @@ import React, { useContext } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
 import { Button, Typography, Avatar, List, ListItem, ListItemText } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
+import { useNavigate } from "react-router-dom";
 
 const ReviewProfile = () => {
-  const { profileData, goToNextStep } = useContext(ProfileContext);
+  const { profileData } = useContext(ProfileContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    alert("Profile updated successfully!");
+    navigate("/user/profile"); // ✅ Redirect to the user profile page
+  };
 
   return (
     <div>
@@ -45,7 +52,7 @@ const ReviewProfile = () => {
       <h3>CV</h3>
       {profileData.cv ? <p>CV Uploaded: {profileData.cv.name}</p> : <p>No CV uploaded</p>}
 
-      <Button variant="contained" color="primary" onClick={() => alert("Profile submitted successfully!")}>
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
         Submit Profile
       </Button>
     </div>
