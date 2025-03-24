@@ -27,7 +27,7 @@ function App() {
   const Login = React.lazy(() => import("./pages/login/Login"));
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
-  const SingleJob = React.lazy(() => import("./pages/company/jobs/singleJob"));
+  const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
   return (
     <>
       <BrowserRouter>
