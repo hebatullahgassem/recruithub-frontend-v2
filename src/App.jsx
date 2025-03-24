@@ -27,7 +27,9 @@ function App() {
   const Login = React.lazy(() => import("./pages/login/Login"));
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
-  const SingleJob = React.lazy(() => import("./pages/company/jobs/singleJob"));
+  const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
+  const UserSingleJob = React.lazy(() => import("./pages/user/jobs/UserSingleJob"));
+  const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
   return (
     <>
       <BrowserRouter>
@@ -49,6 +51,8 @@ function App() {
                 <Route path="/company/jobs" element={<CompanyJobs />} />
                 <Route path='/company/jobs/:id' element={<SingleJob />} />
                 <Route path="/company/talents" element={<CompanyTalents />} />
+                <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
+                <Route path="/application-form" element={<ApplicationForm />} />
 
 
                 {/* Applicant Profile */}
