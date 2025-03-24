@@ -30,6 +30,8 @@ function App() {
   const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
   const UserSingleJob = React.lazy(() => import("./pages/user/jobs/UserSingleJob"));
   const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
+  const RegisterCompany = React.lazy(() => import("./pages/company/register/CompanyRegister"));
+  
   return (
     <>
       <BrowserRouter>
@@ -54,6 +56,7 @@ function App() {
                 <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
                 <Route path="/application-form" element={<ApplicationForm />} />
 
+                <Route path="/company/register" element={<RegisterCompany />} />
 
                 {/* Applicant Profile */}
                 <Route path="/applicant/profile" element={<UserProfile />} />
@@ -74,3 +77,4 @@ function App() {
 }
 
 export default App;
+

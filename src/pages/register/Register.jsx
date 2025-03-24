@@ -15,11 +15,11 @@ import {
   Link,
 } from "@mui/material";
 import { Lock, Person, Email } from "@mui/icons-material";
+import { signupUser } from "../../services/api";
 
 function Register() {
   const [formValues, setFormValues] = useState({
     fname: "",
-    lname: "",
     username: "",
     email: "",
     password: "",
@@ -27,7 +27,6 @@ function Register() {
   });
   const [formErrors, setFormErrors] = useState({
     fnameError: null,
-    lnameError: null,
     emailError: null,
     usernameError: null,
     passwordError: null,
@@ -42,14 +41,14 @@ function Register() {
   }
   async function handleRegister() {
     try {
-      const res = await axios.post("https://goodreads-node-production.up.railway.app/auth/register", {
-        fName: formValues.fname,
-        lName: formValues.lname,
+      const res = await signupUser({
+        name: formValues.fname,
         username: formValues.username,
         email: formValues.email,
         password: formValues.password,
       });
-      navigate("/otp", { state: formValues });
+      console.log(res)
+      navigate("/", { state: formValues });
     } catch (error) {
       console.log(error.response.data.message)
     }
@@ -61,14 +60,6 @@ function Register() {
         ...formErrors,
         fnameError:
           e.target.value.length === 0 ? "First Name is required" : null,
-      });
-    }
-    if (e.target.name === "lname") {
-      setFormValues({ ...formValues, lname: e.target.value });
-      setFormErrors({
-        ...formErrors,
-        lnameError:
-          e.target.value.length === 0 ? "Last Name is required" : null,
       });
     }
     if (e.target.name === "username") {
@@ -182,19 +173,6 @@ function Register() {
                     <Person sx={{ color: "action.active", mr: 1 }} />
                   ),
                 }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Last Name"
-                placeholder="Doe"
-                variant="outlined"
-                value={formValues.lname}
-                name="lname"
-                onChange={handleChange}
-                error={!!formErrors.lnameError}
-                helperText={formErrors.lnameError}
               />
             </Grid>
 

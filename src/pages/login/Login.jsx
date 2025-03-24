@@ -13,6 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
+import { loginUser } from "../../services/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -21,10 +22,7 @@ function Login() {
 
   async function handleLogin() {
     try {
-      const res = await axios.post("https://goodreads-node-production.up.railway.app/auth/login", {
-        email,
-        password,
-      });
+      const res = await loginUser(email, password);
       if (res.status === 200) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", res.data.user.role);
