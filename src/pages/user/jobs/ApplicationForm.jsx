@@ -32,7 +32,6 @@ const ApplicationForm = ({ questions: propQuestions = [] }) => {
     
     const handleSubmit = () => {
         console.log("Submitted Answers:", answers);
-        alert("Your application has been submitted!");
     };
 
     if (!questions.length) return <p>Loading questions...</p>;
@@ -43,14 +42,6 @@ const ApplicationForm = ({ questions: propQuestions = [] }) => {
         {questions.map((question) => (
             <FormControl key={question.QuestionID} component="fieldset" margin="normal" fullWidth>
                 <FormLabel>{question.Text}</FormLabel>
-
-                {question.Type === "Text" && (
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        onChange={(e) => handleChange(question.QuestionID, e.target.value)}
-                    />
-                )}
 
                 {question.Type === "Single Choice" && (
                     <RadioGroup onChange={(e) => handleChange(question.QuestionID, e.target.value)}>

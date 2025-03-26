@@ -96,20 +96,16 @@ const UserSingleJob = () => {
       const questions = [
         { 
             "QuestionID": 1, 
-            "Text": "What programming languages are you proficient in?", 
-            "Type": "Text" 
-        },
-        { 
-            "QuestionID": 2, 
             "Text": "What is the time complexity of a binary search?", 
             "Type": "Single Choice",
             "options": ["O(n)", "O(log n)", "O(1)"] 
         },
         { 
-            "QuestionID": 3, 
+            "QuestionID": 2, 
             "Text": "Which of the following are frontend frameworks?", 
             "Type": "Multiple Choice",
-            "options": ["React", "Angular", "Django", "Vue"] 
+            "options": ["React", "Angular", "Django", "Vue"] ,
+            
         }
     ];
 
