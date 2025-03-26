@@ -1,8 +1,21 @@
+import JobCard from "../../../components/job/JobCard"
+
 function UserSaved() {
     return (
-        <header style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <h1 style={{ fontSize: '2rem', margin: '1rem' }}>User Saved</h1>
-        </header>
+        <div className="d-flex flex-column align-items-center w-100">
+            <h1>User Saved</h1>
+            <JobCard job={{
+            _id: '1',
+            title: 'Software Engineer',
+            companyName: 'Vois',
+            type: 'Full-time',
+            workStyle: 'Onsite',
+            location: 'New York, NY',
+            companyLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhO-fRJWu5psjEYHnr8-cuBso-97hktHGIRwBXmSiDHN8w8-FX8G4eemvPvt6kgan2kTc&usqp=CAU',
+            description: 'Develop and maintain web applications.',
+            keywords: ['JavaScript', 'React', 'Node.js'],
+        }} user={"user"}/>
+        </div>
     )
 
 }

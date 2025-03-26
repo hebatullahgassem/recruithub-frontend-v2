@@ -8,7 +8,7 @@ function JobCard({ job, user }) {
   return (
     <div
       className="job-card"
-      key={job._id}
+      key={job.id}
       style={{
         width: "50%",
         border: "1px solid #e1e9ee",
@@ -20,7 +20,7 @@ function JobCard({ job, user }) {
         flexDirection: "column",
         cursor: "pointer",
       }}
-      onClick={() => navigate(`/company/jobs/${job._id}`)}
+      onClick={() => navigate(`/company/jobs/${job.id}`)}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img

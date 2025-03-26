@@ -13,7 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
-import { loginUser } from "../../services/api";
+import { loginUser } from "../../services/Api";
 
 function Login() {
   const [email, setEmail] = useState("");

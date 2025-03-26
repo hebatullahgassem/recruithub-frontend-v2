@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import Voice from "../../../components/question/Voice";
 import Text from "../../../components/question/Text";
 import Boolean from "../../../components/question/Boolean";
+import JobCard from "../../../components/job/JobCard";
 
 const JobApplication = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -15,35 +16,23 @@ const JobApplication = () => {
   
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div style={{ padding: 20, maxWidth: 600, margin: "auto", textAlign: "left" }}>
+      <div className="d-flex flex-column align-items-center w-100">
         <Typography variant="h4" gutterBottom>
           Job Application
         </Typography>
-
-        <Boolean/>
-
-        <Text/>
-
-        <Voice />
-
-        {/* Question 4: Date Picker */}
-        <Typography variant="h6" gutterBottom>When can you start?</Typography>
-        <DatePicker
-          label="Select a Date"
-          value={selectedDate}
-          onChange={(newValue) => {
-            setSelectedDate(newValue);
-            console.log("Date changed:", newValue ? dayjs(newValue).format("YYYY-MM-DD") : null);
-          }}
-        />
-
-        {/* Submit Button */}
-        <Button variant="contained" color="primary" fullWidth style={{ marginTop: 20 }}>
-          Submit
-        </Button>
+        <JobCard job={{
+            _id: '1',
+            title: 'Software Engineer',
+            companyName: 'Vois',
+            type: 'Full-time',
+            workStyle: 'Onsite',
+            location: 'New York, NY',
+            companyLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhO-fRJWu5psjEYHnr8-cuBso-97hktHGIRwBXmSiDHN8w8-FX8G4eemvPvt6kgan2kTc&usqp=CAU',
+            description: 'Develop and maintain web applications.',
+            keywords: ['JavaScript', 'React', 'Node.js'],
+        }} user={"user"}/>
+        
       </div>
-    </LocalizationProvider>
   );
 };
 
