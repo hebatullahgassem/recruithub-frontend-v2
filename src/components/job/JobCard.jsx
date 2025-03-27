@@ -3,7 +3,7 @@ import ApplicantFooter from "./ApplicantFooter";
 import CompanyFooter from "./CompanyFooter";
 
 function JobCard({ job, user }) {
-  const keywords = job?.keywords?.join(" · ") || "";
+  // const keywords = job?.keywords?.join(" · ") || "";
   const navigate = useNavigate();
   return (
     <div
@@ -80,7 +80,7 @@ function JobCard({ job, user }) {
       <p style={{ margin: "16px 0 8px", color: "#333", flexGrow: 1 }}>
         {job.description}
       </p>
-      <p style={{ color: "#666" }}>{keywords}</p>
+      {/* <p style={{ color: "#666" }}>{keywords}</p> */}
       {user === "company" ? <CompanyFooter /> : <ApplicantFooter />}
     </div>
   );
