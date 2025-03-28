@@ -6,6 +6,8 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import { ProfileProvider } from "./context/ProfileContext";
 import { UserContextProvider } from './context/UserContext';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 
 function App() {
@@ -28,7 +30,7 @@ function App() {
   const Login = React.lazy(() => import("./pages/login/Login"));
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
-  const SingleJob = React.lazy(() => import("./pages/company/jobs/singleJob"));
+  const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
   // const RegisterCompany = React.lazy(() => import("./pages/company/register/CompanyRegister"));
 
   return (
