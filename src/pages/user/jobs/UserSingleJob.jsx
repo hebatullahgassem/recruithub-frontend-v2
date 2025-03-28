@@ -9,6 +9,8 @@ import { Box,Button } from "@mui/material";
 import ApplicationForm from './ApplicationForm';
 // import PhasesSwitcher from '../../../components/job/PhasesSwitcher';
 import Meeting from '../../../components/job/user/Meeting';
+import { useQuery } from '@tanstack/react-query';
+import { getApplicationsByUser } from '../../../services/Application';
 const UserSingleJob = () => {
     const { jobId } = useParams(); 
     const navigate = useNavigate();
@@ -17,6 +19,21 @@ const UserSingleJob = () => {
     const [error, setError] = useState(null);
     const [clickedColumn, setClickedColumn] = useState(1);
     // const [showApplicationForm, setShowApplicationForm] = useState(false);
+    const [page, setPage] = useState(1);
+      const [pageSize, setPageSize] = useState(10);
+      const [total, setTotal] = useState(0);
+      
+      const [filters, setFilters] = useState({
+        user: "",
+        job: "",
+      });
+    
+      const [searchFilters, setSearchFilters] = useState({
+        user: "7",
+        job: `${jobId}`,
+      });
+
+
     const formRef = useRef(null);
   
     const phases = ["Application", "Technical Assessment", "Technical Interview", "Hr Interview","Offer"];
@@ -109,6 +126,23 @@ const UserSingleJob = () => {
         }
     ];
 
+    const {
+      data: userApp,
+      error: userAppError,
+      isLoading: userAppLoading,
+      refetch,
+    } = useQuery({
+      queryKey: ["userApp", page, pageSize, searchFilters],
+      queryFn: async () => {
+        // console.log({ filters: searchFilters, page, pageSize })
+        const res = await getApplicationsByUser({ filters: searchFilters, page, pageSize });
+        console.log(res)
+        setTotal(res.count);
+        return res.results[0];
+      },
+    });
+    // console.log(userApp)
+
     useEffect(() => {
         const fetchUserJob = async () => {
             try {
@@ -125,18 +159,6 @@ const UserSingleJob = () => {
         fetchUserJob();
     }, [jobId]);
 
-    
-  // const navigateToApplicationForm = () => {
-  //       console.log("Questions data being passed:", questions);
-  //       navigate('/application-form', { state: { questions } });
-  //   };
-  
-  // const showApplication = () => {
-  //     setShowApplicationForm(true);
-  //     setTimeout(() => {
-  //         formRef.current?.scrollIntoView({ behavior: 'smooth' });
-  //     }, 200);
-  // };  
   
     if (loading) return <p className="text-center">Loading...</p>;
     if (error) return <p className="text-danger">{error}</p>;
@@ -146,9 +168,9 @@ const UserSingleJob = () => {
     return (
         <div className="container mt-5">
 
-            <JobDetails/>
+            <JobDetails job={userApp?.job_details}/>
             <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases}/>
-            {clickedColumn === 1 && <ApplicationForm questions={questions} />}
+            {clickedColumn === 1 && <ApplicationForm questions={userApp?.job_details?.questions} answers={userApp?.answers}/>}
             {/* <button onClick={showApplication}>Apply</button> */}
             {clickedColumn > 1 && <Meeting phase={phases[clickedColumn-1]} applicationData ={data2.application}  clickedColumn={clickedColumn}/>}
 

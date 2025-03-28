@@ -20,11 +20,11 @@ function JobCard({ job, user, type }) {
         flexDirection: "column",
         cursor: "pointer",
       }}
-      onClick={() => navigate(`/company/jobs/${job.id}`)}
+      onClick={() => user === 'company' ? navigate(`/company/jobs/${job.id}`) : navigate(`/applicant/jobs/${job.id}`)}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
-          src={job.company_logo}
+          src={job.company_logo || 'https://static.thenounproject.com/png/3198584-200.png'}
           alt={job.company_name}
           style={{
             width: "50px",
