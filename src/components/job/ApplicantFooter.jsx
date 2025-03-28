@@ -2,12 +2,12 @@ import { Button } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SendIcon from "@mui/icons-material/Send";
 
-function ApplicantFooter() {
+function ApplicantFooter({type}) {
     return (
         <div style={{ display: 'flex', gap: '1rem' }}>
-            <Button variant="text" startIcon={<SaveIcon />}>
+            {type != 'saved' && <Button variant="text" startIcon={<SaveIcon />}>
                 Save
-            </Button>
+            </Button>}
             <Button variant="text" startIcon={<SendIcon />}>
                 Apply
             </Button>

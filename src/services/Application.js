@@ -13,8 +13,13 @@ export const getAllApplications = async () => {
 };
 
 // Get Applications by User ID
-export const getApplicationsByUserId = async (userId) => {
-  const response = await AxiosApi.get(`applications/?user_id=${userId}`);
+export const getApplicationsByUser = async ({ filters = {}, page = 1, pageSize = 10 }) => {
+  const params = new URLSearchParams({
+    ...filters,
+    page,
+    page_size: pageSize,
+  });
+  const response = await AxiosApi.get(`applications/?${params.toString()}`);
   return response.data;
 };
 

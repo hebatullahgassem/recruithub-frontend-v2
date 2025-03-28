@@ -1,18 +1,40 @@
 import React, { useState } from "react";
 import { TextField, RadioGroup, FormControlLabel, Radio, Button, Typography } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import Voice from "../../../components/question/Voice";
-import Text from "../../../components/question/Text";
-import Boolean from "../../../components/question/Boolean";
+import { getApplicationsByUser } from "../../../services/Application";
+import { useQuery } from "@tanstack/react-query";
 import JobCard from "../../../components/job/JobCard";
 
 const JobApplication = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
-
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
   
+  const [filters, setFilters] = useState({
+    user: "",
+    job: "",
+    status: "",
+  });
+
+  const [searchFilters, setSearchFilters] = useState({
+    user: "7",
+    job: "",
+    status: "2,3,4,5,6",
+  });
+
+  const {
+    data: application,
+    error: applicationError,
+    isLoading: applicationLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["application", page, pageSize, searchFilters],
+    queryFn: async () => {
+      const res = await getApplicationsByUser({ filters: searchFilters, page, pageSize });
+      console.log(res)
+      setTotal(res.count);
+      return res.results;
+    },
+  });
   
 
   return (
@@ -20,18 +42,35 @@ const JobApplication = () => {
         <Typography variant="h4" gutterBottom>
           Job Application
         </Typography>
-        <JobCard job={{
-            _id: '1',
-            title: 'Software Engineer',
-            companyName: 'Vois',
-            type: 'Full-time',
-            workStyle: 'Onsite',
-            location: 'New York, NY',
-            companyLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhO-fRJWu5psjEYHnr8-cuBso-97hktHGIRwBXmSiDHN8w8-FX8G4eemvPvt6kgan2kTc&usqp=CAU',
-            description: 'Develop and maintain web applications.',
-            keywords: ['JavaScript', 'React', 'Node.js'],
-        }} user={"user"}/>
-        
+        {application?.map((application) => (
+          <JobCard key={application.id} job={application.job_details} user={"user"} />
+        ))}
+        <div className="d-flex justify-content-between w-100 mt-3">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          className="btn btn-primary"
+        >
+          Previous
+        </button>
+        <select
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        >
+          {[10, 20, 30].map((size) => (
+            <option key={size} value={size}>
+              {size} per page
+            </option>
+          ))}
+        </select>
+        <button
+          disabled={page * pageSize >= total}
+          onClick={() => setPage((prev) => prev + 1)}
+          className="btn btn-primary"
+        >
+          Next
+        </button>
+      </div>
       </div>
   );
 };
