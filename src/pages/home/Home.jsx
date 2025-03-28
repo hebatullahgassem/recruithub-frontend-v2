@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col, Button } from "react-bootstrap";
-// import "./home.css";
+
 
 const Home = () => {
   return (
