@@ -170,7 +170,7 @@ const UserSingleJob = () => {
 
             <JobDetails job={userApp?.job_details}/>
             <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases}/>
-            {clickedColumn === 1 && <ApplicationForm questions={userApp?.job_details?.questions} answers={userApp?.answers}/>}
+            {clickedColumn === 1 && <ApplicationForm questions={userApp?.job_details?.questions} answers={userApp?.answers} application={userApp?.id}/>}
             {/* <button onClick={showApplication}>Apply</button> */}
             {clickedColumn > 1 && <Meeting phase={phases[clickedColumn-1]} applicationData ={data2.application}  clickedColumn={clickedColumn}/>}
 
