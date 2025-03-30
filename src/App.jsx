@@ -31,6 +31,9 @@ function App() {
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
   const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
+  const UserSingleJob = React.lazy(() => import("./pages/user/jobs/UserSingleJob"));
+  const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
+  // const RegisterCompany = React.lazy(() => import("./pages/register/RegisterCompany"));
   // const RegisterCompany = React.lazy(() => import("./pages/company/register/CompanyRegister"));
 
   return (
@@ -57,6 +60,10 @@ function App() {
                 <Route path="/company/jobs" element={<CompanyJobs />} />
                 <Route path='/company/jobs/:id' element={<SingleJob />} />
                 <Route path="/company/talents" element={<CompanyTalents />} />
+                <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
+                <Route path="/application-form" element={<ApplicationForm />} />
+
+                {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
                 {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
 
                 {/* Applicant Profile */}
