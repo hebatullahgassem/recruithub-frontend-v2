@@ -1,32 +1,68 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import axios from "axios";
 
 const CompanySchedule = ({ applicant, phase, handleClose }) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [meetingLink, setMeetingLink] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  
+  // Populate state with applicant's existing interview details
+  useEffect(() => {
+    if (phase === 3) {
+      setSelectedDateTime(applicant.interview_time ? dayjs(applicant.interview_time) : null);
+      setMeetingLink(applicant.interview_link || "");
+    } else if (phase === 4) {
+      setSelectedDateTime(applicant.hr_time ? dayjs(applicant.hr_time) : null);
+      setMeetingLink(applicant.hr_link || "");
+    }
+  }, [applicant, phase]);
+
 
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!selectedDateTime || !meetingLink) {
       alert("Please fill in all fields: date & time, and meeting link.");
       return;
     }
-    handleClose();
+    try{
+    setLoading(true);
 
-    const interviewDetails = {
-      interviewDateTime: dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm"),
-      meetingLink: meetingLink,
-    };
-
-    console.log("Interview Scheduled:", interviewDetails);
-    alert(
-      `Interview scheduled for ${applicant.Name} on ${interviewDetails.interviewDateTime}.\nMeeting Link: ${interviewDetails.meetingLink}`
-    );
+    const updateData = {};
+      if (phase === 3) { 
+        updateData.interview_link = meetingLink;
+        updateData.interview_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
+      } else if (phase === 4) { 
+        updateData.hr_link = meetingLink;
+        updateData.hr_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
+      }
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/applications/${applicant.id}/`,
+        updateData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      console.log("Update successful:", response.data);
+      alert(
+        `Interview scheduled for ${applicant.user_name} on ${dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm")}.\nMeeting Link: ${meetingLink}`
+      );
+      handleClose();
+    } catch (error) {
+      console.error("Error updating interview details:", error);
+      alert("Failed to schedule interview. Please try again.");
+    } finally {
+      setLoading(false);
+    } 
   };
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -41,7 +77,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       >
         {/* Applicant Name Input */}
         <Typography variant="h6" gutterBottom>
-          <strong>Schedule Interview for:</strong> {applicant.Name || null}
+          <strong>Schedule Interview for:</strong> {applicant.user_name || null}
         </Typography>
 
         {/* Date & Time Picker */}
@@ -72,8 +108,9 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
           color="primary"
           fullWidth
           onClick={handleSubmit}
+          disabled={loading}
         >
-          Schedule Interview
+          {loading ? "Scheduling..." : "Schedule Interview"}
         </Button>
       </div>
     </LocalizationProvider>

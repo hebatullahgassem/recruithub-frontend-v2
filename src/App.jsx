@@ -6,9 +6,9 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import { ProfileProvider } from "./context/ProfileContext";
 import { UserContextProvider } from './context/UserContext';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 function App() {
   const Home = React.lazy(() => import("./pages/home/Home"));
@@ -35,7 +35,9 @@ function App() {
 
   return (
     <>
+    <QueryClientProvider client={new QueryClient()}>
       <BrowserRouter>
+
         <ProfileProvider>
           <UserContextProvider>
           <Navbar />
@@ -72,6 +74,8 @@ function App() {
           </UserContextProvider>
         </ProfileProvider>
       </BrowserRouter>
+      </QueryClientProvider>
+
     </>
   )
 }
