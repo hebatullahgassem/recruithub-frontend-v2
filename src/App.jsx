@@ -4,8 +4,10 @@ import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
+import JobCreate from './components/job/JobCreate';
 import { ProfileProvider } from "./context/ProfileContext";
 import { UserContextProvider } from './context/UserContext';
+import Login from './pages/login/Login';
 
 
 function App() {
@@ -25,10 +27,10 @@ function App() {
   const UserApplications = React.lazy(() => import("./pages/user/applications/Applications"));
   const UserSingleApplications = React.lazy(() => import("./pages/user/singleApplication/SingleApplication"));
   const JobApplication = React.lazy(() => import("./pages/user/applications/Applications"));
-  const Login = React.lazy(() => import("./pages/login/Login"));
+  // const Login = React.lazy(() => import("./pages/login/Login"));
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() => import("./pages/company/talents/Talents"));
-  const SingleJob = React.lazy(() => import("./pages/company/jobs/singleJob"));
+  const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
   // const RegisterCompany = React.lazy(() => import("./pages/company/register/CompanyRegister"));
 
   return (
@@ -53,6 +55,8 @@ function App() {
                 <Route path="/company/jobs" element={<CompanyJobs />} />
                 <Route path='/company/jobs/:id' element={<SingleJob />} />
                 <Route path="/company/talents" element={<CompanyTalents />} />
+              <Route path="/jobCreate" element={<JobCreate />} />
+
                 {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
 
                 {/* Applicant Profile */}

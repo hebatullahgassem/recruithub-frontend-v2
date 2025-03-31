@@ -13,7 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
-import { loginUser } from "../../services/Api";
+import { loginUser } from "../../services/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -23,15 +23,8 @@ function Login() {
   async function handleLogin() {
     try {
       const res = await loginUser(email, password);
-      if (res.status === 200) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", res.data.user.role);
-        localStorage.setItem("userName", res.data.user.username);
-        localStorage.setItem("userId", res.data.user._id);
-        localStorage.setItem("sType", res.data.user.subscription.subscriptionType);
-        localStorage.setItem("endDate", res.data.user.subscription.endDate);
-        res.data.user.role === "admin" ? navigate("/admin") : navigate("/");
-      }
+      localStorage.setItem("token", res.token);
+      navigate("/"); // Navigate to the home page after successful login
     } catch (error) {
       alert("Login failed. Please check your credentials.");
     }
@@ -116,7 +109,7 @@ function Login() {
             variant="contained"
             size="large"
             type="submit"
-            disabled={!email || password.length < 8}
+            disabled={!email || password.length < 5}
             sx={{
               background: "rgba(148,187,233)",
               borderRadius: 1,
