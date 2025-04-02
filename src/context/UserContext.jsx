@@ -1,4 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useLayoutEffect, useState } from "react";
+import { AxiosApi } from "../services/Api";
+import { getUser } from "../services/Auth";
 
 export const userContext = createContext();
 
@@ -10,6 +12,16 @@ export function UserContextProvider({ children }) {
     const tok = localStorage.getItem("token");
     if (tok) setToken(tok);
   }, []);
+  useLayoutEffect(() => {
+    const fetchUser = async () => {
+      if (token) {
+        const response = await getUser();
+        console.log(response)
+        setUser(response);
+      }
+    };
+    fetchUser();
+  }, [token]);
   return (
     <userContext.Provider value={{ token, setToken, user, setUser }}>
       {children}

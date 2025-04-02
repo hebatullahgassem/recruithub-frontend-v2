@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextField, RadioGroup, FormControlLabel, Radio, Button, Typography } from "@mui/material";
 import { getApplicationsByUser } from "../../../services/Application";
 import { useQuery } from "@tanstack/react-query";
 import JobCard from "../../../components/job/JobCard";
+import { userContext } from "../../../context/UserContext";
 
 const JobApplication = () => {
+  const {user} = useContext(userContext)
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
@@ -16,7 +18,7 @@ const JobApplication = () => {
   });
 
   const [searchFilters, setSearchFilters] = useState({
-    user: "7",
+    user: `${user.id}`,
     job: "",
     status: "2,3,4,5,6",
   });

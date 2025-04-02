@@ -21,7 +21,7 @@ const Register = () => {
     username: "",
     name: "",
     password: "",
-    userType: "jobseeker",
+    user_type: "jobseeker",
   });
 
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const Register = () => {
     setIsEmployer(!isEmployer);
     setFormData((prev) => ({
       ...prev,
-      userType: newUserType,
+      user_type: newUserType,
     }));
   };
 
@@ -47,7 +47,7 @@ const Register = () => {
     try {
       const formattedData = {
         ...formData,
-        user_type: formData.userType.toUpperCase(),
+        user_type: formData.user_type.toUpperCase(),
       };
       await axios.post("http://localhost:8000/user/register/", formattedData);
       navigate("/login");

@@ -5,12 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import JobCreate from './components/job/JobCreate';
-import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/footer/Footer";
 import { ProfileProvider } from "./context/ProfileContext";
 import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AxiosProvider from "./services/AxiosProvider";import Login from './pages/login/Login';
+import AxiosProvider from "./services/AxiosProvider";
+import Login from './pages/login/Login';
 
 
 function App() {

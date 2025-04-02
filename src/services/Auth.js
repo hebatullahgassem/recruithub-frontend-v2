@@ -1,27 +1,27 @@
+import axios from "axios";
 import { AxiosApi } from "./Api";
 
 // Login Function
 export const loginUser = async (email, password) => {
-  const response = await AxiosApi.post("token/", { email, password });
+  const response = await axios.post("http://localhost:8000/user/token/", { email, password });
   localStorage.setItem("token", response.data.token); // Store token
+  localStorage.setItem("user_type", response.data.user_type)
   return response.data;
 };
 
 // Signup Function
 export const signupUser = async (userData) => {
-  await AxiosApi.post("create/", userData);
+  await AxiosApi.post("user/create/", userData);
 };
 
 // Get Authenticated User Data
 export const getUser = async () => {
-  const token = localStorage.getItem("token");
-  const response = await AxiosApi.get("me/", {
-    headers: { Authorization: `Token ${token}` },
-  });
+  const response = await AxiosApi.get("user/profile/");
   return response.data;
 };
 
 // Logout Function
 export const logoutUser = () => {
   localStorage.removeItem("token"); // Remove token
+  localStorage.removeItem("user_type")
 };

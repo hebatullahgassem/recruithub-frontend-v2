@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery } from "@tanstack/react-query";
 import { getAllJobs } from "../../../services/Job";
 import { getApplicationsByUser } from "../../../services/Application";
+import { userContext } from "../../../context/UserContext";
 
 function UserSaved() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+  const {user} = useContext(userContext)
   
   const [filters, setFilters] = useState({
     user: "",
@@ -17,7 +19,7 @@ function UserSaved() {
   });
 
   const [searchFilters, setSearchFilters] = useState({
-    user: "7",
+    user: `${user.id}`,
     job: "",
     status: "1",
   });
@@ -56,8 +58,8 @@ function UserSaved() {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center w-100">
-      <h2>Available saved</h2>
-      <div className="filters mb-3 d-flex flex-column align-items-center gap-2">
+      <h2>Your Saved Jobs</h2>
+      {/* <div className="filters mb-3 d-flex flex-column align-items-center gap-2">
         <div className="d-flex gap-2">
           <input
             type="text"
@@ -75,14 +77,14 @@ function UserSaved() {
             value={filters.job}
             onChange={handleChange}
           />
-          {/* <input
+          <input
             type="text"
             className="form-control"
             placeholder="Status"
             name="status"
             value={filters.status}
             onChange={handleChange}
-          /> */}
+          />
         </div>
         <div className="d-flex gap-2">
           <button
@@ -112,10 +114,15 @@ function UserSaved() {
             Search
           </button>
         </div>
-      </div>
-      {saved?.map((save) => (
+      </div> */}
+      {console.log(saved)}
+      {saved.length ? saved?.map((save) => (
         <JobCard key={save.id} job={save.job_details} user={"user"} type={"saved"} />
-      ))}
+      )) : (
+        <div style={{ minHeight: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h4>No Saved Jobs</h4>
+        </div>
+      )}
       <div className="d-flex justify-content-between w-100 mt-3">
         <button
           disabled={page === 1}

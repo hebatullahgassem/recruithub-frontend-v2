@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useParams , useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 // import DatePicker from 'react-datepicker';
@@ -11,8 +11,10 @@ import ApplicationForm from './ApplicationForm';
 import Meeting from '../../../components/job/user/Meeting';
 import { useQuery } from '@tanstack/react-query';
 import { getApplicationsByUser } from '../../../services/Application';
+import { userContext } from '../../../context/UserContext';
 const UserSingleJob = () => {
-    const { jobId } = useParams(); 
+    const { jobId } = useParams();
+    const {user} = useContext(userContext)
     const navigate = useNavigate();
     const [userJob, setUserJob] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const UserSingleJob = () => {
       });
     
       const [searchFilters, setSearchFilters] = useState({
-        user: "7",
+        user: `${user.id}`,
         job: `${jobId}`,
       });
 

@@ -3,7 +3,8 @@ import { setAuthToken } from "./Api";
 import { userContext } from "../context/UserContext";
 
 const AxiosProvider = ({ children = null }) => {
-  const { token } = useContext(userContext);
+  // const { token } = useContext(userContext);
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     setAuthToken(token);
