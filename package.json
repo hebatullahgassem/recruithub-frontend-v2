@@ -23,7 +23,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
-    "framer-motion": "^12.5.0",
+    "framer-motion": "^12.6.2",
     "i": "^0.3.7",
     "react": "^19.0.0",
     "react-big-calendar": "^1.18.0",

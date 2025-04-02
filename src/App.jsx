@@ -2,12 +2,16 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from './components/navbar/Navbar';
+import Footer from './components/footer/Footer';
+import JobCreate from './components/job/JobCreate';
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
 import { ProfileProvider } from "./context/ProfileContext";
 import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AxiosProvider from "./services/AxiosProvider";
+import AxiosProvider from "./services/AxiosProvider";import Login from './pages/login/Login';
+
 
 function App() {
   const Home = React.lazy(() => import("./pages/home/Home"));
@@ -95,6 +99,7 @@ function App() {
                         path="/company/talents"
                         element={<CompanyTalents />}
                       />
+                      <Route path="/jobCreate" element={<JobCreate />} />
                       {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
                       <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
                       <Route path="/application-form" element={<ApplicationForm />} />

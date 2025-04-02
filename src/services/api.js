@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000/";
+const API_BASE_URL = "http://localhost:8000/user/";
 
 export const AxiosApi = axios.create({
   baseURL: API_BASE_URL,
@@ -17,3 +17,4 @@ export const setAuthToken = (token) => {
     delete AxiosApi.defaults.headers.common["Authorization"];
   }
 };
+
