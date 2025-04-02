@@ -2,8 +2,8 @@ import { useNavigate } from "react-router";
 import ApplicantFooter from "./ApplicantFooter";
 import CompanyFooter from "./CompanyFooter";
 
-function JobCard({ job, user }) {
-  const keywords = job?.keywords?.join(" · ") || "";
+function JobCard({ job, user, type }) {
+  // const keywords = job?.keywords?.join(" · ") || "";
   const navigate = useNavigate();
   return (
     <div
@@ -20,12 +20,12 @@ function JobCard({ job, user }) {
         flexDirection: "column",
         cursor: "pointer",
       }}
-      onClick={() => navigate(`/company/jobs/${job.id}`)}
+      onClick={() => user === 'company' ? navigate(`/company/jobs/${job.id}`) : navigate(`/applicant/jobs/${job.id}`)}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
-          src={job.companyLogo}
-          alt={job.companyName}
+          src={job.company_logo || 'https://static.thenounproject.com/png/3198584-200.png'}
+          alt={job.company_name}
           style={{
             width: "50px",
             height: "50px",
@@ -57,10 +57,10 @@ function JobCard({ job, user }) {
                     marginRight: "8px",
                   }}
                 >
-                  {job.type}
+                  {job.type_of_job}
                 </div>
               )}
-              {job.workStyle && (
+              {/* {job.workStyle && (
                 <div
                   style={{
                     backgroundColor: "#f5f5f5",
@@ -70,18 +70,18 @@ function JobCard({ job, user }) {
                 >
                   {job.workStyle}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
-          <p style={{ margin: "4px 0", color: "#666" }}>{job.companyName} - {job.location}</p>
+          <p style={{ margin: "4px 0", color: "#666" }}>{job.company_name} - {job.location}</p>
         </div>
       </div>
       <p style={{ margin: "16px 0 8px", color: "#333", flexGrow: 1 }}>
         {job.description}
       </p>
-      <p style={{ color: "#666" }}>{keywords}</p>
-      {user === "company" ? <CompanyFooter /> : <ApplicantFooter />}
+      {/* <p style={{ color: "#666" }}>{keywords}</p> */}
+      {user === "company" ? <CompanyFooter /> : <ApplicantFooter type={type} />}
     </div>
   );
 }

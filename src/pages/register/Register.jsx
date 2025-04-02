@@ -15,7 +15,7 @@ import {
   Link,
 } from "@mui/material";
 import { Lock, Person, Email } from "@mui/icons-material";
-import { signupUser } from "../../services/Api";
+import { signupUser } from "../../services/Auth";
 
 function Register() {
   const [formValues, setFormValues] = useState({
