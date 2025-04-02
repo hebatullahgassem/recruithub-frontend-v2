@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery } from "@tanstack/react-query";
 import { getAllJobs } from "../../../services/Job";
 import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
+import { Typography } from "@mui/material";
 
 function UserSaved() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
   const {user} = useContext(userContext)
+  const navigate = useNavigate()
   
   const [filters, setFilters] = useState({
     user: "",
@@ -115,15 +117,20 @@ function UserSaved() {
           </button>
         </div>
       </div> */}
-      {console.log(saved)}
-      {saved.length ? saved?.map((save) => (
+      {saved && saved.length ? saved?.map((save) => (
         <JobCard key={save.id} job={save.job_details} user={"user"} type={"saved"} />
       )) : (
-        <div style={{ minHeight: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <h4>No Saved Jobs</h4>
+        <div style={{ minHeight: "30vh", display: "flex", flexDirection:'column', justifyContent: "center", alignItems: "center" }}>
+          <Typography variant="h4">No applications found</Typography>
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate("/applicant/jobs")}
+          >
+            Browse Jobs
+          </button>
         </div>
       )}
-      <div className="d-flex justify-content-between w-100 mt-3">
+      {saved && saved.length === '0' && <div className="d-flex justify-content-between w-100 mt-3">
         <button
           disabled={page === 1}
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -148,7 +155,7 @@ function UserSaved() {
         >
           Next
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

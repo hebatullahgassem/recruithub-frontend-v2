@@ -4,8 +4,6 @@ import { AxiosApi } from "./Api";
 // Login Function
 export const loginUser = async (email, password) => {
   const response = await axios.post("http://localhost:8000/user/token/", { email, password });
-  localStorage.setItem("token", response.data.token); // Store token
-  localStorage.setItem("user_type", response.data.user_type)
   return response.data;
 };
 
@@ -23,5 +21,4 @@ export const getUser = async () => {
 // Logout Function
 export const logoutUser = () => {
   localStorage.removeItem("token"); // Remove token
-  localStorage.removeItem("user_type")
 };

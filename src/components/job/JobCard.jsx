@@ -18,10 +18,14 @@ function JobCard({ job, user, type }) {
         marginBottom: "16px",
         display: "flex",
         flexDirection: "column",
+      }}
+    >
+      <div
+      style={{
         cursor: "pointer",
       }}
       onClick={() => user === 'company' ? navigate(`/company/jobs/${job.id}`) : navigate(`/applicant/jobs/${job.id}`)}
-    >
+      >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
           src={job.company_logo || 'https://static.thenounproject.com/png/3198584-200.png'}
@@ -80,6 +84,7 @@ function JobCard({ job, user, type }) {
       <p style={{ margin: "16px 0 8px", color: "#333", flexGrow: 1 }}>
         {job.description}
       </p>
+      </div>
       {/* <p style={{ color: "#666" }}>{keywords}</p> */}
       {user === "company" ? <CompanyFooter /> : <ApplicantFooter type={type} />}
     </div>

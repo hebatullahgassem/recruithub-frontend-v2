@@ -22,6 +22,9 @@ export function UserContextProvider({ children }) {
     };
     fetchUser();
   }, [token]);
+  useEffect(()=>{
+    console.log(user)
+  }, [user])
   return (
     <userContext.Provider value={{ token, setToken, user, setUser }}>
       {children}

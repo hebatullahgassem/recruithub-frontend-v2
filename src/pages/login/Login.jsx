@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
@@ -14,16 +14,19 @@ import {
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import { loginUser } from "../../services/Auth";
+import { userContext } from "../../context/UserContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const {setUser} = useContext(userContext)
 
   async function handleLogin() {
     try {
       const res = await loginUser(email, password);
       localStorage.setItem("token", res.token);
+      setUser(res)
       navigate("/"); // Navigate to the home page after successful login
     } catch (error) {
       alert("Login failed. Please check your credentials.");
