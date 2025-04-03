@@ -22,3 +22,8 @@ export const getUser = async () => {
 export const logoutUser = () => {
   localStorage.removeItem("token"); // Remove token
 };
+
+  export const patchUser = async (id, userData) => {
+    const response = await AxiosApi.patch(`user/jobseekers/${id}/`, userData, { headers: { "Content-Type": "multipart/form-data" } });
+    return response.data;
+  }

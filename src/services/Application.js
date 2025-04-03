@@ -39,3 +39,10 @@ export const updateApplication = async (id, updatedData) => {
 export const deleteApplication = async (id) => {
   await AxiosApi.delete(`/applications/${id}/`);
 };
+
+// Patch Application by ID
+export const patchApplication = async (id, patchData) => {
+  const response = await AxiosApi.patch(`applications/${id}/`, patchData);
+  return response.data;
+};
+

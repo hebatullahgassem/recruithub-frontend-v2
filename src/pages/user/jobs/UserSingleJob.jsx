@@ -10,7 +10,10 @@ import ApplicationForm from "./ApplicationForm";
 // import PhasesSwitcher from '../../../components/job/PhasesSwitcher';
 import Meeting from "../../../components/job/user/Meeting";
 import { useQuery } from "@tanstack/react-query";
-import { getApplicationsByUser } from "../../../services/Application";
+import {
+  createApplication,
+  getApplicationsByUser,
+} from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getJobById } from "../../../services/Job";
 const UserSingleJob = () => {
@@ -27,15 +30,11 @@ const UserSingleJob = () => {
   const [total, setTotal] = useState(0);
   const [apply, setApply] = useState(false);
 
-  const [filters, setFilters] = useState({
-    user: "",
-    job: "",
+  const [searchFilters, setSearchFilters] = useState({
+    user: `${user?.id}`,
+    job: `${jobId}` || null,
   });
 
-  const [searchFilters, setSearchFilters] = useState({
-    user: `${user.id}`,
-    job: `${jobId}`,
-  });
 
   const formRef = useRef(null);
 
@@ -47,13 +46,22 @@ const UserSingleJob = () => {
     "Offer",
   ];
 
- 
+  async function handleClick() {
+    const application = {
+      user: `${user.id}`,
+      job: `${jobId}`,
+      status: `1`,
+    };
+    const res = await createApplication(application);
+    console.log(res);
+    userAppRefetch();
+  }
 
   const {
     data: userApp,
     error: userAppError,
     isLoading: userAppLoading,
-    refetch,
+    refetch: userAppRefetch,
   } = useQuery({
     queryKey: ["userApp", page, pageSize, searchFilters],
     queryFn: async () => {
@@ -65,7 +73,7 @@ const UserSingleJob = () => {
       });
       // console.log(res)
       setTotal(res.count);
-      return res.results[0];
+      return res.results[0] || {};
     },
   });
   // console.log(userApp)
@@ -77,34 +85,35 @@ const UserSingleJob = () => {
     queryKey: ["jobs", page, pageSize, searchFilters],
     queryFn: async () => {
       const res = await getJobById(jobId);
-      console.log(res);
+      // console.log(res);
       return res;
     },
   });
 
-  useEffect(() => {
-    const fetchUserJob = async () => {
-      try {
-        // Fetch user-job details (Replace with actual API endpoint)
-        const response = await axios.get(`/api/user-jobs/${jobId}`);
-        setUserJob(response.data);
-      } catch (err) {
-        setError("Failed to fetch job application details.");
-      } finally {
-        setLoading(false); // Ensure loading is false after fetching
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserJob = async () => {
+  //     try {
+  //       // Fetch user-job details (Replace with actual API endpoint)
+  //       const response = await axios.get(`/api/user-jobs/${jobId}`);
+  //       setUserJob(response.data);
+  //     } catch (err) {
+  //       setError("Failed to fetch job application details.");
+  //     } finally {
+  //       setLoading(false); // Ensure loading is false after fetching
+  //     }
+  //   };
 
-    fetchUserJob();
-  }, [jobId]);
+  //   fetchUserJob();
+  // }, [jobId]);
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (jobsLoading || userAppLoading)
+    return <p className="text-center">Loading...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
     <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
       <JobDetails job={userApp?.job_details || jobsData} />
-      {userApp ? (
+      {userApp && Object.keys(userApp).length !== 0 ? (
         <>
           <ProcessColumn
             setter={setClickedColumn}
@@ -115,7 +124,8 @@ const UserSingleJob = () => {
             <ApplicationForm
               questions={userApp?.job_details?.questions}
               answers={userApp?.answers}
-              application={userApp?.id}
+              application={userApp}
+              refetch={userAppRefetch}
             />
           )}
           {clickedColumn > 1 && (
@@ -128,12 +138,15 @@ const UserSingleJob = () => {
         </>
       ) : (
         <>
-          <button className="btn btn-primary mt-2" style={{ width: 'fit-content' }} onClick={()=>handleClick()}>
+          <button
+            className="btn btn-primary mt-2"
+            style={{ width: "fit-content" }}
+            onClick={() => handleClick()}
+          >
             Apply for this job!
           </button>
         </>
       )}
-      
     </div>
   );
 };
