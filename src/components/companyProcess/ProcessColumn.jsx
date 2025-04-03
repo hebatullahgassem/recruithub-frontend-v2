@@ -7,7 +7,7 @@ function ProcessColumn({setter, column, phases}) {
         
         <ToggleButtonGroup
             orientation="horizontal"
-            sx={{ mt:2, scale:0.8}}
+            sx={{ mt:2, scale:0.8, alignSelf:'center'}}
             // onChange={handleChange}
         >
             {[1, 2, 3, 4, 5].map((val) => (

@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router";
 import ApplicantFooter from "./ApplicantFooter";
 import CompanyFooter from "./CompanyFooter";
+import { useContext } from "react";
+import { userContext } from "../../context/UserContext";
 
-function JobCard({ job, user, type }) {
+function JobCard({ job, type }) {
   // const keywords = job?.keywords?.join(" · ") || "";
+  const {user} = useContext(userContext)
   const navigate = useNavigate();
   return (
     <div
@@ -24,7 +27,7 @@ function JobCard({ job, user, type }) {
       style={{
         cursor: "pointer",
       }}
-      onClick={() => user === 'company' ? navigate(`/company/jobs/${job.id}`) : navigate(`/applicant/jobs/${job.id}`)}
+      onClick={() => user.user_type === 'COMPANY' ? navigate(`/company/jobs/${job.id}`) : navigate(`/applicant/jobs/${job.id}`)}
       >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
@@ -81,12 +84,24 @@ function JobCard({ job, user, type }) {
           <p style={{ margin: "4px 0", color: "#666" }}>{job.company_name} - {job.location}</p>
         </div>
       </div>
-      <p style={{ margin: "16px 0 8px", color: "#333", flexGrow: 1 }}>
+      <p
+        style={{
+          margin: "16px 0 8px",
+          color: "#333",
+          flexGrow: 1,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitLineClamp: 5,
+          lineClamp: 5,
+          WebkitBoxOrient: "vertical",
+        }}
+      >
         {job.description}
       </p>
       </div>
       {/* <p style={{ color: "#666" }}>{keywords}</p> */}
-      {user === "company" ? <CompanyFooter /> : <ApplicantFooter type={type} />}
+      {/* {user === "company" ? <CompanyFooter /> : <ApplicantFooter type={type} job_id={job.id}/>} */}
     </div>
   );
 }

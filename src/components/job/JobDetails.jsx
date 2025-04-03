@@ -16,7 +16,6 @@ function JobDetails({ job }) {
   //   companyLogo:
   //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhO-fRJWu5psjEYHnr8-cuBso-97hktHGIRwBXmSiDHN8w8-FX8G4eemvPvt6kgan2kTc&usqp=CAU",
   // };
-  console.log(job);
   if(job) return (
       <div className="mt-4" style={{maxWidth:'100vw'}}>
         <div className="card p-4 shadow-sm">

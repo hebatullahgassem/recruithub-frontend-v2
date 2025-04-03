@@ -23,7 +23,7 @@ const localizer = dateFnsLocalizer({
 const Meeting = ({ phase, clickedColumn, applicationData }) => {
 
   if (!applicationData) {
-    return <p className="text-danger">Application data is missing.</p>;
+    return <p className="text-danger text-center">You didnt apply yet</p>;
   }
   const appStatus = applicationData.Status; 
   const getPhaseData = () => {

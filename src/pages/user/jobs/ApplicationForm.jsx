@@ -49,7 +49,7 @@ const ApplicationForm = ({ questions, answers:savedAnswers, application}) => {
     // if (!questions.length) return <p>Loading questions...</p>;
     
       return (
-        <Container>
+        <Container sx={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
         <Typography variant="h4" gutterBottom>Job Application Quiz</Typography>
         {questions?.map((question) => (
             <FormControl key={question.id} component="fieldset" margin="normal" fullWidth>
