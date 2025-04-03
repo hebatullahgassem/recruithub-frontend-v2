@@ -42,6 +42,9 @@ function ApplicantsTable({ phase }) {
   const { data: applicants, error, isLoading, refetch } = useQuery({
     queryKey,
     queryFn,
+    onSuccess: () => {
+      console.log("Data updated successfully");
+    }
   });
 
   useEffect(() => {
@@ -63,7 +66,8 @@ function ApplicantsTable({ phase }) {
     if (phase < 5) {
       try {
         const response = await axios.patch(
-          `http://localhost:8000/applications/${applicant}/`,
+          // `http://localhost:8000/applications/${applicant}/`,
+          `http://localhost:8000/applications/${applicant}/update_status/`,
           { status: String(phase + 2) },
           {
             headers: {
@@ -72,20 +76,29 @@ function ApplicantsTable({ phase }) {
             },
           }
         );
-        console.log(applicant, "Added to phase", phase);
-        console.log(response);
+        // console.log(applicant, "Added to phase", phase);
+        // console.log(response);
         refetch();
+        // alert('Applicant moved to next phase successfully');
       } catch (error) {
         console.error("Error updating application:", error);
+        if (error.response && error.response.status === 500) {
+
+          refetch(); 
+        } else {
+          alert('Failed to update application status');
+        }
       }
+      
     }
   };
   
   const handleFail = async (applicant, phase) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8000/applications/${applicant}/`,
-        { fail: true },
+        // `http://localhost:8000/applications/${applicant}/`,
+        `http://localhost:8000/applications/${applicant}/update_status/`,
+        { fail: true , status: String(phase + 1) },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,8 +106,8 @@ function ApplicantsTable({ phase }) {
           },
         }
       );
-      console.log(applicant, "Failed at phase", phase);
-      console.log(response);
+      // console.log(applicant, "Failed at phase", phase);
+      // console.log(response);
       refetch();
     } catch (error) {
       console.error("Error updating application:", error);
@@ -191,6 +204,8 @@ function ApplicantsTable({ phase }) {
                     />
                       </TableCell>
                       <TableCell align="left">
+                         {!applicant.fail ? (
+                          <>
                         <FaUserSlash
                           style={{
                             cursor: "pointer",
@@ -210,6 +225,10 @@ function ApplicantsTable({ phase }) {
                           }}
                           onClick={() => handleNext(applicant.id, phase)}
                         />
+                        </>
+                        ) : (
+                         <span>Rejected</span>
+                        )}
                         <FaCalendarPlus 
                         style={{
                             cursor: "pointer",
