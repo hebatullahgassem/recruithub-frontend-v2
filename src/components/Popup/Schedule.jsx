@@ -10,7 +10,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [meetingLink, setMeetingLink] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
   
   // Populate state with applicant's existing interview details
   useEffect(() => {
@@ -33,7 +33,11 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
     try{
     setLoading(true);
 
-    const updateData = {};
+    const updateData = {
+        interview_time: dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm"),
+        interview_link: meetingLink,
+        phase,
+    };
       if (phase === 3) { 
         updateData.interview_link = meetingLink;
         updateData.interview_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
@@ -42,7 +46,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         updateData.hr_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
       }
       const response = await axios.patch(
-        `http://127.0.0.1:8000/applications/${applicant.id}/`,
+        `http://127.0.0.1:8000/applications/${applicant.id}/schedule_interview/`,
         updateData,
         {
           headers: {
