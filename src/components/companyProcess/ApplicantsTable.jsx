@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FaCalendarPlus,
   FaPencilAlt,
@@ -22,17 +22,19 @@ import { GiCancel } from "react-icons/gi";
 import CompanySchedule from "../Popup/Schedule";
 //   import axiosInstance from "../../../apis/config";
 import axios from "axios";
+import { userContext } from "../../context/UserContext";
 
 function ApplicantsTable({ phase }) {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [total, setTotal] = useState(1);
   const [update, setUpdate] = useState({});
+  const { user } = useContext(userContext);
 
   const queryKey = ["applicants", page, rowsPerPage, phase];
   const queryFn = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/applications/`, {
-      params: { page, page_size: rowsPerPage, status: phase + 1 },//, company: 3
+      params: { page, page_size: rowsPerPage, status: phase + 1, company: user?.id }, //, company: 3
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -141,6 +143,8 @@ function ApplicantsTable({ phase }) {
       className="d-flex flex-column align-items-center justify-content-center"
       style={{ maxWidth: "inherit" }}
     >
+      
+      {applicants?.length < 1 && <p style={{color:'red'}}>There are no applicants in the current phase of this job.</p>}
       {update.id ? (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"

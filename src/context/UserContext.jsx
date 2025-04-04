@@ -9,10 +9,6 @@ export function UserContextProvider({ children }) {
   let [user, setUser] = useState(null);
   // let [isOpen,setOpen] = useState(false)
   useEffect(() => {
-    const tok = localStorage.getItem("token");
-    if (tok) setToken(tok);
-  }, []);
-  useLayoutEffect(() => {
     const fetchUser = async () => {
       if (token) {
         const response = await getUser();
@@ -22,6 +18,11 @@ export function UserContextProvider({ children }) {
     };
     fetchUser();
   }, [token]);
+  useEffect(() => {
+    const tok = localStorage.getItem("token");
+    if (tok) setToken(tok);
+  }, []);
+  
   useEffect(()=>{
     console.log(user)
   }, [user])

@@ -98,7 +98,7 @@ function App() {
                         path="/company/talents"
                         element={<CompanyTalents />}
                       />
-                      <Route path="/jobCreate" element={<JobCreate />} />
+                      <Route path="/company/jobCreate" element={<JobCreate />} />
                       {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
                       <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
                       <Route path="/application-form" element={<ApplicationForm />} />

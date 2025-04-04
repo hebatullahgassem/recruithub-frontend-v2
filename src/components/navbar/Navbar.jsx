@@ -40,17 +40,17 @@ function Navbar() {
             </li>
         </>
     )}
-    {user?.user_type?.toLowerCase() === 'jobseeker' && (
+    {user?.user_type?.toLowerCase() === 'company' && (
         <>
-            {/* <li className="nav-item">
+            <li className="nav-item">
                 <Link style={{ textDecoration: 'none' }} to="/company/talents">Talents</Link>
-            </li> */}
+            </li>
             <li className="nav-item">
                 <Link style={{ textDecoration: 'none' }} to="/company/jobs">My Jobs</Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
                 <Link style={{ textDecoration: 'none' }} to="jobCreate">Create Job</Link>
-            </li>
+            </li> */}
         </>
     )}
     
