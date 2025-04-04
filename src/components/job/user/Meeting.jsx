@@ -35,6 +35,8 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
         return { link: applicationData.interview_link, time: applicationData.interview_time };
       case "Hr Interview":
         return { link: applicationData.hr_link, time: applicationData.hr_time };
+      case "Offer":
+        return { link: applicationData.offer_link, time: applicationData.offer_time };
         
       default:
         return { link: null, time: null };
@@ -88,7 +90,7 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
     {appStatus >= clickedColumn ? (
       <>
         {/* <p>Status is eligible for this phase.</p> */}
-        {console.log(phaseLink)}
+        {/* {console.log(phaseLink)} */}
         {phaseLink ? (
           <Box mt={2}>
             <Button variant="contained" color="primary" href={phaseLink} target="_blank">

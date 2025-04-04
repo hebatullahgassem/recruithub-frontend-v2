@@ -10,7 +10,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [meetingLink, setMeetingLink] = useState("");
   const [loading, setLoading] = useState(false);
-
+  console.log(phase)
   // Populate state with applicant's existing interview details
   useEffect(() => {
     if (phase === 3) {
@@ -23,7 +23,10 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       setMeetingLink(applicant.hr_link || "");
     } else if (phase === 2) {
       setMeetingLink(applicant.assessment_link || "");
-    }
+    } else if (phase === 5) {
+      setSelectedDateTime(applicant.offer_time ? dayjs(applicant.offer_time) : null);
+      setMeetingLink(applicant.offer_link || "");
+    } 
   }, [applicant, phase]);
 
   // Handle form submission
@@ -40,14 +43,18 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         interview_link: meetingLink,
         phase,
       };
-      if (phase === 3) {
-        updateData.interview_link = meetingLink;
-        updateData.interview_time =
-          dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
-      } else if (phase === 4) {
-        updateData.hr_link = meetingLink;
-        updateData.hr_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
-      }
+      // if (phase === 3) {
+      //   updateData.interview_link = meetingLink;
+      //   updateData.interview_time =
+      //     dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
+      // } else if (phase === 4) {
+      //   updateData.hr_link = meetingLink;
+      //   updateData.hr_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
+      // } else if (phase === 5) {
+      //   updateData.offer_link = meetingLink;
+      //   updateData.offer_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
+      // }
+      console.log(updateData)
       const response = await axios.patch(
         `http://127.0.0.1:8000/applications/${applicant.id}/schedule_interview/`,
         updateData,
@@ -114,13 +121,14 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         {/* Applicant Name Input */}
         <Typography variant="h6" gutterBottom>
           <strong>
-            {!phase === 2 ? "Schedule Interview" : "Assign Assessment"} for:
+            {phase != 2 ? "Schedule Interview" : "Assign Assessment"} for:
           </strong>{" "}
           {applicant.user_name || null}
         </Typography>
 
         {/* Date & Time Picker */}
-        {!phase === 2 && (
+        {/* {console.log(phase === 2)} */}
+        {phase != 2 && (
           <>
             <Typography variant="h6" gutterBottom>
               Select Date & Time:
@@ -136,7 +144,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
 
         {/* Meeting Link Input */}
         <Typography variant="h6" gutterBottom>
-          {!phase === 2 ? "Meeting Link:" : "Assessment Link:"}
+          {phase != 2 ? "Meeting Link:" : "Assessment Link:"}
         </Typography>
         <TextField
           fullWidth
@@ -150,7 +158,13 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
           variant="contained"
           color="primary"
           fullWidth
-          onClick={phase === 2 ? handleAssessment : handleSubmit}
+          onClick={(event) => {
+            if (phase === 2) {
+              handleAssessment(event);
+            } else {
+              handleSubmit(event);
+            }
+          }}
           disabled={loading}
         >
           {loading ? "Scheduling..." : phase === 2 ? "Assign Assessment" : "Schedule Interview"}
