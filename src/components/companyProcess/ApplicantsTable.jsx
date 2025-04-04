@@ -157,7 +157,7 @@ function ApplicantsTable({ phase }) {
               backdropFilter: "blur(5px)"
             }}
           >
-            <h2 className="text-center mb-3">Set Schedule</h2>
+            <h2 className="text-center mb-3">{Number(phase) === 2 ? "Assessment Link" : "Set Schedule"}</h2>
             <GiCancel
               style={{
                 position: "absolute",
@@ -234,8 +234,8 @@ function ApplicantsTable({ phase }) {
                             cursor: "pointer",
                             scale: 1.5,
                             marginLeft: "20px",
-                            display: Number(phase) === 3 || Number(phase) === 4 ? "inline-block" : "none",
-                            color:(Number(phase) === 3 && applicant.interview_link) || 
+                            display: Number(phase) === 2 || Number(phase) === 3 || Number(phase) === 4 ? "inline-block" : "none",
+                            color:(Number(phase) === 2 && applicant.assessment_link) || (Number(phase) === 3 && applicant.interview_link) || 
                                   (Number(phase) === 4 && applicant.hr_link)           
                                   ? "green"
                                   : "black",

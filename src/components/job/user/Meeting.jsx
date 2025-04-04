@@ -25,15 +25,17 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
   if (!applicationData) {
     return <p className="text-danger text-center">You didnt apply yet</p>;
   }
-  const appStatus = applicationData.Status; 
+  console.log(applicationData)
+  const appStatus = parseInt(applicationData.status) - 1;
   const getPhaseData = () => {
     switch (phase) {
       case "Technical Assessment":
-        return { link: applicationData.AssessmentLink, time: applicationData.AssessmentTime };
+        return { link: applicationData.assessment_link, time: applicationData.assessment_time };
       case "Technical Interview":
-        return { link: applicationData.InterviewLink, time: applicationData.InterviewTime };
+        return { link: applicationData.interview_link, time: applicationData.interview_time };
       case "Hr Interview":
-        return { link: applicationData.HrLink, time: applicationData.HrTime };
+        return { link: applicationData.hr_link, time: applicationData.hr_time };
+        
       default:
         return { link: null, time: null };
     }
@@ -81,12 +83,12 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
  console.log("Application :", appStatus ,clickedColumn);
   return (
     <div>
-    <h3>{phase} Meeting</h3>
+    <h3>{phase === "Technical Assessment" ? "Technical Assessment" : `${phase} Meeting` }</h3>
 
     {appStatus >= clickedColumn ? (
       <>
         {/* <p>Status is eligible for this phase.</p> */}
-
+        {console.log(phaseLink)}
         {phaseLink ? (
           <Box mt={2}>
             <Button variant="contained" color="primary" href={phaseLink} target="_blank">

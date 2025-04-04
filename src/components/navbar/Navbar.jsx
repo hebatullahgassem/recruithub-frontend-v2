@@ -14,7 +14,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">Recruitment Platform</Link>
+                <Link className="navbar-brand" >Recruitment Platform</Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -40,13 +40,16 @@ function Navbar() {
             </li>
         </>
     )}
-    {user?.user_type?.toLowerCase() === 'company' && (
+    {user?.user_type?.toLowerCase() === 'jobseeker' && (
         <>
-            <li className="nav-item">
+            {/* <li className="nav-item">
                 <Link style={{ textDecoration: 'none' }} to="/company/talents">Talents</Link>
-            </li>
+            </li> */}
             <li className="nav-item">
                 <Link style={{ textDecoration: 'none' }} to="/company/jobs">My Jobs</Link>
+            </li>
+            <li className="nav-item">
+                <Link style={{ textDecoration: 'none' }} to="jobCreate">Create Job</Link>
             </li>
         </>
     )}
