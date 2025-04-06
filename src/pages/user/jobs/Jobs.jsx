@@ -61,7 +61,7 @@ function UserJobs() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center w-100">
+    <div className="d-flex flex-column align-items-center w-100" style={{ minHeight: "70vh" }}>
       <h2>Available Jobs</h2>
       <div className="filters mb-3 d-flex flex-column align-items-center gap-2">
         <div className="d-flex gap-2">

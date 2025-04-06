@@ -63,7 +63,7 @@ const UserSingleJob = () => {
     isLoading: userAppLoading,
     refetch: userAppRefetch,
   } = useQuery({
-    queryKey: ["userApp", page, pageSize, searchFilters],
+    queryKey: ["userApp"],
     queryFn: async () => {
       // console.log({ filters: searchFilters, page, pageSize })
       const res = await getApplicationsByUser({
@@ -82,29 +82,13 @@ const UserSingleJob = () => {
     error: jobsError,
     isLoading: jobsLoading,
   } = useQuery({
-    queryKey: ["jobs", page, pageSize, searchFilters],
+    queryKey: ["jobs"],
     queryFn: async () => {
       const res = await getJobById(jobId);
       // console.log(res);
       return res;
     },
   });
-
-  // useEffect(() => {
-  //   const fetchUserJob = async () => {
-  //     try {
-  //       // Fetch user-job details (Replace with actual API endpoint)
-  //       const response = await axios.get(`/api/user-jobs/${jobId}`);
-  //       setUserJob(response.data);
-  //     } catch (err) {
-  //       setError("Failed to fetch job application details.");
-  //     } finally {
-  //       setLoading(false); // Ensure loading is false after fetching
-  //     }
-  //   };
-
-  //   fetchUserJob();
-  // }, [jobId]);
 
   if (jobsLoading || userAppLoading)
     return <p className="text-center">Loading...</p>;
@@ -141,11 +125,12 @@ const UserSingleJob = () => {
       ) : (
         <>
           <button
-            className="btn btn-primary mt-2"
-            style={{ width: "fit-content" }}
+            className="btn mt-2"
+            style={{ width: "fit-content", backgroundColor: jobsData?.status === "0" ? "red" : "#28a745", color: "white" }}
             onClick={() => handleClick()}
+            disabled={jobsData?.status === "0"}
           >
-            Apply for this job!
+            {jobsData?.status === "0" ? "Job is Closed" : "Apply for this job!"}
           </button>
         </>
       )}

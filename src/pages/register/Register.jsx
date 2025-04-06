@@ -52,6 +52,7 @@ const Register = () => {
       await axios.post("http://localhost:8000/user/register/", formattedData);
       navigate("/login");
     } catch (error) {
+      alert("Registration failed. Please check your details.");
       console.error("Registration failed", error);
     }
   };

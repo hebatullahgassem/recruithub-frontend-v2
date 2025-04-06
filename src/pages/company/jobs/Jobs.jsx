@@ -10,19 +10,19 @@ import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
 
 function CompanyJobs() {
-//   const location = useLocation();
-  const {user} = useContext(userContext)
+  //   const location = useLocation();
+  const { user } = useContext(userContext);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState({
     title: "",
-    company: user?.id 
+    company: user?.id,
   });
   const [searchFilters, setSearchFilters] = useState({
     title: "",
-    company: user?.id 
+    company: user?.id,
   });
 
   const {
@@ -67,42 +67,71 @@ function CompanyJobs() {
   // };
 
   return (
-    <div className="container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <header style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div
+      className="container"
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <h1 style={{ fontSize: "2rem", margin: "1rem" }}>Company Jobs</h1>
-        <Button onClick={()=>navigate('/company/jobCreate')}>Create New Job</Button>
+        <Button onClick={() => navigate("/company/jobCreate")}>
+          Create New Job
+        </Button>
       </header>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <TextField
-          label="Search by name"
-          name="title"
-          value={filters.title}
-          onChange={handleChange}
-          style={{ margin: "1rem" }}
-        />
-        <Button variant="contained" onClick={handleSearch}>
-          Search
-        </Button>
-        <Button variant="contained" onClick={handleReset}>
-          Reset
-        </Button>
-      </div>
-        {companyJobsLoading ? (
-          <CircularProgress />
-        ) : (
-          companyJobs?.map((job) => (
-            <JobCard key={job.id} job={job}/>
-          ))
-        )}
-        <CustomPagination
-          page={page}
-          setPage={setPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          total={total}
-        />
+
+      {companyJobsLoading ? (
+        <CircularProgress />
+      ) : companyJobs.length < 1 ? (
+        <div style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}>
+          <h2>No jobs found</h2>
+          <p>Please create a job</p>
+          <Button onClick={() => navigate("/company/jobCreate")}>
+            Create New Job
+          </Button>
+        </div>
+      ) : (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              label="Search by name"
+              name="title"
+              value={filters.title}
+              onChange={handleChange}
+              style={{ margin: "1rem" }}
+            />
+            <Button variant="contained" onClick={handleSearch}>
+              Search
+            </Button>
+            <Button variant="contained" onClick={handleReset}>
+              Reset
+            </Button>
+          </div>
+          <div style={{display:'flex', justifyContent:'center', alignItems:'center', gap: "1rem", minWidth: "100%", flexDirection: "column"}}>
+            {companyJobs?.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+          <CustomPagination
+            page={page}
+            setPage={setPage}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            total={total}
+          />
+        </>
+      )}
     </div>
   );
 }
 export default CompanyJobs;
-

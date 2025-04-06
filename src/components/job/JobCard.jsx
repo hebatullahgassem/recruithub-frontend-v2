@@ -45,7 +45,7 @@ function JobCard({ job, type }) {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
+              // justifyContent: "center",
               gap: "8px",
             }}
           >
@@ -56,28 +56,32 @@ function JobCard({ job, type }) {
                 alignItems: "center",
               }}
             >
-              {job.type && (
+              {job.type_of_job && (
                 <div
                   style={{
                     backgroundColor: "#f5f5f5",
                     padding: "1px 2px",
                     marginRight: "8px",
+                    borderRadius: "4px",
+                    color:"#901b20"
                   }}
                 >
                   {job.type_of_job}
                 </div>
               )}
-              {/* {job.workStyle && (
+              {job.attend && (
                 <div
                   style={{
                     backgroundColor: "#f5f5f5",
                     padding: "1px 2px",
                     marginRight: "8px",
+                    borderRadius: "4px",
+                    color:"#901b20"
                   }}
                 >
-                  {job.workStyle}
+                  {job.attend}
                 </div>
-              )} */}
+              )}
             </div>
           </div>
 

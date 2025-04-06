@@ -191,7 +191,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
           questions?.some(
             (question) =>
               question.required && typeof answers[question.id] === "undefined"
-          ) || !cv || application.status == '2'
+          ) || !cv || application.status == '2' || application.job_details.status == '0'
         }
       >
         Submit
