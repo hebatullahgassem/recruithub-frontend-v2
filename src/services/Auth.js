@@ -3,7 +3,10 @@ import { AxiosApi } from "./Api";
 
 // Login Function
 export const loginUser = async (email, password) => {
-  const response = await axios.post("http://localhost:8000/user/token/", { email, password });
+  const response = await axios.post("http://localhost:8000/user/token/", {
+    email,
+    password,
+  });
   return response.data;
 };
 
@@ -23,7 +26,27 @@ export const logoutUser = () => {
   localStorage.removeItem("token"); // Remove token
 };
 
-  export const patchUser = async (id, userData) => {
-    const response = await AxiosApi.patch(`user/jobseekers/${id}/`, userData, { headers: { "Content-Type": "multipart/form-data" } });
-    return response.data;
+export const patchUser = async (id, userData) => {
+  const response = await AxiosApi.patch(`user/jobseekers/${id}/`, userData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+export const updateUserProfile = async (userId, formData) => {
+  try {
+    const response = await AxiosApi.patch(
+      `/user/jobseekers/${userId}/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    // console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error("Profile Update Error:", error);
+    throw error;
   }
+};

@@ -5,7 +5,7 @@ import { getUser } from "../services/Auth";
 export const userContext = createContext();
 
 export function UserContextProvider({ children }) {
-  let [token, setToken] = useState(null);
+  let [token, setToken] = useState(localStorage.getItem("token"));
   let [user, setUser] = useState(null);
   // let [isOpen,setOpen] = useState(false)
   useEffect(() => {
@@ -13,6 +13,9 @@ export function UserContextProvider({ children }) {
       if (token) {
         const response = await getUser();
         console.log(response)
+        response.skills = JSON.parse(response.skills);
+        response.education = JSON.parse(response.education);
+        response.experience = JSON.parse(response.experience);
         setUser(response);
       }
     };
