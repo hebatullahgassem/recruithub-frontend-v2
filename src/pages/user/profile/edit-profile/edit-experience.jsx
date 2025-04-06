@@ -32,6 +32,10 @@ const EditExperience = () => {
     updateProfile("experience", experiences);
     goToNextStep("/applicant/profile/edit-skills");
   };
+  const handleBack = () => {
+    updateProfile("experience", experiences);
+    goToNextStep("/applicant/profile/edit-education");
+  };
 
   return (
     <div>
@@ -136,6 +140,9 @@ const EditExperience = () => {
         ))}
         <Button variant="outlined" onClick={handleAddExperience}>
           Add More
+        </Button>
+        <Button variant="outlined" onClick={handleBack}>
+          Back: Education
         </Button>
         <Button variant="contained" onClick={handleSave}>
           Next: Skills

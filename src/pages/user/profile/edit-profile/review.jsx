@@ -4,12 +4,15 @@ import { Button, Typography, Avatar, List, ListItem, ListItemText, Box } from "@
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { useNavigate } from "react-router-dom";
 import { updateUserProfile } from "../../../../services/Auth";
+import { userContext } from "../../../../context/UserContext";
 
 const ReviewProfile = () => {
-  const { profileData } = useContext(ProfileContext);
+  const { profileData, setProfileData } = useContext(ProfileContext);
+  const {setUser} = useContext(userContext)
   const navigate = useNavigate();
   // console.log(profileData);
   const handleSubmit = async () => {
+    try {
     const profileFormData = new FormData();
     profileFormData.append("name", profileData.name);
     profileFormData.append("email", profileData.email);
@@ -30,9 +33,27 @@ const ReviewProfile = () => {
     });
     const response = await updateUserProfile(profileData.id,profileFormData);
     console.log(response);
-    // alert("Profile updated successfully!");
-    console.log(profileData)
+    const parsedResponse = {
+      ...response.data,
+      skills: safeParseJSON(response.data.skills, []),
+      education: safeParseJSON(response.data.education, []),
+      experience: safeParseJSON(response.data.experience, []),
+    };
+    setUser(parsedResponse)
+    setProfileData(parsedResponse); // Update the profile data in context
     navigate("/applicant/profile"); // ✅ Redirect to the user profile page
+    
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
+    }
+  };
+  const safeParseJSON = (json, fallback) => {
+    try {
+      return JSON.parse(json);
+    } catch {
+      return fallback;
+    }
   };
 
   return (

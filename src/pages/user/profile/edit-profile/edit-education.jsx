@@ -24,6 +24,10 @@ const EditEducation = () => {
     updateProfile("education", education);
     goToNextStep("applicant/profile/edit-experience");
   };
+  const handleBack = () => {
+    updateProfile("education", education);
+    goToNextStep("/applicant/profile/edit-personal");
+  };
 
   return (
     <div>
@@ -102,6 +106,9 @@ const EditEducation = () => {
         ))}
         <Button variant="outlined" onClick={handleAdd}>
           Add More
+        </Button>
+        <Button variant="outlined" onClick={handleBack}>
+          Back: Personal Info
         </Button>
         <Button variant="contained" onClick={handleSave}>
           Next: Experience

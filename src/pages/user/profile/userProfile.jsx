@@ -17,9 +17,10 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(ProfileContext);
   const { user } = useContext(userContext);
+  console.log(profileData);
 
   useEffect(() => {
-    setProfileData(user || {});
+    setProfileData(user);
   }, [user]);
 
   // Navigation functions

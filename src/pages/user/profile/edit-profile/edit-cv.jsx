@@ -19,6 +19,10 @@ const EditCV = () => {
     updateProfile("cv", cv);
     goToNextStep("/applicant/profile/review");
   };
+  const handleBack = () => {
+    updateProfile("cv", cv);
+    goToNextStep("/applicant/profile/edit-skills");
+  }
 
   return (
     <div>
@@ -72,9 +76,14 @@ const EditCV = () => {
           )}
         </Grid>
         <Button
+          variant="outlined"
+          onClick={handleBack}
+        >
+          Back: Skills
+        </Button>
+        <Button
           variant="contained"
           onClick={handleSave}
-          sx={{ alignSelf: "flex-end", marginTop: 2 }}
         >
           Next: Review
         </Button>

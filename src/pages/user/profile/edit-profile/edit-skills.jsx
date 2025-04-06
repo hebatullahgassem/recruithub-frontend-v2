@@ -23,6 +23,10 @@ const EditSkills = () => {
     updateProfile("skills", skills); // ✅ Correct function from ProfileContext
     goToNextStep("/applicant/profile/edit-cv"); // ✅ Correct navigation function
   };
+  const handleBack = () => {
+    updateProfile("skills", skills); // ✅ Correct function from ProfileContext
+    goToNextStep("/applicant/profile/edit-experience"); // ✅ Correct navigation function
+  }
 
   return (
     <div>
@@ -62,6 +66,9 @@ const EditSkills = () => {
             />
           ))}
         </Box>
+        <Button variant="outlined" onClick={handleBack}>
+          Back: Experience
+        </Button>
         <Button variant="contained" onClick={handleSave}>
           Next: CV
         </Button>
