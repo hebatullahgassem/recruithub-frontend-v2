@@ -68,11 +68,11 @@ function App() {
               <AxiosProvider>
                 <Navbar />
                 <div
-                  className="container"
                   style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    maxWidth: "100vw",
                   }}
                 >
                   <Suspense fallback={<div>Loading...</div>}>

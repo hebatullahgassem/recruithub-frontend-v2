@@ -2,9 +2,11 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
+import { Avatar, Typography } from "@mui/material";
 
 function Navbar() {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isProfile, setIsProfile] = useState(false);
   const { user, setUser } = useContext(userContext);
   const navigate = useNavigate();
   const toggleNavbar = () => {
@@ -12,9 +14,14 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      className="navbar navbar-expand-lg navbar-light"
+      style={{ backgroundColor: "#dedede", color: "#901b20" }}
+    >
       <div className="container-fluid">
-        <Link className="navbar-brand">Recruitment Platform</Link>
+        <Link className="navbar-brand" to={"/"} style={{ color: "#901b20" }}>
+          Recruitment Platform
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -33,13 +40,16 @@ function Navbar() {
             {user?.user_type?.toLowerCase() === "jobseeker" && (
               <>
                 <li className="nav-item">
-                  <Link style={{ textDecoration: "none" }} to="/applicant/jobs">
+                  <Link
+                    style={{ textDecoration: "none", color: "#901b20" }}
+                    to="/applicant/jobs"
+                  >
                     Jobs
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none", color: "#901b20" }}
                     to="/applicant/saved"
                   >
                     Saved
@@ -47,7 +57,7 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none", color: "#901b20" }}
                     to="/applicant/applications"
                   >
                     Applications
@@ -59,7 +69,7 @@ function Navbar() {
               <>
                 <li className="nav-item">
                   <Link
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none", color: "#901b20" }}
                     to="/company/talents"
                   >
                     Talents
@@ -78,20 +88,63 @@ function Navbar() {
 
             <div
               className="ms-auto d-flex align-items-center gap-2"
-              style={{ position: "absolute", right: "0" }}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setIsProfile(!isProfile);
+              }}
             >
+              {isProfile && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "40px",
+                    right: "10px",
+                    backgroundColor: "white",
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "8px",
+                    padding: "10px",
+                    zIndex: 1000,
+                  }}
+                >
+                  <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                    <li style={{ padding: "8px 0", cursor: "pointer" }}>
+                      <Link
+                        to={"/applicant/profile"}
+                        style={{ textDecoration: "none", color: "#901b20" }}
+                      >
+                        Profile
+                      </Link>
+                    </li>
+                    <li
+                      style={{
+                        padding: "8px 0",
+                        cursor: "pointer",
+                        color: "red",
+                      }}
+                      onClick={() => {
+                        if (
+                          window.confirm("Are you sure you want to logout?")
+                        ) {
+                          logoutUser();
+                          setUser({});
+                          navigate("/");
+                        }
+                      }}
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
               {user && Object.keys(user).length !== 0 && (
                 <>
                   <li className="nav-item">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => navigate("/applicant/profile")}
-                    >
-                      Profile
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
+                    {/* <button
                       className="btn btn-danger me-2"
                       onClick={() => {
                         if (
@@ -104,27 +157,36 @@ function Navbar() {
                       }}
                     >
                       Logout
-                    </button>
+                    </button> */}
+                    <Typography>{user?.name}</Typography>
+                  </li>
+                  <li className="nav-item">
+                    <Avatar
+                      src={user?.img}
+                      alt="Profile"
+                      sx={{ width: 40, height: 40, backgroundColor: "#901b20" }}
+                    ></Avatar>
                   </li>
                 </>
               )}
 
-              {user && Object.keys(user).length === 0 || user === null && (
-                <li className="nav-item">
-                  <Link
-                    style={{
-                      textDecoration: "none",
-                      padding: "10px 20px",
-                      background: "#007bff",
-                      color: "white",
-                      borderRadius: "5px",
-                    }}
-                    to="/register"
-                  >
-                    Get Started
-                  </Link>
-                </li>
-              )}
+              {(user && Object.keys(user).length === 0) ||
+                (user === null && (
+                  <li className="nav-item">
+                    <Link
+                      style={{
+                        textDecoration: "none",
+                        padding: "10px 20px",
+                        background: "#007bff",
+                        color: "white",
+                        borderRadius: "5px",
+                      }}
+                      to="/register"
+                    >
+                      Get Started
+                    </Link>
+                  </li>
+                ))}
             </div>
           </ul>
         </div>
