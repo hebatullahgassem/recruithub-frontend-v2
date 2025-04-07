@@ -95,7 +95,7 @@ const UserProfile = () => {
                     Education
                   </Typography>
                   {profileData.education && profileData.education.length > 0 ? (
-                    profileData.education.map((edu, index) => (
+                    profileData?.education?.map((edu, index) => (
                       <Typography
                         key={index}
                         sx={{ marginTop: "10px", fontSize: "14px" }}

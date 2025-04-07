@@ -35,7 +35,6 @@ const UserSingleJob = () => {
     job: `${jobId}` || null,
   });
 
-
   const formRef = useRef(null);
 
   const phases = [
@@ -47,14 +46,19 @@ const UserSingleJob = () => {
   ];
 
   async function handleClick() {
-    const application = {
-      user: `${user.id}`,
-      job: `${jobId}`,
-      status: `1`,
-    };
-    const res = await createApplication(application);
-    console.log(res);
-    userAppRefetch();
+    try {
+      const application = {
+        user: `${user.id}`,
+        job: `${jobId}`,
+        status: `1`,
+      };
+      const res = await createApplication(application);
+      console.log(res);
+      userAppRefetch();
+    } catch (error) {
+      alert('Complete your profile before applying!')
+      console.error("Error creating application:", error);
+    }
   }
 
   const {
@@ -104,29 +108,40 @@ const UserSingleJob = () => {
             column={clickedColumn}
             phases={phases}
           />
-          <div style={{ minHeight: "30vh", display: "flex", justifyContent: "center", flexDirection: "column" }}>
-          {clickedColumn === 1 && (
-            <ApplicationForm
-              questions={userApp?.job_details?.questions}
-              answers={userApp?.answers}
-              application={userApp}
-              refetch={userAppRefetch}
-            />
-          )}
-          {clickedColumn > 1 && (
-            <Meeting
-              phase={phases[clickedColumn - 1]}
-              applicationData={userApp}
-              clickedColumn={clickedColumn}
-            />
-          )}
+          <div
+            style={{
+              minHeight: "30vh",
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            {clickedColumn === 1 && (
+              <ApplicationForm
+                questions={userApp?.job_details?.questions}
+                answers={userApp?.answers}
+                application={userApp}
+                refetch={userAppRefetch}
+              />
+            )}
+            {clickedColumn > 1 && (
+              <Meeting
+                phase={phases[clickedColumn - 1]}
+                applicationData={userApp}
+                clickedColumn={clickedColumn}
+              />
+            )}
           </div>
         </>
       ) : (
         <>
           <button
             className="btn mt-2"
-            style={{ width: "fit-content", backgroundColor: jobsData?.status === "0" ? "red" : "#28a745", color: "white" }}
+            style={{
+              width: "fit-content",
+              backgroundColor: jobsData?.status === "0" ? "red" : "#28a745",
+              color: "white",
+            }}
             onClick={() => handleClick()}
             disabled={jobsData?.status === "0"}
           >

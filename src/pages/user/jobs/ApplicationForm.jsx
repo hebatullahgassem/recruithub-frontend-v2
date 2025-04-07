@@ -21,14 +21,15 @@ import { patchUser } from "../../../services/Auth";
 import { patchApplication } from "../../../services/Application";
 const ApplicationForm = ({ questions, answers: savedAnswers, application, refetch }) => {
   const location = useLocation();
-  const { user } = useContext(userContext);
+  const { user, setUser } = useContext(userContext);
   const [answers, setAnswers] = useState(
     savedAnswers ? { ...savedAnswers } : {}
   );
   const [cv, setCv] = useState(user.cv || null);
   const [cvNew, setCvNew] = useState(false);
 
-  console.log("Questions data received:", questions);
+  // console.log("Questions data received:", questions);
+  console.log("Saved Answers:", answers);
   // const savedQuestionIds = Object.keys(savedAnswers).map(questionId => Number(questionId));
   // console.log("Saved Question IDs:", savedQuestionIds);
 
@@ -82,12 +83,16 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
     cvForm.append("cv", cv, cv.name); 
     try {
         const cvRes = await patchUser(user.id, cvForm);
+        setUser(cvRes)
         console.log("CV Upload Response:", cvRes);
         await patchApplication(application.id,{'status': '2'})
         refetch()
     } catch (error) {
         console.error("Error uploading CV:", error.response?.data || error);
     }
+    }else if (user.cv) {
+      await patchApplication(application.id,{'status': '2'})
+      refetch()
     }
   };
 

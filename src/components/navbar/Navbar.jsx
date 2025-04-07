@@ -90,7 +90,7 @@ function Navbar() {
   className="ms-auto d-flex align-items-center gap-2"
   style={{
     position: "absolute",
-    right: "10px",
+    right: "80px",
     top: "10px",
     cursor: "pointer",
   }}

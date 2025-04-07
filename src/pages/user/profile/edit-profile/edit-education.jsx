@@ -34,7 +34,7 @@ const EditEducation = () => {
       <ProfileStepper activeStep={1} /> {/* Step 2 */}
       <h2>Edit Education</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-        {education.map((edu, index) => (
+        {education?.map((edu, index) => (
           <Box
             key={index}
             sx={{
