@@ -53,12 +53,13 @@ function App() {
   const Register = React.lazy(() => import("./pages/register/Register"));
   const CompanyTalents = React.lazy(() =>
     import("./pages/company/talents/Talents")
+  
   );
   const SingleJob = React.lazy(() => import("./pages/company/jobs/SingleJob"));
   const UserSingleJob = React.lazy(() => import("./pages/user/jobs/UserSingleJob"));
   const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
   // // const RegisterCompany = React.lazy(() => import("./pages/register/RegisterCompany"));
-
+  const RecommendedJobs = React.lazy(() => import("./pages/user/profile/edit-profile/RecomJobs"));
   return (
     <>
       <QueryClientProvider client={new QueryClient()}>
@@ -134,7 +135,12 @@ function App() {
                         path="/applicant/profile/review"
                         element={<ReviewProfile />}
                       />
+                      <Route 
+                        path="/applicant/profile/recom" 
+                        element={<RecommendedJobs />} 
+                      />
                     </Routes>
+                    
                   </Suspense>
                 </div>
                 <Footer />

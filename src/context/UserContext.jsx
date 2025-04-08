@@ -6,11 +6,12 @@ export const userContext = createContext();
 export function UserContextProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
-
+  const [loading, setLoading] = useState(true); 
   useEffect(() => {
     const fetchUser = async () => {
       if (token) {
         try {
+          setLoading(true); 
           const response = await getUser();
           console.log(response);
 
@@ -26,7 +27,13 @@ export function UserContextProvider({ children }) {
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
+        finally {
+        setLoading(false); // Set loading to false when done
       }
+    } else {
+      setLoading(false); // Also set loading false if no token
+    
+    }
     };
 
     fetchUser();
