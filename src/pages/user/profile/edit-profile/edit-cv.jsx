@@ -1,30 +1,68 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { Button, Box, Typography, Grid } from "@mui/material";
-
+import { userContext } from "../../../../context/UserContext";
+import { AxiosApi } from "../../../../services/Api";
+import { useLocation } from "react-router-dom";
 const EditCV = () => {
-  const { profileData, updateProfile, goToNextStep } =
-    useContext(ProfileContext);
-  const [cv, setCv] = useState(profileData?.cv || null);
-  console.log(profileData);
+  const { user } = useContext(userContext);
+  const location = useLocation();
+  const { userId } = location.state || {};
+  const [cv, setCv] = useState(null);
+  const [cvName, setCvName] = useState('');
+  const [cvFile, setCvFile] = useState(null);
+
+  
+  console.log("User ID:", userId);
+  console.log("CV:", cv);
+  useEffect(() => {
+    if (userId) {
+      AxiosApi.get(`user/jobseekers/${userId}/`)
+        .then((response) => {
+          const cvId = response.data.cv;
+          if (cvId) {
+            const fullUrl = `https://res.cloudinary.com/dkvyfbtdl/raw/upload/${cvId}.pdf`;
+            setCv(fullUrl);
+            setCvName(cvId.split('/').pop());
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [userId]);
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setCv(file);
+      setCvName(file.name);
+
+      const formData = new FormData();
+      formData.append('cv', file);
+      AxiosApi.patch(`user/jobseekers/${userId}/`, formData, {
+        headers: {
+          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+        .then(response => {
+          updateProfile(userId, "cv", response.data.cv);
+          goToNextStep(`/applicant/profile/review/${userId}`);
+        })
+        .catch(error => console.log(error));
     }
   };
 
   const handleSave = () => {
-    updateProfile("cv", cv);
-    goToNextStep("/applicant/profile/review");
+    // if (!cv) return;
+    goToNextStep(`/applicant/profile/review/${userId}`);
   };
 
   return (
     <div>
       <ProfileStepper activeStep={4} />
       <Typography variant="h4" gutterBottom>
-        Upload CV
+        {cv ? "Update CV" : "Upload CV"}
       </Typography>
       <Box
         sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}
@@ -37,7 +75,7 @@ const EditCV = () => {
               fullWidth
               sx={{ padding: 2, textTransform: "none" }}
             >
-              {cv ? "Change CV" : "Upload CV"}
+              {cvName ? `Change ${cvName}` : "Upload CV"}
               <input
                 type="file"
                 accept=".pdf,.doc,.docx"
@@ -49,25 +87,26 @@ const EditCV = () => {
               variant="outlined"
               color="error"
               sx={{ padding: 0 }}
-              onClick={() => setCv(profileData.cv || null)}
+              onClick={() => setCv(null)}
             >
               X
             </Button>
           </Grid>
           {cv && (
             <Grid item xs={12}>
-              {cv.name ? (
-                <Typography variant="body1">
-                  Uploaded: <strong>{cv.name}</strong>
-                </Typography>
-              ) : cv ? (
-                <Typography variant="body1">
-                  Old Cv:{" "}
-                  <a href={cv} target="_blank">
-                    view
-                  </a>
-                </Typography>
-              ) : null}
+              <Typography variant="body1">
+                Uploaded: <strong>{cvName}</strong>
+              </Typography>
+            </Grid>
+          )}
+          {user?.cv && (
+            <Grid item xs={12}>
+              <Typography variant="body1">
+                CV Link:{" "}
+                <a href={cv} target="_blank" rel="noopener noreferrer">
+                  View CV
+                </a>
+              </Typography>
             </Grid>
           )}
         </Grid>
@@ -84,3 +123,4 @@ const EditCV = () => {
 };
 
 export default EditCV;
+

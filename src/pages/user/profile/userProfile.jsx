@@ -27,8 +27,36 @@ const UserProfile = () => {
   const goToEditExperience = () =>
     navigate("/applicant/profile/edit-experience");
   const goToEditSkills = () => navigate("/applicant/profile/edit-skills");
-  const goToEditCV = () => navigate("/applicant/profile/edit-cv");
-  const goToEditPersonal = () => navigate("/applicant/profile/edit-personal");
+  const goToEditCV = () => {
+    if (user?.id) {
+      navigate("/applicant/profile/edit-cv", {
+        state: { userId: user.id },
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
+  const goToEditPersonal = () => {
+    if (user?.id) {
+      navigate("/applicant/profile/edit-personal", {
+        state: { userId: user.id }, 
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
+
+  const ShowRecommendedJobs = () => {
+    
+    if (user?.id) {
+      console.log("User ID:", user.id)
+      navigate(`/applicant/profile/recom`, { 
+        state: { userId: user.id } 
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
 
   if (profileData)
     return (
@@ -215,6 +243,22 @@ const UserProfile = () => {
                 </Card>
               </Grid>
             </Grid>
+              <Card sx={{ mt: 2, padding: "15px" }}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+                    Job Recommendations
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    Based on your profile, we've found some jobs that might interest you.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => ShowRecommendedJobs()}
+                    sx={{ mt: 2, mb: 2, width: "100%" }}
+                  >
+                    View Recommended Jobs
+                  </Button>
+                </Card>
           </Card>
         </Grid>
       </Grid>
