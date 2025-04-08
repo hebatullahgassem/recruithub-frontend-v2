@@ -122,21 +122,17 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Education
                   </Typography>
-                  {profileData.education && profileData.education.length > 0 ? (
-                    profileData?.education?.map((edu, index) => (
-                      <Typography
-                        key={index}
-                        sx={{ marginTop: "10px", fontSize: "14px" }}
-                      >
-                        <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
-                        {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
-                      </Typography>
-                    ))
-                  ) : (
+                    {(profileData.education || []).map?.((edu, index) => (
+                    <Typography key={index} sx={{ marginTop: "10px", fontSize: "14px" }}>
+                      <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
+                      {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
+                    </Typography>
+                  )) || (
                     <Typography sx={{ marginTop: "10px", fontSize: "14px" }}>
                       No education added
                     </Typography>
                   )}
+
                   <Button
                     variant="text"
                     color="primary"

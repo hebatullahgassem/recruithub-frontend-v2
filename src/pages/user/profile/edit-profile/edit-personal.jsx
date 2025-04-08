@@ -65,20 +65,6 @@ const EditPersonal = () => {
     const { name, value } = e.target;
     setLocalData((prev) => ({ ...prev, [name]: value }));
   };
-/////////////////
-  const validateFile = (file) => {
-    // Check file type
-    if (!file.type.match('image.*')) {
-      throw new Error('Please upload an image file (JPEG, PNG, etc.)');
-    }
-
-    // Check file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      throw new Error('File size should be less than 5MB');
-    }
-
-    return true;
-  };
 
   const handleImageUpload = async (e, field) => {
     const file = e.target.files[0];
@@ -126,57 +112,7 @@ const EditPersonal = () => {
       setError(error.message);
     }
   };
- //////////shofy de w shofy validate file
 
-  // const handleSave = async () => {
-  //   if (!validateForm()) return;
-  //   try {
-  //     // Prepare the data payload with correct backend field names
-  //     const payload = {
-  //       name: localData.name,
-  //       dob: localData.dob,
-  //       location: localData.location,
-  //       about: localData.about,
-  //       phone_number: localData.phone,  // Match backend field name
-  //       national_id: localData.nationalId,  // Match backend field name
-  //     };
-  
-  //     const response = await AxiosApi.patch(
-  //       `user/jobseekers/${userId}/`,
-  //       payload,
-  //       {
-  //         headers: {
-  //           'Authorization': `Token ${localStorage.getItem('token')}`,
-  //           'Content-Type': 'application/json',
-  //         }
-  //       }
-  //     );
-  
-  //     // Update context with the latest data
-  //     updateProfile({
-  //       ...profileData,
-  //       ...response.data,
-  //       phone_number: response.data.phone_number || localData.phone,
-  //       national_id: response.data.national_id || localData.nationalId,
-  //     });
-  //     setSuccess(true);
-  //     setError(null);
-      
-  //     setTimeout(() => {
-  //       goToNextStep();
-  //     }, 3000);
-
-  //   } catch (err) {
-  //     console.error("Error updating profile:", err);
-      
-  //     // Handle error messages
-  //     const errorMessage = err.response?.data 
-  //       ? Object.values(err.response.data).join(' ') 
-  //       : "Failed to save changes. Please check your input.";
-      
-  //     setError(errorMessage);
-  //   }
-  // };
   const handleSave = async () => {
     if (!validateForm()) return;
     
@@ -215,7 +151,7 @@ const EditPersonal = () => {
       setError(null);
       
       setTimeout(() => {
-        goToNextStep(`/applicant/profile/education/${userId}`);
+        goToNextStep(`/applicant/profile/edit-education`, { userId });
       }, 3000);
   
     } catch (err) {
