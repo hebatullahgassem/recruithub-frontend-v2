@@ -10,6 +10,7 @@ import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AxiosProvider from "./services/AxiosProvider";
 import Login from './pages/login/Login';
+import VerifyOTP from "./pages/otp/VerifyOTP"; 
 
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
+                      <Route path="/verify-otp" element={<VerifyOTP />} />
                       <Route path="/applicant" element={<UserHome />} />
                       <Route path="/applicant/jobs" element={<UserJobs />} />
                       <Route path="/applicant/saved" element={<UserSaved />} />

@@ -11,7 +11,7 @@ export function UserContextProvider({ children }) {
     const fetchUser = async () => {
       if (token) {
         try {
-          const response = await getUser();
+          const response = await getUser(token);
           console.log(response);
 
           // Safely parse JSON fields

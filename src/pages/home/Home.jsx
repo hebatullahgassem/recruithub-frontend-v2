@@ -18,14 +18,16 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (user && user.user_type === "JOBSEEKER") {
-      navigate("/applicant/jobs");
-    } else if (user && user.user_type === "COMPANY") {
-      navigate("/company/jobs");
-    } else {
+    if (!user) {
+      // If no user is logged in, redirect to login page
       navigate("/login");
+    } else if (user.user_type === "JOBSEEKER") {
+      navigate("/applicant/jobs");
+    } else if (user.user_type === "COMPANY") {
+      navigate("/company/jobs");
     }
   };
+  
   return (
     <Container fluid className="p-0">
       {/* Hero Section */}
