@@ -84,8 +84,8 @@ const EditEducation = () => {
         }
       );
       
-      updateProfile("education", education);
-      goToNextStep(`/applicant/profile/edit-experience`, { userId });
+      // updateProfile("education", education);
+      goToNextStep(`/applicant/profile`, { userId });
     } catch (err) {
       console.error("Error updating education:", err);
       setError("Failed to save education data");
@@ -117,7 +117,7 @@ const EditEducation = () => {
 
   return (
     <div>
-      <ProfileStepper activeStep={1} /> {/* Step 2 */}
+      {/* <ProfileStepper activeStep={1} /> Step 2 */}
       <h2>Edit Education</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         {education.map((edu, index) => (
@@ -196,11 +196,11 @@ const EditEducation = () => {
           Add More
         </Button>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <Button variant="outlined" onClick={handleBack}>
+          {/* <Button variant="outlined" onClick={handleBack}>
             Back: Personal Info
-          </Button>
+          </Button> */}
           <Button variant="contained" onClick={handleSave}>
-            Next: Experience
+            Submit Education
           </Button>
         </Box>
         {error && (

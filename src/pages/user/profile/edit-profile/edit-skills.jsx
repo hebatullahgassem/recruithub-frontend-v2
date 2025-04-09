@@ -4,6 +4,7 @@ import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { Button, TextField, Box, Chip, Grid, CircularProgress, Alert } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
+import { updateUserProfile } from "../../../../services/Auth";
 
 const EditSkills = () => {
   const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
@@ -73,14 +74,10 @@ const EditSkills = () => {
       const formData = new FormData();
       formData.append("skills", JSON.stringify(skills));
 
-      await AxiosApi.patch(`user/jobseekers/${userId}/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await updateUserProfile(userId, formData);
 
       updateProfile("skills", skills);
-      goToNextStep("/applicant/profile/edit-cv", { userId });
+      goToNextStep("/applicant/profile", { userId });
     } catch (err) {
       console.error("Error saving skills:", err);
       setError("Failed to save skills.");
@@ -103,7 +100,7 @@ const EditSkills = () => {
 
   return (
     <div>
-      <ProfileStepper activeStep={3} />
+      {/* <ProfileStepper activeStep={3} /> */}
       <h2>Edit Skills</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <Grid container spacing={2}>
@@ -144,11 +141,11 @@ const EditSkills = () => {
           ))}
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button variant="outlined" onClick={handleBack}>
+          {/* <Button variant="outlined" onClick={handleBack}>
             Back: Experience
-          </Button>
+          </Button> */}
           <Button variant="contained" onClick={handleSave}>
-            Next: CV
+            Submit Skills
           </Button>
         </Box>
         {error && (

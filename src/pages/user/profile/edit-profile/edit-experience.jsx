@@ -113,7 +113,7 @@ const EditExperience = () => {
 
   return (
     <div>
-      <ProfileStepper activeStep={2} />
+      {/* <ProfileStepper activeStep={2} /> */}
       <h2>Edit Experience</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         {experiences.map((exp, index) => (

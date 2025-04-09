@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { use, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -16,12 +16,15 @@ import { userContext } from "../../../context/UserContext";
 const UserProfile = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(ProfileContext);
-  const { user } = useContext(userContext);
-  console.log(profileData);
-
+  const { user, refetchUser } = useContext(userContext);
+  console.log("profileData",profileData);
+  console.log("user",user);
   useEffect(() => {
     setProfileData(user);
   }, [user]);
+  useEffect(() => {
+    refetchUser();
+  }, []);
 
   // Navigation functions
   const goToEditEducation = () => navigate("/applicant/profile/edit-education");
@@ -154,7 +157,7 @@ const UserProfile = () => {
                         key={index}
                         sx={{ marginTop: "10px", fontSize: "14px" }}
                       >
-                        <strong>{exp.jobTitle}</strong> at {exp.company}
+                        <strong>{exp.title}</strong> at {exp.company}
                       </Typography>
                     ))
                   ) : (
@@ -211,7 +214,7 @@ const UserProfile = () => {
                   </Typography>
                   {profileData.cv ? (
                     <a
-                      href={profileData.cv}
+                      href={profileData?.cv?.endsWith(".pdf") ? profileData.cv : `${profileData.cv}.pdf`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -240,7 +243,7 @@ const UserProfile = () => {
                 </Card>
               </Grid>
             </Grid>
-              <Card sx={{ mt: 2, padding: "15px" }}>
+              {/* <Card sx={{ mt: 2, padding: "15px" }}>
                   <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
                     Job Recommendations
                   </Typography>
@@ -255,7 +258,7 @@ const UserProfile = () => {
                   >
                     View Recommended Jobs
                   </Button>
-                </Card>
+                </Card> */}
           </Card>
         </Grid>
       </Grid>

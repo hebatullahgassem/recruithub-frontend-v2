@@ -85,6 +85,7 @@ const EditPersonal = () => {
       const formData = new FormData();
       formData.append(backendField, file);
 
+      console.log("FormData", formData.get(backendField));
       const response = await AxiosApi.patch(
         `user/jobseekers/${userId}/`,
         formData, {
@@ -150,9 +151,7 @@ const EditPersonal = () => {
       setSuccess(true);
       setError(null);
       
-      setTimeout(() => {
-        goToNextStep(`/applicant/profile/edit-education`, { userId });
-      }, 3000);
+        goToNextStep(`/applicant/profile`, { userId });
   
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -183,7 +182,7 @@ const EditPersonal = () => {
 
   return (
     <div>
-      <ProfileStepper activeStep={0} />
+      {/* <ProfileStepper activeStep={0} /> */}
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <h2>Edit Personal Details</h2>
          
@@ -327,7 +326,7 @@ const EditPersonal = () => {
           sx={{ mt: 2 }}
           // disabled={uploadStatus.img === 'uploading' || uploadStatus.nationalIdImg === 'uploading'}
         >
-          Save Changes and Proceed to Education
+          Save Changes
         </Button>
       </Box>
     </div>

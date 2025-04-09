@@ -1,101 +1,132 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  Box, 
-  Typography, 
-  Button, 
+import {
+  Box,
+  Typography,
+  Button,
   CircularProgress,
   Pagination,
   Alert,
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
 } from "@mui/material";
-import { userContext } from "../../../../context/UserContext";
-import { AxiosApi } from "../../../../services/Api";
+import { userContext } from "../../../context/UserContext";
+import { AxiosApi } from "../../../services/Api";
 import { color } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 
 const RecommendedJobs = () => {
-  const { user, loading: userLoading } = useContext(userContext);
+  const { user } = useContext(userContext);
+  console.log("User:", user);
   const navigate = useNavigate();
-  const [jobs, setJobs] = useState([]);
+  // const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 5,
     totalPages: 1,
-    totalResults: 0
+    totalResults: 0,
   });
-  console.log("User:", user.id);
-  const fetchRecommendedJobs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  // console.log("User:", user.id);
+  // const fetchRecommendedJobs = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
 
-      if (!user?.id) throw new Error("User not authenticated");
+  //     if (!user?.id) throw new Error("User not authenticated");
 
+  //     const response = await AxiosApi.get(`jobs/recom/${user.id}/`, {
+  //       params: {
+  //         page: pagination.page,
+  //         page_size: pagination.pageSize
+  //       },
+  //       timeout: 10000
+  //     });
+
+  //     const data = response.data;
+  //     if (!data.recommendations || !data.total_results) {
+  //       throw new Error("Invalid response structure from server");
+  //     }
+
+  //     setJobs(data.recommendations);
+  //     setPagination(prev => ({
+  //       ...prev,
+  //       totalPages: Math.ceil(data.total_results / pagination.pageSize),
+  //       totalResults: data.total_results
+  //     }));
+
+  //   } catch (err) {
+  //     let errorMessage = "Failed to fetch recommendations";
+
+  //     if (err.response) {
+  //       if (err.response.status === 400) {
+  //         errorMessage = "Invalid request - please check your CV URL";
+  //       } else if (err.response.status === 401) {
+  //         navigate('/login');
+  //         return;
+  //       } else {
+  //         errorMessage = err.response.data?.error || err.response.data?.detail || errorMessage;
+  //       }
+  //     } else if (err.message.includes("timeout")) {
+  //       errorMessage = "Request timed out - please try again";
+  //     } else {
+  //       errorMessage = "Network error - could not connect to server";
+  //     }
+
+  //     setError(errorMessage);
+  //     console.error("Fetch error:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (user?.id) {
+  //     fetchRecommendedJobs();
+  //   }
+  // }, [user?.id, pagination.page, pagination.pageSize]); //
+  const {
+    data: jobs,
+    error: jobsError,
+    isLoading: jobsLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["jobsRecomm", user?.id, pagination.page, pagination.pageSize],
+    queryFn: async () => {
+      if (!user?.id) {
+        console.error("User not authenticated");
+        return [];
+      }
       const response = await AxiosApi.get(`jobs/recom/${user.id}/`, {
         params: {
           page: pagination.page,
-          page_size: pagination.pageSize
+          page_size: pagination.pageSize,
         },
-        timeout: 10000
+        timeout: 10000,
       });
-
       const data = response.data;
-      if (!data.recommendations || !data.total_results) {
-        throw new Error("Invalid response structure from server");
-      }
-
-      setJobs(data.recommendations);
-      setPagination(prev => ({
+      console.log(data);
+      setPagination((prev) => ({
         ...prev,
         totalPages: Math.ceil(data.total_results / pagination.pageSize),
-        totalResults: data.total_results
+        totalResults: data.total_results,
       }));
-
-    } catch (err) {
-      let errorMessage = "Failed to fetch recommendations";
-
-      if (err.response) {
-        if (err.response.status === 400) {
-          errorMessage = "Invalid request - please check your CV URL";
-        } else if (err.response.status === 401) {
-          navigate('/login');
-          return;
-        } else {
-          errorMessage = err.response.data?.error || err.response.data?.detail || errorMessage;
-        }
-      } else if (err.message.includes("timeout")) {
-        errorMessage = "Request timed out - please try again";
-      } else {
-        errorMessage = "Network error - could not connect to server";
-      }
-
-      setError(errorMessage);
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.id) {
-      fetchRecommendedJobs();
-    }
-  }, [user?.id, pagination.page, pagination.pageSize]); //
+      return data.recommendations || [];
+    },
+  });
 
   const handlePageChange = (event, newPage) => {
-    setPagination(prev => ({ ...prev, page: newPage }));
+    setPagination((prev) => ({ ...prev, page: newPage }));
   };
 
   const handlePageSizeChange = (event) => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
       pageSize: event.target.value,
-      page: 1
+      page: 1,
     }));
   };
 
@@ -104,19 +135,19 @@ const RecommendedJobs = () => {
   };
 
   const handleRefresh = () => {
-    fetchRecommendedJobs();
+    refetch();
   };
 
   if (!user?.cv) {
     return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
+      <Box sx={{ p: 4, textAlign: "center" }}>
         <Alert severity="warning" sx={{ mb: 3 }}>
           You need to upload your CV to get job recommendations.
         </Alert>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           color="primary"
-          onClick={() => navigate('/applicant/profile/edit-cv')}
+          onClick={() => navigate("/applicant/profile/edit-cv")}
         >
           Upload CV Now
         </Button>
@@ -125,22 +156,32 @@ const RecommendedJobs = () => {
   }
 
   return (
-    <Box sx={{ p: 3,
-     maxWidth: '1200px',
-      margin: '0 auto',
-      minHeight: '100vh', // Make sure the container takes full height
-      display: 'flex',
-      flexDirection: 'column'
-       }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
+    <Box
+      sx={{
+        p: 3,
+        maxWidth: "1200px",
+        margin: "0 auto",
+        minHeight: "100vh", // Make sure the container takes full height
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Typography variant="h4" gutterBottom sx={{ mb: 3, fontWeight: "bold" }}>
         Recommended Jobs For You
       </Typography>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <Typography variant="subtitle1" color="text.secondary">
           {pagination.totalResults} jobs matched your profile
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel id="page-size-label">Jobs per page</InputLabel>
             <Select
@@ -149,37 +190,40 @@ const RecommendedJobs = () => {
               onChange={handlePageSizeChange}
               label="Jobs per page"
             >
-              {[5, 10, 15, 20,25].map((size) => (
-                <MenuItem key={size} value={size}>{size}</MenuItem>
+              {[5, 10, 15, 20, 25].map((size) => (
+                <MenuItem key={size} value={size}>
+                  {size}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Button 
-            variant="outlined" 
-            onClick={handleRefresh}
-            disabled={loading}
-          >
+          <Button variant="outlined" onClick={handleRefresh} disabled={loading}>
             Refresh
           </Button>
         </Box>
       </Box>
 
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+      {jobsLoading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : error ? (
+      ) : jobsError ? (
         <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
+          {jobsError.message || "Failed to fetch recommendations"}
         </Alert>
       ) : jobs.length === 0 ? (
-        <Alert severity="info">No recommendations found. Try updating your profile or CV.</Alert>
+        <Alert severity="info">
+          No recommendations found. Try updating your profile or CV.
+        </Alert>
       ) : (
         <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {jobs.map((job) => (
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            {console.log("Jobs:", jobs)}
+            {jobs?.map((job, index) => (
               <Box
-                key={job.id}
+                key={index}
                 onClick={() => handleJobClick(job.id)}
                 sx={{
                   border: "1px solid #e1e9ee",
@@ -189,15 +233,23 @@ const RecommendedJobs = () => {
                   cursor: "pointer",
                   transition: "0.3s",
                   "&:hover": {
-                    transform: "scale(1.01)"
-                  }
+                    transform: "scale(1.01)",
+                  },
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                   <img
-                    src={job.company_logo || 'https://static.thenounproject.com/png/3198584-200.png'}
+                    src={
+                      job.company_logo ||
+                      "https://static.thenounproject.com/png/3198584-200.png"
+                    }
                     alt={job.company_name}
-                    style={{ width: 50, height: 50, borderRadius: "50%", marginRight: 16 }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      marginRight: 16,
+                    }}
                   />
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="h6">{job.title}</Typography>
@@ -233,7 +285,9 @@ const RecommendedJobs = () => {
                 </Typography>
 
                 {job.skills_required?.length > 0 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+                  <Box
+                    sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}
+                  >
                     {job.skills_required.slice(0, 5).map((skill, index) => (
                       <Box
                         key={index}
@@ -243,7 +297,7 @@ const RecommendedJobs = () => {
                           py: 0.5,
                           borderRadius: "4px",
                           fontSize: "14px",
-                          color: "#555"
+                          color: "#555",
                         }}
                       >
                         {skill}
@@ -254,10 +308,9 @@ const RecommendedJobs = () => {
               </Box>
             ))}
           </div>
-            {/* Pagination */}
-            
-            
-            {/* {/* <Box sx={{
+          {/* Pagination */}
+
+          {/* {/* <Box sx={{
             // position: 'sticky',
             bottom: 0,
             backgroundColor: 'white',
@@ -276,15 +329,18 @@ const RecommendedJobs = () => {
               variant="outlined"
             />
           </Box> */}
-           
-            {/* )} */}
-           {/* Normal Pagination */}
-           <Box sx={{ mt: 4, 
-              justifyContent: 'center',
-              zIndex:5, 
-              display: 'flex',
-              py:2,
-              }}>
+
+          {/* )} */}
+          {/* Normal Pagination */}
+          <Box
+            sx={{
+              mt: 4,
+              justifyContent: "center",
+              zIndex: 5,
+              display: "flex",
+              py: 2,
+            }}
+          >
             <Pagination
               count={pagination.totalPages}
               page={pagination.page}
@@ -294,9 +350,9 @@ const RecommendedJobs = () => {
               showLastButton
             />
           </Box>
-      </>
-    )}
-  </Box>
+        </>
+      )}
+    </Box>
   );
 };
 

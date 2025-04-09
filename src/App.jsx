@@ -59,7 +59,7 @@ function App() {
   const UserSingleJob = React.lazy(() => import("./pages/user/jobs/UserSingleJob"));
   const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
   // // const RegisterCompany = React.lazy(() => import("./pages/register/RegisterCompany"));
-  const RecommendedJobs = React.lazy(() => import("./pages/user/profile/edit-profile/RecomJobs"));
+  const RecommendedJobs = React.lazy(() => import("./pages/user/jobs/RecomJobs"));
   return (
     <>
       <QueryClientProvider client={new QueryClient()}>
