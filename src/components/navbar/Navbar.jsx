@@ -42,6 +42,14 @@ function Navbar() {
                 <li className="nav-item">
                   <Link
                     style={{ textDecoration: "none", color: "#901b20" }}
+                    to="/applicant/profile/recom"
+                  >
+                    Recommended
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    style={{ textDecoration: "none", color: "#901b20" }}
                     to="/applicant/jobs"
                   >
                     Jobs
@@ -86,87 +94,92 @@ function Navbar() {
               </>
             )}
 
-<div
-  className="ms-auto d-flex align-items-center gap-2"
-  style={{
-    position: "absolute",
-    right: "80px",
-    top: "10px",
-    cursor: "pointer",
-  }}
-  onClick={() => setIsProfile(!isProfile)}
->
-  {user && Object.keys(user).length !== 0 ? (
-    <>
-      {/* Dropdown menu */}
-      {isProfile && (
-        <div
-          style={{
-            position: "absolute",
-            top: "40px",
-            right: "10px",
-            backgroundColor: "white",
-            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-            padding: "10px",
-            zIndex: 1000,
-          }}
-        >
-          <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-            <li style={{ padding: "8px 0", cursor: "pointer" }}>
-              <Link
-                to="/applicant/profile"
-                style={{ textDecoration: "none", color: "#901b20" }}
-              >
-                Profile
-              </Link>
-            </li>
-            <li
-              style={{ padding: "8px 0", cursor: "pointer", color: "red" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (window.confirm("Are you sure you want to logout?")) {
-                  logoutUser();
-                  setUser({});
-                  navigate("/");
-                }
+            <div
+              className="ms-auto d-flex align-items-center gap-2"
+              style={{
+                position: "absolute",
+                right: "80px",
+                top: "10px",
+                cursor: "pointer",
               }}
+              onClick={() => setIsProfile(!isProfile)}
             >
-              Logout
-            </li>
-          </ul>
-        </div>
-      )}
+              {user && Object.keys(user).length !== 0 ? (
+                <>
+                  {/* Dropdown menu */}
+                  {isProfile && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "40px",
+                        right: "10px",
+                        backgroundColor: "white",
+                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                        borderRadius: "8px",
+                        padding: "10px",
+                        zIndex: 1000,
+                      }}
+                    >
+                      <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                        <li style={{ padding: "8px 0", cursor: "pointer" }}>
+                          <Link
+                            to="/applicant/profile"
+                            style={{ textDecoration: "none", color: "#901b20" }}
+                          >
+                            Profile
+                          </Link>
+                        </li>
+                        <li
+                          style={{
+                            padding: "8px 0",
+                            cursor: "pointer",
+                            color: "red",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm("Are you sure you want to logout?")
+                            ) {
+                              logoutUser();
+                              setUser({});
+                              navigate("/");
+                            }
+                          }}
+                        >
+                          Logout
+                        </li>
+                      </ul>
+                    </div>
+                  )}
 
-      {/* Avatar and Username */}
-      <div className="d-flex align-items-center gap-2">
-        <Typography>{user?.name}</Typography>
-        <Avatar
-          src={user?.img}
-          alt="Profile"
-          sx={{ width: 40, height: 40, backgroundColor: "#901b20" }}
-        />
-      </div>
-    </>
-  ) : (
-    // When no user is logged in
-    <li className="nav-item" style={{ marginTop: "10px" }}>
-      <Link
-        to="/register"
-        style={{
-          textDecoration: "none",
-          padding: "10px 20px",
-          background: "#007bff",
-          color: "white",
-          borderRadius: "5px",
-        }}
-      >
-        Get Started
-      </Link>
-    </li>
-  )}
-</div>
-
+                  {/* Avatar and Username */}
+                  <div className="d-flex align-items-center gap-2">
+                    <Typography>{user?.name}</Typography>
+                    <Avatar
+                      src={user?.img}
+                      alt="Profile"
+                      sx={{ width: 40, height: 40, backgroundColor: "#901b20" }}
+                    />
+                  </div>
+                </>
+              ) : (
+                // When no user is logged in
+                <li className="nav-item" style={{ marginTop: "10px" }}>
+                  <Link
+                    to="/register"
+                    style={{
+                      textDecoration: "none",
+                      padding: "10px 20px",
+                      background: "#007bff",
+                      color: "white",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    Get Started
+                  </Link>
+                </li>
+              )}
+            </div>
           </ul>
         </div>
       </div>

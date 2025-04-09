@@ -1,12 +1,62 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
-import { Button, TextField, Box, Chip, Grid } from "@mui/material";
+import { Button, TextField, Box, Chip, Grid, CircularProgress, Alert } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AxiosApi } from "../../../../services/Api";
+import { updateUserProfile } from "../../../../services/Auth";
 
 const EditSkills = () => {
   const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
-  const [skills, setSkills] = useState(profileData?.skills || []);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const locationUserId = location.state?.userId;
+  const userId = locationUserId || profileData?.id;
+
+  const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/applicant/profile", { replace: true });
+      return;
+    }
+
+    const fetchSkills = async () => {
+      try {
+        const res = await AxiosApi.get(`user/jobseekers/${userId}/`, {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const skillData = res.data?.skills;
+
+        if (!skillData) {
+          setSkills([]);
+        } else if (Array.isArray(skillData)) {
+          setSkills(skillData);
+        } else {
+          try {
+            const parsed = JSON.parse(skillData);
+            setSkills(Array.isArray(parsed) ? parsed : [parsed]);
+          } catch (err) {
+            console.error("Invalid JSON in skills:", err);
+            setSkills([]);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching skills:", err);
+        setError("Failed to load skills.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSkills();
+  }, [userId]);
 
   const handleAddSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -19,18 +69,38 @@ const EditSkills = () => {
     setSkills(skills.filter((skill) => skill !== skillToDelete));
   };
 
-  const handleSave = () => {
-    updateProfile("skills", skills); // ✅ Correct function from ProfileContext
-    goToNextStep("/applicant/profile/edit-cv"); // ✅ Correct navigation function
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("skills", JSON.stringify(skills));
+
+      await updateUserProfile(userId, formData);
+
+      updateProfile("skills", skills);
+      goToNextStep("/applicant/profile", { userId });
+    } catch (err) {
+      console.error("Error saving skills:", err);
+      setError("Failed to save skills.");
+    }
   };
+
   const handleBack = () => {
-    updateProfile("skills", skills); // ✅ Correct function from ProfileContext
-    goToNextStep("/applicant/profile/edit-experience"); // ✅ Correct navigation function
+    updateProfile("skills", skills);
+    goToNextStep("/applicant/profile/edit-experience", { userId });
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+        <span style={{ marginLeft: "10px" }}>Loading skills...</span>
+      </Box>
+    );
   }
 
   return (
     <div>
-      <ProfileStepper activeStep={3} />
+      {/* <ProfileStepper activeStep={3} /> */}
       <h2>Edit Skills</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <Grid container spacing={2}>
@@ -40,7 +110,7 @@ const EditSkills = () => {
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
               fullWidth
-              color={skills.includes(newSkill) ? "error" : "primary"}
+              color={skills.includes(newSkill.trim()) ? "error" : "primary"}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -50,7 +120,11 @@ const EditSkills = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="outlined" onClick={handleAddSkill} disabled={!newSkill || skills.includes(newSkill) || skills.length > 9}>
+            <Button
+              variant="outlined"
+              onClick={handleAddSkill}
+              disabled={!newSkill || skills.includes(newSkill.trim()) || skills.length > 9}
+            >
               + Add Skill
             </Button>
           </Grid>
@@ -66,12 +140,19 @@ const EditSkills = () => {
             />
           ))}
         </Box>
-        <Button variant="outlined" onClick={handleBack}>
-          Back: Experience
-        </Button>
-        <Button variant="contained" onClick={handleSave}>
-          Next: CV
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          {/* <Button variant="outlined" onClick={handleBack}>
+            Back: Experience
+          </Button> */}
+          <Button variant="contained" onClick={handleSave}>
+            Submit Skills
+          </Button>
+        </Box>
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
       </Box>
     </div>
   );

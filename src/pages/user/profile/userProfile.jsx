@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { use, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -16,20 +16,51 @@ import { userContext } from "../../../context/UserContext";
 const UserProfile = () => {
   const navigate = useNavigate();
   const { profileData, setProfileData } = useContext(ProfileContext);
-  const { user } = useContext(userContext);
-  console.log(profileData);
-
+  const { user, refetchUser } = useContext(userContext);
+  console.log("profileData",profileData);
+  console.log("user",user);
   useEffect(() => {
     setProfileData(user);
   }, [user]);
+  useEffect(() => {
+    refetchUser();
+  }, []);
 
   // Navigation functions
   const goToEditEducation = () => navigate("/applicant/profile/edit-education");
   const goToEditExperience = () =>
     navigate("/applicant/profile/edit-experience");
   const goToEditSkills = () => navigate("/applicant/profile/edit-skills");
-  const goToEditCV = () => navigate("/applicant/profile/edit-cv");
-  const goToEditPersonal = () => navigate("/applicant/profile/edit-personal");
+  const goToEditCV = () => {
+    if (user?.id) {
+      navigate("/applicant/profile/edit-cv", {
+        state: { userId: user.id },
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
+  const goToEditPersonal = () => {
+    if (user?.id) {
+      navigate("/applicant/profile/edit-personal", {
+        state: { userId: user.id }, 
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
+
+  const ShowRecommendedJobs = () => {
+    
+    if (user?.id) {
+      console.log("User ID:", user.id)
+      navigate(`/applicant/profile/recom`, { 
+        state: { userId: user.id } 
+      });
+    } else {
+      console.error("No user ID available");
+    }
+  };
 
   if (profileData)
     return (
@@ -94,21 +125,17 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Education
                   </Typography>
-                  {profileData.education && profileData.education.length > 0 ? (
-                    profileData?.education?.map((edu, index) => (
-                      <Typography
-                        key={index}
-                        sx={{ marginTop: "10px", fontSize: "14px" }}
-                      >
-                        <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
-                        {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
-                      </Typography>
-                    ))
-                  ) : (
+                    {(profileData.education || []).map?.((edu, index) => (
+                    <Typography key={index} sx={{ marginTop: "10px", fontSize: "14px" }}>
+                      <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
+                      {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
+                    </Typography>
+                  )) || (
                     <Typography sx={{ marginTop: "10px", fontSize: "14px" }}>
                       No education added
                     </Typography>
                   )}
+
                   <Button
                     variant="text"
                     color="primary"
@@ -130,7 +157,7 @@ const UserProfile = () => {
                         key={index}
                         sx={{ marginTop: "10px", fontSize: "14px" }}
                       >
-                        <strong>{exp.jobTitle}</strong> at {exp.company}
+                        <strong>{exp.title}</strong> at {exp.company}
                       </Typography>
                     ))
                   ) : (
@@ -187,7 +214,7 @@ const UserProfile = () => {
                   </Typography>
                   {profileData.cv ? (
                     <a
-                      href={profileData.cv}
+                      href={profileData?.cv?.endsWith(".pdf") ? profileData.cv : `${profileData.cv}.pdf`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -216,6 +243,22 @@ const UserProfile = () => {
                 </Card>
               </Grid>
             </Grid>
+              {/* <Card sx={{ mt: 2, padding: "15px" }}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+                    Job Recommendations
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    Based on your profile, we've found some jobs that might interest you.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => ShowRecommendedJobs()}
+                    sx={{ mt: 2, mb: 2, width: "100%" }}
+                  >
+                    View Recommended Jobs
+                  </Button>
+                </Card> */}
           </Card>
         </Grid>
       </Grid>

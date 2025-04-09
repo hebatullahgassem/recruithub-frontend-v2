@@ -4,166 +4,173 @@ import {
   Button,
   Typography,
   Avatar,
-  List,
-  ListItem,
-  ListItemText,
   Box,
+  Chip,
+  Divider,
+  Grid,
+  Paper,
 } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
-import { useNavigate } from "react-router-dom";
-import { updateUserProfile } from "../../../../services/Auth";
+import { useNavigate, useLocation } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 
 const ReviewProfile = () => {
-  const { profileData, setProfileData } = useContext(ProfileContext);
-  const { setUser, user } = useContext(userContext);
+  const { profileData } = useContext(ProfileContext);
+  const { user } = useContext(userContext);
   const navigate = useNavigate();
-  // console.log(profileData);
-  const handleSubmit = async () => {
-    try {
-      const profileFormData = new FormData();
-      profileFormData.append("name", profileData.name);
-      profileFormData.append("email", profileData.email);
-      profileFormData.append("phone", profileData.phone || "");
-      profileFormData.append("location", profileData.location || "");
-      profileFormData.append("dob", profileData.dob || "");
-      profileFormData.append("about", profileData.about || "");
-      profileFormData.append("national_id", profileData.national_id || "");
-      profileFormData.append(
-        "national_id_img",
-        profileData.national_id_img || ""
-      );
-      profileFormData.append("img", profileData.img || "");
-      profileFormData.append(
-        "education",
-        JSON.stringify(profileData.education || [])
-      );
-      profileFormData.append(
-        "experience",
-        JSON.stringify(profileData.experience || [])
-      );
-      profileFormData.append(
-        "skills",
-        JSON.stringify(profileData.skills || [])
-      );
-      profileFormData.append("cv", profileData.cv || "");
+  const location = useLocation();
+  const locationUserId = location.state?.userId;
+  const userId = locationUserId || user?.id;
 
-      profileFormData.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
-      const response = await updateUserProfile(
-        profileData.id || user.id,
-        profileFormData
-      );
-      console.log(response);
-      const parsedResponse = {
-        ...response.data,
-        skills: safeParseJSON(response.data.skills, []),
-        education: safeParseJSON(response.data.education, []),
-        experience: safeParseJSON(response.data.experience, []),
-      };
-      setUser(parsedResponse);
-      setProfileData(parsedResponse); // Update the profile data in context
-      navigate("/applicant/profile"); // ✅ Redirect to the user profile page
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
-    }
+  const handleSubmit = () => {
+    navigate("/applicant/profile");
   };
-  const safeParseJSON = (json, fallback) => {
-    try {
-      return JSON.parse(json);
-    } catch {
-      return fallback;
-    }
+
+  const handleBack = () => {
+    navigate("/applicant/profile/edit-cv", { state: { userId } });
   };
 
   return (
-    <div style={{ textAlign: "center", display: "flex", flexDirection: "column" }}>
-      <ProfileStepper activeStep={5} /> {/* Last Step */}
-      <h2>Review Your Profile</h2>
-      <Avatar
-        src={profileData.img}
-        sx={{ width: 100, height: 100, alignSelf: "center" }}
-      />
-      <h3>Personal Information</h3>
-      <Typography variant="body1">Name: {profileData.name}</Typography>
-      <Typography variant="body1">Email: {profileData.email}</Typography>
-      <Typography variant="body1">
-        Phone: {profileData.phone || "Not provided"}
-      </Typography>
-      <Typography variant="body1">
-        Location: {profileData.location || "Not provided"}
-      </Typography>
-      <Typography variant="body1">
-        Date of Birth: {profileData.dob || "Not provided"}
-      </Typography>
-      <Typography variant="body1">
-        About: {profileData.about || "Not provided"}
-      </Typography>
-      <Typography variant="body1">
-        National ID: {profileData.national_id || "Not provided"}
-      </Typography>
-      {profileData.national_id_img ? (
-        <Typography variant="body1">
-          <Avatar
-            src={profileData.national_id_img}
-            sx={{ width: 100, height: 100, borderRadius: 2, marginLeft: 3 }}
-          />
-        </Typography>
-      ) : (
-        <Typography variant="body1">National ID Image: Not provided</Typography>
-      )}
-      <h3>Education</h3>
-      {profileData.education && profileData.education.length > 0 ? (
-        profileData.education.map((edu, index) => (
-          <Typography key={index} variant="body1">
-            {`${edu.degree} Degree from ${edu.school} majoring ${edu.fieldOfStudy} from ${edu.startDate} to ${edu.endDate}`}
+    <Grid container justifyContent="center" sx={{ p: 3 }}>
+      <Grid item xs={12} md={8}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+          {/* <ProfileStepper activeStep={6} /> */}
+          <Typography variant="h4" align="center" gutterBottom>
+            Review Your Profile
           </Typography>
-        ))
-      ) : (
-        <Typography variant="body1">No education data available</Typography>
-      )}
-      <h3>Experience</h3>
-      {profileData.experience && profileData.experience.length > 0 ? (
-        profileData.experience.map((exp, index) => (
-          <Typography key={index} variant="body1">
-            {`${exp.jobTitle} at ${exp.company}`}
-          </Typography>
-        ))
-      ) : (
-        <Typography variant="body1">No experience data available</Typography>
-      )}
-      <h3>Skills</h3>
-      <Box sx={{ display: "flex", gap: 1, justifyContent:'center' }}>
-        {profileData.skills && profileData.skills.length > 0 ? (
-          profileData.skills.map((skill, index) => (
-            <Typography key={index} variant="body1">
-              {skill}
+
+          <Box sx={{ textAlign: "center", my: 3 }}>
+            <Avatar
+              src={profileData.img}
+              sx={{ width: 120, height: 120, mx: "auto" }}
+            />
+          </Box>
+
+          <Divider>
+            <Typography variant="h6">Personal Information</Typography>
+          </Divider>
+          <Box sx={{ my: 2 }}>
+            <Typography fontWeight="bold">
+              Name: <Typography component="span">{user.name}</Typography>
             </Typography>
-          ))
-        ) : (
-          <Typography variant="body1">No skills data available</Typography>
-        )}
-      </Box>
-      <h3>CV</h3>
-      {profileData.cv ? (
-        <p>
-          CV Uploaded:{" "}
-          {profileData.cv.name || (
-            <a href={profileData.cv} target="_blank">
-              view
-            </a>
-          )}
-        </p>
-      ) : (
-        <p>No CV uploaded</p>
-      )}
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Submit Profile
-      </Button>
-    </div>
+            <Typography fontWeight="bold">
+              Email: <Typography component="span">{user.email}</Typography>
+            </Typography>
+            <Typography fontWeight="bold">
+              Phone: <Typography component="span">{user.phone || "Not provided"}</Typography>
+            </Typography>
+            <Typography fontWeight="bold">
+              Location: <Typography component="span">{user.location || "Not provided"}</Typography>
+            </Typography>
+            <Typography fontWeight="bold">
+              Date of Birth: <Typography component="span">{user.dob || "Not provided"}</Typography>
+            </Typography>
+            <Typography fontWeight="bold">
+              About: <Typography component="span">{user.about || "Not provided"}</Typography>
+            </Typography>
+            <Typography fontWeight="bold">
+              National ID: <Typography component="span">{user.national_id || "Not provided"}</Typography>
+            </Typography>
+            {user.national_id_img ? (
+              <Avatar
+                src={user.national_id_img}
+                sx={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 2,
+                  my: 1,
+                  boxShadow: 3,
+                }}
+              />
+            ) : (
+              <Typography>National ID Image: Not provided</Typography>
+            )}
+          </Box>
+
+          <Divider>
+            <Typography variant="h6">Education</Typography>
+          </Divider>
+          <Box sx={{ my: 2 }}>
+            {user.education?.length ? (
+              user.education.map((edu, index) => (
+                <Typography key={index}>
+                  {`${edu.degree} at ${edu.school} (${edu.fieldOfStudy}) from ${edu.startDate} to ${edu.endDate}`}
+                </Typography>
+              ))
+            ) : (
+              <Typography>No education data available</Typography>
+            )}
+          </Box>
+
+          <Divider>
+            <Typography variant="h6">Experience</Typography>
+          </Divider>
+          <Box sx={{ my: 2 }}>
+            {user.experience?.length ? (
+              user.experience.map((exp, index) => (
+                <Typography key={index}>
+                  {`${exp.jobTitle} at ${exp.company} (${exp.startDate} - ${exp.endDate})`}
+                </Typography>
+              ))
+            ) : (
+              <Typography>No experience data available</Typography>
+            )}
+          </Box>
+
+          <Divider>
+            <Typography variant="h6">Skills</Typography>
+          </Divider>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, my: 2 }}>
+            {user.skills?.length ? (
+              user.skills.map((skill, index) => (
+                <Chip key={index} label={skill} />
+              ))
+            ) : (
+              <Typography>No skills provided</Typography>
+            )}
+          </Box>
+
+          <Divider>
+            <Typography variant="h6">CV</Typography>
+          </Divider>
+          <Box sx={{ my: 2 }}>
+            {user.cv ? (
+              <Typography>
+                CV:{" "}
+                <a
+                  href={`https://res.cloudinary.com/dkvyfbtdl/raw/upload/${user.cv}.pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View CV
+                </a>
+              </Typography>
+            ) : (
+              <Typography>No CV uploaded</Typography>
+            )}
+          </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBack}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Submit Profile
+            </Button>
+          </Box>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
 export default ReviewProfile;
+
