@@ -1,190 +1,510 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
-import { Avatar, Typography } from "@mui/material";
+import { 
+  Avatar, 
+  Typography, 
+  Drawer, 
+  IconButton, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  Divider, 
+  Box, 
+  Slide,
+  Button,
+  Container,
+  Badge
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+
+// Custom color palette based on #882024
+const theme = {
+  primary: "#882024",
+  primaryLight: "#a83236",
+  primaryDark: "#6c1519",
+  secondary: "#f5f5f5",
+  textPrimary: "#2d2d2d",
+  textSecondary: "#555555",
+  background: "#ffffff",
+  divider: "#e0e0e0"
+};
 
 function Navbar() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isProfile, setIsProfile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { user, setUser } = useContext(userContext);
   const navigate = useNavigate();
-  const toggleNavbar = () => {
-    setIsCollapsed(!isCollapsed);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  return (
-    <nav
-      className="navbar navbar-expand-lg navbar-light"
-      style={{ backgroundColor: "#dedede", color: "#901b20" }}
-    >
-      <div className="container-fluid">
-        <Link className="navbar-brand" to={"/"} style={{ color: "#901b20" }}>
-          Recruitment Platform
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          onClick={toggleNavbar}
-          aria-controls="navbarSupportedContent"
-          aria-expanded={!isCollapsed}
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div
-          className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}
-          id="navbarSupportedContent"
-        >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
-            {user?.user_type?.toLowerCase() === "jobseeker" && (
-              <>
-                <li className="nav-item">
-                  <Link
-                    style={{ textDecoration: "none", color: "#901b20" }}
-                    to="/applicant/profile/recom"
-                  >
-                    Recommended
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    style={{ textDecoration: "none", color: "#901b20" }}
-                    to="/applicant/jobs"
-                  >
-                    Jobs
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    style={{ textDecoration: "none", color: "#901b20" }}
-                    to="/applicant/saved"
-                  >
-                    Saved
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    style={{ textDecoration: "none", color: "#901b20" }}
-                    to="/applicant/applications"
-                  >
-                    Applications
-                  </Link>
-                </li>
-              </>
-            )}
-            {user?.user_type?.toLowerCase() === "company" && (
-              <>
-                <li className="nav-item">
-                  <Link
-                    style={{ textDecoration: "none", color: "#901b20" }}
-                    to="/company/talents"
-                  >
-                    Talents
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link style={{ textDecoration: "none" }} to="/company/jobs">
-                    My Jobs
-                  </Link>
-                </li>
-                {/* <li className="nav-item">
-                <Link style={{ textDecoration: 'none' }} to="jobCreate">Create Job</Link>
-            </li> */}
-              </>
-            )}
+  const handleProfileToggle = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
 
-            <div
-              className="ms-auto d-flex align-items-center gap-2"
-              style={{
-                position: "absolute",
-                right: "80px",
-                top: "10px",
-                cursor: "pointer",
-              }}
-              onClick={() => setIsProfile(!isProfile)}
-            >
-              {user && Object.keys(user).length !== 0 ? (
+  const handleLogout = (e) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to logout?")) {
+      logoutUser();
+      setUser({});
+      navigate("/");
+    }
+  };
+
+  const drawer = (
+    <Box
+      sx={{
+        width: 300,
+        height: "100%",
+        backgroundColor: theme.background,
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
+      <Box sx={{ 
+        display: "flex", 
+        justifyContent: "space-between",
+        alignItems: "center",
+        p: 3,
+        borderBottom: `1px solid ${theme.divider}`
+      }}>
+        <Typography variant="h6" sx={{ 
+          fontWeight: 700,
+          color: theme.primary,
+          letterSpacing: "-0.5px"
+        }}>
+          RecruitHub
+        </Typography>
+        <IconButton 
+          onClick={handleDrawerToggle}
+          sx={{
+            color: theme.textPrimary,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      
+      <Box sx={{ flexGrow: 1, p: 2 }}>
+        <List sx={{ py: 0 }}>
+          {user?.user_type?.toLowerCase() === "jobseeker" && (
+            <>
+              <NavDrawerItem to="/applicant/profile/recom" text="Recommended" icon="📌" />
+              <NavDrawerItem to="/applicant/jobs" text="Jobs" icon="💼" />
+              <NavDrawerItem to="/applicant/saved" text="Saved" icon="🔖" />
+              <NavDrawerItem to="/applicant/applications" text="Applications" icon="📩" />
+            </>
+          )}
+          {user?.user_type?.toLowerCase() === "company" && (
+            <>
+              <NavDrawerItem to="/company/talents" text="Talents" icon="👥" />
+              <NavDrawerItem to="/company/jobs" text="My Jobs" icon="🏢" />
+            </>
+          )}
+        </List>
+      </Box>
+      
+      {user ? (
+        <Box sx={{ p: 2, borderTop: `1px solid ${theme.divider}` }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleLogout}
+            sx={{
+              py: 1.5,
+              borderRadius: "8px",
+              borderColor: theme.divider,
+              color: theme.textPrimary,
+              "&:hover": {
+                borderColor: theme.primary,
+                backgroundColor: "rgba(136, 32, 36, 0.04)"
+              }
+            }}
+          >
+            Sign Out
+          </Button>
+        </Box>
+      ) : (
+        <Box sx={{ p: 2, borderTop: `1px solid ${theme.divider}` }}>
+          <Button
+            component={Link}
+            to="/register"
+            fullWidth
+            variant="contained"
+            sx={{
+              py: 1.5,
+              borderRadius: "8px",
+              backgroundColor: theme.primary,
+              "&:hover": {
+                backgroundColor: theme.primaryLight,
+                boxShadow: "0 4px 12px rgba(136, 32, 36, 0.2)"
+              }
+            }}
+          >
+            Get Started
+          </Button>
+          <Button
+            component={Link}
+            to="/login"
+            fullWidth
+            sx={{
+              mt: 1.5,
+              py: 1.5,
+              borderRadius: "8px",
+              color: theme.primary,
+              "&:hover": {
+                backgroundColor: "rgba(136, 32, 36, 0.04)"
+              }
+            }}
+          >
+            Already have an account? Sign In
+          </Button>
+        </Box>
+      )}
+    </Box>
+  );
+
+  return (
+    <>
+      <Box
+        component="nav"
+        sx={{
+          backgroundColor: theme.background,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+          position: "relative",
+          zIndex: 1100
+        }}
+      >
+        <Container maxWidth="xl">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              height: "72px"
+            }}
+          >
+            {/* Logo/Brand */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <Link 
+                to="/" 
+                style={{ textDecoration: "none" }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color: theme.primary,
+                    letterSpacing: "-0.5px",
+                    fontSize: "1.5rem",
+                    "&:hover": { opacity: 0.9 }
+                  }}
+                >
+                  RecruitHub
+                </Typography>
+              </Link>
+
+              {/* Desktop Navigation */}
+              <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1 }}>
+                {user?.user_type?.toLowerCase() === "jobseeker" && (
+                  <>
+                    <NavLink to="/applicant/profile/recom" text="Recommended" />
+                    <NavLink to="/applicant/jobs" text="Jobs" />
+                    <NavLink to="/applicant/saved" text="Saved" />
+                    <NavLink to="/applicant/applications" text="Applications" />
+                  </>
+                )}
+                {user?.user_type?.toLowerCase() === "company" && (
+                  <>
+                    <NavLink to="/company/talents" text="Talents" />
+                    <NavLink to="/company/jobs" text="My Jobs" />
+                  </>
+                )}
+              </Box>
+            </Box>
+
+            {/* User/Auth Section */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {user ? (
                 <>
-                  {/* Dropdown menu */}
-                  {isProfile && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "40px",
-                        right: "10px",
-                        backgroundColor: "white",
-                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  <IconButton sx={{ color: theme.textPrimary }}>
+                    <Badge badgeContent={3} color="error">
+                      <NotificationsNoneIcon />
+                    </Badge>
+                  </IconButton>
+                  
+                  <Box sx={{ position: "relative" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        cursor: "pointer",
+                        p: 1,
                         borderRadius: "8px",
-                        padding: "10px",
-                        zIndex: 1000,
+                        "&:hover": {
+                          backgroundColor: "rgba(136, 32, 36, 0.05)"
+                        }
                       }}
+                      onClick={handleProfileToggle}
                     >
-                      <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                        <li style={{ padding: "8px 0", cursor: "pointer" }}>
-                          <Link
+                      <Box sx={{ textAlign: "right", display: { xs: "none", md: "block" } }}>
+                        <Typography variant="subtitle2" sx={{ 
+                          fontWeight: 600,
+                          color: theme.textPrimary
+                        }}>
+                          {user?.name}
+                        </Typography>
+                        <Typography variant="caption" sx={{ 
+                          color: theme.textSecondary,
+                          lineHeight: 1
+                        }}>
+                          {user?.user_type}
+                        </Typography>
+                      </Box>
+                      <Avatar
+                        src={user?.img}
+                        alt="Profile"
+                        sx={{ 
+                          width: 40, 
+                          height: 40, 
+                          backgroundColor: theme.primary,
+                          "&:hover": {
+                            boxShadow: `0 0 0 2px ${theme.background}, 0 0 0 4px ${theme.primary}`
+                          }
+                        }}
+                      />
+                    </Box>
+
+                    {/* Profile Dropdown */}
+                    <Slide direction="down" in={isProfileOpen} mountOnEnter unmountOnExit>
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "60px",
+                          right: 0,
+                          backgroundColor: theme.background,
+                          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+                          borderRadius: "12px",
+                          overflow: "hidden",
+                          minWidth: "220px",
+                          border: `1px solid ${theme.divider}`
+                        }}
+                      >
+                        <Box sx={{ p: 2, borderBottom: `1px solid ${theme.divider}` }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                            {user?.name}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: theme.textSecondary }}>
+                            {user?.email}
+                          </Typography>
+                        </Box>
+                        <List sx={{ py: 0 }}>
+                          <ListItem 
+                            button 
+                            component={Link} 
                             to="/applicant/profile"
-                            style={{ textDecoration: "none", color: "#901b20" }}
+                            sx={{
+                              "&:hover": {
+                                backgroundColor: "rgba(136, 32, 36, 0.05)"
+                              }
+                            }}
                           >
-                            Profile
-                          </Link>
-                        </li>
-                        <li
-                          style={{
-                            padding: "8px 0",
-                            cursor: "pointer",
-                            color: "red",
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (
-                              window.confirm("Are you sure you want to logout?")
-                            ) {
-                              logoutUser();
-                              setUser({});
-                              navigate("/");
+                            <ListItemText 
+                              primary="My Profile" 
+                              primaryTypographyProps={{ 
+                                color: theme.textPrimary,
+                                fontWeight: 500 
+                              }}
+                            />
+                          </ListItem>
+                          <ListItem 
+                            button 
+                            component={Link} 
+                            to="/settings"
+                            sx={{
+                              "&:hover": {
+                                backgroundColor: "rgba(136, 32, 36, 0.05)"
+                              }
+                            }}
+                          >
+                            <ListItemText 
+                              primary="Settings" 
+                              primaryTypographyProps={{ 
+                                color: theme.textPrimary,
+                                fontWeight: 500 
+                              }}
+                            />
+                          </ListItem>
+                        </List>
+                        <Divider />
+                        <ListItem 
+                          button 
+                          onClick={handleLogout}
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "rgba(136, 32, 36, 0.05)"
                             }
                           }}
                         >
-                          Logout
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Avatar and Username */}
-                  <div className="d-flex align-items-center gap-2">
-                    <Typography>{user?.name}</Typography>
-                    <Avatar
-                      src={user?.img}
-                      alt="Profile"
-                      sx={{ width: 40, height: 40, backgroundColor: "#901b20" }}
-                    />
-                  </div>
+                          <ListItemText 
+                            primary="Sign Out" 
+                            primaryTypographyProps={{ 
+                              color: theme.primary,
+                              fontWeight: 600 
+                            }}
+                          />
+                        </ListItem>
+                      </Box>
+                    </Slide>
+                  </Box>
                 </>
               ) : (
-                // When no user is logged in
-                <li className="nav-item" style={{ marginTop: "10px" }}>
-                  <Link
-                    to="/register"
-                    style={{
-                      textDecoration: "none",
-                      padding: "10px 20px",
-                      background: "#007bff",
-                      color: "white",
-                      borderRadius: "5px",
+                <>
+                  <Button
+                    component={Link}
+                    to="/login"
+                    variant="text"
+                    sx={{
+                      display: { xs: "none", sm: "inline-flex" },
+                      color: theme.textPrimary,
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: theme.primary,
+                        backgroundColor: "transparent"
+                      }
                     }}
                   >
-                    Get Started
-                  </Link>
-                </li>
+                    Sign In
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/register"
+                    variant="contained"
+                    sx={{
+                      borderRadius: "8px",
+                      px: 3,
+                      py: 1.5,
+                      backgroundColor: theme.primary,
+                      "&:hover": {
+                        backgroundColor: theme.primaryLight,
+                        boxShadow: `0 4px 12px rgba(136, 32, 36, 0.3)`
+                      },
+                      transition: "all 0.2s ease"
+                    }}
+                  >
+                    Join Now
+                  </Button>
+                </>
               )}
-            </div>
-          </ul>
-        </div>
-      </div>
-    </nav>
+
+              {/* Mobile Menu Button */}
+              <IconButton
+                onClick={handleDrawerToggle}
+                sx={{ 
+                  ml: 1,
+                  display: { lg: "none" },
+                  color: theme.textPrimary,
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: "block", lg: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: 300,
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
+    </>
   );
 }
+
+// Custom NavLink component for desktop
+const NavLink = ({ to, text }) => (
+  <Link
+    to={to}
+    style={{ textDecoration: "none" }}
+  >
+    <Box
+      sx={{
+        px: 2,
+        py: 1.5,
+        borderRadius: "6px",
+        transition: "all 0.2s ease",
+        "&:hover": {
+          backgroundColor: "rgba(136, 32, 36, 0.05)",
+          "& .nav-text": {
+            color: "#882024",
+            fontWeight: 600
+          }
+        }
+      }}
+    >
+      <Typography
+        className="nav-text"
+        variant="body1"
+        sx={{
+          fontWeight: 500,
+          color: theme.textSecondary,
+          transition: "all 0.2s ease"
+        }}
+      >
+        {text}
+      </Typography>
+    </Box>
+  </Link>
+);
+
+// Custom NavDrawerItem component
+const NavDrawerItem = ({ to, text, icon }) => (
+  <ListItem 
+    button 
+    component={Link} 
+    to={to}
+    sx={{
+      borderRadius: "8px",
+      mb: 0.5,
+      "&:hover": {
+        backgroundColor: "rgba(136, 32, 36, 0.05)",
+        "& .drawer-text": {
+          color: "#882024",
+          fontWeight: 600
+        }
+      }
+    }}
+  >
+    <Typography variant="body1" sx={{ mr: 1.5 }}>{icon}</Typography>
+    <ListItemText 
+      primary={text}
+      primaryTypographyProps={{
+        className: "drawer-text",
+        color: theme.textPrimary,
+        fontWeight: 500
+      }} 
+    />
+  </ListItem>
+);
 
 export default Navbar;
