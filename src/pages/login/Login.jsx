@@ -103,7 +103,7 @@ function Login() {
           />
 
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Link component={RouterLink} to="/forget" underline="hover" style={{ color: "#901b20" }}>
+            <Link component={RouterLink} to="/forgot-password" underline="hover" style={{ color: "#901b20" }}>
               Forgot Password?
             </Link>
           </Box>
