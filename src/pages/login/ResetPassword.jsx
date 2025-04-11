@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Box, Typography, Container } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -15,7 +16,9 @@ const ResetPassword = () => {
 
     const fetchToken = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/user/password-reset/get-token/${email}/`);
+        const response = await axios.get(
+          `http://localhost:8000/user/password-reset/get-token/${email}/`
+        );
         console.log("Token received:", response.data.token);
         setToken(response.data.token);
       } catch (err) {
@@ -31,11 +34,10 @@ const ResetPassword = () => {
     setMessage("");
     setError("");
     try {
-      const response = await axios.post("http://localhost:8000/user/password-reset/confirm/", { 
-        email, 
-        token, 
-        new_password: newPassword
-      });
+      const response = await axios.post(
+        "http://localhost:8000/user/password-reset/confirm/",
+        { email, token, new_password: newPassword }
+      );
       setMessage(response.data.message);
       setTimeout(() => navigate("/login"), 2000); // Redirect after success
     } catch (err) {
@@ -44,21 +46,34 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Container>
+      <Box sx={{ mt: 5, display: "flex", flexDirection: "column", gap: 2 }}>
+        <Typography variant="h4" align="center">Reset Password</Typography>
+        <TextField
+          label="Enter new password"
           type="password"
-          placeholder="Enter new password"
+          variant="outlined"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
+          fullWidth
           required
         />
-        <button type="submit">Reset Password</button>
-      </form>
-      {message && <p>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+        {message && (
+          <Typography color="blue" align="center">{message}</Typography>
+        )}
+        {error && (
+          <Typography color="red" align="center">{error}</Typography>
+        )}
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={!newPassword}
+          sx={{ mt: 2 }}
+        >
+          Reset Password
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
