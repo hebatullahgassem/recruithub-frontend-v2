@@ -14,17 +14,21 @@ import {
   Grid,
   Checkbox,
   FormControlLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import { loginUser } from "../../services/Auth";
 import { userContext } from "../../context/UserContext";
 import Lottie from "lottie-react";
-import animationData from '../../assets/animations/LoginRegister.json';
+import animationData from "../../assets/animations/LoginRegister.json";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);
 
@@ -35,7 +39,9 @@ function Login() {
       setUser(res);
       navigate("/");
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      // Set the custom error message
+      setSnackbarMessage("Oops! Incorrect email or password. Please try again.");
+      setOpenSnackbar(true);
     }
   }
 
@@ -174,26 +180,25 @@ function Login() {
                   required
                 />
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
-                    sx={{
-                      color: "#901b20",
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 18,  // Reduced the checkbox icon size
-                      },
-                    }}
-                  />
-                }
-                label="Show Password"
-                sx={{
-                  color: "#901b20",
-                  fontSize: "0.75rem",  // Reduced font size of the label
-                }}
-              />
-
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                      sx={{
+                        color: "#901b20",
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 18,  // Reduced the checkbox icon size
+                        },
+                      }}
+                    />
+                  }
+                  label="Show Password"
+                  sx={{
+                    color: "#901b20",
+                    fontSize: "0.75rem",  // Reduced font size of the label
+                  }}
+                />
 
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                   <Link
@@ -244,6 +249,31 @@ function Login() {
           </Grid>
         </Grid>
       </Container>
+
+      {/* Snackbar for error message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000} // Set duration as desired
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Positioned at the top center
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          sx={{
+            width: "100%",
+            // backgroundColor: "#f44336",
+            color: "black",  // Text color for better contrast
+            fontWeight: "bold",
+            padding: "15px",  // Increased padding
+            fontSize: "1rem", // Increased font size
+            borderRadius: "10px", // Rounded corners
+            border: "2px solid red", // White border to make it stand out
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
