@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -18,6 +18,8 @@ import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/LoginRegister.json';
+import { debounce } from "lodash"; // Import lodash for debouncing
+
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -33,61 +35,79 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");  // Added email error state
   const [showPassword, setShowPassword] = useState(false); 
   const [passwordHelpText, setPasswordHelpText] = useState(""); 
 
   const navigate = useNavigate();
 
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.post("http://localhost:8000/user/check-email/", { email });
+      if (response.data.error) {
+        setEmailError("Email already exists. Please choose another one.");
+      }
+    } catch (error) {
+      console.error("Email check failed", error);
+    }
+  };
+
+  const checkUsernameExists = async (username) => {
+    try {
+      const response = await axios.post("http://localhost:8000/user/check-username/", { username });
+      if (response.data.error) {
+        setUsernameError("Username already exists. Please choose another one.");
+      }
+    } catch (error) {
+      console.error("Username check failed", error);
+    }
+  };
+
+  const debouncedEmailCheck = debounce(checkEmailExists, 500);
+  const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
+
+  useEffect(() => {
+    if (formData.email) debouncedEmailCheck(formData.email);
+    return () => debouncedEmailCheck.cancel();
+  }, [formData.email]);
+
+  useEffect(() => {
+    if (formData.username) debouncedUsernameCheck(formData.username);
+    return () => debouncedUsernameCheck.cancel();
+  }, [formData.username]);
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
 
-    // Password matching logic
-    if (name === "confirmPassword") {
-      if (value !== formData.password) {
-        setPasswordError("Passwords do not match");
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailError(emailRegex.test(value) ? "" : "Invalid email format.");
+    }
+
+    if (name === "username") {
+      const usernameRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+      setUsernameError(usernameRegex.test(value) ? "" : "Username must contain at least one number or special character.");
+    }
+
+    if (name === "name") {
+      const nameRegex = /^[A-Za-z\s]+$/;
+      setNameError(nameRegex.test(value) ? "" : "Name must only contain letters and spaces.");
+    }
+
+    if (name === "password" || name === "confirmPassword") {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+      setPasswordHelpText(passwordRegex.test(value) ? "" : "Password must contain uppercase, lowercase, number, and special character.");
+      
+      if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
+        setPasswordError("Passwords do not match.");
       } else {
         setPasswordError("");
       }
     }
-
-    // Password complexity logic
-    if (name === "password" || name === "confirmPassword") {
-      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
-      if (!passwordRegex.test(value)) {
-        setPasswordHelpText(
-          "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (including underscores)."
-        );
-      } else if (value.length < 8) {
-        setPasswordHelpText("Password must be at least 8 characters long.");
-      } else {
-        setPasswordHelpText(""); 
-      }
-    }
-
-    // Username validation: must contain special characters or numbers
-    if (name === "username") {
-      const usernameRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
-      if (!usernameRegex.test(value)) {
-        setUsernameError("Username must contain at least one special character, underscore, or number.");
-      } else {
-        setUsernameError("");
-      }
-    }
-
-    // Name validation: must not contain special characters or numbers
-    if (name === "name") {
-      const nameRegex = /^[A-Za-z\s]+$/; // Only alphabetic characters and spaces allowed
-      if (!nameRegex.test(value)) {
-        setNameError("Name must only contain letters and spaces.");
-      } else {
-        setNameError("");
-      }
-    }
   };
+
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -119,7 +139,7 @@ const Register = () => {
     }
 
     // Ensure username and name meet their criteria
-    if (usernameError || nameError || passwordError) {
+    if (usernameError || nameError || passwordError || emailError) {
       alert("Please fix the errors before submitting.");
       return;
     }
@@ -148,7 +168,42 @@ const Register = () => {
     usernameError ||
     nameError ||
     passwordError || 
+    emailError || 
     passwordHelpText;
+
+
+    const handleEmailCheck = async () => {
+      try {
+        const emailCheckResponse = await axios.post("http://localhost:8000/user/check-email/", {
+          email: formData.email
+        });
+    
+        if (emailCheckResponse.data.error) {
+          setEmailError("Email already exists. Please choose another one.");
+        } else {
+          setEmailError("");
+        }
+      } catch (error) {
+        console.error("Email check failed", error);
+      }
+    };
+    
+    const handleUsernameCheck = async () => {
+      try {
+        const usernameCheckResponse = await axios.post("http://localhost:8000/user/check-username/", {
+          username: formData.username
+        });
+    
+        if (usernameCheckResponse.data.error) {
+          setUsernameError("Username already exists. Please choose another one.");
+        } else {
+          setUsernameError("");
+        }
+      } catch (error) {
+        console.error("Username check failed", error);
+      }
+    };
+    
 
   return (
     <Box
@@ -244,6 +299,9 @@ const Register = () => {
                   }}
                   required
                 />
+                {emailError && (
+                  <Typography variant="body2" color="error">{emailError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
