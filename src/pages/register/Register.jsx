@@ -17,7 +17,7 @@ import {
 import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
-import animationData from '../../assets/animations/LoginRegister.json'; 
+import animationData from '../../assets/animations/LoginRegister.json';
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -32,6 +32,7 @@ const Register = () => {
 
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false); // State for Show Password
+  const [passwordHelpText, setPasswordHelpText] = useState(""); // For displaying the password criteria
 
   const navigate = useNavigate();
 
@@ -42,14 +43,31 @@ const Register = () => {
       [name]: value,
     });
 
-    if (name === "confirmPassword" || name === "password") {
-      if (formData.password !== value && name === "confirmPassword") {
-        setPasswordError("Passwords do not match");
-      } else {
-        setPasswordError("");
-      }
+   // Password matching logic
+  if (name === "confirmPassword") {
+    if (value !== formData.password) {
+      setPasswordError("Passwords do not match");
+    } else {
+      setPasswordError(""); // Clear error if passwords match
     }
-  };
+  }
+
+  // Password complexity logic
+  if (name === "password" || name === "confirmPassword") {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    
+    // If password doesn't match complexity, show help text
+    if (!passwordRegex.test(value)) {
+      setPasswordHelpText(
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+      );
+    } else if (value.length < 8) {
+      setPasswordHelpText("Password must be at least 8 characters long.");
+    } else {
+      setPasswordHelpText(""); // Clear help text if valid
+    }
+  }
+};
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -62,12 +80,29 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
+    // Ensure passwords match first
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
+      alert("Passwords do not match. Please ensure both passwords are identical.");
       return;
     }
-
+  
+    // If password meets criteria, proceed
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setPasswordError("Password must meet the required complexity.");
+      alert(
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+      );
+      return;
+    } else if (formData.password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long.");
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+  
+    // Proceed with registration
     try {
       const formattedData = {
         ...formData,
@@ -80,7 +115,8 @@ const Register = () => {
       alert("Registration failed. Please check your details.");
       console.error("Registration failed", error);
     }
-  };
+  };  
+  
 
   return (
     <Box
@@ -240,7 +276,7 @@ const Register = () => {
                     ),
                   }}
                   error={!!passwordError}
-                  helperText={passwordError}
+                  helperText={passwordError || passwordHelpText} // Show password error or help text
                   required
                 />
 

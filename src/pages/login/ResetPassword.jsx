@@ -25,6 +25,7 @@ const ResetPassword = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [passwordHelpText, setPasswordHelpText] = useState(""); // For password criteria help text
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const ResetPassword = () => {
     fetchToken();
   }, [email]);
 
-  // Real-time password match check
+  // Real-time password match and complexity check
   const handleConfirmPasswordChange = (e) => {
     const value = e.target.value;
     setConfirmPassword(value);
@@ -54,6 +55,23 @@ const ResetPassword = () => {
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setNewPassword(value);
+
+    // Check password complexity
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(value)) {
+      setPasswordHelpText(
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+      );
+    } else if (value.length < 8) {
+      setPasswordHelpText("Password must be at least 8 characters long.");
+    } else {
+      setPasswordHelpText(""); // Clear password help text if valid
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -62,9 +80,23 @@ const ResetPassword = () => {
     // Check if the passwords match before submitting
     if (newPassword !== confirmPassword) {
       setPasswordError("Passwords do not match");
+      alert("Passwords do not match. Please ensure both passwords are identical.");
       return;
     }
 
+    // Check for password complexity and length
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      alert(
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+      );
+      return;
+    } else if (newPassword.length < 8) {
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+    // Proceed with password reset
     try {
       const response = await axios.post(
         "http://localhost:8000/user/password-reset/confirm/",
@@ -140,7 +172,7 @@ const ResetPassword = () => {
                   variant="outlined"
                   type={showPassword ? "text" : "password"} // Toggle password visibility
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#901b20' },
@@ -177,7 +209,7 @@ const ResetPassword = () => {
                     '& .MuiInputLabel-root': { color: '#901b20' },
                   }}
                   error={!!passwordError}
-                  helperText={passwordError}
+                  helperText={passwordError || passwordHelpText}
                   required
                   InputProps={{
                     endAdornment: (
