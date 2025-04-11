@@ -46,3 +46,25 @@ export const patchApplication = async (id, patchData) => {
   return response.data;
 };
 
+export async function bulkUpdateApplicationStatus(applicationIds, status, fail = false) {
+  try {
+      const response = await AxiosApi.patch(
+          'applications/bulk_update_status/',
+          {
+              application_ids: applicationIds,
+              status: String(status),
+              fail: fail
+          },
+          {
+              headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                  'Content-Type': 'application/json'
+              }
+          }
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error in bulkUpdateApplicationStatus:', error);
+      throw error;
+  }
+}
