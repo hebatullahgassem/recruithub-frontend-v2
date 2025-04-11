@@ -18,7 +18,7 @@ import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/LoginRegister.json';
-import { debounce } from "lodash"; // Import lodash for debouncing
+import { debounce } from "lodash";
 
 
 const Register = () => {
@@ -35,7 +35,7 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");  // Added email error state
+  const [emailError, setEmailError] = useState("");  
   const [showPassword, setShowPassword] = useState(false); 
   const [passwordHelpText, setPasswordHelpText] = useState(""); 
 
@@ -44,42 +44,57 @@ const Register = () => {
   const checkEmailExists = async (email) => {
     try {
       const response = await axios.post("http://localhost:8000/user/check-email/", { email });
-      if (response.data.error) {
-        setEmailError("Email already exists. Please choose another one.");
+      if (response.data.exists) {
+        setEmailError(response.data.error || "Email already exists. Please choose another one.");
+        return true; 
       }
+      setEmailError("");
+      return false; 
     } catch (error) {
       console.error("Email check failed", error);
+      return false;
     }
   };
-
+  
   const checkUsernameExists = async (username) => {
     try {
       const response = await axios.post("http://localhost:8000/user/check-username/", { username });
-      if (response.data.error) {
-        setUsernameError("Username already exists. Please choose another one.");
+      if (response.data.exists) {
+        setUsernameError(response.data.error || "Username already exists. Please choose another one.");
+        return true; 
       }
+      setUsernameError("");
+      return false;
     } catch (error) {
       console.error("Username check failed", error);
+      return false;
     }
   };
-
+  
+  
   const debouncedEmailCheck = debounce(checkEmailExists, 500);
   const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
 
   useEffect(() => {
-    if (formData.email) debouncedEmailCheck(formData.email);
+    if (formData.email && !emailError) { 
+      debouncedEmailCheck(formData.email);
+    }
     return () => debouncedEmailCheck.cancel();
-  }, [formData.email]);
+  }, [formData.email, emailError]);
 
   useEffect(() => {
-    if (formData.username) debouncedUsernameCheck(formData.username);
+    if (formData.username && !usernameError) { 
+      debouncedUsernameCheck(formData.username);
+    }
     return () => debouncedUsernameCheck.cancel();
-  }, [formData.username]);
+  }, [formData.username, usernameError]);
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const updatedFormData = { ...formData, [name]: value };  
+    
+    setFormData(updatedFormData);  
 
     if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -100,14 +115,12 @@ const Register = () => {
       const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
       setPasswordHelpText(passwordRegex.test(value) ? "" : "Password must contain uppercase, lowercase, number, and special character.");
       
-      if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
-        setPasswordError("Passwords do not match.");
-      } else {
-        setPasswordError("");
+      // Use the updatedFormData instead of formData
+      if (name === "confirmPassword" || (name === "password" && updatedFormData.confirmPassword)) {
+        setPasswordError(updatedFormData.password !== updatedFormData.confirmPassword ? "Passwords do not match." : "");
       }
     }
-  };
-
+};
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -118,8 +131,22 @@ const Register = () => {
     }));
   };
 
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const emailExists = await checkEmailExists(formData.email);
+  if (emailExists) {
+    return;
+  }
+
+  // Check if username exists
+  const usernameExists = await checkUsernameExists(formData.username);
+  if (usernameExists) {
+    return;
+  }
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
@@ -160,16 +187,16 @@ const Register = () => {
 
   // Check if the submit button should be disabled
   const isSubmitDisabled =
-    !formData.email ||
-    !formData.username ||
-    !formData.name ||
-    !formData.password ||
-    !formData.confirmPassword ||
-    usernameError ||
-    nameError ||
-    passwordError || 
-    emailError || 
-    passwordHelpText;
+  !formData.email ||
+  !formData.username ||
+  !formData.name ||
+  !formData.password ||
+  !formData.confirmPassword ||
+  !!usernameError || // Convert to boolean
+  !!nameError ||
+  !!passwordError || 
+  !!emailError || 
+  passwordHelpText;
 
 
     const handleEmailCheck = async () => {
