@@ -11,6 +11,8 @@ import {
   InputAdornment,
   Divider,
   Grid,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,6 +31,7 @@ const Register = () => {
   });
 
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for Show Password
 
   const navigate = useNavigate();
 
@@ -207,7 +210,7 @@ const Register = () => {
                   fullWidth
                   label="Password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Toggle between text and password type
                   variant="outlined"
                   value={formData.password}
                   onChange={handleChange}
@@ -225,7 +228,7 @@ const Register = () => {
                   fullWidth
                   label="Confirm Password"
                   name="confirmPassword"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Toggle between text and password type
                   variant="outlined"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -239,6 +242,26 @@ const Register = () => {
                   error={!!passwordError}
                   helperText={passwordError}
                   required
+                />
+
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                      sx={{
+                        color: "#911720",
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 18,  // Reduced the checkbox icon size
+                        },
+                      }}
+                    />
+                  }
+                  label="Show Password"
+                  sx={{
+                    color: "#911720",
+                    fontSize: "0.75rem",  // Reduced font size of the label
+                  }}
                 />
 
                 <Button

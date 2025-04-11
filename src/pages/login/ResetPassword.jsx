@@ -9,9 +9,12 @@ import {
   Box,
   Divider,
   Grid,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import Lottie from "lottie-react";
 import animationData from "../../assets/animations/LoginRegister.json";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const ResetPassword = () => {
   const { email } = useParams();
@@ -22,6 +25,7 @@ const ResetPassword = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -134,7 +138,7 @@ const ResetPassword = () => {
                   fullWidth
                   label="Enter new password"
                   variant="outlined"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Toggle password visibility
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   sx={{
@@ -145,12 +149,24 @@ const ResetPassword = () => {
                     '& .MuiInputLabel-root': { color: '#901b20' },
                   }}
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <TextField
                   fullWidth
                   label="Confirm new password"
                   variant="outlined"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Toggle password visibility
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   sx={{
@@ -163,6 +179,18 @@ const ResetPassword = () => {
                   error={!!passwordError}
                   helperText={passwordError}
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {message && (
                   <Typography color="blue" align="center">{message}</Typography>

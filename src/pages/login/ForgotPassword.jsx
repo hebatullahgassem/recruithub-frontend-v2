@@ -128,12 +128,42 @@ function ForgotPassword() {
                   }}
                   required
                 />
-                {message && countdown > 0 && (
-                  <Typography color="blue" align="center">{message}</Typography>
+                {message && countdown === 0 && (
+                  <Typography
+                    color="success.main"
+                    align="center"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      color: "#4CAF50",  // Green color for success message
+                    }}
+                  >
+                    {message}
+                  </Typography>
                 )}
-                {error && <Typography color="red" align="center">{error}</Typography>}
+                {error && (
+                  <Typography
+                    color="error.main"
+                    align="center"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      color: "#D32F2F",  // Red color for error message
+                    }}
+                  >
+                    {error}
+                  </Typography>
+                )}
                 {countdown > 0 && (
-                  <Typography color="orange" align="center">
+                  <Typography
+                    color="orange"
+                    align="center"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      color: "#FF9800",  // Orange color for countdown message
+                    }}
+                  >
                     Please wait {countdown} seconds before trying again.
                   </Typography>
                 )}
