@@ -183,7 +183,7 @@ const JobCreate = () => {
         });
         setQuestions([]);
         setUpdate(false);
-        navigate("/company/jobs" + jobId);
+        navigate("/company/jobs/" + jobId);
       } else {
         console.error("Failed to update job");
       }

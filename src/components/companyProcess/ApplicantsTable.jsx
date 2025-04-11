@@ -18,11 +18,13 @@ import {
   FaUserCheck,
   FaUserSlash,
 } from "react-icons/fa";
+import { RiQuestionAnswerFill } from "react-icons/ri";
 import { GiCancel } from "react-icons/gi";
 import CompanySchedule from "../Popup/Schedule";
 //   import axiosInstance from "../../../apis/config";
 import axios from "axios";
 import { userContext } from "../../context/UserContext";
+import { useLocation, useParams } from "react-router";
 
 function ApplicantsTable({ phase }) {
   const [page, setPage] = useState(1);
@@ -30,11 +32,12 @@ function ApplicantsTable({ phase }) {
   const [total, setTotal] = useState(1);
   const [update, setUpdate] = useState({});
   const { user } = useContext(userContext);
+  const { id } = useParams();
 
   const queryKey = ["applicants", page, rowsPerPage, phase];
   const queryFn = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/applications/`, {
-      params: { page, page_size: rowsPerPage, status: phase + 1, company: user?.id }, //, company: 3
+      params: { page, page_size: rowsPerPage, status: phase + 1, job: id }, //, company: 3
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -68,6 +71,13 @@ function ApplicantsTable({ phase }) {
     setRowsPerPage(event.target.value);
   };
   const handleNext = async (applicant, phase) => {
+    if (
+      !confirm(
+        "Are you sure you want to move this applicant to the next phase?"
+      )
+    ) {
+      return;
+    }
     if (phase < 5) {
       try {
         const response = await axios.patch(
@@ -97,6 +107,9 @@ function ApplicantsTable({ phase }) {
   };
 
   const handleFail = async (applicant, phase) => {
+    if (!confirm("Are you sure you want to make this applicant fail?")) {
+      return;
+    }
     try {
       const response = await axios.patch(
         // `http://localhost:8000/applications/${applicant}/`,
@@ -143,8 +156,11 @@ function ApplicantsTable({ phase }) {
       className="d-flex flex-column align-items-center justify-content-center"
       style={{ maxWidth: "inherit" }}
     >
-      
-      {applicants?.length < 1 && <p style={{color:'red'}}>There are no applicants in the current phase of this job.</p>}
+      {applicants?.length < 1 && (
+        <p style={{ color: "red" }}>
+          There are no applicants in the current phase of this job.
+        </p>
+      )}
       {update.id ? (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
@@ -236,7 +252,7 @@ function ApplicantsTable({ phase }) {
                     fontWeight: "bold",
                   }}
                 >
-                  Status
+                  Status & ATS
                 </TableCell>
                 <TableCell
                   style={{
@@ -269,8 +285,16 @@ function ApplicantsTable({ phase }) {
                       size="small"
                       variant="light"
                     />
+                    {applicant?.ats_res > 0 && (
+                      <Chip
+                        color={"primary"}
+                        label={applicant.ats_res + "%"}
+                        size="small"
+                        variant="light"
+                      />
+                    )}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell>
                     {!applicant.fail ? (
                       <>
                         <FaUserSlash
@@ -290,6 +314,17 @@ function ApplicantsTable({ phase }) {
                             display: phase === 5 ? "none" : "initial",
                           }}
                           onClick={() => handleNext(applicant.id, phase)}
+                        />
+
+                        <RiQuestionAnswerFill
+                          style={{
+                            cursor: "pointer",
+                            scale: 1.5,
+                            marginLeft: "20px",
+                            display: applicant.answers && applicant.answers.length > 0 ? "intial" : "none",
+                            // color: "red",
+                          }}
+                          onClick={() => handleFail(applicant.id, phase)}
                         />
                       </>
                     ) : (

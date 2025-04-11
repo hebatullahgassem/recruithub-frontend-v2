@@ -20,11 +20,7 @@ export const getUser = async (token) => {
   console.log("Token:", token);  // Check if the token is valid and exists
 
   try {
-    const response = await axios.get('http://localhost:8000/user/profile/', {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await AxiosApi.get('user/profile/');
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {
