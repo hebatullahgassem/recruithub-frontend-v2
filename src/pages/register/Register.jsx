@@ -31,8 +31,10 @@ const Register = () => {
   });
 
   const [passwordError, setPasswordError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State for Show Password
-  const [passwordHelpText, setPasswordHelpText] = useState(""); // For displaying the password criteria
+  const [usernameError, setUsernameError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
+  const [passwordHelpText, setPasswordHelpText] = useState(""); 
 
   const navigate = useNavigate();
 
@@ -43,31 +45,49 @@ const Register = () => {
       [name]: value,
     });
 
-   // Password matching logic
-  if (name === "confirmPassword") {
-    if (value !== formData.password) {
-      setPasswordError("Passwords do not match");
-    } else {
-      setPasswordError(""); // Clear error if passwords match
+    // Password matching logic
+    if (name === "confirmPassword") {
+      if (value !== formData.password) {
+        setPasswordError("Passwords do not match");
+      } else {
+        setPasswordError("");
+      }
     }
-  }
 
-  // Password complexity logic
-  if (name === "password" || name === "confirmPassword") {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    
-    // If password doesn't match complexity, show help text
-    if (!passwordRegex.test(value)) {
-      setPasswordHelpText(
-        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
-      );
-    } else if (value.length < 8) {
-      setPasswordHelpText("Password must be at least 8 characters long.");
-    } else {
-      setPasswordHelpText(""); // Clear help text if valid
+    // Password complexity logic
+    if (name === "password" || name === "confirmPassword") {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+      if (!passwordRegex.test(value)) {
+        setPasswordHelpText(
+          "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (including underscores)."
+        );
+      } else if (value.length < 8) {
+        setPasswordHelpText("Password must be at least 8 characters long.");
+      } else {
+        setPasswordHelpText(""); 
+      }
     }
-  }
-};
+
+    // Username validation: must contain special characters or numbers
+    if (name === "username") {
+      const usernameRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+      if (!usernameRegex.test(value)) {
+        setUsernameError("Username must contain at least one special character, underscore, or number.");
+      } else {
+        setUsernameError("");
+      }
+    }
+
+    // Name validation: must not contain special characters or numbers
+    if (name === "name") {
+      const nameRegex = /^[A-Za-z\s]+$/; // Only alphabetic characters and spaces allowed
+      if (!nameRegex.test(value)) {
+        setNameError("Name must only contain letters and spaces.");
+      } else {
+        setNameError("");
+      }
+    }
+  };
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -80,29 +100,30 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Ensure passwords match first
+
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
       alert("Passwords do not match. Please ensure both passwords are identical.");
       return;
     }
-  
-    // If password meets criteria, proceed
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // If password meets criteria
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       setPasswordError("Password must meet the required complexity.");
-      alert(
-        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
-      );
       return;
     } else if (formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
       alert("Password must be at least 8 characters long.");
       return;
     }
-  
-    // Proceed with registration
+
+    // Ensure username and name meet their criteria
+    if (usernameError || nameError || passwordError) {
+      alert("Please fix the errors before submitting.");
+      return;
+    }
+
     try {
       const formattedData = {
         ...formData,
@@ -115,8 +136,19 @@ const Register = () => {
       alert("Registration failed. Please check your details.");
       console.error("Registration failed", error);
     }
-  };  
-  
+  };
+
+  // Check if the submit button should be disabled
+  const isSubmitDisabled =
+    !formData.email ||
+    !formData.username ||
+    !formData.name ||
+    !formData.password ||
+    !formData.confirmPassword ||
+    usernameError ||
+    nameError ||
+    passwordError || 
+    passwordHelpText;
 
   return (
     <Box
@@ -163,10 +195,10 @@ const Register = () => {
                 justifyContent: "center",
               }}
             >
-              <Typography 
-                variant="h5" 
-                align="center" 
-                fontWeight="bold" 
+              <Typography
+                variant="h5"
+                align="center"
+                fontWeight="bold"
                 gutterBottom
                 sx={{ color: "#911720" }}
               >
@@ -177,9 +209,9 @@ const Register = () => {
               <Button
                 fullWidth
                 variant="outlined"
-                sx={{ 
-                  mb: 3, 
-                  textTransform: "none", 
+                sx={{
+                  mb: 3,
+                  textTransform: "none",
                   py: 1,
                   color: "#911720",
                   borderColor: "#911720",
@@ -230,6 +262,9 @@ const Register = () => {
                   }}
                   required
                 />
+                {usernameError && (
+                  <Typography variant="body2" color="error">{usernameError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
@@ -241,12 +276,15 @@ const Register = () => {
                   onChange={handleChange}
                   required
                 />
+                {nameError && (
+                  <Typography variant="body2" color="error">{nameError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
                   label="Password"
                   name="password"
-                  type={showPassword ? "text" : "password"} // Toggle between text and password type
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   value={formData.password}
                   onChange={handleChange}
@@ -264,7 +302,7 @@ const Register = () => {
                   fullWidth
                   label="Confirm Password"
                   name="confirmPassword"
-                  type={showPassword ? "text" : "password"} // Toggle between text and password type
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -276,7 +314,7 @@ const Register = () => {
                     ),
                   }}
                   error={!!passwordError}
-                  helperText={passwordError || passwordHelpText} // Show password error or help text
+                  helperText={passwordError || passwordHelpText}
                   required
                 />
 
@@ -288,7 +326,7 @@ const Register = () => {
                       sx={{
                         color: "#911720",
                         "& .MuiSvgIcon-root": {
-                          fontSize: 18,  // Reduced the checkbox icon size
+                          fontSize: 18,
                         },
                       }}
                     />
@@ -296,7 +334,7 @@ const Register = () => {
                   label="Show Password"
                   sx={{
                     color: "#911720",
-                    fontSize: "0.75rem",  // Reduced font size of the label
+                    fontSize: "0.75rem",
                   }}
                 />
 
@@ -316,6 +354,7 @@ const Register = () => {
                       background: "#911720",
                     },
                   }}
+                  disabled={isSubmitDisabled} // Disable button if criteria are not met
                 >
                   Register
                 </Button>

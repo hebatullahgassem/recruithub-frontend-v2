@@ -28,6 +28,9 @@ const ResetPassword = () => {
   const [passwordHelpText, setPasswordHelpText] = useState(""); // For password criteria help text
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
+  // Password complexity regex (same as in registration)
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_\-])[A-Za-z\d@$!%*?&_\-]{8,}$/;
+
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -60,7 +63,6 @@ const ResetPassword = () => {
     setNewPassword(value);
 
     // Check password complexity
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(value)) {
       setPasswordHelpText(
         "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -85,7 +87,6 @@ const ResetPassword = () => {
     }
 
     // Check for password complexity and length
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
       alert(
         "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -108,6 +109,9 @@ const ResetPassword = () => {
       setError(err.response?.data?.token || "Something went wrong");
     }
   };
+
+  // Disable submit button when criteria is not met
+  const isSubmitDisabled = !newPassword || !confirmPassword || passwordError || !passwordRegex.test(newPassword);
 
   return (
     <Box
@@ -235,7 +239,7 @@ const ResetPassword = () => {
                   variant="contained"
                   size="large"
                   onClick={handleSubmit}
-                  disabled={!newPassword || !confirmPassword || passwordError}
+                  disabled={isSubmitDisabled}
                   sx={{
                     mt: 2,
                     py: 1.5,
@@ -246,7 +250,7 @@ const ResetPassword = () => {
                       transition: "transform 0.2s",
                       background: "#901b20",
                     },
-                    opacity: !newPassword || !confirmPassword || passwordError ? 0.6 : 1,
+                    opacity: isSubmitDisabled ? 0.6 : 1,
                   }}
                 >
                   Reset Password
