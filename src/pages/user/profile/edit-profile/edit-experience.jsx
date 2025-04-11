@@ -1,11 +1,61 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
-import { Button, TextField, Box, Grid } from "@mui/material";
+import { Button, TextField, Box, Grid, CircularProgress, Alert } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AxiosApi } from "../../../../services/Api";
 
 const EditExperience = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const locationUserId = location.state?.userId;
   const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
-  const [experiences, setExperiences] = useState(profileData.experience || []);
+  const userId = locationUserId || profileData?.id;
+
+  const [experiences, setExperiences] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch experience on mount
+  useEffect(() => {
+    if (!userId) {
+      navigate("/applicant/profile", { replace: true });
+      return;
+    }
+
+    const fetchExperience = async () => {
+      try {
+        const res = await AxiosApi.get(`user/jobseekers/${userId}/`, {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const expData = res.data?.experience;
+
+        if (!expData) {
+          setExperiences([]);
+        } else if (Array.isArray(expData)) {
+          setExperiences(expData);
+        } else {
+          try {
+            const parsed = JSON.parse(expData);
+            setExperiences(Array.isArray(parsed) ? parsed : [parsed]);
+          } catch (err) {
+            console.error("Invalid JSON in experience:", err);
+            setExperiences([]);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching experience:", err);
+        setError("Failed to load experience data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExperience();
+  }, [userId]);
 
   const handleAddExperience = () => {
     setExperiences([
@@ -28,18 +78,42 @@ const EditExperience = () => {
     setExperiences(updatedExperiences);
   };
 
-  const handleSave = () => {
-    updateProfile("experience", experiences);
-    goToNextStep("/applicant/profile/edit-skills");
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("experience", JSON.stringify(experiences));
+
+      await AxiosApi.patch(`user/jobseekers/${userId}/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      updateProfile("experience", experiences);
+      goToNextStep("/applicant/profile/edit-skills", { userId });
+    } catch (err) {
+      console.error("Error saving experience:", err);
+      setError("Failed to save experience.");
+    }
   };
+
   const handleBack = () => {
     updateProfile("experience", experiences);
-    goToNextStep("/applicant/profile/edit-education");
+    goToNextStep("/applicant/profile/edit-education", { userId });
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+        <span style={{ marginLeft: "10px" }}>Loading experience data...</span>
+      </Box>
+    );
+  }
 
   return (
     <div>
-      <ProfileStepper activeStep={2} />
+      {/* <ProfileStepper activeStep={2} /> */}
       <h2>Edit Experience</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         {experiences.map((exp, index) => (
@@ -56,10 +130,9 @@ const EditExperience = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => {
-                const newExperiences = experiences.filter((_, i) => i !== index);
-                setExperiences(newExperiences);
-              }}
+              onClick={() =>
+                setExperiences(experiences.filter((_, i) => i !== index))
+              }
               sx={{ position: "absolute", top: 0, right: 0, padding: 0 }}
             >
               X
@@ -83,7 +156,7 @@ const EditExperience = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Company Location"
+                  label="Location"
                   value={exp.location}
                   onChange={(e) => handleChange(index, "location", e.target.value)}
                   fullWidth
@@ -91,14 +164,15 @@ const EditExperience = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  // label="Employment Type"
                   select
                   SelectProps={{ native: true }}
                   value={exp.employmentType}
-                  onChange={(e) => handleChange(index, "employmentType", e.target.value)}
+                  onChange={(e) =>
+                    handleChange(index, "employmentType", e.target.value)
+                  }
                   fullWidth
                 >
-                  {/* <option value="">Select Employment Type</option> */}
+                  <option value="">Select Employment Type</option>
                   <option value="full-time">Full-time</option>
                   <option value="part-time">Part-time</option>
                   <option value="freelance">Freelance</option>
@@ -138,15 +212,23 @@ const EditExperience = () => {
             </Grid>
           </Box>
         ))}
+
         <Button variant="outlined" onClick={handleAddExperience}>
           Add More
         </Button>
-        <Button variant="outlined" onClick={handleBack}>
-          Back: Education
-        </Button>
-        <Button variant="contained" onClick={handleSave}>
-          Next: Skills
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button variant="outlined" onClick={handleBack}>
+            Back: Education
+          </Button>
+          <Button variant="contained" onClick={handleSave}>
+            Next: Skills
+          </Button>
+        </Box>
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
       </Box>
     </div>
   );
