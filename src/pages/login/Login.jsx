@@ -12,16 +12,23 @@ import {
   InputAdornment,
   Divider,
   Grid,
+  Checkbox,
+  FormControlLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import { loginUser } from "../../services/Auth";
 import { userContext } from "../../context/UserContext";
 import Lottie from "lottie-react";
-import animationData from '../../assets/animations/LoginRegister.json'; 
+import animationData from "../../assets/animations/LoginRegister.json";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
   const { setUser } = useContext(userContext);
 
@@ -32,7 +39,9 @@ function Login() {
       setUser(res);
       navigate("/");
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      // Set the custom error message
+      setSnackbarMessage("Oops! Incorrect email or password. Please try again.");
+      setOpenSnackbar(true);
     }
   }
 
@@ -48,9 +57,8 @@ function Login() {
         justifyContent: "center",
         alignItems: "center",
         width: "90%",
-        hight: "90%",
+        height: "90%",
         minHeight: "80vh",
-        // background: "",
       }}
     >
       <Container maxWidth="lg">
@@ -88,20 +96,22 @@ function Login() {
                 justifyContent: "center",
               }}
             >
-              <Typography 
-                variant="h5" 
-                align="center" 
-                fontWeight="bold" 
+              <Typography
+                variant="h5"
+                align="center"
+                fontWeight="bold"
                 gutterBottom
                 sx={{ color: "#901b20" }}
               >
                 Login
               </Typography>
-              <Divider sx={{ 
-                mb: 4, 
-                backgroundColor: "#901b20",
-                height: 2,
-              }} />
+              <Divider
+                sx={{
+                  mb: 4,
+                  backgroundColor: "#901b20",
+                  height: 2,
+                }}
+              />
 
               <Box
                 component="form"
@@ -124,16 +134,16 @@ function Login() {
                     ),
                   }}
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#901b20',
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
                       },
-                      '&:hover fieldset': {
-                        borderColor: '#901b20',
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
                       },
                     },
-                    '& .MuiInputLabel-root': {
-                      color: '#901b20',
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
                     },
                   }}
                   required
@@ -142,7 +152,7 @@ function Login() {
                 <TextField
                   fullWidth
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   placeholder="••••••••"
                   value={password}
@@ -155,27 +165,47 @@ function Login() {
                     ),
                   }}
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#901b20',
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
                       },
-                      '&:hover fieldset': {
-                        borderColor: '#901b20',
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
                       },
                     },
-                    '& .MuiInputLabel-root': {
-                      color: '#901b20',
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
                     },
                   }}
                   required
                 />
 
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                      sx={{
+                        color: "#901b20",
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 18,  // Reduced the checkbox icon size
+                        },
+                      }}
+                    />
+                  }
+                  label="Show Password"
+                  sx={{
+                    color: "#901b20",
+                    fontSize: "0.75rem",  // Reduced font size of the label
+                  }}
+                />
+
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Link 
-                    component={RouterLink} 
-                    to="/forget" 
-                    underline="hover" 
-                    sx={{ color: "#901b20", fontWeight: 'bold' }}
+                  <Link
+                    component={RouterLink}
+                    to="/forgot-password"
+                    underline="hover"
+                    sx={{ color: "#901b20", fontWeight: "bold" }}
                   >
                     Forgot Password?
                   </Link>
@@ -205,11 +235,11 @@ function Login() {
 
                 <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
                   New to the website?{" "}
-                  <Link 
-                    component={RouterLink} 
-                    to="/register" 
-                    underline="hover" 
-                    sx={{ color: "#901b20", fontWeight: 'bold' }}
+                  <Link
+                    component={RouterLink}
+                    to="/register"
+                    underline="hover"
+                    sx={{ color: "#901b20", fontWeight: "bold" }}
                   >
                     Create Account
                   </Link>
@@ -219,6 +249,31 @@ function Login() {
           </Grid>
         </Grid>
       </Container>
+
+      {/* Snackbar for error message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000} // Set duration as desired
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Positioned at the top center
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          sx={{
+            width: "100%",
+            // backgroundColor: "#f44336",
+            color: "black",  // Text color for better contrast
+            fontWeight: "bold",
+            padding: "15px",  // Increased padding
+            fontSize: "1rem", // Increased font size
+            borderRadius: "10px", // Rounded corners
+            border: "2px solid red", // White border to make it stand out
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

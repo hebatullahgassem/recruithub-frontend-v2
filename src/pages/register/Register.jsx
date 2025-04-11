@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -11,11 +11,15 @@ import {
   InputAdornment,
   Divider,
   Grid,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
-import animationData from '../../assets/animations/LoginRegister.json'; 
+import animationData from '../../assets/animations/LoginRegister.json';
+import { debounce } from "lodash"; // Import lodash for debouncing
+
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -24,17 +28,86 @@ const Register = () => {
     username: "",
     name: "",
     password: "",
+    confirmPassword: "",
     user_type: "jobseeker",
   });
 
+  const [passwordError, setPasswordError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");  // Added email error state
+  const [showPassword, setShowPassword] = useState(false); 
+  const [passwordHelpText, setPasswordHelpText] = useState(""); 
+
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.post("http://localhost:8000/user/check-email/", { email });
+      if (response.data.error) {
+        setEmailError("Email already exists. Please choose another one.");
+      }
+    } catch (error) {
+      console.error("Email check failed", error);
+    }
   };
+
+  const checkUsernameExists = async (username) => {
+    try {
+      const response = await axios.post("http://localhost:8000/user/check-username/", { username });
+      if (response.data.error) {
+        setUsernameError("Username already exists. Please choose another one.");
+      }
+    } catch (error) {
+      console.error("Username check failed", error);
+    }
+  };
+
+  const debouncedEmailCheck = debounce(checkEmailExists, 500);
+  const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
+
+  useEffect(() => {
+    if (formData.email) debouncedEmailCheck(formData.email);
+    return () => debouncedEmailCheck.cancel();
+  }, [formData.email]);
+
+  useEffect(() => {
+    if (formData.username) debouncedUsernameCheck(formData.username);
+    return () => debouncedUsernameCheck.cancel();
+  }, [formData.username]);
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailError(emailRegex.test(value) ? "" : "Invalid email format.");
+    }
+
+    if (name === "username") {
+      const usernameRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+      setUsernameError(usernameRegex.test(value) ? "" : "Username must contain at least one number or special character.");
+    }
+
+    if (name === "name") {
+      const nameRegex = /^[A-Za-z\s]+$/;
+      setNameError(nameRegex.test(value) ? "" : "Name must only contain letters and spaces.");
+    }
+
+    if (name === "password" || name === "confirmPassword") {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+      setPasswordHelpText(passwordRegex.test(value) ? "" : "Password must contain uppercase, lowercase, number, and special character.");
+      
+      if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
+        setPasswordError("Passwords do not match.");
+      } else {
+        setPasswordError("");
+      }
+    }
+  };
+
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -47,6 +120,30 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError("Passwords do not match");
+      alert("Passwords do not match. Please ensure both passwords are identical.");
+      return;
+    }
+
+    // If password meets criteria
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setPasswordError("Password must meet the required complexity.");
+      return;
+    } else if (formData.password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long.");
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+    // Ensure username and name meet their criteria
+    if (usernameError || nameError || passwordError || emailError) {
+      alert("Please fix the errors before submitting.");
+      return;
+    }
+
     try {
       const formattedData = {
         ...formData,
@@ -54,14 +151,59 @@ const Register = () => {
       };
       await axios.post("http://localhost:8000/user/register/", formattedData);
       localStorage.setItem("email", formData.email);
-      console.log(localStorage.getItem("email"))
-      // Navigate to OTP verification page
       navigate("/verify-otp");
     } catch (error) {
       alert("Registration failed. Please check your details.");
       console.error("Registration failed", error);
     }
   };
+
+  // Check if the submit button should be disabled
+  const isSubmitDisabled =
+    !formData.email ||
+    !formData.username ||
+    !formData.name ||
+    !formData.password ||
+    !formData.confirmPassword ||
+    usernameError ||
+    nameError ||
+    passwordError || 
+    emailError || 
+    passwordHelpText;
+
+
+    const handleEmailCheck = async () => {
+      try {
+        const emailCheckResponse = await axios.post("http://localhost:8000/user/check-email/", {
+          email: formData.email
+        });
+    
+        if (emailCheckResponse.data.error) {
+          setEmailError("Email already exists. Please choose another one.");
+        } else {
+          setEmailError("");
+        }
+      } catch (error) {
+        console.error("Email check failed", error);
+      }
+    };
+    
+    const handleUsernameCheck = async () => {
+      try {
+        const usernameCheckResponse = await axios.post("http://localhost:8000/user/check-username/", {
+          username: formData.username
+        });
+    
+        if (usernameCheckResponse.data.error) {
+          setUsernameError("Username already exists. Please choose another one.");
+        } else {
+          setUsernameError("");
+        }
+      } catch (error) {
+        console.error("Username check failed", error);
+      }
+    };
+    
 
   return (
     <Box
@@ -71,7 +213,6 @@ const Register = () => {
         alignItems: "center",
         width: "90%",
         minHeight: "100vh",
-        // background: "", // Lighter gradient with burgundy tones
       }}
     >
       <Container maxWidth="lg">
@@ -83,7 +224,7 @@ const Register = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100%",
-                backgroundColor: "#f8f1f1", // Light burgundy tint
+                backgroundColor: "#f8f1f1",
                 borderRadius: 2,
               }}
             >
@@ -102,34 +243,30 @@ const Register = () => {
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.95)",
                 backdropFilter: "blur(10px)",
-                border: "1px solid rgba(145, 23, 32, 0.2)", // Burgundy border
+                border: "1px solid rgba(145, 23, 32, 0.2)",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
               }}
             >
-              <Typography 
-                variant="h5" 
-                align="center" 
-                fontWeight="bold" 
+              <Typography
+                variant="h5"
+                align="center"
+                fontWeight="bold"
                 gutterBottom
-                sx={{ color: "#911720" }} // Burgundy color for heading
+                sx={{ color: "#911720" }}
               >
                 {isEmployer ? "Register as Employer" : "Register as Jobseeker"}
               </Typography>
-              <Divider sx={{ 
-                mb: 4, 
-                backgroundColor: "#911720",
-                height: 2,
-              }} />
+              <Divider sx={{ mb: 4, backgroundColor: "#911720", height: 2 }} />
 
               <Button
                 fullWidth
                 variant="outlined"
-                sx={{ 
-                  mb: 3, 
-                  textTransform: "none", 
+                sx={{
+                  mb: 3,
+                  textTransform: "none",
                   py: 1,
                   color: "#911720",
                   borderColor: "#911720",
@@ -160,21 +297,11 @@ const Register = () => {
                       </InputAdornment>
                     ),
                   }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#911720',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#911720',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: '#911720',
-                    },
-                  }}
                   required
                 />
+                {emailError && (
+                  <Typography variant="body2" color="error">{emailError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
@@ -191,21 +318,11 @@ const Register = () => {
                       </InputAdornment>
                     ),
                   }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#911720',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#911720',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: '#911720',
-                    },
-                  }}
                   required
                 />
+                {usernameError && (
+                  <Typography variant="body2" color="error">{usernameError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
@@ -215,27 +332,17 @@ const Register = () => {
                   variant="outlined"
                   value={formData.name}
                   onChange={handleChange}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#911720',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#911720',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: '#911720',
-                    },
-                  }}
                   required
                 />
+                {nameError && (
+                  <Typography variant="body2" color="error">{nameError}</Typography>
+                )}
 
                 <TextField
                   fullWidth
                   label="Password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   value={formData.password}
                   onChange={handleChange}
@@ -246,20 +353,47 @@ const Register = () => {
                       </InputAdornment>
                     ),
                   }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#911720',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#911720',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: '#911720',
-                    },
-                  }}
                   required
+                />
+
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  variant="outlined"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Lock sx={{ color: "#911720" }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={!!passwordError}
+                  helperText={passwordError || passwordHelpText}
+                  required
+                />
+
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                      sx={{
+                        color: "#911720",
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 18,
+                        },
+                      }}
+                    />
+                  }
+                  label="Show Password"
+                  sx={{
+                    color: "#911720",
+                    fontSize: "0.75rem",
+                  }}
                 />
 
                 <Button
@@ -278,6 +412,7 @@ const Register = () => {
                       background: "#911720",
                     },
                   }}
+                  disabled={isSubmitDisabled} // Disable button if criteria are not met
                 >
                   Register
                 </Button>

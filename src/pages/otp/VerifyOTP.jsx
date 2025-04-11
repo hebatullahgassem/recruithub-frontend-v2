@@ -13,7 +13,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/otp.json';
 
-
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
   const navigate = useNavigate();
@@ -55,19 +54,13 @@ const VerifyOTP = () => {
   };
 
   return (
-    
     <Box
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        // backgroundColor: "#f8f8f8",
         px: 2,
-        // backgroundImage: "url('https://img.freepik.com/free-vector/white-with-low-poly-network-connection_1017-29753.jpg?uid=R129139233&ga=GA1.1.243102800.1741383569&semt=ais_hybrid&w=740')",
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
-        // backgroundRepeat: "no-repeat",
       }}
     >
       <Container
@@ -75,7 +68,7 @@ const VerifyOTP = () => {
         sx={{
           p: 4,
           borderRadius: 3,
-          backgroundColor: "rgba(255, 255, 255, 0.9)", // slightly transparent white
+          backgroundColor: "rgba(255, 255, 255, 0.9)", 
           boxShadow: 3,
           textAlign: "center",
           position: "relative",
@@ -105,6 +98,11 @@ const VerifyOTP = () => {
         </Typography>
         <Typography variant="body2" mb={3} color="text.secondary">
           We've sent a 6-digit code to <strong>{email}</strong>
+        </Typography>
+
+        {/* Add message to check spam */}
+        <Typography variant="body2" mb={3} color="text.secondary">
+          Didn’t receive the code? Be sure to check your spam or junk folder.
         </Typography>
 
         <Box component="form" onSubmit={handleVerify}>
