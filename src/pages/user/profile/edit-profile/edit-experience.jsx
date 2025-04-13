@@ -88,19 +88,14 @@ const EditExperience = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
       updateProfile("experience", experiences);
-      goToNextStep("/applicant/profile/edit-skills", { userId });
+      goToNextStep("/applicant/profile" );
     } catch (err) {
       console.error("Error saving experience:", err);
       setError("Failed to save experience.");
     }
   };
 
-  const handleBack = () => {
-    updateProfile("experience", experiences);
-    goToNextStep("/applicant/profile/edit-education", { userId });
-  };
 
   if (loading) {
     return (
@@ -217,11 +212,8 @@ const EditExperience = () => {
           Add More
         </Button>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button variant="outlined" onClick={handleBack}>
-            Back: Education
-          </Button>
           <Button variant="contained" onClick={handleSave}>
-            Next: Skills
+            submit skills 
           </Button>
         </Box>
         {error && (

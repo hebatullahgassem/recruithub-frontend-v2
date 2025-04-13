@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import Slider from "react-slick";
@@ -6,15 +6,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { userContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
-// import './home.css';
-// import intern from '../../assets/image/intern.jpg';
-// import entry from '../../assets/image/entry.jpg';
-// import senior from '../../assets/image/senior.jpg';
-// import manager from '../../assets/image/manger.jpg';
-// import expert from '../../assets/image/expert.jpg';
-
 const Home = () => {
-  const { user } = useContext(userContext);
+  const { user , refetchUser} = useContext(userContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -26,7 +19,15 @@ const Home = () => {
     } else if (user.user_type === "COMPANY") {
       navigate("/company/jobs");
     }
+    else 
+    {
+      navigate("/login");
+    }
   };
+
+  useEffect (() => {
+    refetchUser();
+  }, []);
   
   return (
     <Container fluid className="p-0">

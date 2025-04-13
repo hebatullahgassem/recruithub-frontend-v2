@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -10,18 +10,12 @@ import {
   Box,
   Divider,
 } from "@mui/material";
-import { ProfileContext } from "../../../context/ProfileContext";
 import { userContext } from "../../../context/UserContext";
 
 const UserProfile = () => {
   const navigate = useNavigate();
-  const { profileData, setProfileData } = useContext(ProfileContext);
   const { user, refetchUser } = useContext(userContext);
-  console.log("profileData",profileData);
-  console.log("user",user);
-  useEffect(() => {
-    setProfileData(user);
-  }, [user]);
+
   useEffect(() => {
     refetchUser();
   }, []);
@@ -62,7 +56,7 @@ const UserProfile = () => {
     }
   };
 
-  if (profileData)
+  if (user)
     return (
       <Grid
         container
@@ -92,19 +86,19 @@ const UserProfile = () => {
               }}
             >
               <Avatar
-                src={profileData.img || "/default-avatar.png"}
+                src={user.img || "/default-avatar.png"}
                 sx={{ width: 100, height: 100 }}
               />
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                  {profileData.name || "Your Name"}
+                  {user.name || "Your Name"}
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
-                  {profileData.about ||
+                  {user.about ||
                     "Add a headline or summary about yourself"}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {profileData.location || "Not provided"}
+                  {user.location || "Not provided"}
                 </Typography>
                 <Button
                   variant="outlined"
@@ -125,7 +119,7 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Education
                   </Typography>
-                    {(profileData.education || []).map?.((edu, index) => (
+                    {(user.education || []).map?.((edu, index) => (
                     <Typography key={index} sx={{ marginTop: "10px", fontSize: "14px" }}>
                       <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
                       {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
@@ -150,9 +144,9 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Experience
                   </Typography>
-                  {profileData.experience &&
-                  profileData.experience.length > 0 ? (
-                    profileData.experience.map((exp, index) => (
+                  {user.experience &&
+                  user.experience.length > 0 ? (
+                    user.experience.map((exp, index) => (
                       <Typography
                         key={index}
                         sx={{ marginTop: "10px", fontSize: "14px" }}
@@ -183,8 +177,8 @@ const UserProfile = () => {
                     Skills
                   </Typography>
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {profileData.skills && profileData.skills.length > 0 ? (
-                      profileData.skills.map((skill, index) => (
+                    {user.skills && user.skills.length > 0 ? (
+                      user.skills.map((skill, index) => (
                         <Typography
                           key={index}
                           sx={{ marginTop: "10px", fontSize: "14px" }}
@@ -212,9 +206,9 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     CV
                   </Typography>
-                  {profileData.cv ? (
+                  {user.cv ? (
                     <a
-                      href={profileData?.cv?.endsWith(".pdf") ? profileData.cv : `${profileData.cv}.pdf`}
+                      href={user?.cv?.endsWith(".pdf") ? user.cv : `${user.cv}.pdf`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -268,3 +262,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+

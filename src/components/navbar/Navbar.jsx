@@ -52,6 +52,7 @@ function Navbar() {
     if (window.confirm("Are you sure you want to logout?")) {
       logoutUser();
       setUser({});
+      setIsProfileOpen(false);
       navigate("/");
     }
   };
@@ -230,18 +231,18 @@ function Navbar() {
 
             {/* User/Auth Section */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              {user ? (
+              {user && Object.keys(user).length>0 ? (
                 <>
-                  <IconButton sx={{ color: theme.textPrimary }}>
+                  {/* <IconButton sx={{ color: theme.textPrimary }}>
                     <Badge badgeContent={3} color="error">
                       <NotificationsNoneIcon />
                     </Badge>
-                  </IconButton>
+                  </IconButton> */}
                   
                   <Box sx={{ position: "relative" }}>
                     <Box
                       sx={{
-                        display: "flex",
+                        display: user && Object.keys(user).length>0 ? "flex" : "none",
                         alignItems: "center",
                         gap: 1.5,
                         cursor: "pointer",
@@ -306,7 +307,7 @@ function Navbar() {
                         </Box>
                         <List sx={{ py: 0 }}>
                           <ListItem 
-                            button 
+                            // button 
                             component={Link} 
                             to="/applicant/profile"
                             sx={{
@@ -323,28 +324,11 @@ function Navbar() {
                               }}
                             />
                           </ListItem>
-                          <ListItem 
-                            button 
-                            component={Link} 
-                            to="/settings"
-                            sx={{
-                              "&:hover": {
-                                backgroundColor: "rgba(136, 32, 36, 0.05)"
-                              }
-                            }}
-                          >
-                            <ListItemText 
-                              primary="Settings" 
-                              primaryTypographyProps={{ 
-                                color: theme.textPrimary,
-                                fontWeight: 500 
-                              }}
-                            />
-                          </ListItem>
+                          
                         </List>
                         <Divider />
                         <ListItem 
-                          button 
+                          // button 
                           onClick={handleLogout}
                           sx={{
                             "&:hover": {
@@ -404,7 +388,8 @@ function Navbar() {
               )}
 
               {/* Mobile Menu Button */}
-              <IconButton
+              {user&& Object.keys(user).length > 0 && <IconButton 
+                
                 onClick={handleDrawerToggle}
                 sx={{ 
                   ml: 1,
@@ -413,7 +398,7 @@ function Navbar() {
                 }}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton>}
             </Box>
           </Box>
         </Container>
@@ -480,7 +465,7 @@ const NavLink = ({ to, text }) => (
 // Custom NavDrawerItem component
 const NavDrawerItem = ({ to, text, icon }) => (
   <ListItem 
-    button 
+    // button 
     component={Link} 
     to={to}
     sx={{

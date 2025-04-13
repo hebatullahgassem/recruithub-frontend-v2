@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-// import { ProfileContext } from "../../../../context/ProfileContext";
 import { userContext } from "../../../../context/UserContext";
-// import ProfileStepper from "../../../../components/profile/ProfileStepper";
+
 import {
   Button,
   Box,
@@ -16,8 +15,8 @@ import { ca } from "date-fns/locale";
 
 const EditCV = () => {
   try{
-  // const { goToNextStep } = useContext(ProfileContext);
-  const { user } = useContext(userContext);
+ 
+  const { user ,setUser } = useContext(userContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -47,7 +46,7 @@ const EditCV = () => {
         const cvPath = res.data.cv;
         console.log("CV Path:", cvPath);
         if (cvPath) {
-          const fullUrl = `https://res.cloudinary.com/dkvyfbtdl/raw/upload/${cvPath}`;
+          const fullUrl = `https://res.cloudinary.com/dkvyfbtdl/raw/upload/${cvPath}.pdf `;
           setCvUrl(cvPath?.endsWith(".pdf") ? cvPath : `${cvPath}.pdf`);
           console.log("CV URL:", fullUrl);
           setCvName(cvPath.split("/").pop());
@@ -88,8 +87,6 @@ const EditCV = () => {
 
     const formData = new FormData();
     formData.append("cv", file);
-    // formData.append('name', user.name); // Include other fields if needed
-    // formData.append('email', user.email);
 
     try {
       const response = await AxiosApi.patch(
@@ -103,25 +100,9 @@ const EditCV = () => {
           // Add timeout if needed
           timeout: 30000, // 30 seconds
         }
+        
       );
-
-      // // Update local state with the new CV URL
-      // setCvUrl(response.data.cv);
-      // setCvName(file.name);
-
-      // // Update context/global state if needed
-      // updateProfile("cv", response.data.cv);
-
-      // // Show success message
-      // setAlert({
-      //   severity: "success",
-      //   message: "CV uploaded successfully!",
-      // });
-
-      // // Optional: Log the response for debugging
-      // console.log("Upload successful:", response.data);
-      navigate("/applicant/profile")
-
+      console.log("CV uploaded successfully:", response.data);
     } catch (err) {
       console.error("Upload error:", err);
 
@@ -151,22 +132,19 @@ const EditCV = () => {
         event.target.value = "";
       }
     }
+    
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!cvFile) {
       setError("Please upload a CV file before submitting.");
       return;
     }
-    handleFileUpload(cvFile);
-    goToNextStep("/applicant/profile", { userId });
+   await handleFileUpload(cvFile);
+    
+    navigate("/applicant/profile");
   };
 
-  const handleBack = () => {
-    goToNextStep("/applicant/profile/edit-skills", { userId });
-  };
-  // const handleDelete = async () => {
-  //   setCv
 
   if (loading) {
     return (
@@ -242,9 +220,6 @@ const EditCV = () => {
         )}
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-          {/* <Button variant="outlined" onClick={handleBack}>
-            Back: Skills
-          </Button> */}
           <Button variant="contained" onClick={handleSave} disabled={loading || !cvFile}>
             Submit CV
           </Button>

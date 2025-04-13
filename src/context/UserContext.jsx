@@ -9,6 +9,7 @@ export function UserContextProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const refetchUser = async () => {
+    if (!token) return; // Exit if no token
     try {
       const response = await getUser();
       console.log(response);

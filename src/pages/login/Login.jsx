@@ -30,13 +30,15 @@ function Login() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useContext(userContext);
+  const { setUser, refetchUser } = useContext(userContext);
 
   async function handleLogin() {
     try {
       const res = await loginUser(email, password);
-      localStorage.setItem("token", res.token);
-      setUser(res);
+      // localStorage.setItem("token", res.token);
+      // console.log(res);
+      // setUser(res);
+      refetchUser()
       navigate("/");
     } catch (error) {
       // Set the custom error message
