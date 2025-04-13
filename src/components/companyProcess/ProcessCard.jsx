@@ -8,7 +8,7 @@ import {
 } from "../../services/Application";
 import { userContext } from "../../context/UserContext";
 
-function ProcessCard({ column, phases }) {
+function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
   const [fail, setFail] = useState(false);
   const [display, setDisplay] = useState(false);
@@ -32,6 +32,7 @@ function ProcessCard({ column, phases }) {
       fail: fail,
       old_status: column + 1,
       company: user.id,
+      job: job.id,
     };
     const response = await updateApplicationAts(data);
     console.log(response);
@@ -57,6 +58,7 @@ function ProcessCard({ column, phases }) {
     dataForm.append("new_status", column + 2);
     dataForm.append("old_status", column + 1);
     dataForm.append("company", user.id);
+    dataForm.append("job", job.id);
     const response = await updateApplicationCsv(dataForm);
     console.log(response);
     setTimeout(() => {

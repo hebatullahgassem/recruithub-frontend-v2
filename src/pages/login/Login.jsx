@@ -30,17 +30,21 @@ function Login() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser, refetchUser } = useContext(userContext);
+  const { setUser, refetchUser, setToken } = useContext(userContext);
 
   async function handleLogin() {
     try {
       const res = await loginUser(email, password);
-      // localStorage.setItem("token", res.token);
-      // console.log(res);
-      // setUser(res);
-      refetchUser()
+      console.log(res);
+      setUser(res.user);
+      setToken(res.token);
       navigate("/");
     } catch (error) {
+      // Clear user/token if login failed
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("token");
+
       // Set the custom error message
       setSnackbarMessage("Oops! Incorrect email or password. Please try again.");
       setOpenSnackbar(true);

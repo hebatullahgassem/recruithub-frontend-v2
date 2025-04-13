@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { userContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 const Home = () => {
-  const { user , refetchUser} = useContext(userContext);
+  const { user , refetchUser, token} = useContext(userContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -27,7 +27,7 @@ const Home = () => {
 
   useEffect (() => {
     refetchUser();
-  }, []);
+  }, [token]);
   
   return (
     <Container fluid className="p-0">

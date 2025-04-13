@@ -13,15 +13,20 @@ export const loginUser = async (email, password) => {
 
 // Signup Function
 export const signupUser = async (userData) => {
-  await AxiosApi.post("user/create/", userData);
+  await AxiosApi.post("user/register/", userData);
 };
 
 // Get Authenticated User Data
 export const getUser = async (token) => {
-  console.log("Token:", token);  // Check if the token is valid and exists
+  // console.log("Token:", token);  // Check if the token is valid and exists
 
   try {
-    const response = await AxiosApi.get('user/profile/');
+    const response = await AxiosApi.get('user/profile/', {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    // console.log("User Data:", response.data); // Log the user data for debugging
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {

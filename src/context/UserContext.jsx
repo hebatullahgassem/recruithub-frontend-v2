@@ -8,11 +8,11 @@ export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const refetchUser = async () => {
-    if (!token) return; // Exit if no token
+  const refetchUser = async (tok) => {
+    if (!token && !tok) return; // Exit if no token
     try {
-      const response = await getUser();
-      console.log(response);
+      const response = await getUser(tok || token);
+      // console.log(response);
       // Safely parse JSON fields
       const parsedResponse = {
         ...response,
@@ -30,8 +30,8 @@ export function UserContextProvider({ children }) {
       if (token) {
         try {
           setLoading(true);
-          const response = await getUser();
-          console.log(response);
+          const response = await getUser(token);
+          // console.log(response);
 
           // Safely parse JSON fields
           const parsedResponse = {
@@ -42,6 +42,7 @@ export function UserContextProvider({ children }) {
           };
 
           setUser(parsedResponse);
+          // console.log(token,parsedResponse);
         } catch (error) {
           console.error("Error fetching user data:", error);
         } finally {
@@ -55,22 +56,22 @@ export function UserContextProvider({ children }) {
     fetchUser();
   }, [token]);
 
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const tok = localStorage.getItem("token");
-      if (tok !== token) {
-        setToken(tok);
-      }
-    };
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     const tok = localStorage.getItem("token");
+  //     if (tok !== token) {
+  //       setToken(tok);
+  //     }
+  //   };
 
-    // Listen for changes in localStorage
-    window.addEventListener("storage", handleStorageChange);
+  //   // Listen for changes in localStorage
+  //   window.addEventListener("storage", handleStorageChange);
 
-    // Cleanup listener on unmount
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [token]);
+  //   // Cleanup listener on unmount
+  //   return () => {
+  //     window.removeEventListener("storage", handleStorageChange);
+  //   };
+  // }, [token]);
 
   const safeParseJSON = (json, fallback) => {
     try {

@@ -36,7 +36,7 @@ const theme = {
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const { user, setUser } = useContext(userContext);
+  const { user, setUser, setToken } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
@@ -52,6 +52,7 @@ function Navbar() {
     if (window.confirm("Are you sure you want to logout?")) {
       logoutUser();
       setUser({});
+      setToken(null);
       setIsProfileOpen(false);
       navigate("/");
     }

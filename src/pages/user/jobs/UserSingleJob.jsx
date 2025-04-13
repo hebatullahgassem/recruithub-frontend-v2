@@ -99,7 +99,7 @@ const UserSingleJob = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
+    <div className="container mt-2 d-flex flex-column justify-content-center align-items-center">
       <JobDetails job={userApp?.job_details || jobsData} />
       {userApp && Object.keys(userApp).length !== 0 ? (
         <>

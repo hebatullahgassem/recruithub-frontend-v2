@@ -1,11 +1,12 @@
-import { useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import ProcessColumn from "../../../components/companyProcess/ProcessColumn";
 import ProcessCard from "../../../components/companyProcess/ProcessCard";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import JobDetails from "../../../components/job/JobDetails";
 import { useQuery } from "@tanstack/react-query";
 import { getJobById, patchJob } from "../../../services/Job";
 import { Button } from "@mui/material";
+import { userContext } from "../../../context/UserContext";
 
 function SingleJob() {
   const phases = [
@@ -17,6 +18,7 @@ function SingleJob() {
   ];
   const { id } = useParams();
   const [clickedColumn, setClickedColumn] = useState(1);
+  const{user} = useContext(userContext)
   const navigate = useNavigate();
 
   const handleActivation = async (state) => {
@@ -54,7 +56,15 @@ function SingleJob() {
       return res;
     },
   });
-
+  useEffect(() => {
+    if (!user) return;
+    if(!jobData) return;
+    console.log(user, jobData)
+    
+    if (user.user_type !== "COMPANY" || (jobData && parseInt(user.id) != jobData.company)) {
+      navigate("/");
+    }
+  }, [user, jobData]);
   return (
     <div
       style={{
@@ -67,6 +77,7 @@ function SingleJob() {
     >
       <JobDetails job={jobData} />
       <div>
+        
         {jobData?.status == 1 ? (
           <Button
             variant="contained"
@@ -100,7 +111,7 @@ function SingleJob() {
         column={clickedColumn}
         phases={phases}
       />
-      <ProcessCard column={clickedColumn} phases={phases} />
+      <ProcessCard column={clickedColumn} phases={phases} job={jobData}/>
     </div>
   );
 }

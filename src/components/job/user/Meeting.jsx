@@ -98,7 +98,7 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
             </Button>
           </Box>
         ) : (
-          <p>No resources available for this phase.</p>
+          <p>You qualified to this phase but the meeting isn't assigned yet.</p>
         )}
 
         {/* Show Reminder Calendar */}

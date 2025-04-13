@@ -63,16 +63,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
 
   // submit multi value
   const handleSubmit = async () => {
-    if (Object.keys(answers).length > 0) {
-      const output = Object.entries(answers).map(([key, value]) => ({
-        answer_text: Array.isArray(value) ? JSON.stringify(value) : value,
-        application: application.id,
-        question: parseInt(key),
-      }));
-      const formData = { answers: output };
-      const res = await createAnswer(formData);
-      console.log("Submitted Answers:", res);
-    }
+    try{
 
     if (cvNew) {
       const cvForm = new FormData();
@@ -83,6 +74,10 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
     cvForm.append("cv", cv, cv.name); 
     try {
         const cvRes = await patchUser(user.id, cvForm);
+        if(!cvRes) {
+          console.error("CV upload failed:", cvRes);
+          return;
+        }
         setUser(cvRes)
         console.log("CV Upload Response:", cvRes);
         await patchApplication(application.id,{'status': '2'})
@@ -93,6 +88,18 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
     }else if (user.cv) {
       await patchApplication(application.id,{'status': '2'})
       refetch()
+    }
+    if (Object.keys(answers).length > 0) {
+      const output = Object.entries(answers).map(([key, value]) => ({
+        answer_text: Array.isArray(value) ? JSON.stringify(value) : value,
+        application: application.id,
+        question: parseInt(key),
+      }));
+      const formData = { answers: output };
+      const res = await createAnswer(formData);
+      console.log("Submitted Answers:", res);
+    }} catch (error) {
+      console.error("Error submitting answers:", error.response?.data || error);
     }
   };
 

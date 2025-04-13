@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Container,
@@ -17,6 +17,9 @@ const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
+  const location = useLocation();
+  const { email:stateEmail } = location.state;
+  console.log(email, stateEmail)
 
   const handleChange = (index, value) => {
     if (/^\d?$/.test(value)) {
@@ -33,10 +36,10 @@ const VerifyOTP = () => {
   const handleVerify = async (e) => {
     e.preventDefault();
     const fullOtp = otp.join("");
-
+    
     try {
       const response = await axios.post("http://localhost:8000/user/verify-otp/", {
-        email,
+        email: email || stateEmail,
         otp: fullOtp,
       });
 

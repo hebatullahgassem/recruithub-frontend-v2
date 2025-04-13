@@ -19,21 +19,23 @@ import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/LoginRegister.json';
 import { debounce } from "lodash";
+import { signupUser } from "../../services/Auth";
 
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
-    username: "",
+    national_id: "",
     name: "",
     password: "",
     confirmPassword: "",
     user_type: "jobseeker",
+    username: "",
   });
 
   const [passwordError, setPasswordError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
+  const [NatIdError, setNatIdError] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");  
   const [showPassword, setShowPassword] = useState(false); 
@@ -56,24 +58,24 @@ const Register = () => {
     }
   };
   
-  const checkUsernameExists = async (username) => {
-    try {
-      const response = await axios.post("http://localhost:8000/user/check-username/", { username });
-      if (response.data.exists) {
-        setUsernameError(response.data.error || "Username already exists. Please choose another one.");
-        return true; 
-      }
-      setUsernameError("");
-      return false;
-    } catch (error) {
-      console.error("Username check failed", error);
-      return false;
-    }
-  };
+  // const checkUsernameExists = async (username) => {
+  //   try {
+  //     const response = await axios.post("http://localhost:8000/user/check-username/", { username });
+  //     if (response.data.exists) {
+  //       setNatIdError(response.data.error || "Username already exists. Please choose another one.");
+  //       return true; 
+  //     }
+  //     setNatIdError("");
+  //     return false;
+  //   } catch (error) {
+  //     console.error("Username check failed", error);
+  //     return false;
+  //   }
+  // };
   
   
   const debouncedEmailCheck = debounce(checkEmailExists, 500);
-  const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
+  // const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
 
   useEffect(() => {
     if (formData.email && !emailError) { 
@@ -82,12 +84,12 @@ const Register = () => {
     return () => debouncedEmailCheck.cancel();
   }, [formData.email, emailError]);
 
-  useEffect(() => {
-    if (formData.username && !usernameError) { 
-      debouncedUsernameCheck(formData.username);
-    }
-    return () => debouncedUsernameCheck.cancel();
-  }, [formData.username, usernameError]);
+  // useEffect(() => {
+  //   if (formData.username && !NatIdError) { 
+  //     debouncedUsernameCheck(formData.username);
+  //   }
+  //   return () => debouncedUsernameCheck.cancel();
+  // }, [formData.username, NatIdError]);
 
 
   const handleChange = (e) => {
@@ -101,9 +103,8 @@ const Register = () => {
       setEmailError(emailRegex.test(value) ? "" : "Invalid email format.");
     }
 
-    if (name === "username") {
-      const usernameRegex = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
-      setUsernameError(usernameRegex.test(value) ? "" : "Username must contain at least one number or special character.");
+    if (name === "national_id") {
+      setNatIdError(value.length != 14 ? "National id should be 14 number" : "");
     }
 
     if (name === "name") {
@@ -120,6 +121,7 @@ const Register = () => {
         setPasswordError(updatedFormData.password !== updatedFormData.confirmPassword ? "Passwords do not match." : "");
       }
     }
+    console.log(emailError, NatIdError, nameError, passwordError);
 };
 
   const handleUserTypeToggle = () => {
@@ -136,6 +138,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted:", formData);
 
     const emailExists = await checkEmailExists(formData.email);
   if (emailExists) {
@@ -143,10 +146,10 @@ const Register = () => {
   }
 
   // Check if username exists
-  const usernameExists = await checkUsernameExists(formData.username);
-  if (usernameExists) {
-    return;
-  }
+  // const usernameExists = await checkUsernameExists(formData.username);
+  // if (usernameExists) {
+  //   return;
+  // }
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
@@ -166,7 +169,7 @@ const Register = () => {
     }
 
     // Ensure username and name meet their criteria
-    if (usernameError || nameError || passwordError || emailError) {
+    if (NatIdError || nameError || passwordError || emailError) {
       alert("Please fix the errors before submitting.");
       return;
     }
@@ -175,24 +178,26 @@ const Register = () => {
       const formattedData = {
         ...formData,
         user_type: formData.user_type.toUpperCase(),
+        username: formData.email.split("@")[0], // Use email prefix as username
       };
-      await axios.post("http://localhost:8000/user/register/", formattedData);
+      await signupUser(formattedData);
       localStorage.setItem("email", formData.email);
-      navigate("/verify-otp");
+      navigate("/verify-otp", { state: { email: formData.email } });
     } catch (error) {
-      alert("Registration failed. Please check your details.");
-      console.error("Registration failed", error);
+      console.error("Registration failed", error.response.data.error);
+      alert(`Registration failed. Please check your details.\n${error.response.data.error}`);
+      // console.error("Registration failed", error);
     }
   };
 
   // Check if the submit button should be disabled
   const isSubmitDisabled =
   !formData.email ||
-  !formData.username ||
+  !formData.national_id ||
   !formData.name ||
   !formData.password ||
   !formData.confirmPassword ||
-  !!usernameError || // Convert to boolean
+  !!NatIdError || // Convert to boolean
   !!nameError ||
   !!passwordError || 
   !!emailError || 
@@ -222,9 +227,9 @@ const Register = () => {
         });
     
         if (usernameCheckResponse.data.error) {
-          setUsernameError("Username already exists. Please choose another one.");
+          setNatIdError("Username already exists. Please choose another one.");
         } else {
-          setUsernameError("");
+          setNatIdError("");
         }
       } catch (error) {
         console.error("Username check failed", error);
@@ -330,13 +335,13 @@ const Register = () => {
                   <Typography variant="body2" color="error">{emailError}</Typography>
                 )}
 
-                <TextField
+                {formData.user_type==='jobseeker' && <TextField
                   fullWidth
-                  label="Username"
-                  name="username"
+                  label="National Id"
+                  name="national_id"
                   type="text"
                   variant="outlined"
-                  value={formData.username}
+                  value={formData.national_id}
                   onChange={handleChange}
                   InputProps={{
                     startAdornment: (
@@ -346,9 +351,9 @@ const Register = () => {
                     ),
                   }}
                   required
-                />
-                {usernameError && (
-                  <Typography variant="body2" color="error">{usernameError}</Typography>
+                />}
+                {NatIdError && (
+                  <Typography variant="body2" color="error">{NatIdError}</Typography>
                 )}
 
                 <TextField
