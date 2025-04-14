@@ -7,6 +7,12 @@ export const loginUser = async (email, password) => {
     email,
     password,
   });
+
+  const { token } = response.data;
+
+  // Save token to localStorage
+  localStorage.setItem("token", token);
+
   return response.data;
 };
 
@@ -17,7 +23,7 @@ export const signupUser = async (userData) => {
 
 // Get Authenticated User Data
 export const getUser = async (token) => {
-  console.log("Token:", token);  // Check if the token is valid and exists
+  console.log(localStorage.getItem("token"));  // Check if the token is valid and exists
 
   try {
     const response = await AxiosApi.get('user/profile/');

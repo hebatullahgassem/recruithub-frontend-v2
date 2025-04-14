@@ -6,6 +6,7 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import JobCreate from './components/job/JobCreate';
 import { ProfileProvider } from "./context/ProfileContext";
+import { ComProfileProvider } from "./context/ComProfileContext";
 import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AxiosProvider from "./services/AxiosProvider";
@@ -13,6 +14,8 @@ import Login from './pages/login/Login';
 import VerifyOTP from "./pages/otp/VerifyOTP"; 
 import ForgotPassword from "./pages/login/ForgotPassword";
 import ResetPassword from "./pages/login/ResetPassword";
+import ComProfile from "./pages/company/profile/ComProfile";
+import EditPersonalCom from "./pages/company/profile/edit-profile/edit-personal";
 
 
 function App() {
@@ -68,6 +71,7 @@ function App() {
       <QueryClientProvider client={new QueryClient()}>
         <BrowserRouter>
           <ProfileProvider>
+            <ComProfileProvider>
             <UserContextProvider>
               <AxiosProvider>
                 <Navbar />
@@ -145,6 +149,16 @@ function App() {
                         path="/applicant/profile/recom" 
                         element={<RecommendedJobs />} 
                       />
+
+                      {/* Company Profile */}
+                      <Route 
+                        path="/company/profile/" 
+                        element={<ComProfile />} 
+                      />
+                      <Route
+                        path="/company/profile/edit-personal"
+                        element={<EditPersonalCom />}
+                      />
                     </Routes>
                     
                   </Suspense>
@@ -152,6 +166,7 @@ function App() {
                 <Footer />
               </AxiosProvider>
             </UserContextProvider>
+            </ComProfileProvider>
           </ProfileProvider>
         </BrowserRouter>
       </QueryClientProvider>

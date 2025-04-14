@@ -11,7 +11,6 @@ export function UserContextProvider({ children }) {
   const refetchUser = async () => {
     try {
       const response = await getUser();
-      console.log(response);
       // Safely parse JSON fields
       const parsedResponse = {
         ...response,
@@ -30,7 +29,6 @@ export function UserContextProvider({ children }) {
         try {
           setLoading(true);
           const response = await getUser();
-          console.log(response);
 
           // Safely parse JSON fields
           const parsedResponse = {
