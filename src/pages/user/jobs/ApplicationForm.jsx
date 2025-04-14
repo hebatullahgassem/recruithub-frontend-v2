@@ -171,7 +171,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
           CV{" "}
           {user?.cv && (
             <a
-              href={user.cv}
+              href={user.cv.endsWith("pdf") ? user.cv : user.cv + ".pdf"}
               target="_blank"
               style={{
                 textDecoration: "underline",
