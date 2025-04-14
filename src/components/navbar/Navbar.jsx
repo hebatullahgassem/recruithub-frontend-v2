@@ -307,10 +307,30 @@ function Navbar() {
                           </Typography>
                         </Box>
                         <List sx={{ py: 0 }}>
-                          <ListItem 
-                            // button 
+                        <ListItem 
+                              // button 
+                              component={Link} 
+                              to={user?.user_type?.toLowerCase() === "company" ? "/company/profile/edit-personal" : "/applicant/profile"}
+                              sx={{
+                                "&:hover": {
+                                  backgroundColor: "rgba(136, 32, 36, 0.05)"
+                                },
+                                cursor: "pointer",
+                              }}
+                            >
+                              <ListItemText 
+                                primary="My Profile" 
+                                primaryTypographyProps={{ 
+                                  color: theme.textPrimary,
+                                  fontWeight: 500 
+                                }}
+                              />
+                            </ListItem>
+
+                          {/* <ListItem 
+                            button 
                             component={Link} 
-                            to="/applicant/profile"
+                            to="/settings"
                             sx={{
                               "&:hover": {
                                 backgroundColor: "rgba(136, 32, 36, 0.05)"
@@ -318,14 +338,13 @@ function Navbar() {
                             }}
                           >
                             <ListItemText 
-                              primary="My Profile" 
+                              primary="Settings" 
                               primaryTypographyProps={{ 
                                 color: theme.textPrimary,
                                 fontWeight: 500 
                               }}
                             />
-                          </ListItem>
-                          
+                          </ListItem> */}
                         </List>
                         <Divider />
                         <ListItem 
@@ -334,7 +353,8 @@ function Navbar() {
                           sx={{
                             "&:hover": {
                               backgroundColor: "rgba(136, 32, 36, 0.05)"
-                            }
+                            },
+                            cursor: "pointer"
                           }}
                         >
                           <ListItemText 
