@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getJobById, patchJob } from "../../../services/Job";
 import { Button } from "@mui/material";
 import { userContext } from "../../../context/UserContext";
+import MeetingsTable from "../../../components/companyProcess/MeetingsTable";
 
 function SingleJob() {
   const phases = [
@@ -18,7 +19,8 @@ function SingleJob() {
   ];
   const { id } = useParams();
   const [clickedColumn, setClickedColumn] = useState(1);
-  const{user} = useContext(userContext)
+  const [calender, setCalender] = useState(false);
+  const { user } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleActivation = async (state) => {
@@ -56,15 +58,15 @@ function SingleJob() {
       return res;
     },
   });
-  useEffect(() => {
-    if (!user) return;
-    if(!jobData) return;
-    console.log(user, jobData)
-    
-    if (user.user_type !== "COMPANY" || (jobData && parseInt(user.id) != jobData.company)) {
-      navigate("/");
-    }
-  }, [user, jobData]);
+  // useEffect(() => {
+  //   if (!user) return;
+  //   if(!jobData) return;
+  //   console.log(user, jobData)
+
+  //   if (user.user_type !== "COMPANY" || (jobData && parseInt(user.id) != jobData.company)) {
+  //     navigate("/company/jobs");
+  //   }
+  // }, [user, jobData]);
   return (
     <div
       style={{
@@ -77,7 +79,6 @@ function SingleJob() {
     >
       <JobDetails job={jobData} />
       <div>
-        
         {jobData?.status == 1 ? (
           <Button
             variant="contained"
@@ -105,13 +106,34 @@ function SingleJob() {
         >
           Edit Job
         </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setCalender(!calender)}
+          style={{ marginTop: "10px", marginLeft: "10px" }}
+        >
+          {calender ? "Hide Calender" : "Show Calender"}
+        </Button>
       </div>
-      <ProcessColumn
-        setter={setClickedColumn}
-        column={clickedColumn}
-        phases={phases}
-      />
-      <ProcessCard column={clickedColumn} phases={phases} job={jobData}/>
+      {!calender ? (
+        <>
+          <ProcessColumn
+            setter={setClickedColumn}
+            column={clickedColumn}
+            phases={phases}
+          />
+          <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
+        </>
+      ) : (
+        <>
+          <ProcessColumn
+            setter={setClickedColumn}
+            column={clickedColumn}
+            phases={phases.slice(2, 5)}
+          />
+          <MeetingsTable column={clickedColumn} phases={phases.slice(2,5)} />
+        </>
+      )}
     </div>
   );
 }

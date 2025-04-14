@@ -10,9 +10,9 @@ function ProcessColumn({setter, column, phases}) {
             sx={{ mt:2, scale:0.8, alignSelf:'center'}}
             // onChange={handleChange}
         >
-            {[1, 2, 3, 4, 5].map((val) => (
-                <ToggleButton key={val} value={val} onClick={() => setter(val)} sx={{backgroundColor: val === column ? '#e4e4e4': null}}>
-                    {phases[val-1]}
+            {phases.map((val, index) => (
+                <ToggleButton key={val} value={index+1} onClick={() => setter(index+1)} sx={{backgroundColor: index+1 === column ? '#e4e4e4': null}}>
+                    {phases[index]}
                 </ToggleButton>
             ))}
         </ToggleButtonGroup>

@@ -82,3 +82,8 @@ export const updateApplicationCsv = async (csvData) => {
   });
   return response.data;
 }
+
+export const getMeetingsByJob = async (params) => {
+  const response = await AxiosApi.get(`applications/meetings/?${params.toString()}`);
+  return response.data;
+}

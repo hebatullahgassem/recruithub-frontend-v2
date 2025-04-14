@@ -99,7 +99,7 @@ const EditSkills = () => {
   return (
     <div>
       {/* <ProfileStepper activeStep={3} /> */}
-      <h2>Edit Skills</h2>
+      <h2 className="m-3">Edit Skills</h2>
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

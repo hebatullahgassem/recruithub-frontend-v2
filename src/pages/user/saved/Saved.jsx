@@ -65,7 +65,7 @@ function UserSaved() {
 
   return (
     <div className="d-flex flex-column align-items-center w-100" style={{ minHeight: "70vh" }}>
-      <h2>Your Saved Jobs</h2>
+      <h2 className="m-3">Your Saved Jobs</h2>
       {/* <div className="filters mb-3 d-flex flex-column align-items-center gap-2">
         <div className="d-flex gap-2">
           <input

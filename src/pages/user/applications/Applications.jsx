@@ -54,7 +54,7 @@ const JobApplication = () => {
 
   return (
     <div className="d-flex flex-column align-items-center w-100" style={{ minHeight: "70vh" }}>
-      <h2>Your Jobs Applications</h2>
+      <h2 className="m-3">Your Jobs Applications</h2>
       {application?.length > 0 ? (
         application.map((application) => (
           <JobCard

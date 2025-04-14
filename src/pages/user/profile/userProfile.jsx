@@ -119,12 +119,12 @@ const UserProfile = () => {
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Education
                   </Typography>
-                    {(user.education || []).map?.((edu, index) => (
+                    {user.education ? (user.education || []).map?.((edu, index) => (
                     <Typography key={index} sx={{ marginTop: "10px", fontSize: "14px" }}>
                       <strong>{edu.degree}</strong> at {edu.school} majoring{" "}
-                      {edu.fieldOfStudy} from {edu.startDate} to {edu.endDate}
+                      {edu.fieldOfStudy} from {edu.startDate} till {edu.endDate}
                     </Typography>
-                  )) || (
+                  )) : (
                     <Typography sx={{ marginTop: "10px", fontSize: "14px" }}>
                       No education added
                     </Typography>
@@ -151,7 +151,7 @@ const UserProfile = () => {
                         key={index}
                         sx={{ marginTop: "10px", fontSize: "14px" }}
                       >
-                        <strong>{exp.title}</strong> at {exp.company}
+                        <strong>{exp.title}</strong> at {exp.company} from {exp.startDate} till {exp.endDate}
                       </Typography>
                     ))
                   ) : (

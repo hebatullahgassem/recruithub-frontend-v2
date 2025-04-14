@@ -17,6 +17,7 @@ function UserJobs() {
     type_of_job: "",
     attend: "",
     status: "1",
+    ordering: "",
   });
 
   const [searchFilters, setSearchFilters] = useState({
@@ -26,6 +27,7 @@ function UserJobs() {
     type_of_job: "",
     attend: "",
     status: "1",
+    ordering: "",
   });
 
   const {
@@ -61,6 +63,7 @@ function UserJobs() {
       type_of_job: "",
       attend: "",
       status: "1",
+      ordering: "",
     });
     setPage(1); // Reset page
     refetch(); // Fetch without filters
@@ -71,7 +74,7 @@ function UserJobs() {
       className="d-flex flex-column align-items-center w-100"
       style={{ minHeight: "70vh" }}
     >
-      <h2>Available Jobs</h2>
+      <h2 className="m-3">Available Jobs</h2>
       <div className="filters mb-3 d-flex flex-column align-items-center gap-2">
         <div className="d-flex gap-2 flex-wrap justify-content-center" style={{maxWidth: '70vw'}}>
           <input
@@ -121,17 +124,31 @@ function UserJobs() {
             <option value="Internship">Internship</option>
             <option value="Freelance">Freelance</option>
           </select>
+          <select
+            name={"ordering"}
+            value={filters.ordering || ""}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="">Select Sorting</option>
+            <option value="-created_at">Date DSC</option>
+            <option value="created_at">Date ASC</option>
+            {/* <option value="-type_of_job">Type</option>
+            <option value="-attend">Attendance</option> */}
+          </select>
         </div>
+        {console.log(Object.entries(searchFilters).length === 6)}
         <div className="d-flex gap-2">
           <button
             disabled={
+              Object.entries(searchFilters).length === 7 &&
               !(
                 filters.title ||
                 filters.location ||
                 filters.experince ||
                 filters.type_of_job ||
-                filters.attend
-              )
+                filters.attend || filters.ordering
+              ) 
             }
             onClick={handleReset}
             className="btn btn-danger"
@@ -145,7 +162,7 @@ function UserJobs() {
                 filters.location ||
                 filters.experince ||
                 filters.type_of_job ||
-                filters.attend
+                filters.attend || filters.ordering
               )
             }
             onClick={handleSearch}

@@ -346,8 +346,8 @@ function JobCard({ job, type }) {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 display: "-webkit-box",
-                WebkitLineClamp: 3,
-                lineClamp: 3,
+                WebkitLineClamp: 5,
+                lineClamp: 5,
                 WebkitBoxOrient: "vertical",
               }}
             >
@@ -366,7 +366,7 @@ function JobCard({ job, type }) {
         </div>
         
         {/* Bookmark button */}
-        <button 
+        {/* <button 
           onClick={() => setIsBookmarked(!isBookmarked)}
           aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this job"}
           style={{
@@ -397,7 +397,7 @@ function JobCard({ job, type }) {
           >
             <path d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17L5 21V5Z" />
           </svg>
-        </button>
+        </button> */}
       </div>
       
       <div style={{ 

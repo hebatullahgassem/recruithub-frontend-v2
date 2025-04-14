@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../../../context/UserContext";
-import { Button, TextField, Box, Grid, CircularProgress, Alert } from "@mui/material";
+import { Button, TextField, Box, Grid, CircularProgress, Alert, Switch } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
@@ -78,7 +78,9 @@ const EditExperience = () => {
     setExperiences(updatedExperiences);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("experience", JSON.stringify(experiences));
@@ -92,6 +94,7 @@ const EditExperience = () => {
     } catch (err) {
       console.error("Error saving experience:", err);
       setError("Failed to save experience.");
+      setLoading(false);
     }
   };
 
@@ -107,9 +110,10 @@ const EditExperience = () => {
 
   return (
     <div>
+      <form onSubmit={(e) => handleSave(e)}>
       {/* <ProfileStepper activeStep={2} /> */}
-      <h2>Edit Experience</h2>
-      <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+      <h2 className="m-3">Edit Experience</h2>
+      <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2, minHeight: "40vh" }}>
         {experiences.map((exp, index) => (
           <Box
             key={index}
@@ -138,6 +142,7 @@ const EditExperience = () => {
                   value={exp.title}
                   onChange={(e) => handleChange(index, "title", e.target.value)}
                   fullWidth
+                  required
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -146,6 +151,7 @@ const EditExperience = () => {
                   value={exp.company}
                   onChange={(e) => handleChange(index, "company", e.target.value)}
                   fullWidth
+                  required
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -191,6 +197,7 @@ const EditExperience = () => {
                   onChange={(e) => handleChange(index, "startDate", e.target.value)}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  required
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -200,8 +207,19 @@ const EditExperience = () => {
                   value={exp.endDate}
                   onChange={(e) => handleChange(index, "endDate", e.target.value)}
                   fullWidth
+                  disabled={exp.endDate === "Now"}
                   InputLabelProps={{ shrink: true }}
+                  required={exp.startDate && exp.endDate != 'Now'}
                 />
+                
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <label style={{ marginRight: "8px" }}>Currently Working</label>
+                <Switch
+                  checked={exp.endDate === 'Now'}
+                  onChange={(e) => handleChange(index, "endDate", e.target.checked ? "Now" : "")}
+                  color="primary"
+                  />
+                </Box>
               </Grid>
             </Grid>
           </Box>
@@ -211,7 +229,7 @@ const EditExperience = () => {
           Add More
         </Button>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button variant="contained" onClick={handleSave}>
+          <Button variant="contained" type="submit">
             submit skills 
           </Button>
         </Box>
@@ -221,6 +239,7 @@ const EditExperience = () => {
           </Alert>
         )}
       </Box>
+      </form>
     </div>
   );
 };
