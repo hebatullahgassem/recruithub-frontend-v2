@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ProfileContext } from "../../../../context/ProfileContext";
+import { userContext } from "../../../../context/UserContext";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { Button, TextField, Box, Chip, Grid, CircularProgress, Alert } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,11 +7,11 @@ import { AxiosApi } from "../../../../services/Api";
 import { updateUserProfile } from "../../../../services/Auth";
 
 const EditSkills = () => {
-  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
+  const { user } = useContext(userContext);
   const location = useLocation();
   const navigate = useNavigate();
   const locationUserId = location.state?.userId;
-  const userId = locationUserId || profileData?.id;
+  const userId = locationUserId || user?.id;
 
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
@@ -76,8 +76,7 @@ const EditSkills = () => {
 
       await updateUserProfile(userId, formData);
 
-      updateProfile("skills", skills);
-      goToNextStep("/applicant/profile", { userId });
+      navigate("/applicant/profile", { replace: true });
     } catch (err) {
       console.error("Error saving skills:", err);
       setError("Failed to save skills.");
@@ -85,8 +84,7 @@ const EditSkills = () => {
   };
 
   const handleBack = () => {
-    updateProfile("skills", skills);
-    goToNextStep("/applicant/profile/edit-experience", { userId });
+    navigate("/applicant/profile/edit-experience", { userId });
   };
 
   if (loading) {
@@ -159,3 +157,4 @@ const EditSkills = () => {
 };
 
 export default EditSkills;
+

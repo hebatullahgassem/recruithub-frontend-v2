@@ -9,3 +9,11 @@ export const getTalents = async ({ filters = {}, page = 1, pageSize = 10 }) => {
   const response = await AxiosApi.get(`user/jobseekers/all/?${params.toString()}`);
   return response.data;
 };
+export const getTalentById = async (id) => {
+  console.log("ID:", id);  // Check if the ID is valid and exists
+  const response = await AxiosApi.post(`user/jobseekers/get_talents/?id=${id}`, {
+    headers: { "Content-Type": "application/json" },
+  } );
+
+  return response.data;
+};

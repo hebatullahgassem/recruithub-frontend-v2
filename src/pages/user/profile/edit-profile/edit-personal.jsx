@@ -1,13 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { ProfileContext } from "../../../../context/ProfileContext";
+import { userContext } from "../../../../context/UserContext";
 import { Button, TextField, Avatar, Box, Typography, CircularProgress, Alert } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation } from "react-router-dom";
 
-
 const EditPersonal = () => {
-  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
+  const { user, updateUser, goToNextStep } = useContext(userContext);
   const [success, setSuccess] = useState(false);
   const [localData, setLocalData] = useState({
     name: "",
@@ -29,9 +28,6 @@ const EditPersonal = () => {
   const nationalIdImageRef = useRef(null);
   const location = useLocation();
   const userId = location.state?.userId;
-  
-
-  console.log("userId", userId);
 
   useEffect(() => {
     if (userId) {
@@ -56,36 +52,26 @@ const EditPersonal = () => {
     }
   }, [userId]);
 
-
-
-
-
   const handleChange = (e) => {
-    // setLocalData({ ...localData, [e.target.name]: e.target.value });
     const { name, value } = e.target;
     setLocalData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = async (e, field) => {
     const file = e.target.files[0];
-    // if (!file) return;
-
     try {
-      // Validate file
       if (!file) throw new Error('No file selected');
-    if (!file.type.match('image.*')) throw new Error('Please upload an image file (JPEG, PNG, etc.)');
-    if (file.size > 10 * 1024 * 1024) throw new Error('File size should be less than 5MB');
-    if (file.size === 0) throw new Error('File is empty');
+      if (!file.type.match('image.*')) throw new Error('Please upload an image file (JPEG, PNG, etc.)');
+      if (file.size > 10 * 1024 * 1024) throw new Error('File size should be less than 5MB');
+      if (file.size === 0) throw new Error('File is empty');
 
-    // Then proceed with upload if validation passes
-    setUploadStatus({ ...uploadStatus, [field]: 'uploading' });
-    setError(null);
+      setUploadStatus({ ...uploadStatus, [field]: 'uploading' });
+      setError(null);
 
       const backendField = field === 'nationalIdImg' ? 'national_id_img' : field;
       const formData = new FormData();
       formData.append(backendField, file);
 
-      console.log("FormData", formData.get(backendField));
       const response = await AxiosApi.patch(
         `user/jobseekers/${userId}/`,
         formData, {
@@ -105,7 +91,7 @@ const EditPersonal = () => {
         [field]: updatedData[backendField],
       }));
 
-      updateProfile(backendField, updatedData[backendField]);
+      updateUser(backendField, updatedData[backendField]);
       setUploadStatus({ ...uploadStatus, [field]: 'success' });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -120,7 +106,6 @@ const EditPersonal = () => {
     try {
       const formData = new FormData();
       
-      // Append all fields including files
       formData.append('name', localData.name);
       formData.append('dob', localData.dob);
       formData.append('location', localData.location);
@@ -128,7 +113,6 @@ const EditPersonal = () => {
       formData.append('phone_number', localData.phone);
       formData.append('national_id', localData.nationalId);
   
-      // Append images if they exist
       if (localData.img instanceof File) {
         formData.append('img', localData.img);
       }
@@ -147,11 +131,11 @@ const EditPersonal = () => {
         }
       );
   
-      updateProfile(response.data);
+      updateUser(response.data);
       setSuccess(true);
       setError(null);
       
-        goToNextStep(`/applicant/profile`, { userId });
+      goToNextStep(`/applicant/profile`, { userId });
   
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -179,14 +163,11 @@ const EditPersonal = () => {
     return true;
   };
   
-
   return (
     <div>
-      {/* <ProfileStepper activeStep={0} /> */}
       <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <h2>Edit Personal Details</h2>
          
-        {/* Success Alert */}
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
             Profile updated successfully! Redirecting in 3 seconds...
@@ -231,7 +212,7 @@ const EditPersonal = () => {
           value={localData.name}
           onChange={handleChange}
           fullWidth
-          helperText={`Current: ${profileData?.name || "Not set"}`}
+          helperText={`Current: ${user?.name || "Not set"}`}
         />
 
         <TextField
@@ -241,7 +222,7 @@ const EditPersonal = () => {
           onChange={handleChange}
           fullWidth
           disabled
-          helperText={`Current: ${profileData?.email || "Not set"}`}
+          helperText={`Current: ${user?.email || "Not set"}`}
         />
 
         <TextField
@@ -252,7 +233,7 @@ const EditPersonal = () => {
           onChange={handleChange}
           fullWidth
           InputLabelProps={{ shrink: true }}
-          helperText={`Current: ${profileData?.dob || "Not set"}`}
+          helperText={`Current: ${user?.dob || "Not set"}`}
         />
 
         <TextField
@@ -261,7 +242,7 @@ const EditPersonal = () => {
           value={localData.location}
           onChange={handleChange}
           fullWidth
-          helperText={`Current: ${profileData?.location || "Not set"}`}
+          helperText={`Current: ${user?.location || "Not set"}`}
         />
 
         <TextField
@@ -272,7 +253,7 @@ const EditPersonal = () => {
           fullWidth
           multiline
           rows={4}
-          helperText={`Current: ${profileData?.about || "Not set"}`}
+          helperText={`Current: ${user?.about || "Not set"}`}
         />
 
         <TextField
@@ -281,7 +262,7 @@ const EditPersonal = () => {
           value={localData.phone}
           onChange={handleChange}
           fullWidth
-          helperText={`Current: ${profileData?.phone || "Not set"}`}
+          helperText={`Current: ${user?.phone || "Not set"}`}
         />
 
         <TextField
@@ -290,7 +271,7 @@ const EditPersonal = () => {
           value={localData.nationalId}
           onChange={handleChange}
           fullWidth
-          helperText={`Current: ${profileData?.national_id || "Not set"}`}
+          helperText={`Current: ${user?.national_id || "Not set"}`}
         />
 
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -324,7 +305,6 @@ const EditPersonal = () => {
           variant="contained" 
           onClick={handleSave} 
           sx={{ mt: 2 }}
-          // disabled={uploadStatus.img === 'uploading' || uploadStatus.nationalIdImg === 'uploading'}
         >
           Save Changes
         </Button>

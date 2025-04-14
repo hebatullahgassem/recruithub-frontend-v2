@@ -135,6 +135,7 @@ function Talents() {
             img={talent.img}
             name={talent.name}
             description={talent.about}
+            onClick={() => navigate(`/company/talents/TalentProfile`, { state: { talentId: talent.id } })}
           />
         ))}
       </div>

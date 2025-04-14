@@ -13,6 +13,7 @@ import Login from './pages/login/Login';
 import VerifyOTP from "./pages/otp/VerifyOTP"; 
 import ForgotPassword from "./pages/login/ForgotPassword";
 import ResetPassword from "./pages/login/ResetPassword";
+import TalentProfile from "./pages/company/talents/TalentProfile";
 
 
 function App() {
@@ -39,9 +40,6 @@ function App() {
   const EditCV = React.lazy(() =>
     import("./pages/user/profile/edit-profile/edit-cv")
   );
-  const ReviewProfile = React.lazy(() =>
-    import("./pages/user/profile/edit-profile/review")
-  );
   const UserSaved = React.lazy(() => import("./pages/user/saved/Saved"));
   const UserApplications = React.lazy(() =>
     import("./pages/user/applications/Applications")
@@ -63,6 +61,11 @@ function App() {
   const ApplicationForm = React.lazy(() => import("./pages/user/jobs/ApplicationForm"));
   // // const RegisterCompany = React.lazy(() => import("./pages/register/RegisterCompany"));
   const RecommendedJobs = React.lazy(() => import("./pages/user/jobs/RecomJobs"));
+  const TalantProfile = React.lazy(() =>
+    import("./pages/company/talents/TalentProfile")
+  );
+
+
   return (
     <>
       <QueryClientProvider client={new QueryClient()}>
@@ -105,6 +108,9 @@ function App() {
                         path="/company/talents"
                         element={<CompanyTalents />}
                       />
+                      <Route path="/company/talents/TalentProfile/" element={<TalantProfile />} />
+         
+
                       <Route path="/company/jobCreate" element={<JobCreate />} />
                       <Route path="/company/jobEdit/:jobId" element={<JobCreate />} />
                       {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
@@ -136,10 +142,6 @@ function App() {
                       <Route
                         path="/applicant/profile/edit-cv"
                         element={<EditCV />}
-                      />
-                      <Route
-                        path="/applicant/profile/review"
-                        element={<ReviewProfile />}
                       />
                       <Route 
                         path="/applicant/profile/recom" 

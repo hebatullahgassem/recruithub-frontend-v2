@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ProfileContext } from "../../../../context/ProfileContext";
+import { userContext } from "../../../../context/UserContext";
 import { Button, TextField, Box, Grid, CircularProgress, Alert } from "@mui/material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,8 +9,8 @@ const EditExperience = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const locationUserId = location.state?.userId;
-  const { profileData, updateProfile, goToNextStep } = useContext(ProfileContext);
-  const userId = locationUserId || profileData?.id;
+  const { user } = useContext(userContext);
+  const userId = locationUserId || user?.id;
 
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,8 +88,7 @@ const EditExperience = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      updateProfile("experience", experiences);
-      goToNextStep("/applicant/profile" );
+      navigate("/applicant/profile" );
     } catch (err) {
       console.error("Error saving experience:", err);
       setError("Failed to save experience.");
@@ -227,3 +226,4 @@ const EditExperience = () => {
 };
 
 export default EditExperience;
+
