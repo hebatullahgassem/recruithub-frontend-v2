@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 
 const EditPersonalCom = () => {
-  const { user, setUser } = useContext(userContext); // 👈 use setUser here
+  const { user, setUser } = useContext(userContext); 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [uploadStatus, setUploadStatus] = useState({ img: null });

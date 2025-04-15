@@ -106,6 +106,7 @@ function Navbar() {
             <>
               <NavDrawerItem to="/company/talents" text="Talents" icon="👥" />
               <NavDrawerItem to="/company/jobs" text="My Jobs" icon="🏢" />
+              <NavDrawerItem to="/company/jobs/jobsDashboard" text="Job Dashboard" icon="📊" />
             </>
           )}
         </List>
@@ -225,6 +226,7 @@ function Navbar() {
                   <>
                     <NavLink to="/company/talents" text="Talents" />
                     <NavLink to="/company/jobs" text="My Jobs" />
+                    <NavLink to="/company/jobs/jobsDashboard" text="Job Dashboard"/>
                   </>
                 )}
               </Box>

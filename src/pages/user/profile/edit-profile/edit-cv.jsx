@@ -1,22 +1,27 @@
 import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../../../context/UserContext";
-
 import {
   Button,
   Box,
   Typography,
-  Grid,
   CircularProgress,
   Alert,
+  Card,
+  CardContent,
+  Chip,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ca } from "date-fns/locale";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DescriptionIcon from '@mui/icons-material/Description';
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 
 const EditCV = () => {
-  try{
- 
-  const { user ,setUser } = useContext(userContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useContext(userContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -44,36 +49,30 @@ const EditCV = () => {
         });
 
         const cvPath = res.data.cv;
-        console.log("CV Path:", cvPath);
         if (cvPath) {
-          const fullUrl = `https://res.cloudinary.com/dkvyfbtdl/raw/upload/${cvPath}.pdf `;
-          setCvUrl(cvPath?.endsWith(".pdf") ? cvPath : `${cvPath}.pdf`);
-          console.log("CV URL:", fullUrl);
+          const fullUrl = `https://res.cloudinary.com/dkvyfbtdl/raw/upload/${cvPath}.pdf`;
+          setCvUrl(cvPath.endsWith(".pdf") ? cvPath : `${cvPath}.pdf`);
           setCvName(cvPath.split("/").pop());
         }
       } catch (err) {
         console.error("Error fetching CV:", err);
-        setError("Failed to load CV.");
+        setError("Failed to load CV. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchCV();
-  }, [userId]);
+  }, [userId, navigate]);
 
   const handleFileUpload = async (file) => {
-    // const file = event.target.files[0];
     if (!file) return;
 
-    // Validate file type and size
-    const allowedTypes = [
-      "application/pdf",
-    ];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ["application/pdf"];
+    const maxSize = 5 * 1024 * 1024;
 
     if (!allowedTypes.includes(file.type)) {
-      setError("Only PDF, DOC, and DOCX files are allowed");
+      setError("Only PDF files are allowed");
       return;
     }
 
@@ -89,7 +88,7 @@ const EditCV = () => {
     formData.append("cv", file);
 
     try {
-      const response = await AxiosApi.patch(
+      await AxiosApi.patch(
         `/user/jobseekers/${userId}/`,
         formData,
         {
@@ -97,143 +96,248 @@ const EditCV = () => {
             "Content-Type": "multipart/form-data",
             Authorization: `Token ${localStorage.getItem("token")}`,
           },
-          // Add timeout if needed
-          timeout: 30000, // 30 seconds
+          timeout: 30000,
         }
-        
       );
-      console.log("CV uploaded successfully:", response.data);
+      navigate("/applicant/profile");
     } catch (err) {
       console.error("Upload error:", err);
-
       let errorMessage = "Failed to upload CV";
       if (err.response) {
-        // Server responded with error status
-        if (err.response.status === 413) {
-          errorMessage = "File too large (max 5MB)";
-        } else if (err.response.data) {
-          errorMessage = err.response.data.detail || err.response.statusText;
-        }
+        errorMessage = err.response.status === 413 
+          ? "File too large (max 5MB)" 
+          : err.response.data?.detail || err.response.statusText;
       } else if (err.request) {
-        // Request was made but no response
         errorMessage = "Network error - please check your connection";
       }
-
       setError(errorMessage);
-      setAlert({
-        severity: "error",
-        message: errorMessage,
-      });
     } finally {
       setLoading(false);
-
-      // Clear the file input to allow re-uploading the same file
-      if (event.target) {
-        event.target.value = "";
-      }
     }
-    
   };
 
-  const handleSave = async () => {
-    if (!cvFile) {
-      setError("Please upload a CV file before submitting.");
-      return;
-    }
-   await handleFileUpload(cvFile);
-    
-    navigate("/applicant/profile");
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setError(null);
+    setCvFile(file);
   };
 
+  const handleRemoveFile = () => {
+    setCvFile(null);
+    if (document.getElementById("cv-upload-input")) {
+      document.getElementById("cv-upload-input").value = "";
+    }
+  };
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <CircularProgress />
-        <span style={{ marginLeft: "10px" }}>Loading CV...</span>
+      <Box sx={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        alignItems: "center",
+        minHeight: 200,
+        flexDirection: 'column',
+        gap: 2
+      }}>
+        <CircularProgress size={isMobile ? 24 : 32} />
+        <Typography variant="body1" color="text.secondary">
+          Loading your CV...
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <div>
-      {/* <ProfileStepper activeStep={4} /> */}
-      <Typography variant="h4" gutterBottom>
-        {cvUrl ? "Update CV" : "Upload CV"}
-      </Typography>
+    <Box sx={{ 
+      maxWidth: 800, 
+      mx: 'auto', 
+      p: isMobile ? 2 : 3,
+      my: 4
+    }}>
+      <Card variant="outlined" sx={{ borderRadius: 2 }}>
+        <CardContent sx={{ p: isMobile ? 2 : 3 }}>
+          <Typography 
+            variant="h5" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 600,
+              mb: 3,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
+              fontSize: isMobile ? '1.25rem' : '1.5rem'
+            }}
+          >
+            <DescriptionIcon fontSize={isMobile ? "medium" : "large"} />
+            {cvUrl ? "Update Your CV" : "Upload Your CV"}
+          </Typography>
 
-      <Box
-        sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sx={{ display: "flex", gap: 2 }}>
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              sx={{ padding: 2, textTransform: "none" }}
-            >
-              {cvName ? `Change CV` : "Upload CV"}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            {/* File Upload Section */}
+            <Box>
               <input
+                id="cv-upload-input"
                 type="file"
                 accept=".pdf"
                 hidden
-                onChange={()=>setCvFile(event.target.files[0])}
+                onChange={handleFileChange}
               />
-            </Button>
-            {cvUrl && (
               <Button
+                fullWidth
                 variant="outlined"
-                color="error"
-                sx={{ px: 2 }}
-                onClick={()=>setCvFile(null)}
-                disabled={loading || !cvFile}
+                component="label"
+                htmlFor="cv-upload-input"
+                sx={{
+                  p: isMobile ? 3 : 4,
+                  borderStyle: 'dashed',
+                  borderWidth: 2,
+                  borderColor: theme.palette.divider,
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: theme.palette.action.hover
+                  }
+                }}
               >
-                X
+                <Box sx={{ 
+                  textAlign: 'center',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 1
+                }}>
+                  <CloudUploadIcon sx={{ 
+                    fontSize: isMobile ? 32 : 40, 
+                    color: 'text.secondary' 
+                  }} />
+                  <Box>
+                    <Typography variant="body1" component="div">
+                      <Box component="span" sx={{ fontWeight: 500 }}>
+                        Click to upload
+                      </Box>
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      PDF format (max 5MB)
+                    </Typography>
+                  </Box>
+                </Box>
               </Button>
+
+              {cvFile && (
+                <Box sx={{ 
+                  mt: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  p: 1.5,
+                  backgroundColor: theme.palette.grey[50],
+                  borderRadius: 1
+                }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <DescriptionIcon color="primary" />
+                    <Box>
+                      <Typography variant="body2">{cvFile.name}</Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {(cvFile.size / 1024 / 1024).toFixed(2)} MB
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Button
+                    onClick={handleRemoveFile}
+                    color="error"
+                    size="small"
+                    startIcon={<DeleteIcon fontSize="small" />}
+                    sx={{ minWidth: 32 }}
+                  >
+                    {!isMobile && 'Remove'}
+                  </Button>
+                </Box>
+              )}
+            </Box>
+
+            {/* Current CV Section */}
+            {cvUrl && (
+              <Box sx={{ 
+                backgroundColor: theme.palette.grey[50],
+                borderRadius: 1,
+                p: 2,
+                border: `1px solid ${theme.palette.divider}`
+              }}>
+                <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+                  Existing CV:
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <DescriptionIcon color="action" />
+                  <Button
+                    href={cvUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      textTransform: 'none',
+                      color: theme.palette.primary.main
+                    }}
+                  >
+                    View Current CV
+                  </Button>
+                </Box>
+              </Box>
             )}
-          </Grid>
 
-          {cvUrl && (
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                Uploaded: <strong>{cvFile ? cvFile.name : cvName}</strong>
-              </Typography>
-              <Typography variant="body1">
-                Old CV Link:{" "}
-                <a
-                  href={cvUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View CV
-                </a>
-              </Typography>
-            </Grid>
-          )}
-        </Grid>
+            {/* Error Messages */}
+            {error && (
+              <Alert 
+                severity="error" 
+                sx={{ 
+                  mb: 2,
+                  '& .MuiAlert-message': { 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis' 
+                  } 
+                }}
+              >
+                {error}
+              </Alert>
+            )}
 
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
-        )}
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-          <Button variant="contained" onClick={handleSave} disabled={loading || !cvFile}>
-            Submit CV
-          </Button>
-        </Box>
-      </Box>
-    </div>
-  );}catch (error) {
-    console.error("Error in EditCV component:", error);
-    return (
-      <Alert severity="error" sx={{ mt: 2 }}>
-        An unexpected error occurred. Please try again later.
-      </Alert>
-    );
-  }
+            {/* Action Buttons */}
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              justifyContent: 'flex-end',
+              pt: 3,
+              borderTop: `1px solid ${theme.palette.divider}`
+            }}>
+              {/* <Button
+                variant="outlined"
+                onClick={() => navigate("/applicant/profile")}
+                disabled={loading}
+              >
+                Cancel
+              </Button> */}
+              <Button
+                variant="contained"
+                onClick={() => handleFileUpload(cvFile)}
+                disabled={loading || !cvFile}
+                sx={{ 
+                  minWidth: 120,
+                  '&:disabled': { 
+                    backgroundColor: theme.palette.action.disabledBackground,
+                    color: theme.palette.text.disabled
+                  }
+                }}
+              >
+                {loading ? (
+                  <CircularProgress size={24} sx={{ color: 'inherit' }} />
+                ) : cvUrl ? 'Update CV' : 'Upload CV'}
+              </Button>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
+  );
 };
 
 export default EditCV;

@@ -1,21 +1,76 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../../../../context/ProfileContext";
-import {
-  Button,
-  TextField,
-  Box,
-  Grid,
-  CircularProgress,
-  Alert,
+import { 
+  Button, 
+  TextField, 
+  Box, 
+  Grid, 
+  CircularProgress, 
+  Alert, 
   Switch,
+  Typography,
+  IconButton,
+  Paper,
+  Container,
+  useTheme,
+  useMediaQuery,
+  styled
 } from "@mui/material";
-import ProfileStepper from "../../../../components/profile/ProfileStepper";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
-import { useLocation } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
+import { School, Delete, Add, Check } from "@mui/icons-material";
+
+// Consistent Color Palette
+const primaryColor = '#901b26'; // IIT Maroon
+const secondaryColor = '#d7323e'; // Complementary Gold
+const accentColor = '#a0454e'; // Darker Maroon
+const backgroundColor = '#f8f2ec'; // Off-white
+const textPrimary = '#2d2829'; // Dark Charcoal
+const textSecondary = '#5a5252'; // Warm Gray
+
+const EducationCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  marginBottom: theme.spacing(3),
+  borderRadius: '12px',
+  backgroundColor: '#fff',
+  border: `1px solid ${primaryColor}20`,
+  boxShadow: '0 8px 24px rgba(112,43,46,0.08)',
+  transition: 'all 0.3s ease',
+  position: 'relative',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: '0 12px 28px rgba(112,43,46,0.12)'
+  }
+}));
+
+const AddButton = styled(Button)(({ theme }) => ({
+  padding: `${theme.spacing(1.5)} ${theme.spacing(3)}`,
+  borderRadius: '8px',
+  fontWeight: 600,
+  textTransform: 'none',
+  margin: `${theme.spacing(3)} auto`,
+  width: 'fit-content',
+  borderWidth: 2,
+  '&:hover': {
+    borderWidth: 2
+  }
+}));
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: '8px',
+  fontWeight: 700,
+  textTransform: 'none',
+  fontSize: '1.1rem',
+  minWidth: 200,
+  letterSpacing: 0.5,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+}));
 
 const EditEducation = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const location = useLocation();
   const userId = location.state?.userId;
   const { profileData, updateProfile, goToNextStep } =
@@ -106,159 +161,182 @@ const EditEducation = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <CircularProgress />
-        <span style={{ marginLeft: "10px" }}>Loading education data...</span>
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Alert severity="error">{error}</Alert>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4, color: textPrimary }}>
+        <CircularProgress sx={{ color: primaryColor }} />
+        <Typography variant="body1" sx={{ ml: 2 }}>Loading education data...</Typography>
       </Box>
     );
   }
 
   return (
-    <div>
-      <form onSubmit={(e) => handleSave(e)}>
-        {/* <ProfileStepper activeStep={1} /> Step 2 */}
-        <h2 className="m-3">Edit Education</h2>
-        <Box
-          sx={{
-            padding: 2,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            minHeight: "40vh",
-          }}
-        >
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" sx={{ 
+          fontWeight: 700, 
+          color: textPrimary,
+          fontSize: isMobile ? '1.8rem' : '2.125rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
+          <School fontSize="large" sx={{ color: primaryColor }} />
+          Edit Education
+        </Typography>
+      </Box>
+
+      <form onSubmit={handleSave}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {education.map((edu, index) => (
-            <Box
-              key={index}
-              sx={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: 3,
-                marginBottom: 2,
-                position: "relative",
-              }}
-            >
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => {
-                  const newEducation = education.filter((_, i) => i !== index);
-                  setEducation(newEducation);
-                }}
-                sx={{ position: "absolute", top: 0, right: 0, padding: 0 }}
-              >
-                X
-              </Button>
+            <EducationCard key={index}>
+              <Box sx={{ 
+                position: 'absolute',
+                top: theme.spacing(2),
+                right: theme.spacing(2)
+              }}>
+                <IconButton
+                  onClick={() => setEducation(education.filter((_, i) => i !== index))}
+                  sx={{ color: accentColor }}
+                >
+                  <Delete />
+                </IconButton>
+              </Box>
+
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Degree"
-                    value={edu.degree || ""}
-                    onChange={(e) =>
-                      handleChange(index, "degree", e.target.value)
-                    }
+                    value={edu.degree}
+                    onChange={(e) => handleChange(index, "degree", e.target.value)}
                     fullWidth
                     required
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: '8px' } }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="School"
-                    value={edu.school || ""}
-                    onChange={(e) =>
-                      handleChange(index, "school", e.target.value)
-                    }
+                    value={edu.school}
+                    onChange={(e) => handleChange(index, "school", e.target.value)}
                     fullWidth
                     required
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: '8px' } }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Field of Study"
-                    value={edu.fieldOfStudy || ""}
-                    onChange={(e) =>
-                      handleChange(index, "fieldOfStudy", e.target.value)
-                    }
+                    value={edu.fieldOfStudy}
+                    onChange={(e) => handleChange(index, "fieldOfStudy", e.target.value)}
                     fullWidth
                     required
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: '8px' } }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Start Date"
                     type="date"
-                    value={edu.startDate || ""}
-                    onChange={(e) =>
-                      handleChange(index, "startDate", e.target.value)
-                    }
+                    value={edu.startDate}
+                    onChange={(e) => handleChange(index, "startDate", e.target.value)}
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     required
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: '8px' } }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="End Date"
                     type="date"
-                    value={edu.endDate || ""}
-                    onChange={(e) =>
-                      handleChange(index, "endDate", e.target.value)
-                    }
+                    value={edu.endDate}
+                    onChange={(e) => handleChange(index, "endDate", e.target.value)}
                     disabled={edu.endDate === 'Now'}
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    required={edu.startDate && edu.endDate != 'Now'}
+                    required={edu.startDate && edu.endDate !== 'Now'}
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: '8px' } }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <label style={{ marginRight: "8px" }}>
-                      Currently Studing
-                    </label>
+
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1,
+                    height: '100%',
+                    justifyContent: 'flex-end'
+                  }}>
                     <Switch
-                      checked={edu.endDate === "Now"}
-                      onChange={(e) =>
-                        handleChange(
-                          index,
-                          "endDate",
-                          e.target.checked ? "Now" : ""
-                        )
-                      }
+                      checked={edu.endDate === 'Now'}
+                      onChange={(e) => handleChange(index, "endDate", e.target.checked ? "Now" : "")}
                       color="primary"
                     />
+                    <Typography variant="body2" sx={{ color: textSecondary }}>
+                      Currently Studying
+                    </Typography>
                   </Box>
                 </Grid>
               </Grid>
-            </Box>
+            </EducationCard>
           ))}
-          <Button variant="outlined" onClick={handleAdd}>
-            Add More
-          </Button>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            {/* <Button variant="outlined" onClick={handleBack}>
-            Back: Personal Info
-          </Button> */}
-            <Button variant="contained" type="submit" disabled={loading}>
-              Submit Education
-            </Button>
+
+          <AddButton
+            variant="outlined"
+            onClick={handleAdd}
+            startIcon={<Add />}
+            sx={{
+              borderColor: primaryColor,
+              color: primaryColor,
+              '&:hover': {
+                backgroundColor: 'rgba(144, 27, 38, 0.08)',
+                borderColor: secondaryColor
+              }
+            }}
+          >
+            Add Another Education
+          </AddButton>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4 }}>
+            <SaveButton
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: primaryColor,
+                '&:hover': {
+                  backgroundColor: secondaryColor,
+                  boxShadow: '0px 4px 12px rgba(215, 50, 62, 0.4)'
+                }
+              }}
+              startIcon={<Check />}
+            >
+              Save Education
+            </SaveButton>
           </Box>
+
           {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mt: 2, 
+                borderRadius: '12px',
+                '& .MuiAlert-message': { color: textPrimary }
+              }}
+            >
               {error}
             </Alert>
           )}
         </Box>
       </form>
-    </div>
+    </Container>
   );
 };
-
 export default EditEducation;

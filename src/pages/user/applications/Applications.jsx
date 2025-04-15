@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import {
-  TextField,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Button,
+  Box,
   Typography,
+  Button,
+  CircularProgress,
+  Chip,
+  IconButton,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 import { getApplicationsByUser } from "../../../services/Application";
 import { useQuery } from "@tanstack/react-query";

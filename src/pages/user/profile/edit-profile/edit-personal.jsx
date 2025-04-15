@@ -3,17 +3,82 @@ import { userContext } from "../../../../context/UserContext";
 import {
   Button,
   TextField,
-  Avatar,
   Box,
   Typography,
   CircularProgress,
   Alert,
+  Grid,
+  Paper,
+  Container,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+  styled
+  
 } from "@mui/material";
+import { ArrowBack, CloudUpload, CheckCircle, Error, AddAPhoto  } from "@mui/icons-material";
 import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 
+// Style constants
+const primaryColor = '#d06c79';
+const secondaryColor = '#4a7b9d';
+const accentColor = '#901b21';
+const backgroundColor = '#f9f5f4';
+const textSecondary = '#6c757d'
+
+const ImageUploadWrapper = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    '&::after': {
+      content: '"Change"',
+      position: 'absolute',
+      inset: 0,
+      background: 'rgba(0,0,0,0.5)',
+      color: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '8px',
+      fontSize: '1.2rem',
+    }
+  },
+}));
+
+const ProfileImage = styled(Box)(({ theme }) => ({
+  width: 200,
+  height: 200,
+  borderRadius: '50%', // Make it circular
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  border: `4px solid ${primaryColor}`,
+  boxShadow: theme.shadows[4],
+  [theme.breakpoints.down('sm')]: {
+    width: 150,
+    height: 150,
+  },
+}));
+
+const IDImage = styled(Box)(({ theme }) => ({
+  width: '100%',
+  maxWidth: 280,
+  height: 180,
+  borderRadius: '12px',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  border: `2px solid ${primaryColor}`,
+  [theme.breakpoints.down('sm')]: {
+    height: 140,
+  },
+}));
+
+
 const EditPersonal = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { user, updateUser, goToNextStep } = useContext(userContext);
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
@@ -163,221 +228,270 @@ const EditPersonal = () => {
     if (!phone) {
       setError("");
       return true;
-    } // Allow empty phone number
-    const phoneRegex = /^(?:\01)?[0125]\d{8}$/;
-    if (!phoneRegex.test(phone)) {
-      setError("Correct phone format: +20-1-0125-Eight numbers");
-      return false;
-    }else {
-      setError(null);
-      return true;
     }
+  
+    // Egyptian mobile number regex (11 digits starting with 010, 011, 012, or 015)
+    const phoneRegex = /^01[0-2,5]\d{8}$/;
+    
+    if (!phoneRegex.test(phone)) {
+      setError("Valid format: 11 digits starting with 010, 011, 012, or 015 (e.g., 01123456789)");
+      return false;
+    }
+    
+    setError(null);
+    return true;
   };
-
-  // const validateForm = () => {
-  //   const requiredFields = ['name', 'dob', 'phone'];
-  //   const missingFields = requiredFields.filter(field => !localData[field]);
-
-  //   if (missingFields.length > 0) {
-  //     setError(`Missing required fields: ${missingFields.join(', ')}`);
-  //     return false;
-  //   }
-
-  //   if (!/^\d{11}$/.test(localData.phone)) {
-  //     setError('Correct phone format: +20-1-0125-Eight numbers');
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
+  
 
   return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          handleSave(e);
-        }}
-      >
-        <Box
-          sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 2 }}
-        >
-          <h2>Edit Personal Details</h2>
+    <Box sx={{ backgroundColor, minHeight: '100vh', p: useMediaQuery(theme.breakpoints.down('md')) ? 2 : 4 }}>
+    <Container maxWidth="lg">
+      <Box sx={{ mb: 4 }}>
+        <IconButton onClick={() => navigate(-1)} sx={{ color: primaryColor }}>
+          <ArrowBack />
+        </IconButton>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: primaryColor, mt: 2 }}>
+          Edit Personal Details
+        </Typography>
+      </Box>
 
-          {success && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              Profile updated successfully! Redirecting in 3 seconds...
-            </Alert>
-          )}
+      <Paper sx={{ p: 4, borderRadius: '16px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)' }}>
+        <form onSubmit={handleSave}>
+          <Grid container spacing={3}>
+            {/* Left Column */}
+            <Grid item xs={12} md={4}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 3,
+                alignItems: 'center',
+                textAlign: 'center'
+              }}>
+                {/* Profile Section */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <ImageUploadWrapper onClick={() => personalImageRef.current.click()}>
+                    <ProfileImage
+                      sx={{
+                        backgroundImage: `url(${localData.img || '/default-profile.jpg'})`,
+                      }}
+                    />
+                    <input
+                      type="file"
+                      hidden
+                      ref={personalImageRef}
+                      onChange={(e) => handleImageUpload(e, "img")}
+                    />
+                  </ImageUploadWrapper>
+                  
+                  <Typography variant="h6" sx={{ 
+                    color: primaryColor, 
+                    fontWeight: 600,
+                    mt: 1
+                  }}>
+                    {localData.name || "Your Name"}
+                  </Typography>
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
+                  {uploadStatus.img && (
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      gap: 1,
+                      height: 24
+                    }}>
+                      {uploadStatus.img === 'uploading' && <CircularProgress size={20} />}
+                      {uploadStatus.img === 'success' && 
+                        <CheckCircle fontSize="small" sx={{ color: 'success.main' }} />}
+                      {uploadStatus.img === 'error' && 
+                        <Error fontSize="small" sx={{ color: 'error.main' }} />}
+                    </Box>
+                  )}
+                </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar
-              src={localData.img}
-              sx={{ width: 80, height: 80, cursor: "pointer" }}
-              onClick={() => personalImageRef.current.click()}
-            />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                sx={{ margin: 0, cursor: "pointer" }}
-                onClick={() => personalImageRef.current.click()}
-              >
-                {localData.img
-                  ? "Change Profile Image"
-                  : "Upload Profile Image"}
-              </Typography>
-              {uploadStatus.img === "uploading" && (
-                <CircularProgress size={14} />
+                {/* National ID Section */}
+                <Box sx={{ width: '100%', mt: 2 }}>
+                  <Typography variant="subtitle1" sx={{ 
+                    mb: 2,
+                    color: textSecondary,
+                    fontWeight: 500
+                  }}>
+                    National ID Verification
+                  </Typography>
+                  
+                  <ImageUploadWrapper onClick={() => nationalIdImageRef.current.click()}>
+                    <IDImage
+                      sx={{
+                        backgroundImage: localData.nationalIdImg ? 
+                          `url(${localData.nationalIdImg})` : 
+                          'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)',
+                      }}
+                    >
+                      {!localData.nationalIdImg && (
+                        <Box sx={{
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: primaryColor
+                        }}>
+                          <AddAPhoto sx={{ fontSize: 40, mb: 1 }} />
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            Upload National ID
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: textSecondary }}>
+                            JPG or PNG, max 5MB
+                          </Typography>
+                        </Box>
+                      )}
+                    </IDImage>
+                  </ImageUploadWrapper>
+                  
+                  <input
+                    type="file"
+                    hidden
+                    ref={nationalIdImageRef}
+                    onChange={(e) => handleImageUpload(e, "nationalIdImg")}
+                  />
+
+                  {uploadStatus.nationalIdImg && (
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      gap: 1,
+                      height: 24,
+                      mt: 1
+                    }}>
+                      {uploadStatus.nationalIdImg === 'uploading' && 
+                        <CircularProgress size={20} />}
+                      {uploadStatus.nationalIdImg === 'success' && 
+                        <CheckCircle fontSize="small" sx={{ color: 'success.main' }} />}
+                      {uploadStatus.nationalIdImg === 'error' && 
+                        <Error fontSize="small" sx={{ color: 'error.main' }} />}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Right Column */}
+            <Grid item xs={12} md={8}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    name="name"
+                    value={localData.name}
+                    onChange={handleChange}
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    value={localData.email}
+                    disabled
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Date of Birth"
+                    name="dob"
+                    type="date"
+                    value={localData.dob}
+                    onChange={handleChange}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Location"
+                    name="location"
+                    value={localData.location}
+                    onChange={handleChange}
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="About Me"
+                    name="about"
+                    value={localData.about}
+                    onChange={handleChange}
+                    multiline
+                    rows={4}
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    name="phone"
+                    value={localData.phone}
+                    onChange={handleChange}
+                    error={!!error}
+                    helperText={error || "Format: +20-1-0125-eleven numbers"}
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="National ID"
+                    name="nationalId"
+                    value={localData.nationalId}
+                    onChange={handleChange}
+                    sx={{ mb: 2 }}
+                  />
+                </Grid>
+              </Grid>
+
+              {success && (
+                <Alert severity="success" sx={{ mt: 2, borderRadius: '8px' }}>
+                  Profile updated successfully!
+                </Alert>
               )}
-            </Box>
-            <input
-              type="file"
-              accept="image/*"
-              ref={personalImageRef}
-              style={{ display: "none" }}
-              onChange={(e) => handleImageUpload(e, "img")}
-            />
-          </Box>
 
-          <TextField
-            label="Name"
-            name="name"
-            value={localData.name}
-            onChange={handleChange}
-            fullWidth
-            required
-            error={!localData.name}
-            helperText={`Current: ${user?.name || "Not set"}`}
-          />
-
-          <TextField
-            label="Email"
-            name="email"
-            value={localData.email}
-            onChange={handleChange}
-            fullWidth
-            disabled
-            helperText={`Current: ${user?.email || "Not set"}`}
-          />
-
-          <TextField
-            label="Date of Birth"
-            name="dob"
-            type="date"
-            value={localData.dob}
-            onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            helperText={`Current: ${user?.dob || "Not set"}`}
-          />
-
-          <TextField
-            label="Location"
-            name="location"
-            value={localData.location}
-            onChange={handleChange}
-            fullWidth
-            helperText={`Current: ${user?.location || "Not set"}`}
-          />
-
-          <TextField
-            label="About"
-            name="about"
-            value={localData.about}
-            onChange={handleChange}
-            fullWidth
-            multiline
-            rows={4}
-            helperText={`Current: ${user?.about || "Not set"}`}
-          />
-
-          <TextField
-            label="Phone Number"
-            name="phone"
-            value={localData.phone}
-            onChange={handleChange}
-            fullWidth
-            // error={!validatePhoneNumber(localData.phone)}
-            helperText={`Current: ${user?.phone || "Not set"}`}
-          />
-
-          <TextField
-            label="National ID"
-            name="nationalId"
-            value={localData.nationalId}
-            disabled
-            onChange={handleChange}
-            fullWidth
-            helperText={`Current: ${user?.national_id || "Not set"}`}
-          />
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Avatar
-              src={localData.nationalIdImg}
-              sx={{
-                width: 160,
-                height: 100,
-                cursor: "pointer",
-                borderRadius: 2,
-              }}
-              onClick={() => nationalIdImageRef.current.click()}
-              variant="square"
-            />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                sx={{ margin: 0, cursor: "pointer" }}
-                onClick={() => nationalIdImageRef.current.click()}
-              >
-                {localData.nationalIdImg
-                  ? "Change National ID Image"
-                  : "Upload National ID Image"}
-              </Typography>
-              {uploadStatus.nationalIdImg === "uploading" && (
-                <CircularProgress size={14} />
-              )}
-            </Box>
-            <input
-              type="file"
-              accept="image/*"
-              ref={nationalIdImageRef}
-              style={{ display: "none" }}
-              onChange={(e) => handleImageUpload(e, "nationalIdImg")}
-            />
-          </Box>
-
-          <Button
-            variant="contained"
-            // onClick={handleSave}
-            type="submit"
-            sx={{ mt: 2 }}
-          >
-            Save Changes
-          </Button>
-        </Box>
-      </form>
-    </div>
-  );
+              <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  sx={{ width: isMobile ? '100%' : 'auto' }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: primaryColor,
+                    color: 'white',
+                    width: isMobile ? '100%' : 'auto',
+                    '&:hover': { backgroundColor: accentColor }
+                  }}
+                >
+                  Save Changes
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </form>
+        </Paper>
+    </Container>
+  </Box>
+);
 };
 
 export default EditPersonal;

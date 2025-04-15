@@ -8,8 +8,20 @@ export const createApplication = async (applicationData) => {
 
 // Get All Applications
 export const getAllApplications = async () => {
-  const response = await AxiosApi.get("applications/");
+  try {
+  const response = await AxiosApi.get("applications/",{
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+  console.log("Applications response:", response);
   return response.data;
+} catch (error) {
+  console.error("Error fetching applications:", error);
+  throw error;
+}
+  
+  // return response.data;
 };
 
 // Get Applications by User ID
