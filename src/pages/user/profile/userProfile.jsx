@@ -39,9 +39,9 @@ import { ThemeProvider, createTheme, keyframes } from '@mui/material/styles';
 import { styled } from '@mui/system';
 
 // Custom color palette
-const primaryColor = '#d06c79'; // Soft red/pink
+const primaryColor =  '#d43132'; // Soft red/pink
 const secondaryColor = '#4a7b9d'; // Complementary blue
-const accentColor = '#d32c2c'; // Peach accent
+const accentColor = '#d06c79'; // Peach accent
 const backgroundColor = '#f9f5f4'; // Warm white background
 const darkTextColor = '#3a3a3a'; // Dark gray for text
 const lightTextColor = '#5d5d5d'; // Lighter gray for secondary text

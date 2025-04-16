@@ -124,7 +124,7 @@ import {
   Search,
   ArrowForward
 } from "@mui/icons-material";
-import JobCard from "../../../components/job/JobCard"; 
+import  JobCardApp  from "../../../components/job/JobCardApp"; 
 
 const primaryColor = "#d43132";
 const secondaryColor = "#f5f5f5";
@@ -278,9 +278,9 @@ const JobApplication = () => {
               >
                 <MenuItem value="2,3,4,5,6">All Active</MenuItem>
                 <MenuItem value="1">Applied</MenuItem>
-                <MenuItem value="2">Under Review</MenuItem>
-                <MenuItem value="3">Shortlisted</MenuItem>
-                <MenuItem value="4">Interview</MenuItem>
+                <MenuItem value="2">Techincal Assessment</MenuItem>
+                <MenuItem value="3">Technical Interview</MenuItem>
+                <MenuItem value="4">HR Interview</MenuItem>
                 <MenuItem value="5">Offered</MenuItem>
                 <MenuItem value="6">Rejected</MenuItem>
               </Select>
@@ -484,7 +484,7 @@ const JobApplication = () => {
           }}>
             <AnimatePresence>
               {applications?.map((application, index) => (
-                <JobCard 
+                < JobCardApp 
                   key={application.id}
                   application={application}
                   index={index}
