@@ -56,7 +56,7 @@ const UserSingleJob = () => {
       console.log(res);
       userAppRefetch();
     } catch (error) {
-      alert('Complete your profile before applying!')
+      alert("Complete your profile before applying!");
       console.error("Error creating application:", error);
     }
   }
@@ -99,56 +99,76 @@ const UserSingleJob = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div className="container mt-2 d-flex flex-column justify-content-center align-items-center">
+    <div
+      className="mt-2 d-flex flex-column justify-content-center align-items-center"
+      style={{ maxWidth: "100vw" }}
+    >
       <JobDetails job={userApp?.job_details || jobsData} />
-      {userApp && Object.keys(userApp).length !== 0 ? (
-        <>
-          <ProcessColumn
-            setter={setClickedColumn}
-            column={clickedColumn}
-            phases={phases}
-          />
-          <div
-            style={{
-              minHeight: "30vh",
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-            }}
-          >
-            {clickedColumn === 1 && (
-              <ApplicationForm
-                questions={userApp?.job_details?.questions}
-                answers={userApp?.answers}
-                application={userApp}
-                refetch={userAppRefetch}
-              />
-            )}
-            {clickedColumn > 1 && (
-              <Meeting
-                phase={phases[clickedColumn - 1]}
-                applicationData={userApp}
-                clickedColumn={clickedColumn}
-              />
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          <button
-            className="btn mt-2"
-            style={{
-              width: "fit-content",
-              backgroundColor: jobsData?.status === "0" ? "red" : "#28a745",
-              color: "white",
-            }}
-            onClick={() => handleClick()}
-            disabled={jobsData?.status === "0"}
-          >
-            {jobsData?.status === "0" ? "Job is Closed" : "Apply for this job!"}
-          </button>
-        </>
-      )}
+      <div
+        style={{
+          border: "1px solid #e3cdcd",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "white",
+          marginTop: "10px",
+          padding: "20px",
+          minWidth: "100%",
+          maxWidth: "100vw",
+        }}
+      >
+        {userApp && Object.keys(userApp).length !== 0 ? (
+          <>
+            <ProcessColumn
+              setter={setClickedColumn}
+              column={clickedColumn}
+              phases={phases}
+            />
+            <div
+              style={{
+                minHeight: "30vh",
+                display: "flex",
+                // justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
+              {clickedColumn === 1 && (
+                <ApplicationForm
+                  questions={userApp?.job_details?.questions}
+                  answers={userApp?.answers}
+                  application={userApp}
+                  refetch={userAppRefetch}
+                />
+              )}
+              {clickedColumn > 1 && (
+                <Meeting
+                  phase={phases[clickedColumn - 1]}
+                  applicationData={userApp}
+                  clickedColumn={clickedColumn}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <button
+              className="btn mt-2"
+              style={{
+                width: "fit-content",
+                backgroundColor: jobsData?.status === "0" ? "red" : "#28a745",
+                color: "white",
+              }}
+              onClick={() => handleClick()}
+              disabled={jobsData?.status === "0"}
+            >
+              {jobsData?.status === "0"
+                ? "Job is Closed"
+                : "Apply for this job!"}
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

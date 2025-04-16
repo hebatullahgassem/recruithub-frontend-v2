@@ -86,6 +86,7 @@ function App() {
                     flexDirection: "column",
                     alignItems: "center",
                     maxWidth: "100vw",
+                    backgroundColor: "#f5f6f7",
                   }}
                 >
                   <Suspense fallback={<div>Loading...</div>}>
@@ -109,8 +110,8 @@ function App() {
                       />
                       <Route path="/company" element={<CompanyHome />} />
                       <Route path="/company/jobs" element={<CompanyJobs />} />
-                      <Route path="/company/jobs/:id" element={<SingleJob />} />
                       <Route path="/company/jobs/jobsDashboard" element={<JobsDashboard />} />
+                      <Route path="/company/jobs/:id" element={<SingleJob />} />
 
                       <Route
                         path="/company/talents"

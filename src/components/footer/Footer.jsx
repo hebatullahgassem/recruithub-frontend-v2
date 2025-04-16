@@ -6,7 +6,6 @@ function Footer() {
         width: "100%",
         textAlign: "center",
         padding: "20px",
-        marginTop: "50px",
         backgroundColor: "#f8f9fa",
       }}
     >
@@ -14,7 +13,7 @@ function Footer() {
 
       <div className="links" style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems:'center', marginTop: "20px" }}>
       <a
-        href="https://www.iti.gov.eg/"
+        href="https://iti.gov.eg/home"
         target="_blank"
         rel="noopener noreferrer"
         style={{

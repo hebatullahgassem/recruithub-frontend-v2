@@ -8,6 +8,7 @@ import { getJobById, patchJob } from "../../../services/Job";
 import { Button } from "@mui/material";
 import { userContext } from "../../../context/UserContext";
 import MeetingsTable from "../../../components/companyProcess/MeetingsTable";
+import CalenderSwitcher from "../../../components/companyProcess/CalenderSwitcher";
 
 function SingleJob() {
   const phases = [
@@ -23,28 +24,6 @@ function SingleJob() {
   const { user } = useContext(userContext);
   const navigate = useNavigate();
 
-  const handleActivation = async (state) => {
-    if (
-      state === 0 &&
-      window.confirm("Are you sure you want to deactivate this job?")
-    ) {
-      // Implement the deactivation logic here
-      console.log("Deactivating job with ID:", id);
-      const res = await patchJob(id, { status: 0 });
-      console.log(res);
-      refetch();
-    } else if (
-      state === 1 &&
-      window.confirm("Are you sure you want to activate this job?")
-    ) {
-      // Implement the activation logic here
-      console.log("Activating job with ID:", id);
-      const res = await patchJob(id, { status: 1 });
-      console.log(res);
-      refetch();
-    }
-  };
-
   const {
     data: jobData,
     error: jobError,
@@ -58,15 +37,18 @@ function SingleJob() {
       return res;
     },
   });
-  // useEffect(() => {
-  //   if (!user) return;
-  //   if(!jobData) return;
-  //   console.log(user, jobData)
+  useEffect(() => {
+    if (!user) return;
+    if (!jobData) return;
+    console.log(user, jobData);
 
-  //   if (user.user_type !== "COMPANY" || (jobData && parseInt(user.id) != jobData.company)) {
-  //     navigate("/company/jobs");
-  //   }
-  // }, [user, jobData]);
+    if (
+      user.user_type !== "COMPANY" ||
+      (jobData && parseInt(user.id) != jobData.company)
+    ) {
+      navigate("/company/jobs");
+    }
+  }, [user, jobData]);
   return (
     <div
       style={{
@@ -77,63 +59,56 @@ function SingleJob() {
         maxWidth: "100vw",
       }}
     >
-      <JobDetails job={jobData} />
-      <div>
-        {jobData?.status == 1 ? (
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleActivation(0)}
-            style={{ marginTop: "10px" }}
-          >
-            Daectivate Job
-          </Button>
+      <JobDetails job={jobData} refetch={refetch} />
+      <div
+        style={{
+          border: "1px solid #e3cdcd",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor:'white',
+          marginTop:'10px',
+          padding:'20px',
+          minWidth:'80vw',
+          maxWidth:'100vw'
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+            // marginTop: "10px",
+            minWidth: "fit-content",
+          }}
+        >
+          <h5>Applicants Table</h5>
+          <CalenderSwitcher setCalender={setCalender} calender={calender} />
+          <h5>Meetings Table</h5>
+        </div>
+        {!calender ? (
+          <>
+            <ProcessColumn
+              setter={setClickedColumn}
+              column={clickedColumn}
+              phases={phases}
+            />
+            <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
+          </>
         ) : (
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => handleActivation(1)}
-            style={{ marginTop: "10px", marginLeft: "10px" }}
-          >
-            Activate Job
-          </Button>
+          <>
+            <ProcessColumn
+              setter={setClickedColumn}
+              column={clickedColumn}
+              phases={phases.slice(2, 5)}
+            />
+            <MeetingsTable column={clickedColumn} phases={phases.slice(2, 5)} />
+          </>
         )}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/company/jobEdit/" + id)}
-          style={{ marginTop: "10px", marginLeft: "10px" }}
-        >
-          Edit Job
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setCalender(!calender)}
-          style={{ marginTop: "10px", marginLeft: "10px" }}
-        >
-          {calender ? "Hide Calender" : "Show Calender"}
-        </Button>
       </div>
-      {!calender ? (
-        <>
-          <ProcessColumn
-            setter={setClickedColumn}
-            column={clickedColumn}
-            phases={phases}
-          />
-          <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
-        </>
-      ) : (
-        <>
-          <ProcessColumn
-            setter={setClickedColumn}
-            column={clickedColumn}
-            phases={phases.slice(2, 5)}
-          />
-          <MeetingsTable column={clickedColumn} phases={phases.slice(2,5)} />
-        </>
-      )}
     </div>
   );
 }

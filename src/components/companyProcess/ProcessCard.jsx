@@ -11,6 +11,7 @@ import { userContext } from "../../context/UserContext";
 function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
   const [fail, setFail] = useState(false);
+  const [filters, setFilters] = useState(false);
   const [display, setDisplay] = useState(false);
   const [csvDisplay, setCsvDisplay] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
@@ -36,6 +37,8 @@ function ProcessCard({ column, phases, job }) {
     };
     const response = await updateApplicationAts(data);
     console.log(response);
+    setAts(50);
+    setFail(false);
     setTimeout(() => {
       alert(response.message);
     }, 1000);
@@ -61,6 +64,8 @@ function ProcessCard({ column, phases, job }) {
     dataForm.append("job", job.id);
     const response = await updateApplicationCsv(dataForm);
     console.log(response);
+    setAts(50);
+    setFail(false);
     setTimeout(() => {
       alert(response.message);
     }, 1000);
@@ -86,7 +91,7 @@ function ProcessCard({ column, phases, job }) {
         <h1 style={{ fontSize: "2rem", margin: "1rem" }}>
           {phases[column - 1]}
         </h1>
-        {column === 1 && (
+        {column === 1 && filters && (
           <button
             className="btn btn-primary"
             onClick={() => setDisplay(!display)}
@@ -94,7 +99,7 @@ function ProcessCard({ column, phases, job }) {
             Filter by ats
           </button>
         )}
-        {column != 1 && (
+        {column != 1 && filters && (
           <button
             className="btn btn-primary"
             onClick={() => setCsvDisplay(!csvDisplay)}
@@ -103,7 +108,7 @@ function ProcessCard({ column, phases, job }) {
           </button>
         )}
       </div>
-      {column === 1 && display && (
+      {column === 1 && filters && display && (
         <div
           style={{
             width: "60%",
@@ -111,6 +116,10 @@ function ProcessCard({ column, phases, job }) {
             flexDirection: "column",
             alignItems: "center",
             marginBottom: "1rem",
+            maxWidth: "50vw",
+            padding: "10px",
+            flexWrap: "wrap",
+            overflow: "hidden",
           }}
         >
           <h2 style={{ fontSize: "1.5rem" }}>Next Phase ATS Score</h2>
@@ -137,7 +146,7 @@ function ProcessCard({ column, phases, job }) {
           </button>
         </div>
       )}
-      {column != 1 && csvDisplay && (
+      {column != 1 && filters && csvDisplay && (
         <div
           style={{
             width: "100%",
@@ -145,6 +154,9 @@ function ProcessCard({ column, phases, job }) {
             flexDirection: "column",
             alignItems: "center",
             marginBottom: "1rem",
+            maxWidth: "90vw",
+            padding: "10px",
+            flexWrap: "wrap",
           }}
         >
           <h2 style={{ fontSize: "1.5rem" }}>Next Phase CSV Score</h2>
@@ -179,7 +191,7 @@ function ProcessCard({ column, phases, job }) {
           </button>
         </div>
       )}
-      <ApplicantsTable phase={column} />
+      <ApplicantsTable phase={column} setFilters={setFilters}/>
     </div>
   );
 }

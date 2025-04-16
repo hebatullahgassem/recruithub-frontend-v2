@@ -29,7 +29,7 @@ import { userContext } from "../../context/UserContext";
 import { useLocation, useParams } from "react-router";
 import CustomPopup from "../Popup/CustomPopup";
 
-function ApplicantsTable({ phase }) {
+function ApplicantsTable({ phase, setFilters }) {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [total, setTotal] = useState(1);
@@ -48,6 +48,7 @@ function ApplicantsTable({ phase }) {
       },
     });
     setTotal(response.data.count || 0);
+    setFilters(response.data.count ? true : false);
     return response.data.results;
   };
 
@@ -239,7 +240,7 @@ function ApplicantsTable({ phase }) {
 
       {/* Bulk action buttons */}
       {selected.length > 0 && (
-        <Box sx={{ width: "90%", mb: 2, display: "flex", gap: 2 }}>
+        <Box sx={{ alignSelf:'center', mb: 2, display: "flex", gap: 2 }}>
           <Button
             variant="contained"
             color="primary"
@@ -285,8 +286,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >
@@ -294,8 +295,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >
@@ -303,8 +304,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >
@@ -312,8 +313,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >
@@ -321,8 +322,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >
@@ -330,8 +331,8 @@ function ApplicantsTable({ phase }) {
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "black",
-                    color: "#ffffff",
+                    backgroundColor: "#dedede",
+                    color: "#901b20",
                     fontWeight: "bold",
                   }}
                 >

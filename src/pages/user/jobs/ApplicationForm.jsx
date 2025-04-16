@@ -115,9 +115,11 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
       <Typography variant="h4">
         Job Application Quiz
       </Typography>
-      {parseInt(application?.status) > 1 && <Typography color="green" variant="h6" gutterBottom>
+      {application.fail ? <Typography color="red" variant="h6" gutterBottom>
+        Unfortunately you have failed this phase
+      </Typography> : parseInt(application?.status) > 1 ? <Typography color="green" variant="h6" gutterBottom>
         Your application is submitted
-      </Typography>}
+      </Typography> : null}
       {questions?.map((question) => (
         <FormControl
           key={question.id}
@@ -203,7 +205,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
           questions?.some(
             (question) =>
               question.required && typeof answers[question.id] === "undefined"
-          ) || !cv || application.status == '2' || application.job_details.status == '0'
+          ) || !cv || parseInt(application.status) > 1 || application.job_details.status == '0'
         }
       >
         Submit

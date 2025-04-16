@@ -446,7 +446,7 @@ const Register = () => {
                   }}
                   disabled={isSubmitDisabled} // Disable button if criteria are not met
                 >
-                  Register
+                  <p className="p-0 m-0 color-white" style={{color:'white'}}>Register</p>
                 </Button>
 
                 <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>

@@ -8,6 +8,7 @@ import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
+import { MdAddBox } from "react-icons/md";
 
 function CompanyJobs() {
   //   const location = useLocation();
@@ -79,20 +80,30 @@ function CompanyJobs() {
         }}
       >
         <h1 style={{ fontSize: "2rem", margin: "1rem" }}>Company Jobs</h1>
-        <Button onClick={() => navigate("/company/jobCreate")}>
+        {/* <Button onClick={() => navigate("/company/jobCreate")}>
           Create New Job
-        </Button>
+        </Button> */}
+        <MdAddBox
+          onClick={() => navigate("/company/jobCreate")}
+          style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
+          title="Add New Job"
+        />
       </header>
 
       {companyJobsLoading ? (
         <CircularProgress />
-      ) : companyJobs.length < 1 ? (
-        <div style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}>
+      ) : companyJobs && companyJobs.length < 1 ? (
+        <div
+          style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}
+        >
           <h2>No jobs found</h2>
           <p>Please create a job</p>
-          <Button onClick={() => navigate("/company/jobCreate")}>
-            Create New Job
-          </Button>
+
+          <MdAddBox
+            onClick={() => navigate("/company/jobCreate")}
+            style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
+            title="Add New Job"
+          />
         </div>
       ) : (
         <>
@@ -117,7 +128,16 @@ function CompanyJobs() {
               Reset
             </Button>
           </div>
-          <div style={{display:'flex', justifyContent:'center', alignItems:'center', gap: "1rem", minWidth: "100%", flexDirection: "column"}}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+              minWidth: "100%",
+              flexDirection: "column",
+            }}
+          >
             {companyJobs?.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}

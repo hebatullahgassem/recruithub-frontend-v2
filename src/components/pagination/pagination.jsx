@@ -1,3 +1,5 @@
+import { RiArrowLeftCircleFill, RiArrowRightCircleFill } from "react-icons/ri";
+
 export default function CustomPagination({
   page,
   setPage,
@@ -6,14 +8,20 @@ export default function CustomPagination({
   total,
 }) {
   return (
-    <div className="d-flex gap-1 mt-3">
-      <button
+    <div
+      className="d-flex gap-3 mt-3 mb-5 justify-content-center align-items-center"
+      style={{
+        border: "1px solidrgb(0, 0, 0)",
+        borderRadius: "10px",
+        padding: "10px",
+        visibility: page === 1 && page * pageSize >= total ? "hidden" : "visible",
+      }}
+    >
+      <RiArrowLeftCircleFill
         disabled={page === 1}
         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        className="btn btn-primary"
-      >
-        Previous
-      </button>
+        style={{ scale: "2", color: page === 1?'black':"#901b20" }}
+      />
       <select
         value={pageSize}
         onChange={(e) => setPageSize(Number(e.target.value))}
@@ -24,13 +32,14 @@ export default function CustomPagination({
           </option>
         ))}
       </select>
-      <button
+      <RiArrowRightCircleFill
         disabled={page * pageSize >= total}
         onClick={() => setPage((prev) => prev + 1)}
-        className="btn btn-primary"
-      >
-        Next
-      </button>
+        style={{
+          scale: "2",
+          color: page * pageSize >= total ? "black" : "#901b20",
+        }}
+      />
     </div>
   );
 }

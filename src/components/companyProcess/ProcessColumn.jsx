@@ -1,21 +1,25 @@
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Tab, Tabs, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useState } from "react";
 
 function ProcessColumn({setter, column, phases}) {
 
     return (
         
-        <ToggleButtonGroup
+        <Tabs
             orientation="horizontal"
-            sx={{ mt:2, scale:0.8, alignSelf:'center'}}
+            sx={{ mt:2, alignSelf:'center', maxWidth:'100vw'}}
             // onChange={handleChange}
+            indicatorColor="primary"
+            value={column}
+            textColor="primary"
+            variant="scrollable"
         >
             {phases.map((val, index) => (
-                <ToggleButton key={val} value={index+1} onClick={() => setter(index+1)} sx={{backgroundColor: index+1 === column ? '#e4e4e4': null}}>
+                <Tab key={val} label={phases[index]} value={index+1} onClick={() => setter(index+1)} sx={{backgroundColor: index+1 === column ? '#e4e4e4': null}}>
                     {phases[index]}
-                </ToggleButton>
+                </Tab>
             ))}
-        </ToggleButtonGroup>
+        </Tabs>
     );
 }
 

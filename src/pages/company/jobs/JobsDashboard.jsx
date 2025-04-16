@@ -24,8 +24,8 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const STATUS_MAP = {
-  '1': "Applied",
-  '2': "Application Accepted",
+  '1': "Saved",
+  '2': "Applied",
   '3': "Technical Assessment",
   '4': "Technical Interview",
   '5': "HR Interview",
@@ -45,7 +45,7 @@ const JobsDashboard = () => {
     error: jobsError 
   } = useQuery({
     queryKey: ['allJobs'],
-    queryFn: () => getAllJobs({ filters: {}, page: 1, pageSize: 1000 })
+    queryFn: () => getAllJobs({ filters: {company: user.id}, page: 1, pageSize: 1000 })
   });
 
   // Extract jobs data from response

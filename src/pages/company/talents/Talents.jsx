@@ -128,7 +128,7 @@ function Talents() {
           </div>
         </form>
       </header>
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems:'center', justifyContent:'center' }}>
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems:'center', justifyContent:'center', marginTop:'2rem' }}>
         {talents?.map((talent) => (
           <TalentCard
             key={talent.id}
