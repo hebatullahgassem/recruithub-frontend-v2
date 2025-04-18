@@ -16,7 +16,12 @@ import ForgotPassword from "./pages/login/ForgotPassword";
 import ResetPassword from "./pages/login/ResetPassword";
 import TalentProfile from "./pages/company/talents/TalentProfile";
 import ComProfile from "./pages/company/profile/ComProfile";
-import EditPersonalCom from "./pages/company/profile/edit-profile/edit-personal";
+import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
+import Users from "./admin/Users.jsx";
+// import Dashboard from "./admin/Dashboard.jsx";
+// import Jobseekers from "./admin/Jobseekers.jsx";
+// import Companies from "./admin/Companies.jsx";
+
 
 
 function App() {
@@ -92,6 +97,10 @@ function App() {
                   <Suspense fallback={<div>Loading...</div>}>
                     <Routes>
                       <Route path="/" element={<Home />} />
+                      <Route path="/admin/users" element={<Users />} />
+                      {/* <Route path="/admin/dashboard" element={<Dashboard />} />
+                      <Route path="/admin/jobseekers" element={<Jobseekers />} />
+                      <Route path="/admin/companies" element={<Companies />} /> */}
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/verify-otp" element={<VerifyOTP />} />
