@@ -108,6 +108,7 @@ const EditPersonal = () => {
       AxiosApi.get(`user/jobseekers/${userId}/`)
         .then((res) => {
           const data = res.data;
+          console.log(data);
           setLocalData({
             name: data.name || "",
             email: data.email || "",
@@ -241,7 +242,7 @@ const EditPersonal = () => {
     setError(null);
     return true;
   };
-  
+  console.log(localData);
 
   return (
     <Box sx={{ backgroundColor, minHeight: '100vh', p: useMediaQuery(theme.breakpoints.down('md')) ? 2 : 4 }}>
@@ -309,7 +310,7 @@ const EditPersonal = () => {
                 </Box>
 
                 {/* National ID Section */}
-                <Box sx={{ width: '100%', mt: 2 }}>
+                {/* <Box sx={{ width: '100%', mt: 2 }}>
                   <Typography variant="subtitle1" sx={{ 
                     mb: 2,
                     color: textSecondary,
@@ -371,7 +372,7 @@ const EditPersonal = () => {
                         <Error fontSize="small" sx={{ color: 'error.main' }} />}
                     </Box>
                   )}
-                </Box>
+                </Box> */}
               </Box>
             </Grid>
 
@@ -453,6 +454,7 @@ const EditPersonal = () => {
                     value={localData.nationalId}
                     onChange={handleChange}
                     sx={{ mb: 2 }}
+                    disabled
                   />
                 </Grid>
               </Grid>

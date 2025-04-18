@@ -19,6 +19,7 @@ import { createAnswer } from "../../../services/Answer";
 import { userContext } from "../../../context/UserContext";
 import { patchUser } from "../../../services/Auth";
 import { patchApplication } from "../../../services/Application";
+import { CloudUploadIcon } from "lucide-react";
 const ApplicationForm = ({ questions, answers: savedAnswers, application, refetch }) => {
   const location = useLocation();
   const { user, setUser } = useContext(userContext);
@@ -112,14 +113,18 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
         flexDirection: "column",
       }}
     >
-      <Typography variant="h4">
-        Job Application Quiz
+      <Typography variant="h4" gutterBottom>
+        Job Application Questions
       </Typography>
       {application.fail ? <Typography color="red" variant="h6" gutterBottom>
         Unfortunately you have failed this phase
-      </Typography> : parseInt(application?.status) > 1 ? <Typography color="green" variant="h6" gutterBottom>
+      </Typography> : parseInt(application?.status) > 1 ? <><Typography color="green" variant="h6" gutterBottom>
         Your application is submitted
-      </Typography> : null}
+      </Typography>
+      <Typography color="green" variant="h6" gutterBottom>
+        Check the next phases
+      </Typography>
+      </> : (<>
       {questions?.map((question) => (
         <FormControl
           key={question.id}
@@ -170,29 +175,46 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
 
       <FormControl>
         <FormLabel>
-          CV{" "}
-          {user?.cv && (
+          Apply with Old CV or Upload New One
+        </FormLabel>
+        {user?.cv && (
             <a
               href={user.cv.endsWith("pdf") ? user.cv : user.cv + ".pdf"}
               target="_blank"
               style={{
                 textDecoration: "underline",
-                marginLeft: "20px",
                 cursor: "pointer",
               }}
             >
-              Old Cv
+              View Old CV
             </a>
           )}
-        </FormLabel>
-        <div style={{ display: "flex" }}>
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={handleCvChange}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              padding: "5px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
+            onClick={() => handleCvChange({ target: { files: [] } })}
             disabled={application.status == '2'}
-          />
-          {cvNew && <button className="btn btn-danger p-0 px-1">X</button>}
+          >
+            <CloudUploadIcon style={{ marginRight: "10px" }} />
+            <Typography variant="body2">Upload New CV</Typography>
+          </div>
+          {cvNew && (
+            <button
+              className="btn btn-danger p-0 px-1"
+              style={{ borderRadius: "5px", padding: "5px" }}
+              onClick={() => setCvNew(false)}
+            >
+              X
+            </button>
+          )}
         </div>
       </FormControl>
 
@@ -209,7 +231,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
         }
       >
         Submit
-      </Button>
+      </Button></>)}
     </Container>
   );
 };

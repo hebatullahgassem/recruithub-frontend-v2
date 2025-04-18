@@ -89,7 +89,7 @@ function Talents() {
                 setFilters((prev) => ({ ...prev, name: e.target.value }))
               }
             />
-            <TextField
+            {/* <TextField
               label="Experience"
               value={filters.experience}
               onChange={(e) =>
@@ -98,7 +98,7 @@ function Talents() {
                   experience: e.target.value,
                 }))
               }
-            />
+            /> */}
             <TextField
               label="Location"
               value={filters.location}
