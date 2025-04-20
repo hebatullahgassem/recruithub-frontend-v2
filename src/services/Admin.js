@@ -1,10 +1,11 @@
 import { AxiosApi } from "./Api";
 
-export const getUnverifiedCompanies = async (page = 1, pageSize = 10) => {
+export const getUnverifiedCompanies = async (page = 1, pageSize = 10, searchQuery = "") => {
   const response = await AxiosApi.get("user/admin/company/", {
     params: {
       page: page,
       page_size: pageSize,
+      search: searchQuery,
     },
   });
   return response.data;
@@ -19,11 +20,12 @@ export const verifyCompany = async (companyId) => {
 };
 
 // --- Itian Functions ---
-export const getItians = async (page = 1, pageSize = 10) => {
+export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
     const response = await AxiosApi.get("user/admin/itian/", {
       params: {
         page: page,
         page_size: pageSize,
+        search: searchQuery,
       },
     });
     return response.data; // Expect { count, results }

@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   TablePagination,
+  TextField,
   Button,
   Box,
   CircularProgress,
@@ -29,6 +30,8 @@ function AdminCompany() {
     severity: "info", // 'success' or 'error'
     companyId: null,
   });
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   // --- Data Fetching ---
   const {
@@ -38,11 +41,11 @@ function AdminCompany() {
     isFetching: isRefetching, // Indicates background refetching
   } = useQuery({
     // Unique query key including pagination parameters
-    queryKey: ["unverifiedCompanies", page, rowsPerPage],
+    queryKey: ["unverifiedCompanies", page, rowsPerPage, searchQuery],
     queryFn: async () => {
       // Pass current page and rowsPerPage to the API call
       // API uses 1-based indexing for page, MUI uses 0-based
-      const data = await getUnverifiedCompanies(page + 1, rowsPerPage);
+      const data = await getUnverifiedCompanies(page + 1, rowsPerPage, searchQuery);
       return data; // Expect { count, results }
     },
     keepPreviousData: true, // Keep showing old data while fetching new page
@@ -98,6 +101,20 @@ function AdminCompany() {
 
   return (
     <Box sx={{ padding: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+      <TextField
+        label="Search by Name or Email"
+        variant="outlined"
+        size="small"
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setPage(0); // reset to first page when searching
+        }}
+        sx={{ width: "60%" }}
+      />
+    </Box>
+
       <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3 }}>
         Verify Companies
       </Typography>

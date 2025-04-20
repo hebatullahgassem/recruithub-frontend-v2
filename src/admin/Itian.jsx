@@ -45,6 +45,9 @@ function AdminItian() {
   // State for feedback messages
   const [feedback, setFeedback] = useState({ message: "", severity: "info" });
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+
   // --- Data Fetching ---
   const {
     data: itianData,
@@ -52,14 +55,14 @@ function AdminItian() {
     isLoading: isFetchingItians,
     isFetching: isRefetchingItians,
   } = useQuery({
-    queryKey: ["itians", page, rowsPerPage],
+    queryKey: ["itians", page, rowsPerPage, searchQuery], // include searchQuery in key
     queryFn: async () => {
-      const data = await getItians(page + 1, rowsPerPage);
-      return data; // Expect { count, results }
+      const data = await getItians(page + 1, rowsPerPage, searchQuery); // pass search query to API
+      return data;
     },
     keepPreviousData: true,
   });
-
+  
   // --- Utility to show feedback ---
   const showFeedback = (message, severity = "info") => {
     setFeedback({ message, severity });
@@ -264,6 +267,20 @@ function AdminItian() {
       </Grid>
 
       <Divider sx={{ my: 3 }} />
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+      <TextField
+        label="Search by Email or National ID"
+        variant="outlined"
+        size="small"
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setPage(0); // reset to first page when searching
+        }}
+        sx={{ width: "60%" }}
+      />
+    </Box>
+
 
       {/* --- Itian Table --- */}
       <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 2 }}>
