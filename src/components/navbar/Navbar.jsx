@@ -109,6 +109,12 @@ function Navbar() {
               {/* <NavDrawerItem to="/company/jobs/jobsDashboard" text="Job Dashboard" icon="📊" /> */}
             </>
           )}
+           {user?.user_type?.toLowerCase() === "admin" && (
+            <>
+              <NavLink to="/admin/users" text="Manage Users" />
+              <NavLink to="/admin/jobs" text="Manage Jobs" />
+            </>
+          )}
         </List>
       </Box>
       
@@ -229,6 +235,12 @@ function Navbar() {
                     {/* <NavLink to="/company/jobs/jobsDashboard" text="Job Dashboard"/> */}
                   </>
                 )}
+                {user?.user_type?.toLowerCase() === "admin" && (
+                  <>
+                    <NavLink to="/admin/users" text="Manage Users" />
+                    <NavLink to="/admin/jobs" text="Manage Jobs" />
+                  </>
+                )}
               </Box>
             </Box>
 
@@ -312,7 +324,13 @@ function Navbar() {
                         <ListItem 
                               // button 
                               component={Link} 
-                              to={user?.user_type?.toLowerCase() === "company" ? "/company/profile/edit-personal" : "/applicant/profile"}
+                              to={
+                                user?.user_type?.toLowerCase() === "company"
+                                  ? "/company/profile/edit-personal"
+                                  : user?.user_type?.toLowerCase() === "admin"
+                                    ? "/admin/users"
+                                    : "/applicant/profile"
+                              }
                               sx={{
                                 "&:hover": {
                                   backgroundColor: "rgba(136, 32, 36, 0.05)"

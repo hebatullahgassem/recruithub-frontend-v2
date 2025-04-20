@@ -10,7 +10,6 @@ export default function Users() {
         Authorization: `Token ${localStorage.getItem("token")}`,
       },
     }).then((res) => {
-        console.log("Response data:", res.data.results);
       setUsers(res.data.results);
     });
   }, []);
