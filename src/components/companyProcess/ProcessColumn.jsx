@@ -1,8 +1,13 @@
 import { Tab, Tabs, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function ProcessColumn({setter, column, phases}) {
-
+function ProcessColumn({setter, column, phases, application}) {
+    console.log(application);
+    useEffect(() => {
+        if(application.status){
+            setter(parseInt(application.status)-1);
+        }
+    }, [application]);
     return (
         
         <Tabs
