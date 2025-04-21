@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 function ProcessColumn({setter, column, phases, application}) {
     console.log(application);
     useEffect(() => {
-        if(application.status){
+        if(application?.status){
             console.log(application.status)
             if(application.status === '1') return
             setter(parseInt(application.status)-1);

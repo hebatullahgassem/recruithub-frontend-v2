@@ -5,20 +5,20 @@ import {
   Box,
   Typography,
   Chip,
-  IconButton,
   Button,
+  Card,
+  CardContent,
+  Divider,
+  Avatar,
   useTheme,
-  useMediaQuery
-} from "@mui/material";
-import {
-  BookmarkBorder,
-  LocationOn,
-  Business,
-  Schedule,
-  ArrowForward
-} from "@mui/icons-material";
-import { motion } from "framer-motion";
-function JobCard({ job, type }) {
+  useMediaQuery,
+  Tooltip,
+  Stack,
+} from "@mui/material"
+import { LocationOn, Business, Schedule, ArrowForward, AttachMoney, AccessTime, Star } from "@mui/icons-material"
+import { motion } from "framer-motion"
+
+function JobCard({ job, type , isSelected}) {
   // const keywords = job?.keywords?.join(" · ") || "";
   const {user} = useContext(userContext)
   const navigate = useNavigate();
@@ -34,209 +34,355 @@ function JobCard({ job, type }) {
         : `/applicant/jobs/${jobId}`
     );
   };
+
+  // Format date to relative time
+  const getRelativeTime = (dateString) => {
+    if (!dateString) return "Recent"
+
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInMs = now - date
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
+
+    if (diffInDays === 0) {
+      return "Today"
+    } else if (diffInDays === 1) {
+      return "Yesterday"
+    } else if (diffInDays < 7) {
+      return `${diffInDays} days ago`
+    } else if (diffInDays < 30) {
+      return `${Math.floor(diffInDays / 7)} weeks ago`
+    } else {
+      return `${Math.floor(diffInDays / 30)} months ago`
+    }
+  }
+
+  // Animation variants
+  // const cardVariants = {
+  //   initial: { opacity: 0, y: 20 },
+  //   animate: { opacity: 1, y: 0 },
+  //   hover: {
+  //     y: -8,
+  //     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+  //     borderColor: primaryColor,
+  //   },
+  // }
+
+  // const logoVariants = {
+  //   initial: { scale: 0.8, opacity: 0 },
+  //   animate: { scale: 1, opacity: 1, transition: { delay: 0.2 } },
+  //   hover: { scale: 1.05, transition: { duration: 0.2 } },
+  // }
+
+  // const chipVariants = {
+  //   initial: { opacity: 0, x: -10 },
+  //   animate: { opacity: 1, x: 0 },
+  //   hover: { y: -2 },
+  // }
+
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    whileHover={{
+      y: -8,
+      transition: { duration: 0.3 },
+    }}
+    transition={{ duration: 0.4 }}
+    style={{ width: "100%", height: "100%" }}
+  >
+    <Card
+      onClick={() => handleJobClick(job?.id)}
+      sx={{
+        width: "100%",
+        height: "100%",
+        minHeight: 280,
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "16px",
+        cursor: "pointer",
+        border: isSelected ? `2px solid ${primaryColor}` : "1px solid #e2e8f0",
+        backgroundColor: "#fff",
+        transition: "all 0.3s ease",
+        "&:hover": {
+          borderColor: primaryColor,
+          boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+        },
+        overflow: "hidden",
+        position: "relative",
+      }}
     >
-      <Box
-        onClick={() => handleJobClick(job.id)}
+      <CardContent
         sx={{
-          border: "1px solid",
-          borderColor: "#e2e8f0",
-          borderRadius: "12px",
-          padding: isMobile ? 2 : 3,
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-          backgroundColor: "#fff",
-          height: "100%",
+          p: 0,
           display: "flex",
           flexDirection: "column",
-          "&:hover": {
-            borderColor: primaryColor,
-            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
-          },
-          position: "relative",
-          overflow: "hidden"
+          height: "100%",
+          "&:last-child": { pb: 0 }, // Override Material UI default padding
         }}
       >
-        <IconButton
-          sx={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            zIndex: 2,
-            color: "#cbd5e0",
-            "&:hover": {
-              color: primaryColor
-            }
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            // Handle bookmark logic here
-          }}
-        >
-          <BookmarkBorder />
-        </IconButton>
-
-        <Box sx={{ 
-          display: "flex", 
-          alignItems: "flex-start",
-          mb: 2
-        }}>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "12px",
-              backgroundColor: "#f9fafb",
-              border: "1px solid #f0f0f0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              flexShrink: 0,
-              mr: 2
-            }}
-          >
-            <img
-              src={
-                job.company_logo ||
-                "https://static.thenounproject.com/png/3198584-200.png"
-              }
-              alt={job.company_name}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
+        {/* Header Section */}
+        <Box sx={{ p: 3, pb: 2 }}>
+          <Stack direction="row" spacing={2} alignItems="flex-start">
+            <Avatar
+              src={job?.company_logo || "https://static.thenounproject.com/png/3198584-200.png"}
+              alt={job?.company_name || "Company"}
+              variant="rounded"
+              sx={{
+                width: 56,
+                height: 56,
+                borderRadius: "12px",
+                backgroundColor: "#f9fafb",
+                border: "1px solid #f0f0f0",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
               }}
             />
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                fontWeight: 700,
-                color: "#2d3748",
-                mb: 0.5,
-                pr: 4
-              }}
-            >
-              {job.title}
-            </Typography>
-            <Box sx={{ 
-              display: "flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: 1,
-              mb: 1
-            }}>
-              <Chip
-                icon={<Business sx={{ fontSize: 16 }} />}
-                label={job.company_name}
-                size="small"
+
+            <Box sx={{ flex: 1, overflow: "hidden" }}>
+              <Typography
+                variant="h6"
                 sx={{
-                  backgroundColor: "#f8fafc",
-                  color: "#4a5568",
-                  fontWeight: 500
+                  fontWeight: 700,
+                  color: "#2d3748",
+                  mb: 0.5,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                  lineHeight: 1.4,
                 }}
-              />
-              <Chip
-                icon={<LocationOn sx={{ fontSize: 16 }} />}
-                label={job.location}
-                size="small"
-                sx={{
-                  backgroundColor: "#f8fafc",
-                  color: "#4a5568",
-                  fontWeight: 500
-                }}
-              />
+              >
+                {job?.title || "Job Title"}
+              </Typography>
+
+              <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 0.5 }}>
+                <Business sx={{ fontSize: 16, color: "#718096" }} />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#4a5568",
+                    fontWeight: 500,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {job?.company_name || "Company Name"}
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <LocationOn sx={{ fontSize: 16, color: "#718096" }} />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#718096",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {job?.location || "Location"}
+                </Typography>
+              </Stack>
             </Box>
-            {job.type_of_job && (
+          </Stack>
+
+          <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
+            <Chip
+              icon={<AccessTime sx={{ fontSize: 14 }} />}
+              label={getRelativeTime(job?.created_at)}
+              size="small"
+              sx={{
+                backgroundColor: "#f8fafc",
+                color: "#718096",
+                fontWeight: 500,
+                height: 24,
+                fontSize: "0.7rem",
+              }}
+            />
+
+            {job?.type_of_job && (
               <Chip
-                icon={<Schedule sx={{ fontSize: 16 }} />}
+                icon={<Schedule sx={{ fontSize: 14 }} />}
                 label={job.type_of_job}
                 size="small"
                 sx={{
                   backgroundColor: `${primaryColor}10`,
                   color: primaryColor,
-                  fontWeight: 500
+                  fontWeight: 500,
+                  height: 24,
+                  fontSize: "0.7rem",
                 }}
               />
             )}
-          </Box>
+
+            {job?.salary && (
+              <Chip
+                icon={<AttachMoney sx={{ fontSize: 14 }} />}
+                label={job.salary}
+                size="small"
+                sx={{
+                  backgroundColor: "#f0fdf4",
+                  color: "#16a34a",
+                  fontWeight: 500,
+                  height: 24,
+                  fontSize: "0.7rem",
+                }}
+              />
+            )}
+          </Stack>
         </Box>
 
-        <Typography
-          variant="body2"
+        <Divider />
+
+        {/* Description Section */}
+        <Box sx={{ p: 3, pt: 2, flex: "1 0 auto" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#4a5568",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              lineHeight: 1.6,
+              mb: 2,
+              minHeight: "4.8em", // Minimum height for 3 lines
+              position: "relative",
+              "&:after": {
+                content: '""',
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "24px",
+                background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
+              },
+            }}
+          >
+            {job?.description ||
+              "No description available for this position. Please click for more details about this job opportunity."}
+          </Typography>
+
+          {/* Skills Section */}
+          {job?.skills_required && job.skills_required.length > 0 && (
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                flexWrap: "wrap",
+                gap: 1,
+                mb: 2,
+              }}
+            >
+              {job.skills_required.slice(0, 3).map((skill, index) => (
+                <Chip
+                  key={index}
+                  icon={<Star sx={{ fontSize: 14 }} />}
+                  label={skill}
+                  size="small"
+                  sx={{
+                    backgroundColor: "#edf2f7",
+                    color: "#4a5568",
+                    fontWeight: 500,
+                    height: 24,
+                    fontSize: "0.7rem",
+                  }}
+                />
+              ))}
+              {job.skills_required.length > 3 && (
+                <Tooltip title={job.skills_required.slice(3).join(", ")}>
+                  <Chip
+                    label={`+${job.skills_required.length - 3} more`}
+                    size="small"
+                    sx={{
+                      backgroundColor: "#edf2f7",
+                      color: "#718096",
+                      height: 24,
+                      fontSize: "0.7rem",
+                      cursor: "help",
+                    }}
+                  />
+                </Tooltip>
+              )}
+            </Stack>
+          )}
+        </Box>
+
+        {/* Action Section - Always at the bottom */}
+        <Box
           sx={{
-            mt: 2,
-            color: "#4a5568",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical",
-            lineHeight: 1.6,
-            position: "relative",
-            "&:after": {
-              content: '""',
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "32px",
-              background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
-            }
+            p: 3,
+            pt: 2,
+            pb: 3,
+            mt: "auto", // Push to bottom
+            backgroundColor: "#f8fafc",
+            borderTop: "1px solid #edf2f7",
           }}
         >
-          {job.description}
-        </Typography>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ width: "100%" }}>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.stopPropagation()
+                // Apply logic here
+                console.log("Apply for job:", job?.id)
+              }}
+              sx={{
+                flex: { xs: "1 1 auto", sm: 1 },
+                py: 1.2,
+                borderRadius: 2,
+                fontWeight: 600,
+                borderColor: primaryColor,
+                color: primaryColor,
+                "&:hover": {
+                  backgroundColor: `${primaryColor}10`,
+                  borderColor: primaryColor,
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                },
+                textTransform: "none",
+                fontSize: 14,
+                transition: "all 0.3s ease",
+              }}
+            >
+              Apply Now
+            </Button>
 
-        <Box sx={{ 
-          display: "flex", 
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: "auto",
-          pt: 2
-        }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Schedule sx={{ 
-              fontSize: 16, 
-              color: "#718096",
-              mr: 1 
-            }} />
-            <Typography variant="caption" sx={{ color: "#718096" }}>
-              Posted {new Date(job.created_at).toLocaleDateString()}
-            </Typography>
-          </Box>
-          
-          <Button
-            variant="contained"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleJobClick(job.id);
-            }}
-            sx={{
-              px: 3,
-              py: 1,
-              borderRadius: 2,
-              fontWeight: 600,
-              backgroundColor: primaryColor,
-              "&:hover": {
-                backgroundColor: "#b32828",
-                boxShadow: `0 4px 14px ${primaryColor}33`,
-              },
-              textTransform: "none",
-              fontSize: 14
-            }}
-            endIcon={<ArrowForward />}
-          >
-            View Details
-          </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                e.stopPropagation()
+                handleJobClick(job?.id)
+              }}
+              sx={{
+                flex: { xs: "1 1 auto", sm: 1 },
+                py: 1.2,
+                borderRadius: 2,
+                fontWeight: 600,
+                backgroundColor: primaryColor,
+                "&:hover": {
+                  backgroundColor: "#b32828",
+                  boxShadow: `0 4px 14px ${primaryColor}33`,
+                  transform: "translateY(-2px)",
+                },
+                textTransform: "none",
+                fontSize: 14,
+                transition: "all 0.3s ease",
+              }}
+              endIcon={<ArrowForward />}
+            >
+              View Details
+            </Button>
+          </Stack>
         </Box>
-      </Box>
-    </motion.div>
+      </CardContent>
+    </Card>
+  </motion.div>
+  
   );
 }
 

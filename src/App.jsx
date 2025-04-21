@@ -53,9 +53,7 @@ function App() {
   const UserApplications = React.lazy(() =>
     import("./pages/user/applications/Applications")
   );
-  const UserSingleApplications = React.lazy(() =>
-    import("./pages/user/singleApplication/SingleApplication")
-  );
+ 
   const JobApplication = React.lazy(() =>
     import("./pages/user/applications/Applications")
   );
