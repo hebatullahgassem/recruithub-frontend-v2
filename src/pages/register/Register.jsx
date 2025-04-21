@@ -66,23 +66,10 @@ const Register = () => {
     }
   };
 
-  // const checkUsernameExists = async (username) => {
-  //   try {
-  //     const response = await axios.post("http://localhost:8000/user/check-username/", { username });
-  //     if (response.data.exists) {
-  //       setNatIdError(response.data.error || "Username already exists. Please choose another one.");
-  //       return true;
-  //     }
-  //     setNatIdError("");
-  //     return false;
-  //   } catch (error) {
-  //     console.error("Username check failed", error);
-  //     return false;
-  //   }
-  // };
 
   const debouncedEmailCheck = debounce(checkEmailExists, 500);
-  // const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (formData.email && !emailError) {
@@ -90,13 +77,6 @@ const Register = () => {
     }
     return () => debouncedEmailCheck.cancel();
   }, [formData.email, emailError]);
-
-  // useEffect(() => {
-  //   if (formData.username && !NatIdError) {
-  //     debouncedUsernameCheck(formData.username);
-  //   }
-  //   return () => debouncedUsernameCheck.cancel();
-  // }, [formData.username, NatIdError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -159,18 +139,15 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     console.log("Form submitted:", formData);
 
     const emailExists = await checkEmailExists(formData.email);
     if (emailExists) {
       return;
     }
-
-    // Check if username exists
-    // const usernameExists = await checkUsernameExists(formData.username);
-    // if (usernameExists) {
-    //   return;
-    // }
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
@@ -221,6 +198,8 @@ const Register = () => {
         `Registration failed. Please check your details.\n${error.response.data.error}`
       );
       // console.error("Registration failed", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

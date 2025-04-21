@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -15,11 +15,12 @@ import animationData from '../../assets/animations/otp.json';
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
+  const [seconds, setSeconds] = useState(30);
+  const [resendDisabled, setResendDisabled] = useState(false);
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const location = useLocation();
-  const { email:stateEmail } = location.state;
-  console.log(email, stateEmail)
+  const { email: stateEmail } = location.state;
 
   const handleChange = (index, value) => {
     if (/^\d?$/.test(value)) {
@@ -33,6 +34,13 @@ const VerifyOTP = () => {
     }
   };
 
+  useEffect(() => {
+    if (seconds > 0) {
+      const timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [seconds]);
+
   const handleVerify = async (e) => {
     e.preventDefault();
     const fullOtp = otp.join("");
@@ -42,6 +50,8 @@ const VerifyOTP = () => {
         email: email || stateEmail,
         otp: fullOtp,
       });
+      console.log("email", email || stateEmail);
+      console.log("otp", fullOtp);
 
       if (response.data.message === "OTP verified successfully!") {
         alert("OTP Verified Successfully! You can now log in.");
@@ -53,6 +63,29 @@ const VerifyOTP = () => {
     } catch (error) {
       console.error("OTP verification failed", error);
       alert("OTP verification failed. Please try again.");
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setResendDisabled(true);
+    setSeconds(30);  // Reset the timer
+
+    try {
+      const response = await axios.post("http://localhost:8000/user/resend-otp/", {
+        email: email || stateEmail,
+      });
+      
+      if (response.data.message === "OTP resent successfully. Check your email for the new OTP.") {
+        alert("OTP resent successfully. Please check your inbox.");
+      } else {
+        alert("Failed to resend OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Resending OTP failed", error);
+      alert("Failed to resend OTP. Please try again.");
+    } finally {
+      // Re-enable the button after a delay of 30 seconds
+      setTimeout(() => setResendDisabled(false), 30000);
     }
   };
 
@@ -116,7 +149,6 @@ const VerifyOTP = () => {
                   id={`otp-${index}`}
                   value={digit}
                   onChange={(e) => handleChange(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(index, e)}
                   maxLength={1}
                   autoFocus={index === 0}
                   style={{
@@ -130,19 +162,16 @@ const VerifyOTP = () => {
                     outline: "none",
                     transition: "all 0.2s ease",
                   }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = "#ff5252";
-                    e.target.style.boxShadow = "0 0 0 2px rgba(255,82,82,0.2)";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = "#e0e0e0";
-                    e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
-                  }}
                 />
               </Grid>
             ))}
           </Grid>
 
+          <Typography variant="body2" color="error" mt={2}>
+            {seconds > 0 ? `OTP expires in ${seconds} seconds` : "OTP expired. Please request a new one."}
+          </Typography>
+
+          {/* Resend OTP button */}
           <Typography variant="body2" mt={2} color="text.secondary">
             Didn't receive code?{" "}
             <Button 
@@ -154,6 +183,8 @@ const VerifyOTP = () => {
                 fontWeight: 'bold',
                 fontSize: '0.875rem'
               }}
+              onClick={handleResendOtp}
+              disabled={resendDisabled}
             >
               Resend OTP
             </Button>
@@ -163,7 +194,7 @@ const VerifyOTP = () => {
             type="submit"
             fullWidth
             variant="contained"
-            disabled={otp.join("").length !== 6}
+            disabled={otp.join("").length !== 6 || seconds === 0}
             sx={{ 
               mt: 3, 
               py: 1.5,
