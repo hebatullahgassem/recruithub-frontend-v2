@@ -128,6 +128,19 @@ function ForgotPassword() {
                   }}
                   required
                 />
+
+                <Typography
+                  variant="body2"
+                  align="center"
+                  sx={{
+                    fontStyle: "bold",
+                    fontSize: "0.95rem",
+                    color: "#757575",  // Subtle gray
+                  }}
+                >
+                  ⚠️ You can request a password reset up to 2 times per day. Please use this feature responsibly.
+                </Typography>
+
                 {message && countdown === 0 && (
                   <Typography
                     color="success.main"
