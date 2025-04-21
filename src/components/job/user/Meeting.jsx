@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 // import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -94,11 +94,11 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
     <div
       style={{ display: "flex", flexDirection: "column", marginTop:'10px' }}
     >
-      <h3>
-        {phase === "Technical Assessment"
+      <Typography variant="h4" gutterBottom>
+      {phase === "Technical Assessment"
           ? "Technical Assessment"
           : `${phase} Meeting`}
-      </h3>
+      </Typography>
 
       {appStatus === clickedColumn && applicationData.fail ? (
         <p>Unfortunately you have failed this phase</p>

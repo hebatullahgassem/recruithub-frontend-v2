@@ -124,6 +124,7 @@ const UserSingleJob = () => {
               setter={setClickedColumn}
               column={clickedColumn}
               phases={phases}
+              application={userApp}
             />
             <div
               style={{

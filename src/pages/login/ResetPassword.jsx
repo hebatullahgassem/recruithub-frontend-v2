@@ -39,11 +39,21 @@ const ResetPassword = () => {
         );
         setToken(response.data.token);
       } catch (err) {
-        setError("Failed to fetch token");
+        if (
+          err.response &&
+          err.response.status === 400 &&
+          err.response.data?.error === "Daily limit reached"
+        ) {
+          setError("You have reached the password reset limit for today. Please try again tomorrow.");
+        } else {
+          setError("Failed to fetch token. Please try again later.");
+        }
       }
     };
+  
     fetchToken();
   }, [email]);
+  
 
   // Real-time password match and complexity check
   const handleConfirmPasswordChange = (e) => {

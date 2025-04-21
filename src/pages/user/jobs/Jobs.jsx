@@ -25,6 +25,7 @@ import {
   WorkOutline as WorkOutlineIcon
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaFilterCircleXmark } from "react-icons/fa6";
 
 const primaryColor = "#d43132";
 const secondaryColor = "#f5f5f5";
@@ -374,6 +375,7 @@ const {
                 color: "#a0aec0",
               }
             }}
+            startIcon={<FaFilterCircleXmark />}
           >
             Reset
           </Button>

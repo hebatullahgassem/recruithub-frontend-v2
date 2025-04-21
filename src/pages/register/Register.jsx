@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Alert, Collapse, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Container,
   Typography,
@@ -17,10 +19,9 @@ import {
 import { Email, Lock, Person } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import Lottie from "lottie-react";
-import animationData from '../../assets/animations/LoginRegister.json';
+import animationData from "../../assets/animations/LoginRegister.json";
 import { debounce } from "lodash";
 import { signupUser } from "../../services/Auth";
-
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -32,71 +33,59 @@ const Register = () => {
     confirmPassword: "",
     user_type: "jobseeker",
     username: "",
+    linkedin: "",
+    website: "",
+    other: "",
   });
+  const [alert, setAlert] = useState({ type: '', message: '' });
 
   const [passwordError, setPasswordError] = useState("");
   const [NatIdError, setNatIdError] = useState("");
   const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");  
-  const [showPassword, setShowPassword] = useState(false); 
-  const [passwordHelpText, setPasswordHelpText] = useState(""); 
+  const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordHelpText, setPasswordHelpText] = useState("");
 
   const navigate = useNavigate();
 
   const checkEmailExists = async (email) => {
     try {
-      const response = await axios.post("http://localhost:8000/user/check-email/", { email });
+      const response = await axios.post(
+        "http://localhost:8000/user/check-email/",
+        { email }
+      );
       if (response.data.exists) {
-        setEmailError(response.data.error || "Email already exists. Please choose another one.");
-        return true; 
+        setEmailError(
+          response.data.error ||
+            "Email already exists. Please choose another one."
+        );
+        return true;
       }
       setEmailError("");
-      return false; 
+      return false;
     } catch (error) {
       console.error("Email check failed", error);
       return false;
     }
   };
-  
-  // const checkUsernameExists = async (username) => {
-  //   try {
-  //     const response = await axios.post("http://localhost:8000/user/check-username/", { username });
-  //     if (response.data.exists) {
-  //       setNatIdError(response.data.error || "Username already exists. Please choose another one.");
-  //       return true; 
-  //     }
-  //     setNatIdError("");
-  //     return false;
-  //   } catch (error) {
-  //     console.error("Username check failed", error);
-  //     return false;
-  //   }
-  // };
-  
-  
+
+
   const debouncedEmailCheck = debounce(checkEmailExists, 500);
-  // const debouncedUsernameCheck = debounce(checkUsernameExists, 500);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (formData.email && !emailError) { 
+    if (formData.email && !emailError) {
       debouncedEmailCheck(formData.email);
     }
     return () => debouncedEmailCheck.cancel();
   }, [formData.email, emailError]);
 
-  // useEffect(() => {
-  //   if (formData.username && !NatIdError) { 
-  //     debouncedUsernameCheck(formData.username);
-  //   }
-  //   return () => debouncedUsernameCheck.cancel();
-  // }, [formData.username, NatIdError]);
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };  
+    const updatedFormData = { ...formData, [name]: value };
     
-    setFormData(updatedFormData);  
+    setFormData(updatedFormData);
 
     if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -104,25 +93,43 @@ const Register = () => {
     }
 
     if (name === "national_id") {
-      setNatIdError(value.length != 14 ? "National id should be 14 number" : "");
+      setNatIdError(
+        value.length != 14 ? "National id should be 14 number" : ""
+      );
     }
 
     if (name === "name") {
       const nameRegex = /^[A-Za-z\s]+$/;
-      setNameError(nameRegex.test(value) ? "" : "Name must only contain letters and spaces.");
+      setNameError(
+        nameRegex.test(value)
+          ? ""
+          : "Name must only contain letters and spaces."
+      );
     }
 
     if (name === "password" || name === "confirmPassword") {
-      const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
-      setPasswordHelpText(passwordRegex.test(value) ? "" : "Password must contain uppercase, lowercase, number, and special character.");
-      
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+      setPasswordHelpText(
+        passwordRegex.test(value)
+          ? ""
+          : "Password must contain uppercase, lowercase, number, and special character."
+      );
+
       // Use the updatedFormData instead of formData
-      if (name === "confirmPassword" || (name === "password" && updatedFormData.confirmPassword)) {
-        setPasswordError(updatedFormData.password !== updatedFormData.confirmPassword ? "Passwords do not match." : "");
+      if (
+        name === "confirmPassword" ||
+        (name === "password" && updatedFormData.confirmPassword)
+      ) {
+        setPasswordError(
+          updatedFormData.password !== updatedFormData.confirmPassword
+            ? "Passwords do not match."
+            : ""
+        );
       }
     }
     console.log(emailError, NatIdError, nameError, passwordError);
-};
+  };
 
   const handleUserTypeToggle = () => {
     const newUserType = isEmployer ? "jobseeker" : "company";
@@ -133,44 +140,49 @@ const Register = () => {
     }));
   };
 
-
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     console.log("Form submitted:", formData);
 
     const emailExists = await checkEmailExists(formData.email);
-  if (emailExists) {
-    return;
-  }
-
-  // Check if username exists
-  // const usernameExists = await checkUsernameExists(formData.username);
-  // if (usernameExists) {
-  //   return;
-  // }
+    if (emailExists) {
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
-      alert("Passwords do not match. Please ensure both passwords are identical.");
+      setAlert({
+        type: "error",
+        message: "Passwords do not match. Please ensure both passwords are identical.",
+      });
       return;
     }
 
     // If password meets criteria
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       setPasswordError("Password must meet the required complexity.");
       return;
     } else if (formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
-      alert("Password must be at least 8 characters long.");
+      setAlert({
+        type: "error",
+        message: "Password must be at least 8 characters long.",
+      });
       return;
     }
 
     // Ensure username and name meet their criteria
     if (NatIdError || nameError || passwordError || emailError) {
-      alert("Please fix the errors before submitting.");
+      setAlert({
+        type: "error",
+        message: "Please fix the errors before submitting.",
+      });
+      
       return;
     }
 
@@ -180,62 +192,80 @@ const Register = () => {
         user_type: formData.user_type.toUpperCase(),
         username: formData.email.split("@")[0], // Use email prefix as username
       };
+      if(formData.user_type === "company"){
+        formattedData.accounts = {
+          "linkedin": formData.linkedin,
+          "website": formData.website,
+          "other": formData.other,
+        }
+        formattedData.national_id = null;
+        }
       await signupUser(formattedData);
       localStorage.setItem("email", formData.email);
       navigate("/verify-otp", { state: { email: formData.email } });
     } catch (error) {
       console.error("Registration failed", error.response.data.error);
-      alert(`Registration failed. Please check your details.\n${error.response.data.error}`);
+      setAlert({
+        type: "error",
+        message: `Registration failed. Please check your details.\n${error.response.data.error}`,
+      });
+      
       // console.error("Registration failed", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Check if the submit button should be disabled
   const isSubmitDisabled =
-  !formData.email ||
-  !formData.national_id ||
-  !formData.name ||
-  !formData.password ||
-  !formData.confirmPassword ||
-  !!NatIdError || // Convert to boolean
-  !!nameError ||
-  !!passwordError || 
-  !!emailError || 
-  passwordHelpText;
+    !formData.email ||
+    (!formData.national_id && formData.user_type === "jobseeker") ||
+    !formData.name ||
+    !formData.password ||
+    !formData.confirmPassword ||
+    (formData.user_type === "jobseeker" && !!NatIdError) || // Convert to boolean
+    !!nameError ||
+    !!passwordError ||
+    !!emailError ||
+    passwordHelpText;
 
+  const handleEmailCheck = async () => {
+    try {
+      const emailCheckResponse = await axios.post(
+        "http://localhost:8000/user/check-email/",
+        {
+          email: formData.email,
+        }
+      );
 
-    const handleEmailCheck = async () => {
-      try {
-        const emailCheckResponse = await axios.post("http://localhost:8000/user/check-email/", {
-          email: formData.email
-        });
-    
-        if (emailCheckResponse.data.error) {
-          setEmailError("Email already exists. Please choose another one.");
-        } else {
-          setEmailError("");
-        }
-      } catch (error) {
-        console.error("Email check failed", error);
+      if (emailCheckResponse.data.error) {
+        setEmailError("Email already exists. Please choose another one.");
+      } else {
+        setEmailError("");
       }
-    };
-    
-    const handleUsernameCheck = async () => {
-      try {
-        const usernameCheckResponse = await axios.post("http://localhost:8000/user/check-username/", {
-          username: formData.username
-        });
-    
-        if (usernameCheckResponse.data.error) {
-          setNatIdError("Username already exists. Please choose another one.");
-        } else {
-          setNatIdError("");
+    } catch (error) {
+      console.error("Email check failed", error);
+    }
+  };
+
+  const handleUsernameCheck = async () => {
+    try {
+      const usernameCheckResponse = await axios.post(
+        "http://localhost:8000/user/check-username/",
+        {
+          username: formData.username,
         }
-      } catch (error) {
-        console.error("Username check failed", error);
+      );
+
+      if (usernameCheckResponse.data.error) {
+        setNatIdError("Username already exists. Please choose another one.");
+      } else {
+        setNatIdError("");
       }
-    };
-    
+    } catch (error) {
+      console.error("Username check failed", error);
+    }
+  };
 
   return (
     <Box
@@ -302,18 +332,44 @@ const Register = () => {
                   py: 1,
                   color: "#911720",
                   borderColor: "#911720",
-                  '&:hover': {
-                    backgroundColor: '#911720',
-                    color: '#fff',
-                    borderColor: '#911720'
-                  }
+                  "&:hover": {
+                    backgroundColor: "#911720",
+                    color: "#fff",
+                    borderColor: "#911720",
+                  },
                 }}
                 onClick={handleUserTypeToggle}
               >
                 {isEmployer ? "Switch to Jobseeker" : "Switch to Employer"}
               </Button>
 
-              <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {alert.message && (
+                <Collapse in={!!alert.message}>
+                  <Alert
+                    severity={alert.type}
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={() => setAlert({ type: '', message: '' })}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    }
+                    sx={{ mb: 2 }}
+                  >
+                    {alert.message}
+                  </Alert>
+                </Collapse>
+              )}
+
+
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+              >
                 <TextField
                   fullWidth
                   label="Email"
@@ -332,28 +388,34 @@ const Register = () => {
                   required
                 />
                 {emailError && (
-                  <Typography variant="body2" color="error">{emailError}</Typography>
+                  <Typography variant="body2" color="error">
+                    {emailError}
+                  </Typography>
                 )}
 
-                {formData.user_type==='jobseeker' && <TextField
-                  fullWidth
-                  label="National Id"
-                  name="national_id"
-                  type="text"
-                  variant="outlined"
-                  value={formData.national_id}
-                  onChange={handleChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Person sx={{ color: "#911720" }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  required
-                />}
+                {formData.user_type === "jobseeker" && (
+                  <TextField
+                    fullWidth
+                    label="National Id"
+                    name="national_id"
+                    type="text"
+                    variant="outlined"
+                    value={formData.national_id}
+                    onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Person sx={{ color: "#911720" }} />
+                        </InputAdornment>
+                      ),
+                    }}
+                    required
+                  />
+                )}
                 {NatIdError && (
-                  <Typography variant="body2" color="error">{NatIdError}</Typography>
+                  <Typography variant="body2" color="error">
+                    {NatIdError}
+                  </Typography>
                 )}
 
                 <TextField
@@ -367,7 +429,46 @@ const Register = () => {
                   required
                 />
                 {nameError && (
-                  <Typography variant="body2" color="error">{nameError}</Typography>
+                  <Typography variant="body2" color="error">
+                    {nameError}
+                  </Typography>
+                )}
+
+                {formData.user_type === "company" && (
+                  <>
+                    <TextField
+                      fullWidth
+                      label="LinkedIn"
+                      name="linkedin"
+                      type="text"
+                      variant="outlined"
+                      value={formData.linkedin || ""}
+                      onChange={handleChange}
+                      required
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="Personal Website"
+                      name="website"
+                      type="text"
+                      variant="outlined"
+                      value={formData.website || ""}
+                      onChange={handleChange}
+                      required
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="Other"
+                      name="other"
+                      type="text"
+                      variant="outlined"
+                      value={formData.other || ""}
+                      onChange={handleChange}
+                      // required
+                    />
+                  </>
                 )}
 
                 <TextField
@@ -436,7 +537,8 @@ const Register = () => {
                   sx={{
                     mt: 2,
                     py: 1.5,
-                    background: "linear-gradient(45deg, #911720 30%, #c12e3d 90%)",
+                    background:
+                      "linear-gradient(45deg, #911720 30%, #c12e3d 90%)",
                     boxShadow: "0 3px 5px 2px rgba(145, 23, 32, .3)",
                     "&:hover": {
                       transform: "translateY(-2px)",
@@ -446,16 +548,18 @@ const Register = () => {
                   }}
                   disabled={isSubmitDisabled} // Disable button if criteria are not met
                 >
-                  <p className="p-0 m-0 color-white" style={{color:'white'}}>Register</p>
+                  <p className="p-0 m-0 color-white" style={{ color: "white" }}>
+                    Register
+                  </p>
                 </Button>
 
                 <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
                   Already have an account?{" "}
-                  <Link 
-                    component={RouterLink} 
-                    to="/login" 
-                    underline="hover" 
-                    sx={{ color: "#911720", fontWeight: 'bold' }}
+                  <Link
+                    component={RouterLink}
+                    to="/login"
+                    underline="hover"
+                    sx={{ color: "#911720", fontWeight: "bold" }}
                   >
                     Sign In
                   </Link>

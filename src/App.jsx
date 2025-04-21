@@ -16,7 +16,13 @@ import ForgotPassword from "./pages/login/ForgotPassword";
 import ResetPassword from "./pages/login/ResetPassword";
 import TalentProfile from "./pages/company/talents/TalentProfile";
 import ComProfile from "./pages/company/profile/ComProfile";
-import EditPersonalCom from "./pages/company/profile/edit-profile/edit-personal";
+import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
+import Users from "./admin/Users.jsx";
+import { Spinner } from "react-bootstrap";
+// import Dashboard from "./admin/Dashboard.jsx";
+// import Jobseekers from "./admin/Jobseekers.jsx";
+// import Companies from "./admin/Companies.jsx";
+
 
 
 function App() {
@@ -70,6 +76,19 @@ function App() {
   const JobsDashboard  = React.lazy(() =>
     import("./pages/company/jobs/JobsDashboard")
   );
+  const AdminCompany = React.lazy(() =>
+    import("./admin/Companies")
+  );
+  const AdminItian = React.lazy(() =>
+    import("./admin/Itian")
+  );
+  const VerifyOTP = React.lazy(() => import("./pages/otp/VerifyOTP"));
+  const ForgotPassword = React.lazy(() => import("./pages/login/ForgotPassword"));
+  const ResetPassword = React.lazy(() => import("./pages/login/ResetPassword"));
+  const ComProfile = React.lazy(() => import("./pages/company/profile/ComProfile"));
+  const EditPersonalCom = React.lazy(() => import("./pages/company/profile/edit-profile/EditPersonalCom"));
+  const Users = React.lazy(() => import("./admin/Users"));
+  const JobCreate = React.lazy(() => import("./components/job/JobCreate"));
 
   return (
     <>
@@ -89,9 +108,16 @@ function App() {
                     backgroundColor: "#f5f6f7",
                   }}
                 >
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Spinner animation="border" variant="primary" />
+                  </div>}>
                     <Routes>
                       <Route path="/" element={<Home />} />
+                      <Route path="/admin/users" element={<Users />} />
+                      {/* <Route path="/admin/dashboard" element={<Dashboard />} />
+                      <Route path="/admin/jobseekers" element={<Jobseekers />} /> */}
+                      <Route path="/admin/itians" element={<AdminItian />} />
+                      <Route path="/admin/companies" element={<AdminCompany />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/verify-otp" element={<VerifyOTP />} />

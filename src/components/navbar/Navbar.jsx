@@ -2,16 +2,16 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
-import { 
-  Avatar, 
-  Typography, 
-  Drawer, 
-  IconButton, 
-  List, 
-  ListItem, 
-  ListItemText, 
-  Divider, 
-  Box, 
+import {
+  Avatar,
+  Typography,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Box,
   Slide,
   Button,
   Container,
@@ -68,21 +68,21 @@ function Navbar() {
         flexDirection: "column"
       }}
     >
-      <Box sx={{ 
-        display: "flex", 
+      <Box sx={{
+        display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         p: 3,
         borderBottom: `1px solid ${theme.divider}`
       }}>
-        <Typography variant="h6" sx={{ 
+        <Typography variant="h6" sx={{
           fontWeight: 700,
           color: theme.primary,
           letterSpacing: "-0.5px"
         }}>
           RecruitHub
         </Typography>
-        <IconButton 
+        <IconButton
           onClick={handleDrawerToggle}
           sx={{
             color: theme.textPrimary,
@@ -91,7 +91,7 @@ function Navbar() {
           <CloseIcon />
         </IconButton>
       </Box>
-      
+
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <List sx={{ py: 0 }}>
           {user?.user_type?.toLowerCase() === "jobseeker" && (
@@ -109,9 +109,17 @@ function Navbar() {
               {/* <NavDrawerItem to="/company/jobs/jobsDashboard" text="Job Dashboard" icon="📊" /> */}
             </>
           )}
+           {user?.user_type?.toLowerCase() === "admin" && (
+            <>
+              {/* <NavLink to="/admin/users" text="Manage Users" /> */}
+              <NavLink to="/admin/itians" text="Manage Itians" />
+              <NavLink to="/admin/companies" text="Manage Companies" />
+
+            </>
+          )}
         </List>
       </Box>
-      
+
       {user ? (
         <Box sx={{ p: 2, borderTop: `1px solid ${theme.divider}` }}>
           <Button
@@ -194,8 +202,8 @@ function Navbar() {
           >
             {/* Logo/Brand */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 style={{ textDecoration: "none" }}
               >
                 <Typography
@@ -229,6 +237,13 @@ function Navbar() {
                     {/* <NavLink to="/company/jobs/jobsDashboard" text="Job Dashboard"/> */}
                   </>
                 )}
+                {user?.user_type?.toLowerCase() === "admin" && (
+                  <>
+                    {/* <NavLink to="/admin/users" text="Manage Users" /> */}
+                    <NavLink to="/admin/itians" text="Manage Itians" />
+                    <NavLink to="/admin/companies" text="Manage Companies" />
+                  </>
+                )}
               </Box>
             </Box>
 
@@ -241,7 +256,7 @@ function Navbar() {
                       <NotificationsNoneIcon />
                     </Badge>
                   </IconButton> */}
-                  
+
                   <Box sx={{ position: "relative" }}>
                     <Box
                       sx={{
@@ -258,13 +273,13 @@ function Navbar() {
                       onClick={handleProfileToggle}
                     >
                       <Box sx={{ textAlign: "right", display: { xs: "none", md: "block" } }}>
-                        <Typography variant="subtitle2" sx={{ 
+                        <Typography variant="subtitle2" sx={{
                           fontWeight: 600,
                           color: theme.textPrimary
                         }}>
                           {user?.name}
                         </Typography>
-                        <Typography variant="caption" sx={{ 
+                        <Typography variant="caption" sx={{
                           color: theme.textSecondary,
                           lineHeight: 1
                         }}>
@@ -274,9 +289,9 @@ function Navbar() {
                       <Avatar
                         src={user?.img}
                         alt="Profile"
-                        sx={{ 
-                          width: 40, 
-                          height: 40, 
+                        sx={{
+                          width: 40,
+                          height: 40,
                           backgroundColor: theme.primary,
                           "&:hover": {
                             boxShadow: `0 0 0 2px ${theme.background}, 0 0 0 4px ${theme.primary}`
@@ -309,10 +324,16 @@ function Navbar() {
                           </Typography>
                         </Box>
                         <List sx={{ py: 0 }}>
-                        <ListItem 
-                              // button 
-                              component={Link} 
-                              to={user?.user_type?.toLowerCase() === "company" ? "/company/profile/edit-personal" : "/applicant/profile"}
+                        <ListItem
+                              // button
+                              component={Link}
+                              to={
+                                user?.user_type?.toLowerCase() === "company"
+                                  ? "/company/profile/edit-personal"
+                                  : user?.user_type?.toLowerCase() === "admin"
+                                    ? "/admin/itians"
+                                    : "/applicant/profile"
+                              }
                               sx={{
                                 "&:hover": {
                                   backgroundColor: "rgba(136, 32, 36, 0.05)"
@@ -320,18 +341,18 @@ function Navbar() {
                                 cursor: "pointer",
                               }}
                             >
-                              <ListItemText 
-                                primary="My Profile" 
-                                primaryTypographyProps={{ 
+                              <ListItemText
+                                primary="My Profile"
+                                primaryTypographyProps={{
                                   color: theme.textPrimary,
-                                  fontWeight: 500 
+                                  fontWeight: 500
                                 }}
                               />
                             </ListItem>
 
-                          {/* <ListItem 
-                            button 
-                            component={Link} 
+                          {/* <ListItem
+                            button
+                            component={Link}
                             to="/settings"
                             sx={{
                               "&:hover": {
@@ -339,18 +360,18 @@ function Navbar() {
                               }
                             }}
                           >
-                            <ListItemText 
-                              primary="Settings" 
-                              primaryTypographyProps={{ 
+                            <ListItemText
+                              primary="Settings"
+                              primaryTypographyProps={{
                                 color: theme.textPrimary,
-                                fontWeight: 500 
+                                fontWeight: 500
                               }}
                             />
                           </ListItem> */}
                         </List>
                         <Divider />
-                        <ListItem 
-                          // button 
+                        <ListItem
+                          // button
                           onClick={handleLogout}
                           sx={{
                             "&:hover": {
@@ -359,11 +380,11 @@ function Navbar() {
                             cursor: "pointer"
                           }}
                         >
-                          <ListItemText 
-                            primary="Sign Out" 
-                            primaryTypographyProps={{ 
+                          <ListItemText
+                            primary="Sign Out"
+                            primaryTypographyProps={{
                               color: theme.primary,
-                              fontWeight: 600 
+                              fontWeight: 600
                             }}
                           />
                         </ListItem>
@@ -411,10 +432,10 @@ function Navbar() {
               )}
 
               {/* Mobile Menu Button */}
-              {user&& Object.keys(user).length > 0 && <IconButton 
-                
+              {user&& Object.keys(user).length > 0 && <IconButton
+
                 onClick={handleDrawerToggle}
-                sx={{ 
+                sx={{
                   ml: 1,
                   display: { lg: "none" },
                   color: theme.textPrimary,
@@ -487,9 +508,9 @@ const NavLink = ({ to, text }) => (
 
 // Custom NavDrawerItem component
 const NavDrawerItem = ({ to, text, icon }) => (
-  <ListItem 
-    // button 
-    component={Link} 
+  <ListItem
+    // button
+    component={Link}
     to={to}
     sx={{
       borderRadius: "8px",
@@ -504,13 +525,13 @@ const NavDrawerItem = ({ to, text, icon }) => (
     }}
   >
     <Typography variant="body1" sx={{ mr: 1.5 }}>{icon}</Typography>
-    <ListItemText 
+    <ListItemText
       primary={text}
       primaryTypographyProps={{
         className: "drawer-text",
         color: theme.textPrimary,
         fontWeight: 500
-      }} 
+      }}
     />
   </ListItem>
 );
