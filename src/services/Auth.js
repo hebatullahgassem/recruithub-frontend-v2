@@ -26,7 +26,11 @@ export const getUser = async (token) => {
         Authorization: `Token ${token}`,
       },
     });
-    // console.log("User Data:", response.data); // Log the user data for debugging
+    //console.log("User Data:", response.data.img); // Log the user data for debugging
+    if (response?.data?.img?.startsWith("image/upload/")) {
+      response.data.img = response.data.img.replace("image/upload/", "");
+    }
+    console.log(response.data.img); // Log the user data for debugging
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {

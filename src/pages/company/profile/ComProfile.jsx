@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { use, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Button, 
@@ -14,11 +14,13 @@ import {
 } from "@mui/material";
 import { ComProfileContext } from "../../../context/ComProfileContext";
 import Lottie from "lottie-react";
+import { userContext } from "../../../context/UserContext";
 
 const ComProfile = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { profileData } = useContext(ComProfileContext);
+  // const { profileData } = useContext(ComProfileContext);
+  const {user: profileData, refetchUser} = useContext(userContext);
 
   // Animation configuration
   const lottieConfig = {
@@ -49,6 +51,12 @@ const ComProfile = () => {
   const handleNavigation = (path) => () => {
     navigate(`/company/profile/${path}`, { state: { id: profileData?.id } });
   };
+
+  useEffect(() => {
+    refetchUser()
+  }
+  , [])
+
 
   return (
     <Fade in timeout={800}>
@@ -166,7 +174,7 @@ const ComProfile = () => {
           </Grid>
 
           {/* Brand Identity Section */}
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}>
             <Grow in timeout={800} style={{ transitionDelay: '150ms' }}>
               <Card sx={{ ...cardStyle, height: "100%" }}>
                 <Typography variant="h5" sx={{
@@ -216,7 +224,7 @@ const ComProfile = () => {
                 </Button>
               </Card>
             </Grow>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Fade>

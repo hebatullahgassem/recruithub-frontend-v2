@@ -286,6 +286,7 @@ function Navbar() {
                           {user?.user_type}
                         </Typography>
                       </Box>
+                      {/* {console.log('tttttttt',user?.img)} */}
                       <Avatar
                         src={user?.img}
                         alt="Profile"
@@ -329,7 +330,7 @@ function Navbar() {
                               component={Link}
                               to={
                                 user?.user_type?.toLowerCase() === "company"
-                                  ? "/company/profile/edit-personal"
+                                  ? "/company/profile"
                                   : user?.user_type?.toLowerCase() === "admin"
                                     ? "/admin/itians"
                                     : "/applicant/profile"

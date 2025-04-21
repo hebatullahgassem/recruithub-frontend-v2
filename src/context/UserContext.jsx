@@ -42,6 +42,7 @@ export function UserContextProvider({ children }) {
           };
 
           setUser(parsedResponse);
+          // console.log(parsedResponse.img);
           // console.log(token,parsedResponse);
         } catch (error) {
           console.error("Error fetching user data:", error);

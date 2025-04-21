@@ -15,8 +15,8 @@ import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 import Lottie from "lottie-react";
-import loadingAnimation from "../../../../assets/animations/loading.json";
-import successAnimation from "../../../../assets/animations/success.json";
+// import loadingAnimation from "../../../../assets/animations/loading.json";
+// import successAnimation from "../../../../assets/animations/success.json";
 
 const EditPersonalCom = () => {
   const { user, setUser } = useContext(userContext);
@@ -85,7 +85,7 @@ const EditPersonalCom = () => {
         ...prev,
         img: updatedData.img,
       }));
-
+      
       setUser((prev) => ({
         ...prev,
         img: updatedData.img,
@@ -118,10 +118,10 @@ const EditPersonalCom = () => {
         },
       });
 
-      setUser((prev) => ({
-        ...prev,
-        ...response.data,
-      }));
+      // setUser((prev) => ({
+      //   ...prev,
+      //   ...response.data,
+      // }));
 
       setSuccess(true);
       setError(null);
@@ -135,6 +135,9 @@ const EditPersonalCom = () => {
       setError(errorMessage);
     }
   };
+
+  // console.log("Image source:", localData.img);
+
 
   const validateForm = () => {
     const requiredFields = ["name", "location", "phone"];
@@ -150,15 +153,15 @@ const EditPersonalCom = () => {
 
   // Animation configurations
   const animationConfig = {
-    loading: {
-      animationData: loadingAnimation,
-      style: { width: 80, height: 80 }
-    },
-    success: {
-      animationData: successAnimation,
-      style: { width: 100, height: 100 }
-    }
-  };
+    // loading: {
+    //   animationData: loadingAnimation,
+    //   style: { width: 80, height: 80 }
+    // },
+  //   success: {
+  //     animationData: successAnimation,
+  //     style: { width: 100, height: 100 }
+  //   }
+   };
 
   // Styled components
   const primaryButtonStyle = {
@@ -202,7 +205,7 @@ const EditPersonalCom = () => {
         {success ? (
           <Grow in timeout={500}>
             <Box sx={{ textAlign: "center" }}>
-              <Lottie {...animationConfig.success} />
+              {/* <Lottie {...animationConfig.success} /> */}
               <Alert severity="success" sx={{ mt: 2 }}>
                 Profile updated successfully!
               </Alert>
