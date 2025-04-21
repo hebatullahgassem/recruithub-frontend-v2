@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Alert, Collapse, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Container,
   Typography,
@@ -35,6 +37,7 @@ const Register = () => {
     website: "",
     other: "",
   });
+  const [alert, setAlert] = useState({ type: '', message: '' });
 
   const [passwordError, setPasswordError] = useState("");
   const [NatIdError, setNatIdError] = useState("");
@@ -151,9 +154,10 @@ const Register = () => {
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match");
-      alert(
-        "Passwords do not match. Please ensure both passwords are identical."
-      );
+      setAlert({
+        type: "error",
+        message: "Passwords do not match. Please ensure both passwords are identical.",
+      });
       return;
     }
 
@@ -165,13 +169,20 @@ const Register = () => {
       return;
     } else if (formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
-      alert("Password must be at least 8 characters long.");
+      setAlert({
+        type: "error",
+        message: "Password must be at least 8 characters long.",
+      });
       return;
     }
 
     // Ensure username and name meet their criteria
     if (NatIdError || nameError || passwordError || emailError) {
-      alert("Please fix the errors before submitting.");
+      setAlert({
+        type: "error",
+        message: "Please fix the errors before submitting.",
+      });
+      
       return;
     }
 
@@ -194,9 +205,11 @@ const Register = () => {
       navigate("/verify-otp", { state: { email: formData.email } });
     } catch (error) {
       console.error("Registration failed", error.response.data.error);
-      alert(
-        `Registration failed. Please check your details.\n${error.response.data.error}`
-      );
+      setAlert({
+        type: "error",
+        message: `Registration failed. Please check your details.\n${error.response.data.error}`,
+      });
+      
       // console.error("Registration failed", error);
     } finally {
       setIsSubmitting(false);
@@ -329,6 +342,28 @@ const Register = () => {
               >
                 {isEmployer ? "Switch to Jobseeker" : "Switch to Employer"}
               </Button>
+
+              {alert.message && (
+                <Collapse in={!!alert.message}>
+                  <Alert
+                    severity={alert.type}
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={() => setAlert({ type: '', message: '' })}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    }
+                    sx={{ mb: 2 }}
+                  >
+                    {alert.message}
+                  </Alert>
+                </Collapse>
+              )}
+
 
               <Box
                 component="form"
