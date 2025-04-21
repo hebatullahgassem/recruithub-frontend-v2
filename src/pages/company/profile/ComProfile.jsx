@@ -1,5 +1,5 @@
 import React, { use, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   Button, 
   Card, 
@@ -10,17 +10,23 @@ import {
   useTheme,
   Fade,
   Grow,
-  Slide 
+  Slide, 
+  Tooltip,
+  IconButton,
+  useMediaQuery
 } from "@mui/material";
 import { ComProfileContext } from "../../../context/ComProfileContext";
 import Lottie from "lottie-react";
 import { userContext } from "../../../context/UserContext";
+import { Edit, GitHub, InsertLink, LinkedIn } from "@mui/icons-material";
+import { SiLeetcode } from "react-icons/si";
 
 const ComProfile = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   // const { profileData } = useContext(ComProfileContext);
   const {user: profileData, refetchUser} = useContext(userContext);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Animation configuration
   const lottieConfig = {
@@ -66,7 +72,8 @@ const ComProfile = () => {
         background: `radial-gradient(circle at top left, ${accentColor} 0%, ${theme.palette.background.default} 100%)`,
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        maxWidth: "100vw"
       }}>
         <Grid container spacing={4} sx={{ maxWidth: 1440 }}>
           {/* Profile Header Section */}
@@ -89,33 +96,49 @@ const ComProfile = () => {
                 }
               }}>
                 <Box display="flex" alignItems="center" gap={4} p={3} position="relative">
-                  <Box sx={{
-                    position: "relative",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    border: `3px solid ${primaryColor}`,
-                    boxShadow: `0 8px 24px -4px ${primaryColor}40`
-                  }}>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      borderRadius: "50%",
+                      overflow: "hidden",
+                      border: `3px solid ${primaryColor}`,
+                      boxShadow: `0 8px 24px -4px ${primaryColor}40`,
+                      width: isMobile ? 100 : 140,
+                      height: isMobile ? 100 : 140,
+                    }}
+                  >
                     {profileData?.img ? (
-                      <Avatar 
-                        src={profileData.img} 
-                        sx={{ width: 140, height: 140 }}
+                      <Avatar
+                        src={profileData.img}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                        }}
                       />
                     ) : (
-                      <Lottie 
+                      <Lottie
                         {...lottieConfig}
-                        style={{ width: 140, height: 140 }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
                       />
                     )}
                   </Box>
                   
                   <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="h2" sx={{
-                      fontWeight: 800,
-                      color: primaryColor,
-                      mb: 1,
-                      letterSpacing: "-0.5px"
-                    }}>
+                    <Typography
+                      variant={isMobile ? "h4" : "h2"}
+                      sx={{
+                        fontWeight: 800,
+                        color: primaryColor,
+                        mb: 1,
+                        letterSpacing: "-0.5px",
+                        [theme.breakpoints.down("sm")]: {
+                          fontSize: "1.8rem"
+                        }
+                      }}
+                    >
                       {profileData?.name || "Company Name"}
                     </Typography>
                     
@@ -173,10 +196,10 @@ const ComProfile = () => {
             </Grow>
           </Grid>
 
-          {/* Brand Identity Section */}
-          {/* <Grid item xs={12} md={6}>
-            <Grow in timeout={800} style={{ transitionDelay: '150ms' }}>
-              <Card sx={{ ...cardStyle, height: "100%" }}>
+          {/* Company Accounts Section */}
+          <Grid item xs={12} md={6}>
+            <Grow in timeout={800}>
+              <Card sx={cardStyle}>
                 <Typography variant="h5" sx={{
                   fontWeight: 700,
                   mb: 3,
@@ -185,46 +208,48 @@ const ComProfile = () => {
                   alignItems: "center",
                   gap: 1.5
                 }}>
-                  <span>🎨</span> Brand Identity
+                  Accounts
                 </Typography>
 
-                <Box sx={{ 
-                  height: 240, 
-                  mb: 3,
-                  borderRadius: 3,
-                  overflow: "hidden",
-                  position: "relative",
-                  border: `2px solid ${primaryColor}20`
-                }}>
-                  {profileData?.logo ? (
-                    <img 
-                      src={profileData.logo} 
-                      alt="Brand Logo" 
-                      style={{ 
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                        padding: 16
-                      }} 
-                    />
-                  ) : (
-                    <Lottie
-                      {...lottieConfig}
-                      style={{ width: "100%", height: "100%" }}
-                    />
+                <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+                  {Object.keys(profileData?.accounts || {}).map((type) => (
+                    <Tooltip key={type} title={type}>
+                      <IconButton
+                        size="small"
+                        sx={{ mr: 1, color: primaryColor }}
+                        component="a"
+                        href={profileData.accounts[type]}
+                        target="_blank"
+                      >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "nowrap" }}>
+                          <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>{type}</Typography>
+                          {type === "linkedin" && <LinkedIn fontSize="small" />}
+                          {type === "github" && <GitHub fontSize="small" />}
+                          {type === "personal website" && <InsertLink fontSize="small" />}
+                          {type === "leetcode" && <SiLeetcode />}
+                        </Box>
+                      </IconButton>
+                    </Tooltip>
+                  ))}
+                  {Object.keys(profileData.accounts || {}).length === 0 && (
+                    <Typography variant="body2" sx={{ ml: 1 }}>
+                      Add your accounts
+                    </Typography>
                   )}
+                  <Tooltip title="Edit Accounts">
+                    <IconButton
+                      size="small"
+                      sx={{ color: primaryColor }}
+                      component={Link}
+                      to={`/company/profile/edit-accounts`}
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
-
-                <Button 
-                  onClick={handleNavigation("edit-logo")}
-                  sx={buttonStyle(primaryColor)}
-                  fullWidth
-                >
-                  🖌️ Update Brand Assets
-                </Button>
               </Card>
             </Grow>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Box>
     </Fade>

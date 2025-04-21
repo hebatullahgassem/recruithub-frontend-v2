@@ -89,6 +89,7 @@ function App() {
   const EditPersonalCom = React.lazy(() => import("./pages/company/profile/edit-profile/EditPersonalCom"));
   const Users = React.lazy(() => import("./admin/Users"));
   const JobCreate = React.lazy(() => import("./components/job/JobCreate"));
+  const Accounts = React.lazy(() => import("./components/accounts/Accounts"));
 
   return (
     <>
@@ -134,6 +135,11 @@ function App() {
                         path="/applicant/applications/:id"
                         element={<JobApplication />}
                       />
+                      <Route
+                        path="/applicant/profile/edit-accounts"
+                        element={<Accounts />}
+                      />
+                      <Route path="/applicant/jobs/recommended" element={<RecommendedJobs />} />
                       <Route path="/company" element={<CompanyHome />} />
                       <Route path="/company/jobs" element={<CompanyJobs />} />
                       <Route path="/company/jobs/jobsDashboard" element={<JobsDashboard />} />
@@ -148,6 +154,8 @@ function App() {
 
                       <Route path="/company/jobCreate" element={<JobCreate />} />
                       <Route path="/company/jobEdit/:jobId" element={<JobCreate />} />
+                      
+                      <Route path="/company/profile/edit-accounts" element={<Accounts />} />
                       {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
                       <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
                       <Route path="/application-form" element={<ApplicationForm />} />
