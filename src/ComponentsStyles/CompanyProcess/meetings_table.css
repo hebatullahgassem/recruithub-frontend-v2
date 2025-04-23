@@ -1,0 +1,143 @@
+/* Meetings Table Styles */
+.meetings-table-container {
+  width: 100%;
+}
+
+.meetings-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.meetings-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #901b21;
+  border-radius: 2px;
+}
+
+.no-meetings-message {
+  text-align: center;
+  color: #901b21;
+  font-weight: 500;
+  padding: 2rem;
+  background-color: #fff5f5;
+  border-radius: 6px;
+  border: 1px dashed #ffcdd2;
+}
+
+.meetings-paper {
+  width: 100%;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.table-container {
+  max-height: 500px;
+}
+
+.table-header {
+  background-color: #722732 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 1rem !important;
+}
+
+.row-even {
+  background-color: #ffffff;
+}
+
+.row-odd {
+  background-color: #f9f9f9;
+}
+
+.row-even:hover,
+.row-odd:hover {
+  background-color: #f5f5f5;
+}
+
+.meeting-link {
+  color: #901b21;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #fff5f5;
+  border-radius: 4px;
+  border: 1px solid #ffcdd2;
+}
+
+.meeting-link:hover {
+  color: #7a1720;
+  background-color: #ffe8e8;
+}
+
+.calendar-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-scheduled {
+  color: #2e7d32;
+  font-size: 1.25rem;
+}
+
+.icon-unscheduled {
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  color: #901b21;
+  background-color: #fff5f5;
+  border-radius: 6px;
+  border: 1px dashed #ffcdd2;
+}
+
+.pagination {
+  border-top: 1px solid #eaeaea;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .meetings-paper {
+    margin: 1rem 0;
+  }
+
+  .table-header {
+    padding: 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .meetings-title {
+    font-size: 1.125rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+}

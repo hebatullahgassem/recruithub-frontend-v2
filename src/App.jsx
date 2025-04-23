@@ -19,6 +19,9 @@ import ComProfile from "./pages/company/profile/ComProfile";
 import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
 import Users from "./admin/Users.jsx";
 import { Spinner } from "react-bootstrap";
+// import { ToastProvider } from "./confirmAlert/Toast";
+import { Toaster } from "react-hot-toast";
+
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
 // import Companies from "./admin/Companies.jsx";
@@ -91,8 +94,10 @@ function App() {
 
   return (
     <>
+      
       <QueryClientProvider client={new QueryClient()}>
         <BrowserRouter>
+        <Toaster position="top-right" reverseOrder={false} />
           <ProfileProvider>
             <ComProfileProvider>
             <UserContextProvider>
@@ -111,6 +116,7 @@ function App() {
                     <Spinner animation="border" variant="primary" />
                   </div>}>
                     <Routes>
+
                       <Route path="/" element={<Home />} />
                       <Route path="/admin/users" element={<Users />} />
                       {/* <Route path="/admin/dashboard" element={<Dashboard />} />

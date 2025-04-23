@@ -1,0 +1,148 @@
+@import "../styles/theme.css";
+
+.application-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.application-form-paper {
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.form-title {
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.application-alert {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.alert-icon {
+  margin-right: 0.5rem;
+}
+
+.questions-container {
+  margin-bottom: 2rem;
+}
+
+.question-control {
+  margin-bottom: 1.5rem !important;
+  width: 100%;
+}
+
+.question-label {
+  font-weight: 500 !important;
+  color: var(--secondary) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.required-mark {
+  color: var(--error);
+  margin-left: 0.25rem;
+}
+
+.radio-group {
+  margin-left: 1rem;
+}
+
+.radio-option {
+  margin-bottom: 0.5rem;
+}
+
+.cv-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--gray-50);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary);
+}
+
+.cv-control {
+  width: 100%;
+}
+
+.cv-label {
+  font-weight: 500 !important;
+  color: var(--secondary) !important;
+  margin-bottom: 1rem !important;
+}
+
+.cv-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.view-cv-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  width: fit-content;
+}
+
+.view-cv-link:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+.cv-icon {
+  flex-shrink: 0;
+}
+
+.cv-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-300);
+}
+
+.file-name {
+  font-size: var(--font-size-sm);
+  color: var(--gray-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .application-form-paper {
+    padding: 1.5rem 1rem;
+  }
+
+  .cv-options {
+    flex-direction: column;
+  }
+
+  .file-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

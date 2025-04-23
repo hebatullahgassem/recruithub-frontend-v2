@@ -1,0 +1,98 @@
+/* Calendar Switcher Styles */
+.calendar-switcher {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+  
+  .toggle-checkbox {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    position: absolute;
+  }
+  
+  .toggle-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0;
+    border-radius: 30px;
+    margin: 0;
+  }
+  
+  .toggle-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.2s ease-in-out;
+  }
+  
+  .toggle-inner:before,
+  .toggle-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 30px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .toggle-inner:before {
+    content: "";
+    background-color: #f0f0f0;
+  }
+  
+  .toggle-inner:after {
+    content: "";
+    background-color: #f0f0f0;
+  }
+  
+  .toggle-switch {
+    display: block;
+    width: 22px;
+    height: 22px;
+    margin: 4px;
+    background: #901b21;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 30px;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .toggle-checkbox:checked + .toggle-label .toggle-inner {
+    margin-left: 0;
+  }
+  
+  .toggle-checkbox:checked + .toggle-label .toggle-switch {
+    right: 0px;
+  }
+  
+  .toggle-checkbox:focus + .toggle-label {
+    box-shadow: 0 0 1px #901b21;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .calendar-switcher {
+      width: 50px;
+      height: 26px;
+    }
+  
+    .toggle-inner:before,
+    .toggle-inner:after {
+      height: 26px;
+    }
+  
+    .toggle-switch {
+      width: 18px;
+      height: 18px;
+      margin: 4px;
+      right: 26px;
+    }
+  }
+  

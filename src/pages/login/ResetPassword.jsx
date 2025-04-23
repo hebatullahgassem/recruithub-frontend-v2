@@ -15,7 +15,7 @@ import {
 import Lottie from "lottie-react";
 import animationData from "../../assets/animations/LoginRegister.json";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
+import { toast } from "react-hot-toast";
 const ResetPassword = () => {
   const { email } = useParams();
   const navigate = useNavigate();
@@ -92,18 +92,18 @@ const ResetPassword = () => {
     // Check if the passwords match before submitting
     if (newPassword !== confirmPassword) {
       setPasswordError("Passwords do not match");
-      alert("Passwords do not match. Please ensure both passwords are identical.");
+      toast.error("Passwords do not match. Please ensure both passwords are identical.");
       return;
     }
 
     // Check for password complexity and length
     if (!passwordRegex.test(newPassword)) {
-      alert(
+      toast.error(
         "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
       );
       return;
     } else if (newPassword.length < 8) {
-      alert("Password must be at least 8 characters long.");
+      toast.error("Password must be at least 8 characters long.");
       return;
     }
 

@@ -15,19 +15,21 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import {
-  FaCalendarPlus,
-  FaPencilAlt,
-  FaUserCheck,
-  FaUserSlash,
-} from "react-icons/fa";
-import { RiQuestionAnswerFill } from "react-icons/ri";
-import { GiCancel } from "react-icons/gi";
-import CompanySchedule from "../Popup/Schedule";
 import axios from "axios";
+import CompanySchedule from "../Popup/Schedule.jsx";
 import { userContext } from "../../context/UserContext";
 import { useLocation, useParams } from "react-router";
 import CustomPopup from "../Popup/CustomPopup";
+import { UserCheck, UserX, MessageSquare, Calendar, ChevronRight, X } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { showConfirmToast } from "../../confirmAlert/toastConfirm.jsx";
+// import '../../styles/theme.css';
+import '../../ComponentsStyles/CompanyProcess/application_table.css';
+// import {FaUserSlash, FaUserCheck} from 'react-icons/fa';
+// import { RiQuestionAnswerFill } from 'react-icons/ri';
+// import { FaCalendarPlus } from 'react-icons/fa';
+
+
 
 function ApplicantsTable({ phase, setFilters }) {
   const [page, setPage] = useState(1);
@@ -90,7 +92,7 @@ function ApplicantsTable({ phase, setFilters }) {
 
   const handleBulkAction = async (action) => {
     if (selected.length === 0) {
-      alert("Please select at least one applicant");
+      toast.error("Please select at least one applicant");
       return;
     }
 
@@ -100,7 +102,7 @@ function ApplicantsTable({ phase, setFilters }) {
 
     if (action === "next") {
       if (phase >= 5) {
-        alert("Cannot move beyond Offer phase");
+        toast.error("Cannot move beyond Offer phase");
         return;
       }
       confirmMessage = `Move ${selected.length} applicant(s) to next phase?`;
@@ -112,7 +114,11 @@ function ApplicantsTable({ phase, setFilters }) {
       data = { fail: true, status: String(phase + 1) };
     }
 
-    if (window.confirm(confirmMessage)) {
+    // if (window.confirm(confirmMessage)) {
+      showConfirmToast({
+        message: confirmMessage,
+        onConfirm: async () => {
+    
       try {
         // Perform bulk update
         const promises = selected.map((applicantId) =>
@@ -130,15 +136,14 @@ function ApplicantsTable({ phase, setFilters }) {
 
         await Promise.all(promises);
         refetch();
-        alert(
-          `Applicants ${action === "next" ? "moved" : "rejected"} successfully`
-        );
+        toast.success(`Applicants ${action === "next" ? "moved" : "rejected"} successfully`);
       } catch (error) {
         console.error("Error updating applications:", error);
-        alert(`Failed to ${action === "next" ? "move" : "reject"} applicants`);
+        toast.error(`Failed to ${action === "next" ? "move" : "reject"} applicants`);
       }
-    }
-  };
+    },
+  });
+};
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);
@@ -149,13 +154,16 @@ function ApplicantsTable({ phase, setFilters }) {
   };
 
   const handleNext = async (applicant, phase) => {
-    if (
-      !confirm(
-        "Are you sure you want to move this applicant to the next phase?"
-      )
-    ) {
-      return;
-    }
+    // if (
+    //   !confirm(
+    //     "Are you sure you want to move this applicant to the next phase?"
+    //   )
+    // ) {
+    //   return;
+    // }
+    showConfirmToast({
+      message: "Are you sure you want to move this applicant to the next phase?",
+      onConfirm: async () => {
     if (phase < 5) {
       try {
         const response = await axios.patch(
@@ -169,21 +177,22 @@ function ApplicantsTable({ phase, setFilters }) {
           }
         );
         refetch();
+        toast.success("Applicant moved to next phase");
       } catch (error) {
-        console.error("Error updating application:", error);
-        if (error.response && error.response.status === 500) {
-          refetch();
-        } else {
-          alert("Failed to update application status");
-        }
+        console.error("Error:", error);
+        toast.error("Failed to update application status");
       }
     }
-  };
-
+  },
+});
+};
   const handleFail = async (applicant, phase) => {
-    if (!confirm("Are you sure you want to make this applicant fail?")) {
-      return;
-    }
+    // if (!confirm("Are you sure you want to make this applicant fail?")) {
+    //   return;
+    // }
+    showConfirmToast({
+      message: "Are you sure you want to make this applicant fail?",
+      onConfirm: async () => {
     try {
       const response = await axios.patch(
         `http://localhost:8000/applications/${applicant}/update_status/`,
@@ -196,17 +205,21 @@ function ApplicantsTable({ phase, setFilters }) {
         }
       );
       refetch();
+      toast.success("Applicant marked as failed");
     } catch (error) {
-      console.error("Error updating application:", error);
+      console.error("Error:", error);
+      toast.error("Failed to mark applicant as failed");
     }
-  };
+  },
+});
+};
 
   function handleAnswer(applicant) {
     if (applicant?.answers && applicant?.answers.length > 0) {
       setAnswer(true);
       setUpdate(applicant);
     } else {
-      alert("No answers found for this applicant.");
+      toast.error("No answers found for this applicant.", { icon: "ℹ️" });
     }
   }
 
@@ -220,239 +233,429 @@ function ApplicantsTable({ phase, setFilters }) {
   }
 
   return (
-    <div
-      className="d-flex flex-column align-items-center justify-content-center"
-      style={{ maxWidth: "inherit" }}
-    >
-      {applicants?.length < 1 && (
-        <p style={{ color: "red" }}>
-          There are no applicants in the current phase of this job.
-        </p>
-      )}
-      {update.id ? (
-        <CustomPopup
-          answer={answer}
-          phase={phase}
-          update={update}
-          handleClose={handleClose}
-        />
-      ) : null}
+    <div className="applicants-table-container">
+    {applicants?.length < 1 && (
+      <div className="no-applicants-message">
+        <p>There are no applicants in the current phase of this job.</p>
+      </div>
+    )}
 
-      {/* Bulk action buttons */}
-      {selected.length > 0 && (
-        <Box sx={{ alignSelf:'center', mb: 2, display: "flex", gap: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleBulkAction("next")}
-            disabled={phase >= 5}
-          >
-            Move {selected.length} to Next Phase
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleBulkAction("reject")}
-          >
-            Reject {selected.length} Applicants
-          </Button>
-        </Box>
-      )}
+    {update.id ? <CustomPopup answer={answer} phase={phase} update={update} handleClose={handleClose} /> : null}
 
-      <Paper
-        sx={{
-          width: "90%",
-          overflow: "hidden",
-          marginX: 10,
-          maxWidth: "100vw",
-        }}
-      >
-        <TableContainer>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
+    {selected.length > 0 && (
+      <Box className="bulk-actions-container">
+        <Button
+          variant="contained"
+          className="btn-next"
+          onClick={() => handleBulkAction("next")}
+          disabled={phase >= 5}
+          startIcon={<ChevronRight />}
+          sx={{
+            backgroundColor: "#901b21",
+            "&:hover": {
+              backgroundColor: "#8c364bl",
+            },
+            "&:disabled": {
+              backgroundColor: "#e9d8d9",
+            },
+          }}
+        >
+          Move {selected.length} to Next Phase
+        </Button>
+        <Button
+          variant="contained"
+          className="btn-reject"
+          onClick={() => handleBulkAction("reject")}
+          startIcon={<X />}
+          sx={{
+            backgroundColor: "#d32f2f",
+            "&:hover": {
+              backgroundColor: "#ef5350",
+            },
+          }}
+        >
+          Reject {selected.length} Applicants
+        </Button>
+      </Box>
+    )}
+
+    <Paper className="applicants-table-paper">
+      <TableContainer>
+        <Table stickyHeader aria-label="applicants table" className="recruitment-table">
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  indeterminate={selected.length > 0 && selected.length < applicants?.length}
+                  checked={applicants?.length > 0 && selected.length === applicants?.length}
+                  onChange={handleSelectAll}
+                  sx={{
+                    color: "white",
+                    "&.Mui-checked": {
+                      color: "white",
+                    },
+                    "&.MuiCheckbox-indeterminate": {
+                      color: "white",
+                    },
+                  }}
+                />
+              </TableCell>
+              <TableCell >ID</TableCell>
+              <TableCell >Name</TableCell>
+              <TableCell >Phone</TableCell>
+              <TableCell >Email</TableCell>
+              <TableCell >Status & ATS</TableCell>
+              <TableCell >Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {applicants?.map((applicant, index) => (
+              <TableRow key={applicant.id} className={index % 2 === 0 ? "row-even" : "row-odd"}>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    indeterminate={
-                      selected.length > 0 &&
-                      selected.length < applicants?.length
-                    }
-                    checked={
-                      applicants?.length > 0 &&
-                      selected.length === applicants?.length
-                    }
-                    onChange={handleSelectAll}
+                    checked={selected.includes(applicant.id)}
+                    onChange={(event) => handleSelect(event, applicant.id)}
+                    sx={{
+                      color: "#2f3744",
+                      "&.Mui-checked": {
+                        color: "#2f3744",
+                      },
+                    }}
                   />
                 </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ID
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Name
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Phone
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Email
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Status & ATS
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: "#dedede",
-                    color: "#901b20",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Action
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {applicants?.map((applicant, index) => (
-                <TableRow
-                  key={applicant.id}
-                  style={{
-                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#ececec",
-                  }}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selected.includes(applicant.id)}
-                      onChange={(event) => handleSelect(event, applicant.id)}
-                    />
-                  </TableCell>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{applicant.user_name}</TableCell>
-                  <TableCell>{applicant.user_phone}</TableCell>
-                  <TableCell>{applicant.user_email}</TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{applicant.user_name}</TableCell>
+                <TableCell >{applicant.user_phone}</TableCell>
+                <TableCell>{applicant.user_email}</TableCell>
 
-                  <TableCell>
+                <TableCell>
+                  <div className="status-chips">
                     <Chip
-                      color={applicant.fail ? "error" : "success"}
-                      label={applicant.fail ? "Fail" : "Pending"}
+                      label={applicant.fail ? "Failed" : "Pending"}
+                      className={`status-chip ${applicant.fail ? "status-chip-error" : "status-chip-success"}`}
                       size="small"
-                      variant="light"
                     />
                     {applicant?.ats_res > 0 && (
-                      <Chip
-                        color={"primary"}
-                        label={applicant.ats_res + "%"}
-                        size="small"
-                        variant="light"
-                      />
+                      <Chip label={`${applicant.ats_res}%`} className="status-chip status-chip-info" size="small" />
                     )}
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="action-buttons">
                     {!applicant.fail ? (
                       <>
-                        <FaUserSlash
-                          style={{
-                            cursor: "pointer",
-                            scale: 1.5,
-                            display: applicant.fail ? "none" : "initial",
-                            color: "red",
-                          }}
+                        <UserX
+                          className="action-icon action-icon-error"
                           onClick={() => handleFail(applicant.id, phase)}
+                          size={35}
                         />
-                        <FaUserCheck
-                          style={{
-                            cursor: "pointer",
-                            scale: 1.5,
-                            marginLeft: "20px",
-                            display: phase === 5 ? "none" : "initial",
-                          }}
-                          onClick={() => handleNext(applicant.id, phase)}
-                        />
-
-                        <RiQuestionAnswerFill
-                          style={{
-                            cursor: "pointer",
-                            scale: 1.5,
-                            marginLeft: "20px",
-                            display:
-                              applicant.answers && applicant.answers.length > 0
-                                ? "intial"
-                                : "none",
-                            // color: "red",
-                          }}
-                          onClick={() => handleAnswer(applicant)}
-                        />
+                        {phase !== 5 && (
+                          <UserCheck
+                            className="action-icon action-icon-success"
+                            onClick={() => handleNext(applicant.id, phase)}
+                            size={35}
+                          />
+                        )}
+                        {applicant.answers && applicant.answers.length > 0 && (
+                          <MessageSquare
+                            className="action-icon action-icon-primary"
+                            onClick={() => handleAnswer(applicant)}
+                            size={35}
+                          />
+                        )}
                       </>
                     ) : (
-                      <span>Rejected</span>
+                      <span className="rejected-text">Rejected</span>
                     )}
-                    <FaCalendarPlus
-                      style={{
-                        cursor: "pointer",
-                        scale: 1.5,
-                        marginLeft: "20px",
-                        display:
-                          Number(phase) === 2 ||
-                          Number(phase) === 3 ||
-                          Number(phase) === 4 ||
-                          Number(phase) === 5
-                            ? "inline-block"
-                            : "none",
-                        color:
+                    {(Number(phase) === 2 || Number(phase) === 3 || Number(phase) === 4 || Number(phase) === 5) && (
+                      <Calendar
+                        className={`action-icon ${
                           (Number(phase) === 2 && applicant.assessment_link) ||
                           (Number(phase) === 3 && applicant.interview_link) ||
                           (Number(phase) === 4 && applicant.hr_link) ||
                           (Number(phase) === 5 && applicant.offer_link)
-                            ? "green"
-                            : "black",
-                      }}
-                      onClick={() => setUpdate(applicant)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 100]}
-          component="div"
-          count={total}
-          rowsPerPage={rowsPerPage}
-          page={page - 1}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </div>
+                            ? "action-icon-success"
+                            : "action-icon-secondary"
+                        }`}
+                        // onClick={() => setUpdate(applicant)}
+                         onClick={() => {
+                          const hasLink =
+                            (Number(phase) === 2 && applicant.assessment_link) ||
+                            (Number(phase) === 3 && applicant.interview_link) ||
+                            (Number(phase) === 4 && applicant.hr_link) ||
+                            (Number(phase) === 5 && applicant.offer_link);
+                        
+                          if (hasLink) {
+                            setUpdate(applicant);
+                          } else {
+                            toast.error("No link available for this phase");
+                          }
+                        }}
+                        size={35}
+                      />
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 100]}
+        component="div"
+        count={total}
+        rowsPerPage={rowsPerPage}
+        page={page - 1}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          ".MuiTablePagination-selectIcon": {
+            color: "#2f3744",
+          },
+          ".MuiTablePagination-actions button": {
+            color: "#2f3744",
+          },
+        }}
+      />
+    </Paper>
+  </div>
+
+
+
+    // <div
+    //   className="d-flex flex-column align-items-center justify-content-center"
+    //   style={{ maxWidth: "inherit" }}
+    // >
+    //   {applicants?.length < 1 && (
+    //     <p style={{ color: "red" }}>
+    //       There are no applicants in the current phase of this job.
+    //     </p>
+    //   )}
+    //   {update.id ? (
+    //     <CustomPopup
+    //       answer={answer}
+    //       phase={phase}
+    //       update={update}
+    //       handleClose={handleClose}
+    //     />
+    //   ) : null}
+
+    //   {/* Bulk action buttons */}
+    //   {selected.length > 0 && (
+    //     <Box sx={{ alignSelf:'center', mb: 2, display: "flex", gap: 2 }}>
+    //       <Button
+    //         variant="contained"
+    //         color="primary"
+    //         onClick={() => handleBulkAction("next")}
+    //         disabled={phase >= 5}
+    //       >
+    //         Move {selected.length} to Next Phase
+    //       </Button>
+    //       <Button
+    //         variant="contained"
+    //         color="error"
+    //         onClick={() => handleBulkAction("reject")}
+    //       >
+    //         Reject {selected.length} Applicants
+    //       </Button>
+    //     </Box>
+    //   )}
+
+    //   <Paper
+    //     sx={{
+    //       width: "90%",
+    //       overflow: "hidden",
+    //       marginX: 10,
+    //       maxWidth: "100vw",
+    //     }}
+    //   >
+    //     <TableContainer>
+    //       <Table stickyHeader aria-label="sticky table">
+    //         <TableHead>
+    //           <TableRow>
+    //             <TableCell padding="checkbox">
+    //               <Checkbox
+    //                 indeterminate={
+    //                   selected.length > 0 &&
+    //                   selected.length < applicants?.length
+    //                 }
+    //                 checked={
+    //                   applicants?.length > 0 &&
+    //                   selected.length === applicants?.length
+    //                 }
+    //                 onChange={handleSelectAll}
+    //               />
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               ID
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               Name
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               Phone
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               Email
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               Status & ATS
+    //             </TableCell>
+    //             <TableCell
+    //               style={{
+    //                 backgroundColor: "#dedede",
+    //                 color: "#901b20",
+    //                 fontWeight: "bold",
+    //               }}
+    //             >
+    //               Action
+    //             </TableCell>
+    //           </TableRow>
+    //         </TableHead>
+    //         <TableBody>
+    //           {applicants?.map((applicant, index) => (
+    //             <TableRow
+    //               key={applicant.id}
+    //               style={{
+    //                 backgroundColor: index % 2 === 0 ? "#ffffff" : "#ececec",
+    //               }}
+    //             >
+    //               <TableCell padding="checkbox">
+    //                 <Checkbox
+    //                   checked={selected.includes(applicant.id)}
+    //                   onChange={(event) => handleSelect(event, applicant.id)}
+    //                 />
+    //               </TableCell>
+    //               <TableCell>{index + 1}</TableCell>
+    //               <TableCell>{applicant.user_name}</TableCell>
+    //               <TableCell>{applicant.user_phone}</TableCell>
+    //               <TableCell>{applicant.user_email}</TableCell>
+
+    //               <TableCell>
+    //                 <Chip
+    //                   color={applicant.fail ? "error" : "success"}
+    //                   label={applicant.fail ? "Fail" : "Pending"}
+    //                   size="small"
+    //                   variant="light"
+    //                 />
+    //                 {applicant?.ats_res > 0 && (
+    //                   <Chip
+    //                     color={"primary"}
+    //                     label={applicant.ats_res + "%"}
+    //                     size="small"
+    //                     variant="light"
+    //                   />
+    //                 )}
+    //               </TableCell>
+    //               <TableCell>
+    //                 {!applicant.fail ? (
+    //                   <>
+    //                     <FaUserSlash
+    //                       style={{
+    //                         cursor: "pointer",
+    //                         scale: 1.5,
+    //                         display: applicant.fail ? "none" : "initial",
+    //                         color: "red",
+    //                       }}
+    //                       onClick={() => handleFail(applicant.id, phase)}
+    //                     />
+    //                     <FaUserCheck
+    //                       style={{
+    //                         cursor: "pointer",
+    //                         scale: 1.5,
+    //                         marginLeft: "20px",
+    //                         display: phase === 5 ? "none" : "initial",
+    //                       }}
+    //                       onClick={() => handleNext(applicant.id, phase)}
+    //                     />
+
+    //                     <RiQuestionAnswerFill
+    //                       style={{
+    //                         cursor: "pointer",
+    //                         scale: 1.5,
+    //                         marginLeft: "20px",
+    //                         display:
+    //                           applicant.answers && applicant.answers.length > 0
+    //                             ? "intial"
+    //                             : "none",
+    //                         // color: "red",
+    //                       }}
+    //                       onClick={() => handleAnswer(applicant)}
+    //                     />
+    //                   </>
+    //                 ) : (
+    //                   <span>Rejected</span>
+    //                 )}
+    //                 <FaCalendarPlus
+    //                   style={{
+    //                     cursor: "pointer",
+    //                     scale: 1.5,
+    //                     marginLeft: "20px",
+    //                     display:
+    //                       Number(phase) === 2 ||
+    //                       Number(phase) === 3 ||
+    //                       Number(phase) === 4 ||
+    //                       Number(phase) === 5
+    //                         ? "inline-block"
+    //                         : "none",
+    //                     color:
+    //                       (Number(phase) === 2 && applicant.assessment_link) ||
+    //                       (Number(phase) === 3 && applicant.interview_link) ||
+    //                       (Number(phase) === 4 && applicant.hr_link) ||
+    //                       (Number(phase) === 5 && applicant.offer_link)
+    //                         ? "green"
+    //                         : "black",
+    //                   }}
+    //                   onClick={() => setUpdate(applicant)}
+    //                 />
+    //               </TableCell>
+    //             </TableRow>
+    //           ))}
+    //         </TableBody>
+    //       </Table>
+    //     </TableContainer>
+    //     <TablePagination
+    //       rowsPerPageOptions={[5, 10, 25, 100]}
+    //       component="div"
+    //       count={total}
+    //       rowsPerPage={rowsPerPage}
+    //       page={page - 1}
+    //       onPageChange={handleChangePage}
+    //       onRowsPerPageChange={handleChangeRowsPerPage}
+    //     />
+    //   </Paper>
+    // </div>
   );
 }
 

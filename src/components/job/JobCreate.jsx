@@ -5,7 +5,7 @@ import { set } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { getJobById } from "../../services/Job";
 import { Checkbox } from "@mui/material";
-
+import { toast } from "react-hot-toast";
 const JobCreate = () => {
   const { user } = useContext(userContext);
   const { jobId } = useParams();
@@ -110,7 +110,7 @@ const JobCreate = () => {
     if (
       questions.some((q) => q.type === "multichoice" && q.choices.length === 0)
     ) {
-      alert(
+      toast.error(
         "Please ensure all multiple-choice questions have at least one choice."
       );
       return;
@@ -126,7 +126,7 @@ const JobCreate = () => {
         body: JSON.stringify(jobPayload),
       });
       if (response.ok) {
-        alert("Job created successfully!");
+        toast.success("Job created successfully!");
         setJobData({
           title: "",
           description: "",
@@ -138,11 +138,14 @@ const JobCreate = () => {
         });
         setQuestions([]);
         console.log("Job created successfully!", response.body);
+        toast.success("Job created successfully!");
         navigate("/company/jobs");
       } else {
+        toast.error("Failed to create job");
         console.error("Failed to create job");
       }
     } catch (error) {
+      toast.error("Failed to create job");
       console.error("Error:", error);
     }
   };
@@ -156,7 +159,7 @@ const JobCreate = () => {
     if (
       questions.some((q) => q.type === "multichoice" && q.choices.length === 0)
     ) {
-      alert(
+      toast.error(
         "Please ensure all multiple-choice questions have at least one choice."
       );
       return;
@@ -171,7 +174,7 @@ const JobCreate = () => {
         body: JSON.stringify(jobPayload),
       });
       if (response.ok) {
-        alert("Job updated successfully!");
+        toast.success("Job updated successfully!");
         setJobData({
           title: "",
           description: "",

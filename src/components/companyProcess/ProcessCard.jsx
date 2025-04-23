@@ -1,13 +1,14 @@
 import { Checkbox, Slider } from "@mui/material";
 import ApplicantsTable from "./ApplicantsTable";
-import { use, useContext, useState } from "react";
-import { set } from "date-fns";
+import { useContext, useState } from "react";
 import {
   updateApplicationAts,
   updateApplicationCsv,
 } from "../../services/Application";
 import { userContext } from "../../context/UserContext";
-
+import '../../ComponentsStyles/process_card.css';
+import '../../styles/theme.css';
+import { toast } from "react-hot-toast";
 function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
   const [fail, setFail] = useState(false);
@@ -40,7 +41,7 @@ function ProcessCard({ column, phases, job }) {
     setAts(50);
     setFail(false);
     setTimeout(() => {
-      alert(response.message);
+      toast.error(response.message);
     }, 1000);
   };
   const updateCsv = async () => {
@@ -67,7 +68,7 @@ function ProcessCard({ column, phases, job }) {
     setAts(50);
     setFail(false);
     setTimeout(() => {
-      alert(response.message);
+      toast.error(response.message);
     }, 1000);
   };
   //   const status = [
@@ -78,121 +79,239 @@ function ProcessCard({ column, phases, job }) {
   //     "Offer",
   //   ];
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        maxWidth: "inherit",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <h1 style={{ fontSize: "2rem", margin: "1rem" }}>
-          {phases[column - 1]}
-        </h1>
-        {column === 1 && filters && (
-          <button
-            className="btn btn-primary"
-            onClick={() => setDisplay(!display)}
-          >
-            Filter by ats
-          </button>
-        )}
-        {column != 1 && filters && (
-          <button
-            className="btn btn-primary"
-            onClick={() => setCsvDisplay(!csvDisplay)}
-          >
-            Filter by CSV file
-          </button>
-        )}
+
+    <div className="recruitment-card slide-in-up" style={{ padding: "1.5rem", margin: "1rem 0" }}>
+      <div className="phase-header">
+        <h1 className="phase-title">{phases[column - 1]}</h1>
+        <div className="phase-actions">
+          {column === 1 && filters && (
+            <button className="btn-primary" onClick={() => setDisplay(!display)}>
+              {display ? "Hide ATS Filter" : "Filter by ATS"}
+            </button>
+          )}
+          {column !== 1 && filters && (
+            <button className="btn-primary" onClick={() => setCsvDisplay(!csvDisplay)}>
+              {csvDisplay ? "Hide CSV Filter" : "Filter by CSV"}
+            </button>
+          )}
+        </div>
       </div>
+
       {column === 1 && filters && display && (
-        <div
-          style={{
-            width: "60%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginBottom: "1rem",
-            maxWidth: "50vw",
-            padding: "10px",
-            flexWrap: "wrap",
-            overflow: "hidden",
-          }}
-        >
-          <h2 style={{ fontSize: "1.5rem" }}>Next Phase ATS Score</h2>
+        <div className="filter-container slide-in-up">
+          <h2 className="filter-title">Next Phase ATS Score</h2>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "5rem" }}>
-            <Slider
-              defaultValue={50}
-              aria-label="Default"
-              valueLabelDisplay="auto"
-              onChange={(e) => {
-                setAts(e.target.value);
-              }}
-            />
-            <div style={{ display: "flex" }}>
+          <div className="filter-controls">
+            <div className="slider-container">
+              <Slider
+                defaultValue={50}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                onChange={(e) => {
+                  setAts(e.target.value)
+                }}
+                sx={{
+                  color: "#722732",
+                  "& .MuiSlider-thumb": {
+                    "&:hover, &.Mui-focusVisible": {
+                      boxShadow: "0px 0px 0px 8px rgba(114, 39, 50, 0.16)",
+                    },
+                  },
+                }}
+              />
+            </div>
+            <div className="checkbox-container">
               <Checkbox
                 checked={fail || false}
                 onChange={(e) => setFail(e.target.checked)}
-              ></Checkbox>
-              <label className="text-sm">Fail applicants under {ats}%</label>
+                sx={{
+                  color: "#722732",
+                  "&.Mui-checked": {
+                    color: "#722732",
+                  },
+                }}
+              />
+              <label className="checkbox-label">Fail applicants under {ats}%</label>
             </div>
           </div>
-          <button className="btn btn-primary" onClick={() => updateAts()}>
+          <button className="btn-primary" onClick={() => updateAts()}>
             Update
           </button>
         </div>
       )}
-      {column != 1 && filters && csvDisplay && (
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginBottom: "1rem",
-            maxWidth: "90vw",
-            padding: "10px",
-            flexWrap: "wrap",
-          }}
-        >
-          <h2 style={{ fontSize: "1.5rem" }}>Next Phase CSV Score</h2>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem", marginBottom: "1rem" }}>
-            <Slider
-              defaultValue={50}
-              aria-label="Default"
-              valueLabelDisplay="auto"
-              onChange={(e) => {
-                setAts(e.target.value);
-              }}
-            />
-            <div style={{ display: "flex" }}>
+      {column !== 1 && filters && csvDisplay && (
+        <div className="filter-container slide-in-up">
+          <h2 className="filter-title">Next Phase CSV Score</h2>
+
+          <div className="filter-controls">
+            <div className="slider-container">
+              <Slider
+                defaultValue={50}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                onChange={(e) => {
+                  setAts(e.target.value)
+                }}
+                sx={{
+                  color: "#722732",
+                  "& .MuiSlider-thumb": {
+                    "&:hover, &.Mui-focusVisible": {
+                      boxShadow: "0px 0px 0px 8px rgba(114, 39, 50, 0.16)",
+                    },
+                  },
+                }}
+              />
+            </div>
+            <div className="checkbox-container">
               <Checkbox
                 checked={fail || false}
                 onChange={(e) => setFail(e.target.checked)}
-              ></Checkbox>
-              <label className="text-sm">Fail applicants under {ats}%</label>
+                sx={{
+                  color: "#722732",
+                  "&.Mui-checked": {
+                    color: "#722732",
+                  },
+                }}
+              />
+              <label className="checkbox-label">Fail applicants under {ats}%</label>
             </div>
-            <input
-              type="file"
-              onChange={(e) => {
-                setCsvFile(e.target.files[0]);
-              }}
-              accept=".csv, .xlsx, .xls"
-              className="form-control"
-            ></input>
+            <div className="file-input-container">
+              <input
+                type="file"
+                onChange={(e) => {
+                  setCsvFile(e.target.files[0])
+                }}
+                accept=".csv, .xlsx, .xls"
+                className="form-control"
+              />
+            </div>
           </div>
-          <button className="btn btn-primary" onClick={() => updateCsv()}>
+          <button className="btn-primary" onClick={() => updateCsv()}>
             Update
           </button>
         </div>
       )}
-      <ApplicantsTable phase={column} setFilters={setFilters}/>
+
+      <ApplicantsTable phase={column} setFilters={setFilters} />
     </div>
+
+
+    // <div
+    //   style={{
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     maxWidth: "inherit",
+    //   }}
+    // >
+    //   <div style={{ display: "flex", alignItems: "center" }}>
+    //     <h1 style={{ fontSize: "2rem", margin: "1rem" }}>
+    //       {phases[column - 1]}
+    //     </h1>
+    //     {column === 1 && filters && (
+    //       <button
+    //         className="btn btn-primary"
+    //         onClick={() => setDisplay(!display)}
+    //       >
+    //         Filter by ats
+    //       </button>
+    //     )}
+    //     {column != 1 && filters && (
+    //       <button
+    //         className="btn btn-primary"
+    //         onClick={() => setCsvDisplay(!csvDisplay)}
+    //       >
+    //         Filter by CSV file
+    //       </button>
+    //     )}
+    //   </div>
+    //   {column === 1 && filters && display && (
+    //     <div
+    //       style={{
+    //         width: "60%",
+    //         display: "flex",
+    //         flexDirection: "column",
+    //         alignItems: "center",
+    //         marginBottom: "1rem",
+    //         maxWidth: "50vw",
+    //         padding: "10px",
+    //         flexWrap: "wrap",
+    //         overflow: "hidden",
+    //       }}
+    //     >
+    //       <h2 style={{ fontSize: "1.5rem" }}>Next Phase ATS Score</h2>
+
+    //       <div style={{ display: "flex", alignItems: "center", gap: "5rem" }}>
+    //         <Slider
+    //           defaultValue={50}
+    //           aria-label="Default"
+    //           valueLabelDisplay="auto"
+    //           onChange={(e) => {
+    //             setAts(e.target.value);
+    //           }}
+    //         />
+    //         <div style={{ display: "flex" }}>
+    //           <Checkbox
+    //             checked={fail || false}
+    //             onChange={(e) => setFail(e.target.checked)}
+    //           ></Checkbox>
+    //           <label className="text-sm">Fail applicants under {ats}%</label>
+    //         </div>
+    //       </div>
+    //       <button className="btn btn-primary" onClick={() => updateAts()}>
+    //         Update
+    //       </button>
+    //     </div>
+    //   )}
+    //   {column != 1 && filters && csvDisplay && (
+    //     <div
+    //       style={{
+    //         width: "100%",
+    //         display: "flex",
+    //         flexDirection: "column",
+    //         alignItems: "center",
+    //         marginBottom: "1rem",
+    //         maxWidth: "90vw",
+    //         padding: "10px",
+    //         flexWrap: "wrap",
+    //       }}
+    //     >
+    //       <h2 style={{ fontSize: "1.5rem" }}>Next Phase CSV Score</h2>
+
+    //       <div style={{ display: "flex", alignItems: "center", gap: "2rem", marginBottom: "1rem" }}>
+    //         <Slider
+    //           defaultValue={50}
+    //           aria-label="Default"
+    //           valueLabelDisplay="auto"
+    //           onChange={(e) => {
+    //             setAts(e.target.value);
+    //           }}
+    //         />
+    //         <div style={{ display: "flex" }}>
+    //           <Checkbox
+    //             checked={fail || false}
+    //             onChange={(e) => setFail(e.target.checked)}
+    //           ></Checkbox>
+    //           <label className="text-sm">Fail applicants under {ats}%</label>
+    //         </div>
+    //         <input
+    //           type="file"
+    //           onChange={(e) => {
+    //             setCsvFile(e.target.files[0]);
+    //           }}
+    //           accept=".csv, .xlsx, .xls"
+    //           className="form-control"
+    //         ></input>
+    //       </div>
+    //       <button className="btn btn-primary" onClick={() => updateCsv()}>
+    //         Update
+    //       </button>
+    //     </div>
+    //   )}
+    //   <ApplicantsTable phase={column} setFilters={setFilters}/>
+    // </div>
   );
 }
 

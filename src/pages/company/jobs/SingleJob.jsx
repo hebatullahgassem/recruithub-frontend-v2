@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { userContext } from "../../../context/UserContext";
 import MeetingsTable from "../../../components/companyProcess/MeetingsTable";
 import CalenderSwitcher from "../../../components/companyProcess/CalenderSwitcher";
-
+import '../../../styles/company/single_job.css'
 function SingleJob() {
   const phases = [
     "Applied",
@@ -49,67 +49,98 @@ function SingleJob() {
       navigate("/company/jobs");
     }
   }, [user, jobData]);
+
+  if (jobLoading) return <div
+   className="loading-spinner"></div>
+  if (jobError) return <div
+   className="error-message">Error loading job data</div>
+
+
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        maxWidth: "100vw",
-      }}
-    >
+    <div className="single-job-container">
       <JobDetails job={jobData} refetch={refetch} />
-      <div
-        style={{
-          border: "1px solid #e3cdcd",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor:'white',
-          marginTop:'10px',
-          padding:'20px',
-          minWidth:'80vw',
-          maxWidth:'100vw'
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "5px",
-            // marginTop: "10px",
-            minWidth: "fit-content",
-          }}
-        >
-          <h5>Applicants Table</h5>
+
+      <div className="recruitment-panel">
+        <div className="view-toggle">
+          <h3 className={!calender ? "active" : ""}>Applicants</h3>
           <CalenderSwitcher setCalender={setCalender} calender={calender} />
-          <h5>Meetings Table</h5>
+          <h3 className={calender ? "active" : ""}>Meetings</h3>
         </div>
+
         {!calender ? (
           <>
-            <ProcessColumn
-              setter={setClickedColumn}
-              column={clickedColumn}
-              phases={phases}
-            />
+            <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases} />
             <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
           </>
         ) : (
           <>
-            <ProcessColumn
-              setter={setClickedColumn}
-              column={clickedColumn}
-              phases={phases.slice(2, 5)}
-            />
+            <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases.slice(2, 5)} />
             <MeetingsTable column={clickedColumn} phases={phases.slice(2, 5)} />
           </>
         )}
       </div>
     </div>
+    // <div
+    //   style={{
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     maxWidth: "100vw",
+    //   }}
+    // >
+    //   <JobDetails job={jobData} refetch={refetch} />
+    //   <div
+    //     style={{
+    //       border: "1px solid #e3cdcd",
+    //       display: "flex",
+    //       flexDirection: "column",
+    //       justifyContent: "center",
+    //       alignItems: "center",
+    //       backgroundColor:'white',
+    //       marginTop:'10px',
+    //       padding:'20px',
+    //       minWidth:'80vw',
+    //       maxWidth:'100vw'
+    //     }}
+    //   >
+    //     <div
+    //       style={{
+    //         display: "flex",
+    //         flexDirection: "row",
+    //         justifyContent: "center",
+    //         alignItems: "center",
+    //         gap: "5px",
+    //         // marginTop: "10px",
+    //         minWidth: "fit-content",
+    //       }}
+    //     >
+    //       <h5>Applicants Table</h5>
+    //       <CalenderSwitcher setCalender={setCalender} calender={calender} />
+    //       <h5>Meetings Table</h5>
+    //     </div>
+    //     {!calender ? (
+    //       <>
+    //         <ProcessColumn
+    //           setter={setClickedColumn}
+    //           column={clickedColumn}
+    //           phases={phases}
+    //         />
+    //         <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
+    //       </>
+    //     ) : (
+    //       <>
+    //         <ProcessColumn
+    //           setter={setClickedColumn}
+    //           column={clickedColumn}
+    //           phases={phases.slice(2, 5)}
+    //         />
+    //         <MeetingsTable column={clickedColumn} phases={phases.slice(2, 5)} />
+    //       </>
+    //     )}
+    //   </div>
+    // </div>
   );
 }
 

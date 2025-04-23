@@ -1,0 +1,110 @@
+@import "../../styles/theme.css"; 
+
+.applicants-table-container {
+  width: 100%;
+  
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.no-applicants-message {
+  background-color: rgba(211, 47, 47, 0.1);
+  color: var(--error);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.bulk-actions-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+ 
+}
+
+.applicants-table-paper {
+  width: 100%;
+  overflow: hidden;
+  
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  
+}
+
+.table-header {
+  background-color: var(--primary);
+  color: var(--white) !important;
+  font-weight: 700 !important;
+}
+
+.row-even {
+  background-color: var(--white);
+}
+
+.row-odd {
+  background-color: var(--gray-50);
+}
+
+.row-even:hover,
+.row-odd:hover {
+  background-color: var(--accent);
+}
+
+.status-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.rejected-text {
+  color: var(--error);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .bulk-actions-container {
+    flex-direction: column;
+  }
+
+  .action-buttons {
+    gap: 0.5rem;
+  }
+  .action-icon {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  /* Optional: Add hover effects or color-specific classes */
+  .action-icon-error {
+    color: var(--error);
+  }
+  
+  .action-icon-success {
+    color: var(--success);
+  }
+  
+  .action-icon-primary {
+    color: var(--primary);
+  }
+  
+  .action-icon-secondary {
+    color: var(--gray-600);
+  }
+  
+}

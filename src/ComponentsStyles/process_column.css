@@ -1,0 +1,39 @@
+@import  '../Styles/theme.css';
+
+.process-column-container {
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.process-tabs {
+  min-height: 48px;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.process-tab {
+  min-width: 120px;
+  min-height: 48px;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--gray-700);
+  opacity: 0.8;
+  transition: color var(--transition-normal), opacity var(--transition-normal);
+}
+
+.process-tab.active {
+  color: var(--primary);
+  opacity: 1;
+}
+
+.process-tab:hover {
+  color: var(--primary-light);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .process-tab {
+    min-width: 100px;
+    font-size: var(--font-size-sm);
+  }
+}

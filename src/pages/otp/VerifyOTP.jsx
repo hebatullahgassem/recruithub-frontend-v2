@@ -12,7 +12,7 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/otp.json';
-
+import { toast } from "react-hot-toast";
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
   const [seconds, setSeconds] = useState(30);
@@ -54,15 +54,15 @@ const VerifyOTP = () => {
       console.log("otp", fullOtp);
 
       if (response.data.message === "OTP verified successfully!") {
-        alert("OTP Verified Successfully! You can now log in.");
+        toast.success("OTP Verified Successfully! You can now log in.");
         localStorage.removeItem("email");
         navigate("/login");
       } else {
-        alert("Invalid OTP, please try again.");
+        toast.error("Invalid OTP, please try again.");
       }
     } catch (error) {
       console.error("OTP verification failed", error);
-      alert("OTP verification failed. Please try again.");
+      toast.error("OTP verification failed. Please try again.");
     }
   };
 
@@ -76,13 +76,13 @@ const VerifyOTP = () => {
       });
       
       if (response.data.message === "OTP resent successfully. Check your email for the new OTP.") {
-        alert("OTP resent successfully. Please check your inbox.");
+        toast.success("OTP resent successfully. Please check your inbox.");
       } else {
-        alert("Failed to resend OTP. Please try again.");
+        toast.error("Failed to resend OTP. Please try again.");
       }
     } catch (error) {
       console.error("Resending OTP failed", error);
-      alert("Failed to resend OTP. Please try again.");
+      toast.error("Failed to resend OTP. Please try again.");
     } finally {
       // Re-enable the button after a delay of 30 seconds
       setTimeout(() => setResendDisabled(false), 30000);

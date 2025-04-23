@@ -14,6 +14,7 @@ import {
   createApplication,
   getApplicationsByUser,
 } from "../../../services/Application";
+import { toast } from "react-hot-toast";
 import { userContext } from "../../../context/UserContext";
 import { getJobById } from "../../../services/Job";
 const UserSingleJob = () => {
@@ -56,7 +57,7 @@ const UserSingleJob = () => {
       console.log(res);
       userAppRefetch();
     } catch (error) {
-      alert("Complete your profile before applying!");
+      toast.error("Complete your profile before applying!");
       console.error("Error creating application:", error);
     }
   }
