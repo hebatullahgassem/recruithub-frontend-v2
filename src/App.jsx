@@ -21,6 +21,8 @@ import Users from "./admin/Users.jsx";
 import { Spinner } from "react-bootstrap";
 // import { ToastProvider } from "./confirmAlert/Toast";
 import { Toaster } from "react-hot-toast";
+import ChatBot from "./components/chatbot/ChatBot.jsx";
+import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
 
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
@@ -110,6 +112,7 @@ function App() {
                     alignItems: "center",
                     maxWidth: "100vw",
                     backgroundColor: "#f5f6f7",
+                    position: "relative",
                   }}
                 >
                   <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center'}}>
@@ -207,6 +210,7 @@ function App() {
                     </Routes>
                     
                   </Suspense>
+                  <PopupChatBot />
                 </div>
                 <Footer />
               </AxiosProvider>

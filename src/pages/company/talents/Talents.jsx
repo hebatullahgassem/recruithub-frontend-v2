@@ -74,7 +74,7 @@ function Talents() {
   if (talentsError) return <Alert severity="error" sx={{ mt: 2 }}>Error loading talents</Alert>;
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1200, margin: "0 auto" }}>
+    <Box sx={{ maxWidth: '100vw', margin: "0 auto" }}>
       <Card sx={{
         p: 3,
         mb: 3,
@@ -142,7 +142,6 @@ function Talents() {
           gap: 3,
           p: 3,
           width: "100vw",
-          marginLeft: "-24px", // Counteract default padding
           minHeight: "100vh"
         }}>
           <AnimatePresence>

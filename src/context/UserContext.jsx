@@ -7,6 +7,7 @@ export function UserContextProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [chatBot, setChatBot] = useState(false);
 
   const refetchUser = async (tok) => {
     if (!token && !tok) return; // Exit if no token
@@ -83,7 +84,7 @@ export function UserContextProvider({ children }) {
   };
 
   return (
-    <userContext.Provider value={{ token, setToken, user, setUser, refetchUser }}>
+    <userContext.Provider value={{ token, setToken, user, setUser, refetchUser, chatBot, setChatBot }}>
       {children}
     </userContext.Provider>
   );
