@@ -48,7 +48,9 @@ export const logoutUser = () => {
 
 export const patchUser = async (id, userData) => {
   const response = await AxiosApi.patch(`user/jobseekers/${id}/`, userData, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: { "Content-Type": "multipart/form-data" ,
+      Authorization: `Token ${localStorage.getItem("token")}`,
+    },
   });
   return response.data;
 };

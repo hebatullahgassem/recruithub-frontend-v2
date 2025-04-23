@@ -91,6 +91,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
         refetch()
     } catch (error) {
         console.error("Error uploading CV:", error.response?.data || error);
+        return;
     }
     }else if (user.cv) {
       await patchApplication(application.id,{'status': '2'})

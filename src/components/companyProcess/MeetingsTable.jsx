@@ -75,6 +75,7 @@ function MeetingsTable({ column, phases }) {
         job: id,
         status: column + 3,
       });
+     
       const res = await getMeetingsByJob(params);
       return res.results;
     },

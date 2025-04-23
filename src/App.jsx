@@ -74,9 +74,9 @@ function App() {
   const TalantProfile = React.lazy(() =>
     import("./pages/company/talents/TalentProfile")
   );
-  const JobsDashboard  = React.lazy(() =>
-    import("./pages/company/jobs/JobsDashboard")
-  );
+  // const JobsDashboard  = React.lazy(() =>
+  //   import("./pages/company/jobs/JobsDashboard")
+  // );
   const AdminCompany = React.lazy(() =>
     import("./admin/Companies")
   );
@@ -146,7 +146,7 @@ function App() {
                       <Route path="/applicant/jobs/recommended" element={<RecommendedJobs />} />
                       <Route path="/company" element={<CompanyHome />} />
                       <Route path="/company/jobs" element={<CompanyJobs />} />
-                      <Route path="/company/jobs/jobsDashboard" element={<JobsDashboard />} />
+                      {/* <Route path="/company/jobs/jobsDashboard" element={<JobsDashboard />} /> */}
                       <Route path="/company/jobs/:id" element={<SingleJob />} />
 
                       <Route

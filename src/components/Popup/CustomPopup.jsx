@@ -2,7 +2,7 @@ import CompanySchedule from "./Schedule";
 import AnswerBox from "./AnswerBox";
 import { GiCancel } from "react-icons/gi";
 
-export default function CustomPopup({ answer, phase, update, handleClose }) {
+export default function CustomPopup({ answer, phase, update, handleClose, handleNext, handleFail }) {
 
     const PopupPicker = () => {
         if (!update.id) return null;

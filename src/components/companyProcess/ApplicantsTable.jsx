@@ -224,6 +224,7 @@ function ApplicantsTable({ phase, setFilters }) {
   }
 
   function handleClose() {
+    setAnswer(false);
     setUpdate({});
     refetch();
   }
@@ -240,7 +241,7 @@ function ApplicantsTable({ phase, setFilters }) {
       </div>
     )}
 
-    {update.id ? <CustomPopup answer={answer} phase={phase} update={update} handleClose={handleClose} /> : null}
+    {update.id ? <CustomPopup answer={answer} phase={phase} update={update} handleClose={handleClose} handleNext={handleNext} handleFail={handleFail} /> : null}
 
     {selected.length > 0 && (
       <Box className="bulk-actions-container">
