@@ -1,0 +1,235 @@
+.job-application-card-container {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .job-application-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .job-application-card:hover {
+    border-color: #d43132;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .job-application-card-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .job-application-card-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .job-application-card-logo-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    border: 1px solid #edf2f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-right: 1rem;
+  }
+  
+  .job-application-card-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .job-application-card-title-container {
+    flex: 1;
+  }
+  
+  .job-application-card-title {
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+    padding-right: 4rem;
+    font-size: 1.25rem;
+  }
+  
+  .job-application-card-company-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .job-application-card-icon {
+    font-size: 16px;
+  }
+  
+  .job-application-card-company-chip,
+  .job-application-card-location-chip {
+    background-color: #f8fafc;
+    color: #4a5568;
+    font-weight: 500;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .job-application-card-job-type-chip {
+    font-weight: 500;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .job-application-card-dates {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f8fafc;
+    border-radius: 8px;
+  }
+  
+  .job-application-card-date-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .job-application-card-date-label {
+    color: #718096;
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
+  
+  .job-application-card-date-value {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  
+  .job-application-card-description {
+    margin-top: 0.5rem;
+    color: #4a5568;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.6;
+    position: relative;
+    font-size: 0.875rem;
+  }
+  
+  .job-application-card-description:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  }
+  
+  .job-application-card-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #edf2f7;
+  }
+  
+  .job-application-card-skill-chip {
+    font-weight: 500;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .job-application-card-more-skills-chip {
+    background-color: #edf2f7;
+    color: #718096;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .job-application-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+  
+  .job-application-card-details-button,
+  .job-application-card-job-button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: none;
+    font-size: 0.875rem;
+  }
+  
+  .job-application-card-details-button:hover {
+    background-color: rgba(212, 49, 50, 0.1);
+  }
+  
+  .job-application-card-job-button:hover {
+    background-color: #b32828;
+    box-shadow: 0 4px 14px rgba(212, 49, 50, 0.2);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .job-application-card {
+      padding: 1rem;
+    }
+  
+    .job-application-card-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  
+    .job-application-card-details-button,
+    .job-application-card-job-button {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .job-application-card-header {
+      flex-direction: column;
+    }
+  
+    .job-application-card-logo-container {
+      margin-bottom: 1rem;
+      margin-right: 0;
+    }
+  
+    .job-application-card-dates {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  
+    .job-application-card-date-item {
+      width: 100%;
+    }
+  }
+  

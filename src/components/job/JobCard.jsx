@@ -218,7 +218,7 @@ function JobCard({ job, type , isSelected}) {
               />
             )}
 
-            {job?.salary && (
+            {/* {job?.salary && (
               <Chip
                 icon={<AttachMoney sx={{ fontSize: 14 }} />}
                 label={job.salary}
@@ -231,7 +231,7 @@ function JobCard({ job, type , isSelected}) {
                   fontSize: "0.7rem",
                 }}
               />
-            )}
+            )} */}
           </Stack>
         </Box>
 
@@ -324,7 +324,7 @@ function JobCard({ job, type , isSelected}) {
           }}
         >
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ width: "100%" }}>
-            <Button
+            {/* <Button
               variant="outlined"
               onClick={(e) => {
                 e.stopPropagation()
@@ -350,7 +350,7 @@ function JobCard({ job, type , isSelected}) {
               }}
             >
               Apply Now
-            </Button>
+            </Button> */}
 
             <Button
               variant="contained"
@@ -375,7 +375,7 @@ function JobCard({ job, type , isSelected}) {
               }}
               endIcon={<ArrowForward />}
             >
-              View Details
+              Apply Now
             </Button>
           </Stack>
         </Box>

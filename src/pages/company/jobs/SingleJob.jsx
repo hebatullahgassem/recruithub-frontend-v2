@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { userContext } from "../../../context/UserContext";
 import MeetingsTable from "../../../components/companyProcess/MeetingsTable";
 import CalenderSwitcher from "../../../components/companyProcess/CalenderSwitcher";
-import '../../../styles/company/single_job.css'
+import '../../../styles/company/job/single_job.css'
 function SingleJob() {
   const phases = [
     "Applied",

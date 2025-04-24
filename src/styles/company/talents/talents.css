@@ -1,0 +1,206 @@
+.talents-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .talents-header {
+    background-color: var(--background);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+  }
+  
+  .talents-header h1 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .talents-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .talents-search-field {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .talents-search-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .talents-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .talents-button--primary {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+  }
+  
+  .talents-button--primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .talents-button--secondary {
+    background-color: white;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+  
+  .talents-button--secondary:hover {
+    background-color: var(--primary-lighter);
+    transform: translateY(-2px);
+  }
+  
+  .talents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .talent-card {
+    background-color: var(--background);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .talent-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .talent-card__header {
+    padding: 1.5rem;
+    background-color: var(--primary-lighter);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .talent-card__avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .talent-card__name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+  }
+  
+  .talent-card__title {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  .talent-card__body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .talent-card__description {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    flex-grow: 1;
+  }
+  
+  .talent-card__info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+  }
+  
+  .talent-card__info svg {
+    margin-right: 0.5rem;
+    color: var(--primary);
+  }
+  
+  .talent-card__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .talent-card__skill {
+    background-color: var(--primary-lighter);
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .talent-card__footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    text-align: right;
+  }
+  
+  .talent-card__button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .talent-card__button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .talents-pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    .talents-search {
+      flex-direction: column;
+    }
+    
+    .talents-search-buttons {
+      flex-direction: column;
+    }
+    
+    .talents-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  

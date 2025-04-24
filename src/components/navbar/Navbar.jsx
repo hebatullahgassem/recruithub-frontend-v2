@@ -20,7 +20,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
+import {showConfirmToast} from "../../confirmAlert/toastConfirm"; // Adjust the import path as necessary
 // Custom color palette based on #882024
 const theme = {
   primary: "#882024",
@@ -32,6 +32,7 @@ const theme = {
   background: "#ffffff",
   divider: "#e0e0e0"
 };
+
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -49,13 +50,20 @@ function Navbar() {
 
   const handleLogout = (e) => {
     e.stopPropagation();
-    if (window.confirm("Are you sure you want to logout?")) {
-      logoutUser();
-      setUser({});
-      setToken(null);
-      setIsProfileOpen(false);
-      navigate("/");
-    }
+    showConfirmToast({
+      message: "Are you sure you want to logout?",
+      onConfirm: () => {
+        logoutUser();
+        setUser({});
+        setToken(null);
+        setIsProfileOpen(false);
+        navigate("/");
+      },
+      onCancel: () => {
+        // Optional: Do something if user cancels (like a log or toast)
+        console.log("Logout cancelled");
+      }
+    });
   };
 
   const drawer = (
