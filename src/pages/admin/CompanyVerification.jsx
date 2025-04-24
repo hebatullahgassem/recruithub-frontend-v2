@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { verifyCompany } from "../services/Auth.js";
+import { verifyCompany } from "../../services/Auth";
 
 const CompanyVerification = ({ companyId, onSuccess, buttonProps = {}}) => {
   const [status, setStatus] = useState("");

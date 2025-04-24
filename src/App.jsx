@@ -6,7 +6,7 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import JobCreate from './components/job/JobCreate';
 import { ProfileProvider } from "./context/ProfileContext";
-import  CompanyVerification  from "./admin/CompanyVerification.jsx";
+import  CompanyVerification  from "./pages/admin/CompanyVerification.jsx";
 
 import { ComProfileProvider } from "./context/ComProfileContext";
 import { UserContextProvider } from "./context/UserContext";

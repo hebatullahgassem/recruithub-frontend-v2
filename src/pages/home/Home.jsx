@@ -6,8 +6,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { userContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
+import { Box } from "@mui/material";
 const Home = () => {
-  const { user , refetchUser, token} = useContext(userContext);
+  const { user, refetchUser, token } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -20,17 +21,19 @@ const Home = () => {
       navigate("/company/jobs");
     } else if (user.user_type === "ADMIN") {
       navigate("/admin/itians");
-    }
-    else 
-    {
+    } else {
       navigate("/login");
     }
   };
 
-  useEffect (() => {
+  const isJobSeeker = user && user.user_type === "JOBSEEKER";
+  const isCompany = user && user.user_type === "COMPANY";
+  const isAdmin = user && user.user_type === "ADMIN";
+
+  useEffect(() => {
     refetchUser();
   }, [token]);
-  
+
   return (
     <Container fluid className="p-0">
       {/* Hero Section */}
@@ -65,15 +68,16 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             style={{ fontSize: "3rem", fontWeight: "bold" }}
           >
-            Recruitment Platform
+            RecruitHub
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            style={{ fontSize: "1.5rem", margin: "20px 0" }}
+            style={{ fontSize: "1.5rem", margin: "20px 0", fontWeight: "bold" }}
           >
-            Connecting Graduates to the World of Work
+            Connecting {isCompany ? "Companies" : "ITI Graduates"} to the World
+            of {isCompany ? "Talents" : "Work"}
           </motion.p>
           <motion.div
             initial={{ scale: 0 }}
@@ -89,7 +93,7 @@ const Home = () => {
                 backgroundColor: "#901b20",
                 border: "none",
               }}
-              onClick={()=>handleClick()}
+              onClick={() => handleClick()}
             >
               Get Started
             </Button>
@@ -100,150 +104,217 @@ const Home = () => {
                 backgroundColor: "#901b20",
                 border: "none",
               }}
-              onClick={()=>handleClick()}
+              onClick={() => handleClick()}
             >
-              Post a Job
+              {!user?.id
+                ? "Login"
+                : isJobSeeker
+                ? "Browse Jobs"
+                : isCompany
+                ? "Post a Job"
+                : "Manage Website"}
             </Button>
           </motion.div>
         </Col>
       </Row>
       {/* Split Section for Applicants and Recruiters */}
-      <Row
-        className="split-section mx-auto"
-        style={{ padding: "50px 0", textAlign: "center" }}
-      >
-        <Col
-          md={6}
-          style={{
-            backgroundColor: "#f8f9fa",
-            padding: "30px",
-            borderRight: "1px solid #ddd",
-          }}
+      {!user?.id && (
+        <Row
+          className="split-section mx-auto"
+          style={{ padding: "50px 0", textAlign: "center" }}
         >
-          <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
-            For ITI Graduates
-          </h2>
-          <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
-            Discover job opportunities tailored to your skills and expertise.
-            Build your career with ease and confidence.
-          </p>
-          <Button
-            variant="primary"
+          <Col
+            md={6}
             style={{
-              padding: "10px 20px",
-              fontSize: "1rem",
-              backgroundColor: "#901b20",
-              border: "none",
+              backgroundColor: "#f8f9fa",
+              padding: "30px",
+              borderRight: "1px solid #ddd",
             }}
-            onClick={()=>handleClick()}
           >
-            Join Itians
-          </Button>
-        </Col>
-        <Col
-          md={6}
-          style={{
-            backgroundColor: "#ffffff",
-            padding: "30px",
-          }}
-        >
-          <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
-            For Recruiters
-          </h2>
-          <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
-            Find top talent from ITI graduates. Post jobs and connect with the
-            right candidates effortlessly.
-          </p>
-          <Button
-            variant="primary"
+            <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
+              For ITI Graduates
+            </h2>
+            <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
+              Discover job opportunities tailored to your skills and expertise.
+              Build your career with ease and confidence.
+            </p>
+            <Button
+              variant="primary"
+              style={{
+                padding: "10px 20px",
+                fontSize: "1rem",
+                backgroundColor: "#901b20",
+                border: "none",
+              }}
+              onClick={() => handleClick()}
+            >
+              Join Itians
+            </Button>
+          </Col>
+          <Col
+            md={6}
             style={{
-              padding: "10px 20px",
-              fontSize: "1rem",
-              backgroundColor: "#901b20",
-              border: "none",
+              backgroundColor: "#ffffff",
+              padding: "30px",
             }}
-            onClick={()=>handleClick()}
           >
-            Become Recruiter
-          </Button>
-        </Col>
-      </Row>
+            <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
+              For Recruiters
+            </h2>
+            <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
+              Find top talent from ITI graduates. Post jobs and connect with the
+              right candidates effortlessly.
+            </p>
+            <Button
+              variant="primary"
+              style={{
+                padding: "10px 20px",
+                fontSize: "1rem",
+                backgroundColor: "#901b20",
+                border: "none",
+              }}
+              onClick={() => handleClick()}
+            >
+              Become Recruiter
+            </Button>
+          </Col>
+        </Row>
+      )}
       {/* Job Types Section */}
-      <Row
-        className="job-types-section mx-auto"
-        style={{ padding: "50px 0", textAlign: "center" }}
-      >
-        <h2
-          style={{ color: "#901b20", fontWeight: "bold", marginBottom: "30px" }}
-        >
-          Explore Job Types
-        </h2>
-        <Row className="justify-content-center">
-          <Col md={6} lg={3} style={{ padding: "15px" }}>
-            <Card style={{ border: "none" }}>
-              <Card.Img
-                variant="top"
-                src="https://img.freepik.com/premium-photo/text-full-time-job-written-lightbox-with-alarm-clock-colorfull-stickers-blue-background_132358-5491.jpg"
-                alt="Full-Time"
-                style={{ borderRadius: "10px" }}
-              />
-              <Card.Body>
-                <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>
-                  Full-Time
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={6} lg={3} style={{ padding: "15px" }}>
-            <Card style={{ border: "none" }}>
-              <Card.Img
-                variant="top"
-                src="https://img.freepik.com/premium-photo/red-alarm-clock-with-text-parttime-job_132358-5465.jpg"
-                alt="Part-Time"
-                style={{ borderRadius: "10px" }}
-              />
-              <Card.Body>
-                <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>
-                  Part-Time
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
+      <Box style={{ backgroundColor: "#f8f9fa", padding: "20px 0" }}>
+      {isJobSeeker || !user?.id ? (
+        <Row className="job-types-section mx-auto" style={{ padding: "20px 0", textAlign: "center" }}>
+          <h2 style={{ color: "#901b20", fontWeight: "bold", marginBottom: "30px" }}>Find Your Dream Job</h2>
+          <Row className="justify-content-center">
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/premium-photo/text-full-time-job-written-lightbox-with-alarm-clock-colorfull-stickers-blue-background_132358-5491.jpg"
+                  alt="Full-Time"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Full-Time</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/premium-photo/red-alarm-clock-with-text-parttime-job_132358-5465.jpg"
+                  alt="Part-Time"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Part-Time</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Row className="justify-content-center">
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
+                  alt="Internship"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Internship</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/free-photo/side-view-entrepreneur-working-laptop_23-2148446302.jpg"
+                  alt="Freelance"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Freelance</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Row>
-        <Row className="justify-content-center">
-          <Col md={6} lg={3} style={{ padding: "15px" }}>
-            <Card style={{ border: "none" }}>
-              <Card.Img
-                variant="top"
-                src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
-                alt="Internship"
-                style={{ borderRadius: "10px" }}
-              />
-              <Card.Body>
-                <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>
-                  Internship
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={6} lg={3} style={{ padding: "15px" }}>
-            <Card style={{ border: "none" }}>
-              <Card.Img
-                variant="top"
-                src="https://img.freepik.com/free-photo/side-view-entrepreneur-working-laptop_23-2148446302.jpg"
-                alt="Freelance"
-                style={{ borderRadius: "10px" }}
-              />
-              <Card.Body>
-                <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>
-                  Freelance
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
+      ):null}
+
+      {isCompany || !user?.id ? (
+        <Row className="job-types-section mx-auto" style={{ padding: "20px 0", textAlign: "center" }}>
+          <h2 style={{ color: "#901b20", fontWeight: "bold", marginBottom: "30px" }}>ITI Graduates</h2>
+          <Row className="justify-content-center">
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://www.ue-germany.com/uploads/sites/9/2022/07/digital-business-data-sience-960x540-1.jpg"
+                  alt="Data Scientists"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Data Scientists</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://thecyberexpress.com/wp-content/uploads/2022/12/How-to-Become-a-Cyber-Security-Engineer-750x375.jpg?crop=1"
+                  alt="Cyber Security"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Cyber Security</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Row className="justify-content-center">
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
+                  alt="Software Developers"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Software Developers</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3} style={{ padding: "15px" }}>
+              <Card style={{ border: "none" }}>
+                <Card.Img
+                  variant="top"
+                  src="https://img.freepik.com/free-photo/logo-designer-working-computer-desktop_23-2149142153.jpg?ga=GA1.1.2112067204.1743957977&semt=ais_hybrid&w=740"
+                  alt="Graphic Designers"
+                  style={{ borderRadius: "10px" }}
+                  height="200px"
+                />
+                <Card.Body>
+                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Graphic Designers</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Row>
-      </Row>
-      <div className="numbers" style={{ marginBottom: "30px" }}>
+      ): null}
+      </Box>
+      <div className="numbers" style={{ marginBottom: "30px", marginTop: "30px" }}>
         <div className="header" style={{ marginBottom: "20px" }}>
           <div
             className="vertical-line"

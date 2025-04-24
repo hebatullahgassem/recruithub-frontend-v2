@@ -11,7 +11,7 @@ export const ComProfileProvider = ({ children }) => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token"); // Get token
       if (!token) {
-        console.warn("No token found. User might not be logged in.");
+        // console.warn("No token found. User might not be logged in.");
         return;
       }
       try {

@@ -35,9 +35,10 @@ function Login() {
   async function handleLogin() {
     try {
       const res = await loginUser(email, password);
-      console.log(res);
-      setUser(res.user);
-      setToken(res.token);
+      // console.log(res);
+      refetchUser(res);
+      // setUser(res.user);
+      // setToken(res.token);
       navigate("/");
     } catch (error) {
       // Clear user/token if login failed

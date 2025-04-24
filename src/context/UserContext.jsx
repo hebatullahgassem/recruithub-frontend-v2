@@ -10,6 +10,7 @@ export function UserContextProvider({ children }) {
   const [chatBot, setChatBot] = useState(false);
 
   const refetchUser = async (tok) => {
+    console.log(tok);
     if (!token && !tok) return; // Exit if no token
     try {
       const response = await getUser(tok || token);
@@ -22,6 +23,7 @@ export function UserContextProvider({ children }) {
         experience: safeParseJSON(response.experience, []),
       };
       setUser(parsedResponse);
+      console.log(parsedResponse);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
