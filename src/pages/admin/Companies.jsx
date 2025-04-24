@@ -19,7 +19,7 @@ import {
 import { FaCheckCircle } from "react-icons/fa"; // Using a check icon for verify
 
 // Import your API service functions
-import { getUnverifiedCompanies, verifyCompany } from "../services/Admin"; // Adjust path as needed
+import { getUnverifiedCompanies, verifyCompany } from "../../services/Admin"; // Adjust path as needed
 
 function AdminCompany() {
   const queryClient = useQueryClient(); // Get QueryClient instance

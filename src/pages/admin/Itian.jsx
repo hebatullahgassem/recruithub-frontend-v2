@@ -27,7 +27,7 @@ import {
   createItianSingle,
   createItianBulk,
   deleteItian,
-} from "../services/Admin"; // Adjust path as needed
+} from "../../services/Admin"; // Adjust path as needed
 
 function AdminItian() {
   const queryClient = useQueryClient();

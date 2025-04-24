@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react"
 import { X, Send, Bot, User, MessageSquare } from "lucide-react"
-import { askChatBot } from "../../services/Auth"
+import { askChatBot, getQuota } from "../../services/ChatBot"
 import { userContext } from "../../context/UserContext"
 import ChatMessage from "./ChatMessage"
+import { useQuery } from "@tanstack/react-query"
 
 const PopupChatBot = () => {
   const { chatBot, setChatBot, user } = useContext(userContext)
@@ -15,7 +16,18 @@ const PopupChatBot = () => {
   const handleInputChange = (e) => {
     setInput(e.target.value)
   }
-
+  const {
+    data: quota,
+    error,
+    isLoading: isLoadingQuota,
+    refetch,
+  } = useQuery({
+    queryKey: ["quota"],
+    queryFn:async () => {
+      const response = await getQuota();
+      return response;
+    }
+  });
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -34,6 +46,7 @@ const PopupChatBot = () => {
 
       // Update the last message with the response
       setMessages((prev) => prev.map((msg, idx) => (idx === prev.length - 1 ? { ...msg, response: answer } : msg)))
+      refetch()
     } catch (error) {
       console.error("Error:", error)
       const errorMessage = error.response?.data?.message || "An error occurred"
@@ -42,7 +55,6 @@ const PopupChatBot = () => {
       setMessages((prev) =>
         prev.map((msg, idx) => (idx === prev.length - 1 ? { ...msg, response: errorMessage } : msg)),
       )
-      setIsDisabled(true)
     } finally {
       setIsLoading(false)
     }
@@ -109,9 +121,12 @@ const PopupChatBot = () => {
               color: "white",
             }}
           >
+            <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Bot size={20} />
               <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>AI Assistant</h2>
+            </div>
+              <p style={{ margin: 0, fontSize: "12px", fontWeight: 400 }}>limit resets on <span style={{ fontSize: "11px" }}>{quota?.date}</span></p>
             </div>
             <button
               onClick={() => setChatBot(false)}
@@ -142,6 +157,11 @@ const PopupChatBot = () => {
               gap: "16px",
               backgroundColor: "#f8fafc",
             }}
+            ref={(ref) => {
+              if (ref) {
+                ref.scrollTop = ref.scrollHeight;
+              }
+            }}
           >
             {messages.length === 0 ? (
               <div
@@ -152,9 +172,11 @@ const PopupChatBot = () => {
                   height: "100%",
                   color: "#64748b",
                   textAlign: "center",
+                  flexDirection: "column",
                 }}
               >
                 <p>Ask me anything to get started!</p>
+                <p>{quota?.questions} Remaining messages</p>
               </div>
             ) : (
               messages.map((message, index) => (
@@ -163,6 +185,7 @@ const PopupChatBot = () => {
                   question={message.question}
                   response={message.response}
                   isLast={index === messages.length - 1 && isLoading}
+                  quota={quota}
                 />
               ))
             )}
@@ -183,7 +206,7 @@ const PopupChatBot = () => {
               placeholder="Type your message..."
               value={input}
               onChange={handleInputChange}
-              disabled={isLoading}
+              disabled={isLoading || quota?.questions === 0}
               style={{
                 flex: 1,
                 padding: "10px 12px",
@@ -198,7 +221,7 @@ const PopupChatBot = () => {
             />
             <button
               type="submit"
-              disabled={isDisabled || isLoading || !input.trim()}
+              disabled={isDisabled || isLoading || !input.trim() || quota?.questions === 0}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -213,14 +236,14 @@ const PopupChatBot = () => {
                 opacity: isLoading || !input.trim() ? 0.7 : 1,
                 transition: "background-color 0.2s",
               }}
-              onMouseOver={(e) => {
-                if (!isLoading && input.trim() && !isDisabled) {
-                  e.currentTarget.style.backgroundColor = "#882024"
-                }
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = "#dc898c"
-              }}
+              // onMouseOver={(e) => {
+              //   if (!isLoading && input.trim() && !isDisabled) {
+              //     e.currentTarget.style.backgroundColor = "#882024"
+              //   }
+              // }}
+              // onMouseOut={(e) => {
+              //   e.currentTarget.style.backgroundColor = "#dc898c"
+              // }}
             >
               <Send size={16} />
               <span>Send</span>
@@ -230,7 +253,7 @@ const PopupChatBot = () => {
       )}
 
       {/* Inline styles for animations */}
-      <style jsx global>{`
+      <style global='true' jsx="true">{`
         @keyframes slideUp {
           from {
             opacity: 0;

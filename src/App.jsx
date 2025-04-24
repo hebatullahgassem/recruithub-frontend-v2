@@ -17,12 +17,13 @@ import ResetPassword from "./pages/login/ResetPassword";
 import TalentProfile from "./pages/company/talents/TalentProfile";
 import ComProfile from "./pages/company/profile/ComProfile";
 import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
-import Users from "./admin/Users.jsx";
+// import Users from "./pages/admin/Users.jsx";
 import { Spinner } from "react-bootstrap";
 // import { ToastProvider } from "./confirmAlert/Toast";
 import { Toaster } from "react-hot-toast";
-import ChatBot from "./components/chatbot/ChatBot.jsx";
+// import ChatBot from "./components/chatbot/ChatBot.jsx";
 import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
+import { LinearProgress, Typography } from "@mui/material";
 
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
@@ -80,17 +81,20 @@ function App() {
   //   import("./pages/company/jobs/JobsDashboard")
   // );
   const AdminCompany = React.lazy(() =>
-    import("./admin/Companies")
+    import("./pages/admin/Companies.jsx")
   );
   const AdminItian = React.lazy(() =>
-    import("./admin/Itian")
+    import("./pages/admin/Itian.jsx")
+  );
+  const AdminRag = React.lazy(() =>
+    import("./pages/admin/Rag.jsx")
   );
   const VerifyOTP = React.lazy(() => import("./pages/otp/VerifyOTP"));
   const ForgotPassword = React.lazy(() => import("./pages/login/ForgotPassword"));
   const ResetPassword = React.lazy(() => import("./pages/login/ResetPassword"));
   const ComProfile = React.lazy(() => import("./pages/company/profile/ComProfile"));
   const EditPersonalCom = React.lazy(() => import("./pages/company/profile/edit-profile/EditPersonalCom"));
-  const Users = React.lazy(() => import("./admin/Users"));
+  // const Users = React.lazy(() => import("./pages/admin/Users.jsx"));
   const JobCreate = React.lazy(() => import("./components/job/JobCreate"));
   const Accounts = React.lazy(() => import("./components/accounts/Accounts"));
 
@@ -115,17 +119,25 @@ function App() {
                     position: "relative",
                   }}
                 >
-                  <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Spinner animation="border" variant="primary" />
+                  <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:'5px'}}>
+                    <Typography variant="h6" sx={{
+                      fontWeight: 700,
+                      color: "#882024",
+                      letterSpacing: "-0.5px"
+                    }}>
+                      RecruitHub
+                    </Typography>
+                    <LinearProgress style={{ color: "#882024"}}/>
                   </div>}>
                     <Routes>
 
                       <Route path="/" element={<Home />} />
-                      <Route path="/admin/users" element={<Users />} />
+                      {/* <Route path="/admin/users" element={<Users />} /> */}
                       {/* <Route path="/admin/dashboard" element={<Dashboard />} />
                       <Route path="/admin/jobseekers" element={<Jobseekers />} /> */}
                       <Route path="/admin/itians" element={<AdminItian />} />
                       <Route path="/admin/companies" element={<AdminCompany />} />
+                      <Route path="/admin/rag" element={<AdminRag />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/verify-otp" element={<VerifyOTP />} />

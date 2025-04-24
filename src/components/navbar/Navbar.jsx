@@ -114,6 +114,7 @@ function Navbar() {
               {/* <NavLink to="/admin/users" text="Manage Users" /> */}
               <NavLink to="/admin/itians" text="Manage Itians" />
               <NavLink to="/admin/companies" text="Manage Companies" />
+              <NavLink to="/admin/rag" text="Manage Rag files" />
 
             </>
           )}
@@ -242,6 +243,7 @@ function Navbar() {
                     {/* <NavLink to="/admin/users" text="Manage Users" /> */}
                     <NavLink to="/admin/itians" text="Manage Itians" />
                     <NavLink to="/admin/companies" text="Manage Companies" />
+                    <NavLink to="/admin/rag" text="Manage Rag files" />
                   </>
                 )}
               </Box>
@@ -340,6 +342,7 @@ function Navbar() {
                                   backgroundColor: "rgba(136, 32, 36, 0.05)"
                                 },
                                 cursor: "pointer",
+                                display: user?.user_type?.toLowerCase() === "admin" ? "none" : "flex"
                               }}
                             >
                               <ListItemText
