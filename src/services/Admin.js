@@ -11,6 +11,7 @@ export const getUnverifiedCompanies = async (page = 1, pageSize = 10, searchQuer
   return response.data;
 };
 
+
 export const verifyCompany = async (companyId) => {
     console.log(companyId);
   const response = await AxiosApi.patch(

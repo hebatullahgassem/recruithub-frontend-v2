@@ -6,6 +6,8 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import JobCreate from './components/job/JobCreate';
 import { ProfileProvider } from "./context/ProfileContext";
+import  CompanyVerification  from "./admin/CompanyVerification.jsx";
+
 import { ComProfileProvider } from "./context/ComProfileContext";
 import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -136,6 +138,7 @@ function App() {
                       {/* <Route path="/admin/dashboard" element={<Dashboard />} />
                       <Route path="/admin/jobseekers" element={<Jobseekers />} /> */}
                       <Route path="/admin/itians" element={<AdminItian />} />
+                      <Route path="/admin/company-verify" element={<CompanyVerification />} />
                       <Route path="/admin/companies" element={<AdminCompany />} />
                       <Route path="/admin/rag" element={<AdminRag />} />
                       <Route path="/login" element={<Login />} />
