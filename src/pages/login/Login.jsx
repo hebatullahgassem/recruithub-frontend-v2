@@ -45,8 +45,12 @@ function Login() {
     setToken(null);
     localStorage.removeItem("token");
 
-      // Set the custom error message
-      setSnackbarMessage("Oops! Incorrect email or password. Please try again.");
+        // Extract message from backend if available
+        const backendMessage =
+        error.response.data.non_field_errors[0];
+
+        // Set the custom error message
+      setSnackbarMessage(backendMessage);
       setOpenSnackbar(true);
     }
   }

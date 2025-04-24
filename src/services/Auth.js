@@ -3,12 +3,17 @@ import { AxiosApi } from "./Api";
 
 // Login Function
 export const loginUser = async (email, password) => {
+
   const response = await axios.post("http://localhost:8000/user/token/", {
     email,
     password,
   });
+
+  // if (!response.ok) throw new Error("Login failed");
+
   localStorage.setItem("token", response.data.token); // Store token in local storage
-  return response.data;
+
+  return response.data.token;
 };
 
 // Signup Function
@@ -90,4 +95,23 @@ export const askChatBot = async (question) => {
     console.error("ChatBot Error:", error);
     throw error;
   }
+};
+
+
+//verifyy companyyy
+export const verifyCompany = async (companyId, token) => {
+  const res = await fetch(`http://127.0.0.1:8000/user/admin/verify_company/?id=${companyId}`, {
+    method: "PATCH", // or "PATCH"/"POST" if your view is like that
+    headers: {
+      Authorization: `Token ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Verification failed");
+  }
+
+  return await res.json();
 };

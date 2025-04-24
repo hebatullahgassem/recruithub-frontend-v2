@@ -20,6 +20,7 @@ import { FaCheckCircle } from "react-icons/fa"; // Using a check icon for verify
 
 // Import your API service functions
 import { getUnverifiedCompanies, verifyCompany } from "../services/Admin"; // Adjust path as needed
+import CompanyVerification from "./CompanyVerification";
 
 function AdminCompany() {
   const queryClient = useQueryClient(); // Get QueryClient instance
@@ -197,7 +198,7 @@ function AdminCompany() {
                     </TableCell>
                     {/* Add other cells */}
                     <TableCell align="center">
-                      <Button
+                      {/* <Button
                         variant="contained"
                         color="success" // Use success color for verify action
                         size="small"
@@ -206,7 +207,30 @@ function AdminCompany() {
                         disabled={verifyMutation.isLoading && verifyMutation.variables === company.id} // Disable only the button clicked while processing
                       >
                         {verifyMutation.isLoading && verifyMutation.variables === company.id ? 'Verifying...' : 'Verify'}
-                      </Button>
+                      </Button> */}
+                      <CompanyVerification
+                        companyId={company.id}
+                        onSuccess={() =>
+                          queryClient.invalidateQueries({ queryKey: ["unverifiedCompanies"] })
+                        }
+                        buttonProps={{
+                          variant: "contained",
+                          size: "small",
+                          sx: {
+                            backgroundColor: "rgb(163, 161, 161)",
+                            color: "#fff",
+                            "&:hover": {
+                              backgroundColor: "#5a6268",
+                            },
+                            textTransform: "none",
+                            fontWeight: "bold",
+                            borderRadius: "8px",
+                            px: 2,
+                            py: 1,
+                          },
+                        }}
+                      />
+
                     </TableCell>
                   </TableRow>
                 ))}
