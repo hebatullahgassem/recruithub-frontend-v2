@@ -31,7 +31,7 @@ import '../../ComponentsStyles/CompanyProcess/application_table.css';
 
 
 
-function ApplicantsTable({ phase, setFilters }) {
+function ApplicantsTable({ phase, setFilters, fetch }) {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [total, setTotal] = useState(1);
@@ -41,7 +41,7 @@ function ApplicantsTable({ phase, setFilters }) {
   const { user } = useContext(userContext);
   const { id } = useParams();
 
-  const queryKey = ["applicants", page, rowsPerPage, phase];
+  const queryKey = ["applicants", page, rowsPerPage, phase, fetch];
   const queryFn = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/applications/`, {
       params: { page, page_size: rowsPerPage, status: phase + 1, job: id }, //, company: 3

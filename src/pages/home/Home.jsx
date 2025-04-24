@@ -18,6 +18,8 @@ const Home = () => {
       navigate("/applicant/jobs");
     } else if (user.user_type === "COMPANY") {
       navigate("/company/jobs");
+    } else if (user.user_type === "ADMIN") {
+      navigate("/admin/itians");
     }
     else 
     {

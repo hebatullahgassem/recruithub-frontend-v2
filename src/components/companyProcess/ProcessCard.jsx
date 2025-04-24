@@ -9,6 +9,7 @@ import { userContext } from "../../context/UserContext";
 import '../../ComponentsStyles/process_card.css';
 import '../../styles/theme.css';
 import { toast } from "react-hot-toast";
+import { set } from "date-fns";
 function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
   const [fail, setFail] = useState(false);
@@ -16,6 +17,8 @@ function ProcessCard({ column, phases, job }) {
   const [display, setDisplay] = useState(false);
   const [csvDisplay, setCsvDisplay] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
+  const [fetch, setFetch] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(userContext);
   const updateAts = async () => {
     if (
@@ -28,6 +31,7 @@ function ProcessCard({ column, phases, job }) {
     ) {
       return;
     }
+    setIsLoading(true);
     const data = {
       ats: ats,
       new_status: column + 2,
@@ -40,9 +44,10 @@ function ProcessCard({ column, phases, job }) {
     console.log(response);
     setAts(50);
     setFail(false);
-    setTimeout(() => {
-      toast.error(response.message);
-    }, 1000);
+    setFetch(fetch + 1);
+    setDisplay(false);
+    setIsLoading(false);
+    toast.success(response.message);
   };
   const updateCsv = async () => {
     if (
@@ -55,6 +60,7 @@ function ProcessCard({ column, phases, job }) {
     ) {
       return;
     }
+    setIsLoading(true);
     const dataForm = new FormData();
     dataForm.append("file", csvFile);
     dataForm.append("success", ats);
@@ -67,9 +73,10 @@ function ProcessCard({ column, phases, job }) {
     console.log(response);
     setAts(50);
     setFail(false);
-    setTimeout(() => {
-      toast.error(response.message);
-    }, 1000);
+    setFetch(fetch + 1);
+    setIsLoading(false);
+    setCsvDisplay(false);
+    toast.success(response.message);
   };
   //   const status = [
   //     "Applied",
@@ -134,8 +141,8 @@ function ProcessCard({ column, phases, job }) {
               <label className="checkbox-label">Fail applicants under {ats}%</label>
             </div>
           </div>
-          <button className="btn-primary" onClick={() => updateAts()}>
-            Update
+          <button className="btn-primary" onClick={() => updateAts()} disabled={isLoading}>
+            {isLoading ? "Updating..." : "Update"}
           </button>
         </div>
       )}
@@ -187,13 +194,13 @@ function ProcessCard({ column, phases, job }) {
               />
             </div>
           </div>
-          <button className="btn-primary" onClick={() => updateCsv()}>
-            Update
+          <button className="btn-primary" onClick={() => updateCsv()} disabled={!csvFile || isLoading}>
+            {isLoading ? "Updating..." : 'Update'}
           </button>
         </div>
       )}
 
-      <ApplicantsTable phase={column} setFilters={setFilters} />
+      <ApplicantsTable phase={column} setFilters={setFilters} fetch={fetch}/>
     </div>
 
 
