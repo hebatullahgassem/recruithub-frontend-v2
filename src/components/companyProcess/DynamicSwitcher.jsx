@@ -97,7 +97,7 @@ import Switch from "@mui/material/Switch";
 import { memo } from "react";
 import '../../ComponentsStyles/CompanyProcess/calender_switcher.css';
 
-const CalendarSwitcher = memo(({ calender, setCalender }) => {
+const DynamicSwitcher = memo(({ getter, setter }) => {
   // const PrimarySwitch = styled(Switch)(({ theme }) => ({
   //   width: 48,
   //   height: 28,
@@ -148,8 +148,8 @@ const CalendarSwitcher = memo(({ calender, setCalender }) => {
       type="checkbox"
       id="view-toggle"
       className="toggle-checkbox"
-      checked={calender}
-      onChange={() => setCalender(!calender)}
+      checked={getter}
+      onChange={() => setter(!getter)}
     />
     <label htmlFor="view-toggle" className="toggle-label">
       <span className="toggle-inner"></span>
@@ -159,4 +159,4 @@ const CalendarSwitcher = memo(({ calender, setCalender }) => {
   );
 });
 
-export default CalendarSwitcher;
+export default DynamicSwitcher;

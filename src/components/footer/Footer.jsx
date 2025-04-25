@@ -1,4 +1,8 @@
+import { useContext } from "react";
+import { userContext } from "../../context/UserContext";
+
 function Footer() {
+  const {isLight} = useContext(userContext)
   return (
     <footer
       className="footer"
@@ -6,7 +10,7 @@ function Footer() {
         width: "100%",
         textAlign: "center",
         padding: "20px",
-        backgroundColor: "#f8f9fa",
+        backgroundColor: isLight ? "#f8f9fa" : 'black',
       }}
     >
       
@@ -44,7 +48,7 @@ function Footer() {
       </a>
       </div>
       
-      <p>© 2025 ITI. All rights reserved.</p>
+      <p style={{color: isLight ? 'black' : 'white'}}>© 2025 ITI. All rights reserved.</p>
     </footer>
   );
 }

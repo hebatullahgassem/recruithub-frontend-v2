@@ -8,8 +8,8 @@ import { getJobById, patchJob } from "../../../services/Job";
 import { Button } from "@mui/material";
 import { userContext } from "../../../context/UserContext";
 import MeetingsTable from "../../../components/companyProcess/MeetingsTable";
-import CalenderSwitcher from "../../../components/companyProcess/CalenderSwitcher";
 import '../../../styles/company/single_job.css'
+import DynamicSwitcher from "../../../components/companyProcess/DynamicSwitcher";
 function SingleJob() {
   const phases = [
     "Applied",
@@ -64,7 +64,7 @@ function SingleJob() {
       <div className="recruitment-panel">
         <div className="view-toggle">
           <h3 className={!calender ? "active" : ""}>Applicants</h3>
-          <CalenderSwitcher setCalender={setCalender} calender={calender} />
+          <DynamicSwitcher setter={setCalender} getter={calender} />
           <h3 className={calender ? "active" : ""}>Meetings</h3>
         </div>
 

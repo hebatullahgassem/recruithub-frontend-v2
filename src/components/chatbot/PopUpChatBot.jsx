@@ -6,7 +6,7 @@ import ChatMessage from "./ChatMessage"
 import { useQuery } from "@tanstack/react-query"
 
 const PopupChatBot = () => {
-  const { chatBot, setChatBot, user } = useContext(userContext)
+  const { chatBot, setChatBot, user, isLight } = useContext(userContext)
 
   const [input, setInput] = useState("")
   const [messages, setMessages] = useState([])
@@ -22,7 +22,7 @@ const PopupChatBot = () => {
     isLoading: isLoadingQuota,
     refetch,
   } = useQuery({
-    queryKey: ["quota"],
+    queryKey: ["quota", chatBot],
     queryFn:async () => {
       if(!user?.id) return []
       const response = await getQuota();
@@ -75,7 +75,7 @@ const PopupChatBot = () => {
           height: "56px",
           borderRadius: "50%",
           backgroundColor: "#882024",
-          color: "white",
+          color: isLight ? isLight ? "white" : 'black' : "black",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -100,7 +100,7 @@ const PopupChatBot = () => {
             right: "20px",
             width: "350px",
             height: "500px",
-            backgroundColor: "white",
+            backgroundColor: isLight ? "white" : 'black',
             borderRadius: "12px",
             boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
             display: "flex",
@@ -117,9 +117,9 @@ const PopupChatBot = () => {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "16px",
-              borderBottom: "1px solid #dc898c",
+              borderBottom: isLight ? "1px solid #dc898c" : "1px solid #921d21",
               backgroundColor: "#882024",
-              color: "white",
+              color: isLight ? "white" : 'black',
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -134,7 +134,7 @@ const PopupChatBot = () => {
               style={{
                 background: "none",
                 border: "none",
-                color: "white",
+                color: isLight ? "white" : 'black',
                 cursor: "pointer",
                 display: "flex",
                 padding: "4px",
@@ -156,7 +156,7 @@ const PopupChatBot = () => {
               display: "flex",
               flexDirection: "column",
               gap: "16px",
-              backgroundColor: "#f8fafc",
+              backgroundColor: isLight ? "#f8fafc" : 'black',
             }}
             ref={(ref) => {
               if (ref) {
@@ -171,7 +171,7 @@ const PopupChatBot = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: "100%",
-                  color: "#64748b",
+                  color: isLight ? "#64748b" : '#921d21',
                   textAlign: "center",
                   flexDirection: "column",
                 }}
@@ -198,8 +198,8 @@ const PopupChatBot = () => {
             style={{
               display: "flex",
               padding: "12px",
-              borderTop: "1px solid #dc898c",
-              backgroundColor: "white",
+              borderTop: isLight ?"1px solid #dc898c" : '1px solid #921d21',
+              backgroundColor: isLight ? "white" : 'black',
             }}
           >
             <input
@@ -211,14 +211,16 @@ const PopupChatBot = () => {
               style={{
                 flex: 1,
                 padding: "10px 12px",
-                border: "1px solid #dc898c",
+                border: "1px solid #882024",
                 borderRadius: "6px",
                 marginRight: "8px",
                 fontSize: "14px",
                 outline: "none",
+                backgroundColor: isLight ? "#f5f6f7" : '#515151d9',
+                color: isLight ? "black" : 'white',
               }}
-              onFocus={(e) => (e.target.style.borderColor = "#dc898c")}
-              onBlur={(e) => (e.target.style.borderColor = "#dc898c")}
+              // onFocus={(e) => (e.target.style.borderColor = "#dc898c")}
+              // onBlur={(e) => (e.target.style.borderColor = "#dc898c")}
             />
             <button
               type="submit"
@@ -230,7 +232,7 @@ const PopupChatBot = () => {
                 gap: "4px",
                 padding: "8px 16px",
                 backgroundColor: "#882024",
-                color: "white",
+                color: isLight ? "white" : 'black',
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",

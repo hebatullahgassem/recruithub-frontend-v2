@@ -8,7 +8,7 @@ import { userContext } from "../../context/UserContext";
 import { useNavigate } from "react-router";
 import { Box } from "@mui/material";
 const Home = () => {
-  const { user, refetchUser, token } = useContext(userContext);
+  const { user, refetchUser, token, isLight } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -35,14 +35,18 @@ const Home = () => {
   }, [token]);
 
   return (
-    <Container fluid className="p-0">
+    <Container
+      fluid
+      className="p-0"
+      style={{ backgroundColor: isLight ? "#ffffff" : "#1c0000" }}
+    >
       {/* Hero Section */}
       <Row
         className="hero-section mx-auto"
         style={{
           minHeight: "100vh",
-          backgroundImage:
-            "url('https://knowledgecity.iti.gov.eg/assets/images/slider/Web%20capture_18-1-2023_4417_.jpeg')",
+          // backgroundImage:
+          //   "url('https://knowledgecity.iti.gov.eg/assets/images/slider/Web%20capture_18-1-2023_4417_.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           color: "#901b20",
@@ -54,12 +58,28 @@ const Home = () => {
           maxWidth: "100vw",
         }}
       >
+        <img
+          src="https://knowledgecity.iti.gov.eg/assets/images/slider/Web%20capture_18-1-2023_4417_.jpeg"
+          alt="Background Image"
+          style={{
+            width: "100vw",
+            height: "100vh",
+            objectFit: "cover",
+            margin: "0",
+            padding: "0",
+            zIndex: "0",
+            position: "absolute",
+            filter: isLight ? undefined : "brightness(0.5)",
+            
+          }}
+        />
         <Col
           style={{
-            backgroundColor: "#ffffff73",
+            backgroundColor: isLight ? "#ffffff73" : "#0000009c",
             padding: "20px",
             maxWidth: "fit-content",
             borderRadius: "10px",
+            zIndex: "99",
           }}
         >
           <motion.h1
@@ -92,6 +112,7 @@ const Home = () => {
                 fontSize: "1rem",
                 backgroundColor: "#901b20",
                 border: "none",
+                color: isLight ? "white" : "black",
               }}
               onClick={() => handleClick()}
             >
@@ -103,6 +124,7 @@ const Home = () => {
                 fontSize: "1rem",
                 backgroundColor: "#901b20",
                 border: "none",
+                color: isLight ? "white" : "black",
               }}
               onClick={() => handleClick()}
             >
@@ -121,20 +143,31 @@ const Home = () => {
       {!user?.id && (
         <Row
           className="split-section mx-auto"
-          style={{ padding: "50px 0", textAlign: "center" }}
+          style={{
+            padding: "50px 0",
+            textAlign: "center",
+            backgroundColor: isLight ? "#f8f9fa" : "black",
+            marginTop: "10px",
+          }}
         >
           <Col
             md={6}
             style={{
-              backgroundColor: "#f8f9fa",
+              backgroundColor: isLight ? "#f8f9fa" : "transparent",
               padding: "30px",
-              borderRight: "1px solid #ddd",
+              borderRight: isLight ? "1px solid #ddd" : "1px solid #882024",
             }}
           >
             <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
               For ITI Graduates
             </h2>
-            <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
+            <p
+              style={{
+                margin: "20px 0",
+                fontSize: "1.2rem",
+                color: isLight ? "black" : "white",
+              }}
+            >
               Discover job opportunities tailored to your skills and expertise.
               Build your career with ease and confidence.
             </p>
@@ -154,14 +187,20 @@ const Home = () => {
           <Col
             md={6}
             style={{
-              backgroundColor: "#ffffff",
+              backgroundColor: isLight ? "#ffffff" : "transparent",
               padding: "30px",
             }}
           >
             <h2 style={{ color: "#901b20", fontWeight: "bold" }}>
               For Recruiters
             </h2>
-            <p style={{ margin: "20px 0", fontSize: "1.2rem" }}>
+            <p
+              style={{
+                margin: "20px 0",
+                fontSize: "1.2rem",
+                color: isLight ? "black" : "white",
+              }}
+            >
               Find top talent from ITI graduates. Post jobs and connect with the
               right candidates effortlessly.
             </p>
@@ -181,140 +220,222 @@ const Home = () => {
         </Row>
       )}
       {/* Job Types Section */}
-      <Box style={{ backgroundColor: "#f8f9fa", padding: "20px 0" }}>
-      {isJobSeeker || !user?.id ? (
-        <Row className="job-types-section mx-auto" style={{ padding: "20px 0", textAlign: "center" }}>
-          <h2 style={{ color: "#901b20", fontWeight: "bold", marginBottom: "30px" }}>Find Your Dream Job</h2>
-          <Row className="justify-content-center">
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/premium-photo/text-full-time-job-written-lightbox-with-alarm-clock-colorfull-stickers-blue-background_132358-5491.jpg"
-                  alt="Full-Time"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Full-Time</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/premium-photo/red-alarm-clock-with-text-parttime-job_132358-5465.jpg"
-                  alt="Part-Time"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Part-Time</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
+      <Box
+        style={{
+          backgroundColor: isLight ? "#f8f9fa" : "black",
+          padding: "10px 0",
+          marginTop: "10px",
+          marginBottom: "10px",
+        }}
+      >
+        {isJobSeeker || !user?.id ? (
+          <Row
+            className="job-types-section mx-auto"
+            style={{ padding: "20px 0", textAlign: "center" }}
+          >
+            <h2
+              style={{
+                color: "#901b20",
+                fontWeight: "bold",
+                marginBottom: "30px",
+                textDecoration:'underline'
+              }}
+            >
+              Find Your Dream Job
+            </h2>
+            <Row className="justify-content-center">
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/premium-photo/text-full-time-job-written-lightbox-with-alarm-clock-colorfull-stickers-blue-background_132358-5491.jpg"
+                    alt="Full-Time"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Full-Time
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/premium-photo/red-alarm-clock-with-text-parttime-job_132358-5465.jpg"
+                    alt="Part-Time"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Part-Time
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <Row className="justify-content-center">
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
+                    alt="Internship"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Internship
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/free-photo/side-view-entrepreneur-working-laptop_23-2148446302.jpg"
+                    alt="Freelance"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Freelance
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
           </Row>
-          <Row className="justify-content-center">
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
-                  alt="Internship"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Internship</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/free-photo/side-view-entrepreneur-working-laptop_23-2148446302.jpg"
-                  alt="Freelance"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Freelance</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
+        ) : null}
+        {!user?.id && (
+          <Row
+            className="mx-auto"
+            style={{
+              padding: "5px 0",
+              textAlign: "center",
+              backgroundColor: isLight ? "#f8f9fa" : "#1c0000",
+            }}
+          >
+            {/* <p>divider</p> */}
           </Row>
-        </Row>
-      ):null}
-
-      {isCompany || !user?.id ? (
-        <Row className="job-types-section mx-auto" style={{ padding: "20px 0", textAlign: "center" }}>
-          <h2 style={{ color: "#901b20", fontWeight: "bold", marginBottom: "30px" }}>ITI Graduates</h2>
-          <Row className="justify-content-center">
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://www.ue-germany.com/uploads/sites/9/2022/07/digital-business-data-sience-960x540-1.jpg"
-                  alt="Data Scientists"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Data Scientists</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://thecyberexpress.com/wp-content/uploads/2022/12/How-to-Become-a-Cyber-Security-Engineer-750x375.jpg?crop=1"
-                  alt="Cyber Security"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Cyber Security</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
+        )}
+        {isCompany || !user?.id ? (
+          <Row
+            className="job-types-section mx-auto"
+            style={{ padding: "20px 0", textAlign: "center" }}
+          >
+            <h2
+              style={{
+                color: "#901b20",
+                fontWeight: "bold",
+                marginBottom: "30px",
+                textDecoration:'underline'
+              }}
+            >
+              ITI Graduates
+            </h2>
+            <Row className="justify-content-center">
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://www.ue-germany.com/uploads/sites/9/2022/07/digital-business-data-sience-960x540-1.jpg"
+                    alt="Data Scientists"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Data Scientists
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://thecyberexpress.com/wp-content/uploads/2022/12/How-to-Become-a-Cyber-Security-Engineer-750x375.jpg?crop=1"
+                    alt="Cyber Security"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Cyber Security
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <Row className="justify-content-center">
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
+                    alt="Software Developers"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Software Developers
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6} lg={3} style={{ padding: "15px" }}>
+                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                  <Card.Img
+                    variant="top"
+                    src="https://img.freepik.com/free-photo/logo-designer-working-computer-desktop_23-2149142153.jpg?ga=GA1.1.2112067204.1743957977&semt=ais_hybrid&w=740"
+                    alt="Graphic Designers"
+                    style={{ borderRadius: "10px" }}
+                    height="200px"
+                  />
+                  <Card.Body>
+                    <Card.Title
+                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                    >
+                      Graphic Designers
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
           </Row>
-          <Row className="justify-content-center">
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
-                  alt="Software Developers"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Software Developers</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3} style={{ padding: "15px" }}>
-              <Card style={{ border: "none" }}>
-                <Card.Img
-                  variant="top"
-                  src="https://img.freepik.com/free-photo/logo-designer-working-computer-desktop_23-2149142153.jpg?ga=GA1.1.2112067204.1743957977&semt=ais_hybrid&w=740"
-                  alt="Graphic Designers"
-                  style={{ borderRadius: "10px" }}
-                  height="200px"
-                />
-                <Card.Body>
-                  <Card.Title style={{ color: "#901b20", fontWeight: "bold" }}>Graphic Designers</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Row>
-      ): null}
+        ) : null}
       </Box>
-      <div className="numbers" style={{ marginBottom: "30px", marginTop: "30px" }}>
+      <div
+        className="numbers"
+        style={{
+          marginBottom: "10px",
+          marginTop: "10px",
+          backgroundColor: isLight ? "white" : "black",
+          padding: "30px",
+        }}
+      >
         <div className="header" style={{ marginBottom: "20px" }}>
           <div
             className="vertical-line"
@@ -326,10 +447,22 @@ const Home = () => {
             }}
           ></div>
           <div className="title" style={{ textAlign: "center" }}>
-            <h2 style={{ margin: "10px 0", fontSize: "24px", color: "#333" }}>
+            <h2
+              style={{
+                margin: "10px 0",
+                fontSize: "24px",
+                color: isLight ? "#333" : "#a83236",
+              }}
+            >
               ITI in numbers
             </h2>
-            <h3 style={{ margin: "0", fontSize: "18px", color: "#555" }}>
+            <h3
+              style={{
+                margin: "0",
+                fontSize: "18px",
+                color: isLight ? "#555" : "#a83236",
+              }}
+            >
               Quick facts about ITI
             </h3>
           </div>
@@ -348,10 +481,10 @@ const Home = () => {
             style={{
               textAlign: "center",
               padding: "10px",
-              border: "1px solid #ddd",
+              border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: "#fff",
+              backgroundColor: isLight ? "#fff" : '#333333',
             }}
           >
             <h1
@@ -360,7 +493,7 @@ const Home = () => {
             >
               32
             </h1>
-            <h2 style={{ fontSize: "16px", color: "#333", margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
               IT Specializations
             </h2>
           </div>
@@ -369,10 +502,10 @@ const Home = () => {
             style={{
               textAlign: "center",
               padding: "10px",
-              border: "1px solid #ddd",
+              border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: "#fff",
+              backgroundColor: isLight ? "#fff" : '#333333',
             }}
           >
             <h1
@@ -381,7 +514,7 @@ const Home = () => {
             >
               85%
             </h1>
-            <h2 style={{ fontSize: "16px", color: "#333", margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
               Annual Employment Rate
             </h2>
           </div>
@@ -390,10 +523,10 @@ const Home = () => {
             style={{
               textAlign: "center",
               padding: "10px",
-              border: "1px solid #ddd",
+              border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: "#fff",
+              backgroundColor: isLight ? "#fff" : '#333333',
             }}
           >
             <h1
@@ -402,7 +535,7 @@ const Home = () => {
             >
               500+
             </h1>
-            <h2 style={{ fontSize: "16px", color: "#333", margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
               Companies
             </h2>
           </div>
@@ -411,10 +544,10 @@ const Home = () => {
             style={{
               textAlign: "center",
               padding: "10px",
-              border: "1px solid #ddd",
+              border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: "#fff",
+              backgroundColor: isLight ? "#fff" : '#333333',
             }}
           >
             <h1
@@ -423,7 +556,7 @@ const Home = () => {
             >
               80+
             </h1>
-            <h2 style={{ fontSize: "16px", color: "#333", margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
               Universities & Faculties
             </h2>
           </div>

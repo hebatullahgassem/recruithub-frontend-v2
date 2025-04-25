@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Bot, User } from "lucide-react";
+import { userContext } from "../../context/UserContext";
 
 const ChatMessage = ({ question, response, isLast = false, quota }) => {
   const [displayedResponse, setDisplayedResponse] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
+  const {isLight} = useContext(userContext)
   useEffect(() => {
     console.log(response, isLast);
     if (isLast && response === "") {
@@ -71,8 +72,9 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
             width: "32px",
             height: "32px",
             borderRadius: "50%",
-            backgroundColor: "#f1f5f9",
+            backgroundColor: isLight ? "#f1f5f9" : '#595959',
             flexShrink: 0,
+            color: isLight ? "black" : "#c00007",
           }}
         >
           <User size={16} />
@@ -99,7 +101,7 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
               height: "32px",
               borderRadius: "50%",
               backgroundColor: "#882024",
-              color: "white",
+              color: isLight ? "white" : "black",
               flexShrink: 0,
             }}
           >
@@ -108,10 +110,11 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
           <div>
             <div
               style={{
-                backgroundColor: "#f1f5f9",
+                backgroundColor: isLight ? "#f1f5f9" : '#595959',
                 padding: "12px",
                 borderRadius: "12px",
                 boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                color: isLight ? 'black' : 'white'
               }}
             >
               {isTyping ? (
@@ -145,7 +148,7 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
                 <p className="p-0 m-0">{response}</p>
               )}
             </div>
-            <p>{quota?.questions} Remaining messages</p>
+            <p style={{color: isLight ? 'black' : 'white', fontSize: '10px'}}>{quota?.questions} Remaining messages</p>
           </div>
         </div>
       )}
