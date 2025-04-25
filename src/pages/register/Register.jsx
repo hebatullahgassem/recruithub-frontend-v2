@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Alert, Collapse, IconButton } from "@mui/material";
@@ -22,6 +22,7 @@ import Lottie from "lottie-react";
 import animationData from "../../assets/animations/LoginRegister.json";
 import { debounce } from "lodash";
 import { signupUser } from "../../services/Auth";
+import { userContext } from "../../context/UserContext";
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -45,6 +46,8 @@ const Register = () => {
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordHelpText, setPasswordHelpText] = useState("");
+
+  const {isLight} = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -273,8 +276,11 @@ const Register = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "90%",
+        width: "100%",
         minHeight: "100vh",
+        backgroundColor: isLight ? "#f8f9fa" : "#242424",
+        paddingTop: 3,
+        paddingBottom: 3,
       }}
     >
       <Container maxWidth="lg">
@@ -286,8 +292,9 @@ const Register = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100%",
-                backgroundColor: "#f8f1f1",
+                backgroundColor: isLight ? "#f8f1f1" : "#121212",
                 borderRadius: 2,
+                maxHeight: "100vh",
               }}
             >
               <Lottie
@@ -303,7 +310,7 @@ const Register = () => {
                 p: 4,
                 boxShadow: 3,
                 borderRadius: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : "#121212",
                 backdropFilter: "blur(10px)",
                 border: "1px solid rgba(145, 23, 32, 0.2)",
                 height: "100%",
@@ -385,6 +392,24 @@ const Register = () => {
                       </InputAdornment>
                     ),
                   }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1,
+                    },
+                  }}
                   required
                 />
                 {emailError && (
@@ -410,6 +435,24 @@ const Register = () => {
                       ),
                     }}
                     required
+                    sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                   />
                 )}
                 {NatIdError && (
@@ -427,6 +470,24 @@ const Register = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                 />
                 {nameError && (
                   <Typography variant="body2" color="error">
@@ -445,6 +506,24 @@ const Register = () => {
                       value={formData.linkedin || ""}
                       onChange={handleChange}
                       required
+                      sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                     />
 
                     <TextField
@@ -456,6 +535,24 @@ const Register = () => {
                       value={formData.website || ""}
                       onChange={handleChange}
                       required
+                      sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                     />
 
                     <TextField
@@ -467,6 +564,24 @@ const Register = () => {
                       value={formData.other || ""}
                       onChange={handleChange}
                       // required
+                      sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                     />
                   </>
                 )}
@@ -487,6 +602,24 @@ const Register = () => {
                     ),
                   }}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                 />
 
                 <TextField
@@ -507,6 +640,24 @@ const Register = () => {
                   error={!!passwordError}
                   helperText={passwordError || passwordHelpText}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#901b20",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#901b20",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
+                  }}
                 />
 
                 <FormControlLabel
@@ -553,7 +704,7 @@ const Register = () => {
                   </p>
                 </Button>
 
-                <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+                <Typography variant="body2" sx={{ mt: 2, textAlign: "center", color: isLight ? 'black' : 'white' }}>
                   Already have an account?{" "}
                   <Link
                     component={RouterLink}

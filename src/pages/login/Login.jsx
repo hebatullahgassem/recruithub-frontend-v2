@@ -30,7 +30,7 @@ function Login() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser, refetchUser, setToken } = useContext(userContext);
+  const { setUser, refetchUser, setToken, isLight } = useContext(userContext);
 
   async function handleLogin() {
     try {
@@ -67,9 +67,10 @@ function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "90%",
+        width: "100%",
         height: "90%",
         minHeight: "80vh",
+        backgroundColor:isLight ? 'white' : '#242424'
       }}
     >
       <Container maxWidth="lg">
@@ -81,7 +82,7 @@ function Login() {
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100%",
-                backgroundColor: "rgba(247, 237, 237, 0.95)",
+                backgroundColor: isLight ? "rgba(247, 237, 237, 0.95)" : '#121212',
                 borderRadius: 2,
               }}
             >
@@ -98,7 +99,7 @@ function Login() {
                 p: 4,
                 boxShadow: 3,
                 borderRadius: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#121212',
                 backdropFilter: "blur(10px)",
                 border: "1px solid rgba(144, 27, 32, 0.2)",
                 height: "100%",
@@ -156,6 +157,11 @@ function Login() {
                     "& .MuiInputLabel-root": {
                       color: "#901b20",
                     },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
+                    },
                   }}
                   required
                 />
@@ -186,6 +192,11 @@ function Login() {
                     },
                     "& .MuiInputLabel-root": {
                       color: "#901b20",
+                    },
+                    "& .MuiInputBase-input": {
+                      backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : '#242424',
+                      color: isLight ? 'black' : 'white',
+                      paddingLeft: 1
                     },
                   }}
                   required
@@ -244,7 +255,7 @@ function Login() {
                   Sign In
                 </Button>
 
-                <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+                <Typography variant="body2" sx={{ mt: 2, textAlign: "center", color: isLight ? 'black' : 'white' }}>
                   New to the website?{" "}
                   <Link
                     component={RouterLink}

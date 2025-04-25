@@ -15,12 +15,12 @@ import {
   Tooltip,
   Stack,
 } from "@mui/material"
-import { LocationOn, Business, Schedule, ArrowForward, AttachMoney, AccessTime, Star } from "@mui/icons-material"
+import { LocationOn, Business, Schedule, ArrowForward, AttachMoney, AccessTime, Star, House } from "@mui/icons-material"
 import { motion } from "framer-motion"
 
 function JobCard({ job, type , isSelected}) {
   // const keywords = job?.keywords?.join(" · ") || "";
-  const {user} = useContext(userContext)
+  const {user, isLight} = useContext(userContext)
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -102,7 +102,7 @@ function JobCard({ job, type , isSelected}) {
         borderRadius: "16px",
         cursor: "pointer",
         border: isSelected ? `2px solid ${primaryColor}` : "1px solid #e2e8f0",
-        backgroundColor: "#fff",
+        backgroundColor: isLight ? "#fff" : " #242424",
         transition: "all 0.3s ease",
         "&:hover": {
           borderColor: primaryColor,
@@ -143,7 +143,7 @@ function JobCard({ job, type , isSelected}) {
                 variant="h6"
                 sx={{
                   fontWeight: 700,
-                  color: "#2d3748",
+                  color: isLight ? "#2d3748" : 'white',
                   mb: 0.5,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -157,11 +157,11 @@ function JobCard({ job, type , isSelected}) {
               </Typography>
 
               <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 0.5 }}>
-                <Business sx={{ fontSize: 16, color: "#718096" }} />
+                <Business sx={{ fontSize: 16, color: isLight ? "#718096" : 'white' }} />
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "#4a5568",
+                    color: isLight ? "#4a5568" : 'white',
                     fontWeight: 500,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -173,11 +173,11 @@ function JobCard({ job, type , isSelected}) {
               </Stack>
 
               <Stack direction="row" alignItems="center" spacing={0.5}>
-                <LocationOn sx={{ fontSize: 16, color: "#718096" }} />
+                <LocationOn sx={{ fontSize: 16, color: isLight ? "#718096" : 'white' }} />
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "#718096",
+                    color: isLight ? "#718096" : 'white',
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
@@ -191,12 +191,12 @@ function JobCard({ job, type , isSelected}) {
 
           <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap", gap: 1 }}>
             <Chip
-              icon={<AccessTime sx={{ fontSize: 14 }} />}
+              icon={<AccessTime sx={{ fontSize: 14, color: isLight ? "#718096" : 'white' }} />}
               label={getRelativeTime(job?.created_at)}
               size="small"
               sx={{
-                backgroundColor: "#f8fafc",
-                color: "#718096",
+                backgroundColor: isLight ? "#f8fafc" : '#121212',
+                color: isLight ? "#718096" : 'white',
                 fontWeight: 500,
                 height: 24,
                 fontSize: "0.7rem",
@@ -209,8 +209,8 @@ function JobCard({ job, type , isSelected}) {
                 label={job.type_of_job}
                 size="small"
                 sx={{
-                  backgroundColor: `${primaryColor}10`,
-                  color: primaryColor,
+                  backgroundColor: `${primaryColor}20`,
+                  color: isLight ? primaryColor : 'white',
                   fontWeight: 500,
                   height: 24,
                   fontSize: "0.7rem",
@@ -218,13 +218,13 @@ function JobCard({ job, type , isSelected}) {
               />
             )}
 
-            {job?.salary && (
+            {job?.attend && (
               <Chip
-                icon={<AttachMoney sx={{ fontSize: 14 }} />}
-                label={job.salary}
+                icon={<House sx={{ fontSize: 14 }} />}
+                label={job.attend}
                 size="small"
                 sx={{
-                  backgroundColor: "#f0fdf4",
+                  backgroundColor: isLight ? "#f0fdf4" : '#121212',
                   color: "#16a34a",
                   fontWeight: 500,
                   height: 24,
@@ -242,7 +242,7 @@ function JobCard({ job, type , isSelected}) {
           <Typography
             variant="body2"
             sx={{
-              color: "#4a5568",
+              color: isLight ? "#4a5568" : 'white',
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
@@ -259,7 +259,7 @@ function JobCard({ job, type , isSelected}) {
                 left: 0,
                 right: 0,
                 height: "24px",
-                background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
+                background: isLight ? "linear-gradient(to bottom, #f5f5f5, #fff)" : "linear-gradient(to bottom, #242424, #121212)",
               },
             }}
           >
@@ -319,12 +319,12 @@ function JobCard({ job, type , isSelected}) {
             pt: 2,
             pb: 3,
             mt: "auto", // Push to bottom
-            backgroundColor: "#f8fafc",
+            backgroundColor: isLight ? "#f8fafc" : "#242424",
             borderTop: "1px solid #edf2f7",
           }}
         >
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ width: "100%" }}>
-            <Button
+            {/* <Button
               variant="outlined"
               onClick={(e) => {
                 e.stopPropagation()
@@ -350,7 +350,7 @@ function JobCard({ job, type , isSelected}) {
               }}
             >
               Apply Now
-            </Button>
+            </Button> */}
 
             <Button
               variant="contained"
@@ -372,6 +372,7 @@ function JobCard({ job, type , isSelected}) {
                 textTransform: "none",
                 fontSize: 14,
                 transition: "all 0.3s ease",
+                color: isLight ? 'black' : 'white'
               }}
               endIcon={<ArrowForward />}
             >

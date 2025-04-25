@@ -21,20 +21,23 @@
    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
    const navigate = useNavigate();
  
-   const getStatusChipProps = (status) => {
+   const getStatusChipProps = (status, fail) => {
+    if(fail){
+      return { label: "fail", color: "error" }
+    }
      switch(status) {
        case 1: // Applied
          return { label: "Applied", color: "default" };
        case 2: // Under Review
          return { label: "Under Review", color: "info" };
        case 3: // Shortlisted
-         return { label: "Shortlisted", color: "primary" };
+         return { label: "Technical Assessment", color: "primary" };
        case 4: // Interview
-         return { label: "Interview", color: "warning" };
+         return { label: "Technical Interview", color: "warning" };
        case 5: // Offered
-         return { label: "Offered", color: "success" };
+         return { label: "Hr Interview", color: "success" };
        case 6: // Rejected
-         return { label: "Rejected", color: "error" };
+         return { label: "Offer", color: "success" };
        default:
          return { label: "Unknown", color: "default" };
      }
@@ -59,7 +62,7 @@
        }}
      >
        <Box
-         onClick={() => navigate(`/applicant/jobs/${application.job_details.id}`)}
+         onClick={() => navigate(`/applicant/jobs/${application?.job_details?.id}`)}
          sx={{
            border: "1px solid",
            borderColor: "#e2e8f0",
@@ -81,14 +84,14 @@
        >
          {/* Status badge */}
          <Chip
-           label={getStatusChipProps(application.status).label}
-           color={getStatusChipProps(application.status).color}
+           label={getStatusChipProps(parseInt(application?.status), application?.fail).label}
+           color={getStatusChipProps(parseInt(application?.status, application?.fail)).color}
            size="small"
            sx={{
              position: "absolute",
              top: 12,
              right: 12,
-             zIndex: 2,
+             zIndex: 1,
              fontWeight: 600,
              textTransform: "uppercase",
              fontSize: "0.7rem",
@@ -118,10 +121,10 @@
            >
              <img
                src={
-                 application.job_details.company_logo ||
+                 application?.job_details?.company_logo ||
                  "https://static.thenounproject.com/png/3198584-200.png"
                }
-               alt={application.job_details.company_name}
+               alt={application?.job_details?.company_name}
                style={{
                  width: "100%",
                  height: "100%",
@@ -139,7 +142,7 @@
                  pr: 4
                }}
              >
-               {application.job_details.title}
+               {application?.job_details?.title}
              </Typography>
              <Box sx={{ 
                display: "flex",
@@ -150,7 +153,7 @@
              }}>
                <Chip
                  icon={<Business sx={{ fontSize: 16 }} />}
-                 label={application.job_details.company_name}
+                 label={application?.job_details?.company_name}
                  size="small"
                  sx={{
                    backgroundColor: "#f8fafc",
@@ -160,7 +163,7 @@
                />
                <Chip
                  icon={<LocationOn sx={{ fontSize: 16 }} />}
-                 label={application.job_details.location}
+                 label={application?.job_details?.location}
                  size="small"
                  sx={{
                    backgroundColor: "#f8fafc",
@@ -169,10 +172,10 @@
                  }}
                />
              </Box>
-             {application.job_details.type_of_job && (
+             {application?.job_details?.type_of_job && (
                <Chip
                  icon={<Schedule sx={{ fontSize: 16 }} />}
-                 label={application.job_details.type_of_job}
+                 label={application?.job_details?.type_of_job}
                  size="small"
                  sx={{
                    backgroundColor: `${primaryColor}10`,
@@ -202,7 +205,7 @@
                Applied On
              </Typography>
              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-               {formatDate(application.created_at)}
+               {formatDate(application?.created_at)}
              </Typography>
            </Box>
            <Box>
@@ -214,7 +217,7 @@
                Last Updated
              </Typography>
              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-               {formatDate(application.updated_at)}
+               {formatDate(application?.updated_at)}
              </Typography>
            </Box>
          </Box>
@@ -242,10 +245,10 @@
              }
            }}
          >
-           {application.job_details.description}
+           {application?.job_details?.description}
          </Typography>
  
-         {application.job_details.skills_required?.length > 0 && (
+         {application?.job_details?.skills_required?.length > 0 && (
            <Box
              sx={{ 
                display: "flex", 
@@ -256,7 +259,7 @@
                borderTop: `1px solid #edf2f7`
              }}
            >
-             {application.job_details.skills_required.slice(0, 5).map((skill, index) => (
+             {application?.job_details?.skills_required.slice(0, 5).map((skill, index) => (
                <motion.div
                  key={index}
                  whileHover={{ scale: 1.05 }}
@@ -272,9 +275,9 @@
                  />
                </motion.div>
              ))}
-             {application.job_details.skills_required.length > 5 && (
+             {application?.job_details?.skills_required.length > 5 && (
                <Chip
-                 label={`+${application.job_details.skills_required.length - 5} more`}
+                 label={`+${application?.job_details?.skills_required.length - 5} more`}
                  size="small"
                  sx={{
                    backgroundColor: "#edf2f7",
@@ -292,11 +295,11 @@
            mt: "auto",
            pt: 2
          }}>
-           <Button
+           {/* <Button
              variant="outlined"
              onClick={(e) => {
                e.stopPropagation();
-               navigate(`/applicant/applications/${application.id}`);
+               navigate(`/applicant/applications/${application?.id}`);
              }}
              sx={{
                px: 3,
@@ -314,13 +317,13 @@
              }}
            >
              View Details
-           </Button>
+           </Button> */}
            
            <Button
              variant="contained"
              onClick={(e) => {
                e.stopPropagation();
-               navigate(`/applicant/jobs/${application.job_details.id}`);
+               navigate(`/applicant/jobs/${application?.job_details?.id}`);
              }}
              sx={{
                px: 3,

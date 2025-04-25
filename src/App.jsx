@@ -119,6 +119,7 @@ function App() {
                     maxWidth: "100vw",
                     backgroundColor: "#f5f6f7",
                     position: "relative",
+                    overflowX: "hidden",
                   }}
                 >
                   <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:'5px'}}>

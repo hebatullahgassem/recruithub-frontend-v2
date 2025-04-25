@@ -329,7 +329,7 @@ function Navbar() {
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <MdSunny
                     onClick={() => setIsLight(!isLight)}
-                    style={{ color: isLight ? "yellow" : "white", scale: 2 }}
+                    style={{ color: isLight ? "yellow" : "white", scale: 2, cursor:'pointer' }}
                   />
               {user && Object.keys(user).length > 0 ? (
                 <>
