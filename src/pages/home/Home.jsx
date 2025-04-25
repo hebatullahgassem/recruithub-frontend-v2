@@ -146,7 +146,7 @@ const Home = () => {
           style={{
             padding: "50px 0",
             textAlign: "center",
-            backgroundColor: isLight ? "#f8f9fa" : "black",
+            backgroundColor: isLight ? "#f8f9fa" : "#333",
             marginTop: "10px",
           }}
         >
@@ -222,7 +222,7 @@ const Home = () => {
       {/* Job Types Section */}
       <Box
         style={{
-          backgroundColor: isLight ? "#f8f9fa" : "black",
+          backgroundColor: isLight ? "#f8f9fa" : "#222222",
           padding: "10px 0",
           marginTop: "10px",
           marginBottom: "10px",
@@ -245,7 +245,7 @@ const Home = () => {
             </h2>
             <Row className="justify-content-center">
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/premium-photo/text-full-time-job-written-lightbox-with-alarm-clock-colorfull-stickers-blue-background_132358-5491.jpg"
@@ -255,7 +255,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Full-Time
                     </Card.Title>
@@ -263,7 +263,7 @@ const Home = () => {
                 </Card>
               </Col>
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/premium-photo/red-alarm-clock-with-text-parttime-job_132358-5465.jpg"
@@ -273,7 +273,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Part-Time
                     </Card.Title>
@@ -283,7 +283,7 @@ const Home = () => {
             </Row>
             <Row className="justify-content-center">
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
@@ -293,7 +293,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Internship
                     </Card.Title>
@@ -301,7 +301,7 @@ const Home = () => {
                 </Card>
               </Col>
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/free-photo/side-view-entrepreneur-working-laptop_23-2148446302.jpg"
@@ -311,7 +311,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Freelance
                     </Card.Title>
@@ -327,7 +327,7 @@ const Home = () => {
             style={{
               padding: "5px 0",
               textAlign: "center",
-              backgroundColor: isLight ? "#f8f9fa" : "#1c0000",
+              backgroundColor: isLight ? "white" : "#1c0000",
             }}
           >
             {/* <p>divider</p> */}
@@ -350,7 +350,7 @@ const Home = () => {
             </h2>
             <Row className="justify-content-center">
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://www.ue-germany.com/uploads/sites/9/2022/07/digital-business-data-sience-960x540-1.jpg"
@@ -360,7 +360,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Data Scientists
                     </Card.Title>
@@ -368,7 +368,7 @@ const Home = () => {
                 </Card>
               </Col>
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://thecyberexpress.com/wp-content/uploads/2022/12/How-to-Become-a-Cyber-Security-Engineer-750x375.jpg?crop=1"
@@ -378,7 +378,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Cyber Security
                     </Card.Title>
@@ -388,7 +388,7 @@ const Home = () => {
             </Row>
             <Row className="justify-content-center">
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/premium-photo/business-people-group_780838-13844.jpg"
@@ -398,7 +398,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Software Developers
                     </Card.Title>
@@ -406,7 +406,7 @@ const Home = () => {
                 </Card>
               </Col>
               <Col md={6} lg={3} style={{ padding: "15px" }}>
-                <Card style={{ border: "none", backgroundColor: isLight ? 'white' : '#882024' }}>
+                <Card style={{ backgroundColor: isLight ? 'white' : 'black', border: isLight ? null : '2px solid #901b20', borderRadius: '10px' }}>
                   <Card.Img
                     variant="top"
                     src="https://img.freepik.com/free-photo/logo-designer-working-computer-desktop_23-2149142153.jpg?ga=GA1.1.2112067204.1743957977&semt=ais_hybrid&w=740"
@@ -416,7 +416,7 @@ const Home = () => {
                   />
                   <Card.Body>
                     <Card.Title
-                      style={{ color: isLight ? "#901b20" : '#212121', fontWeight: "bold"  }}
+                      style={{ color: isLight ? "#901b20" : 'white', fontWeight: "bold"  }}
                     >
                       Graphic Designers
                     </Card.Title>
@@ -432,7 +432,7 @@ const Home = () => {
         style={{
           marginBottom: "10px",
           marginTop: "10px",
-          backgroundColor: isLight ? "white" : "black",
+          backgroundColor: isLight ? "white" : "#333",
           padding: "30px",
         }}
       >
@@ -484,7 +484,7 @@ const Home = () => {
               border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: isLight ? "#fff" : '#333333',
+              backgroundColor: isLight ? "#fff" : 'black',
             }}
           >
             <h1
@@ -493,7 +493,7 @@ const Home = () => {
             >
               32
             </h1>
-            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'white', margin: "10px 0 0" }}>
               IT Specializations
             </h2>
           </div>
@@ -505,7 +505,7 @@ const Home = () => {
               border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: isLight ? "#fff" : '#333333',
+              backgroundColor: isLight ? "#fff" : 'black',
             }}
           >
             <h1
@@ -514,7 +514,7 @@ const Home = () => {
             >
               85%
             </h1>
-            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'white', margin: "10px 0 0" }}>
               Annual Employment Rate
             </h2>
           </div>
@@ -526,7 +526,7 @@ const Home = () => {
               border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: isLight ? "#fff" : '#333333',
+              backgroundColor: isLight ? "#fff" : 'black',
             }}
           >
             <h1
@@ -535,7 +535,7 @@ const Home = () => {
             >
               500+
             </h1>
-            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'white', margin: "10px 0 0" }}>
               Companies
             </h2>
           </div>
@@ -547,7 +547,7 @@ const Home = () => {
               border: isLight ?"1px solid #ddd" : '1px solid rgb(94, 23, 26)',
               borderRadius: "8px",
               width: "150px",
-              backgroundColor: isLight ? "#fff" : '#333333',
+              backgroundColor: isLight ? "#fff" : 'black',
             }}
           >
             <h1
@@ -556,7 +556,7 @@ const Home = () => {
             >
               80+
             </h1>
-            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'black', margin: "10px 0 0" }}>
+            <h2 style={{ fontSize: "16px", color: isLight ? "#333" : 'white', margin: "10px 0 0" }}>
               Universities & Faculties
             </h2>
           </div>
