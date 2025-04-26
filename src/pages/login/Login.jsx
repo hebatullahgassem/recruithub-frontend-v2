@@ -21,10 +21,13 @@ import { Link as RouterLink } from "react-router-dom";
 import { loginUser } from "../../services/Auth";
 import { userContext } from "../../context/UserContext";
 import Lottie from "lottie-react";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import animationData from "../../assets/animations/LoginRegister.json";
-import '../../styles/registerLogin/login.css'
-import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import "../../styles/registerLogin/login.css";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../confirmAlert/toastConfirm";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -33,9 +36,9 @@ function Login() {
   // const [openSnackbar, setOpenSnackbar] = useState(false);
   // const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser, refetchUser, setToken } = useContext(userContext);
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
+  const { setUser, refetchUser, setToken, isLight } = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   async function handleLogin() {
     // e.preventDefault()
     // setIsLoading(true)
@@ -43,42 +46,25 @@ function Login() {
     setIsLoading(true);
     try {
       const res = await loginUser(email, password);
-<<<<<<< Updated upstream
       // console.log(res);
       refetchUser(res);
       // setUser(res.user);
       // setToken(res.token);
-=======
-      console.log(res);
-      setUser(res.user);
-      setToken(res.token);
-      localStorage.setItem("token", res.token);
-      showSuccessToast("Login successful! Welcome back.")
->>>>>>> Stashed changes
       navigate("/");
     } catch (error) {
       // Clear user/token if login failed
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
-    showErrorToast("Incorrect email or password. Please try again.")
-    setError("")
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("token");
+      showErrorToast("Incorrect email or password. Please try again.");
+      setError("");
 
-<<<<<<< Updated upstream
-        // Extract message from backend if available
-        const backendMessage =
-        error.response.data.non_field_errors[0];
+      // Extract message from backend if available
+      const backendMessage = error.response.data.non_field_errors[0];
 
-        // Set the custom error message
+      // Set the custom error message
       setSnackbarMessage(backendMessage);
       setOpenSnackbar(true);
-=======
-      // Set the custom error message
-      // setSnackbarMessage("Oops! Incorrect email or password. Please try again.");
-      // setOpenSnackbar(true);
-    }finally {
-      setIsLoading(false)
->>>>>>> Stashed changes
     }
   }
 
@@ -88,105 +74,118 @@ function Login() {
   }
 
   return (
-    <div className="login-container">
-    <div className="login-wrapper">
-      <div className="login-animation-container">
-        <Lottie animationData={animationData} loop={true} className="login-animation" />
-      </div>
-
-      <div className="login-form-container">
-        <div className="login-header">
-          <h1 className="login-title">Welcome Back</h1>
-          <div className="login-divider"></div>
+    <div className="login-container" style={{backgroundImage: isLight ? "linear-gradient(135deg, #f8f9fa 0%, #e9d8d9 100%)" : 'linear-gradient(135deg, #242424 0%, #121212 100%)'}}>
+      <div
+        className="login-wrapper"
+        style={{
+          backgroundColor: isLight ? "#f7eded" : "#242424",
+          boxShadow: isLight ? "0 10px 25px rgba(144, 27, 33, 0.1)" : '0 10px 25px #121212',
+        }}
+      >
+        <div
+          className="login-animation-container"
+          style={{ backgroundColor: isLight ? "#f7eded" : "#121212" }}
+        >
+          <Lottie
+            animationData={animationData}
+            loop={true}
+            className="login-animation"
+          />
         </div>
 
-        {/* Replace the error display JSX with an empty fragment since we're using toast now */}
-        {error && <></>}
-
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email Address
-            </label>
-            <div className="input-wrapper">
-              <Mail className="input-icon" size={18} />
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                className="form-input"
-                placeholder="your.email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+        <div className="login-form-container">
+          <div className="login-header">
+            <h1 className="login-title">Welcome Back</h1>
+            <div className="login-divider"></div>
           </div>
 
-          <div className="form-group">
-            <div className="password-header">
-              <label htmlFor="password" className="form-label">
-                Password
+          {/* Replace the error display JSX with an empty fragment since we're using toast now */}
+          {error && <></>}
+
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label" style={{color: isLight ? "#495057" : "#901b21"}}>
+                Email Address
               </label>
-              <RouterLink to="/forgot-password" className="forgot-password">
-                Forgot Password?
+              <div className="input-wrapper">
+                <Mail className="input-icon" size={18} />
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  className="form-input"
+                  placeholder="your.email@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={{ paddingLeft: "2.75rem" }}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <div className="password-header">
+                <label htmlFor="password" className="form-label" style={{color: isLight ? "#495057" : "#901b21"}}>
+                  Password
+                </label>
+                <RouterLink to="/forgot-password" className="forgot-password">
+                  Forgot Password?
+                </RouterLink>
+              </div>
+              <div className="input-wrapper">
+                <Lock className="input-icon" size={18} />
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className="form-input"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  style={{ paddingLeft: "2.75rem" }}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  className="checkbox-input"
+                  onChange={() => setShowPassword(!showPassword)}
+                  checked={showPassword}
+                />
+                <span className="checkbox-label" style={{color: isLight ? "#495057" : "#901b21"}}>Show Password</span>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className={`login-button ${isLoading ? "loading" : ""}`}
+              disabled={isLoading || !email || password.length < 5}
+            >
+              {isLoading ? "Signing In..." : "Sign In"}
+            </button>
+
+            <p className="signup-prompt" style={{color: isLight ? "#495057" : "#fff"}}>
+              New to the website?{" "}
+              <RouterLink to="/register" className="signup-link">
+                Create Account
               </RouterLink>
-            </div>
-            <div className="input-wrapper">
-              <Lock className="input-icon" size={18} />
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                className="form-input"
-                autoComplete="current-password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="checkbox-container">
-              <input
-                type="checkbox"
-                className="checkbox-input"
-                onChange={() => setShowPassword(!showPassword)}
-                checked={showPassword}
-              />
-              <span className="checkbox-label">Show Password</span>
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className={`login-button ${isLoading ? "loading" : ""}`}
-            disabled={isLoading || !email || password.length < 5}
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </button>
-
-          <p className="signup-prompt">
-            New to the website?{" "}
-            <RouterLink to="/register" className="signup-link">
-              Create Account
-            </RouterLink>
-          </p>
-        </form>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-
-
 
     // <Box
     //   sx={{

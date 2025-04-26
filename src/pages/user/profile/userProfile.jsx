@@ -49,8 +49,9 @@ const UserProfile = () => {
   const accentColor = "#d06c79"; // Peach accent
   const backgroundColor = isLight ? "#f9f5f4" : '#121212'; // Warm white background
   const lightBackgroundColor = isLight ? "#f9f5f4" : '#242424';
-  const darkTextColor = "#3a3a3a"; // Dark gray for text
-  const lightTextColor = "#5d5d5d"; // Lighter gray for secondary text
+  const cardsBackgroundColor = isLight ? "#fff" : '#242424';
+  const darkTextColor = isLight ? "#3a3a3a" : '#fff'; // Dark gray for text
+  const lightTextColor = isLight ? "#5d5d5d" : '#fff'; // Lighter gray for secondary text
 
   // Animations
   const pulse = keyframes`
@@ -221,7 +222,7 @@ const UserProfile = () => {
         <Container maxWidth="xl" sx={{ px: isMobile ? 2 : 4 }}>
           {/* Profile Header */}
           <Slide direction="down" in={true} mountOnEnter unmountOnExit>
-            <ProfileCard elevation={4} sx={{ mb: 3 }}>
+            <ProfileCard elevation={4} sx={{ mb: 3, backgroundColor: lightBackgroundColor }}>
               <Box
                 sx={{
                   height: isMobile ? 100 : 150,
@@ -244,7 +245,7 @@ const UserProfile = () => {
                   sx={{
                     width: isMobile ? 96 : 120,
                     height: isMobile ? 96 : 120,
-                    border: "4px solid white",
+                    border: isLight ? "4px solid white" : "4px solid #121212",
                     boxShadow: 3,
                     animation: `${float} 4s ease-in-out infinite`,
                   }}
@@ -441,7 +442,7 @@ const UserProfile = () => {
             {/* Left Column */}
             <Grid item xs={12} md={8}>
               {/* About Section */}
-              <Grow in={true} timeout={800}>
+              <Grow in={true} timeout={800} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard
                   elevation={3}
                   sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}
@@ -477,7 +478,7 @@ const UserProfile = () => {
               </Grow>
 
               {/* Experience Section */}
-              <Grow in={true} timeout={1000}>
+              <Grow in={true} timeout={1000} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard
                   elevation={3}
                   sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}
@@ -544,7 +545,7 @@ const UserProfile = () => {
               </Grow>
 
               {/* Education Section */}
-              <Grow in={true} timeout={1200}>
+              <Grow in={true} timeout={1200} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard
                   elevation={3}
                   sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}
@@ -612,7 +613,7 @@ const UserProfile = () => {
             {/* Right Column */}
             <Grid item xs={12} md={4}>
               {/* Skills Section */}
-              <Grow in={true} timeout={800}>
+              <Grow in={true} timeout={800} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard
                   elevation={3}
                   sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}
@@ -670,7 +671,7 @@ const UserProfile = () => {
               </Grow>
 
               {/* CV Section */}
-              <Grow in={true} timeout={1000}>
+              <Grow in={true} timeout={1000} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard
                   elevation={3}
                   sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}
@@ -725,7 +726,7 @@ const UserProfile = () => {
               </Grow>
 
               {/* Recommendations Section */}
-              <Grow in={true} timeout={1200}>
+              <Grow in={true} timeout={1200} style={{backgroundColor: lightBackgroundColor}}>
                 <ProfileCard elevation={3} sx={{ p: isMobile ? 2 : 3 }}>
                   <Box
                     sx={{

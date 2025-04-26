@@ -231,7 +231,7 @@ function JobCard({ job, type , isSelected}) {
                   fontSize: "0.7rem",
                 }}
               />
-            )} */}
+            )} 
           </Stack>
         </Box>
 
@@ -259,7 +259,7 @@ function JobCard({ job, type , isSelected}) {
                 left: 0,
                 right: 0,
                 height: "24px",
-                background: isLight ? "linear-gradient(to bottom,rgba(245, 245, 245, 0.47), #fff)" : "linear-gradient(to bottom,rgba(29, 29, 29, 0.57), #121212)",
+                background: isLight ? "linear-gradient(to bottom,rgba(245, 245, 245, 0.47), #fff)" : "linear-gradient(to bottom,rgba(29, 29, 29, 0.57), #121212)", 
               },
             }}
           >
@@ -351,7 +351,6 @@ function JobCard({ job, type , isSelected}) {
               }}
             >
               Apply Now
-            </Button> */}
             </Button> */}
 
             <Button

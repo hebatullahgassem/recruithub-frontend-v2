@@ -5,23 +5,24 @@
     min-height: 100vh;
     padding: 2rem;
     background-color: #f8f9fa;
-    background-image: linear-gradient(135deg, #f8f9fa 0%, #e9d8d9 100%);
+    width: 100vw;
+    /* background-image: linear-gradient(135deg, #f8f9fa 0%, #e9d8d9 100%); */
   }
   
   .login-wrapper {
     display: flex;
     width: 100%;
     max-width: 1000px;
-    background-color: white;
+    /* background-color: white; */
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(144, 27, 33, 0.1);
+    /* box-shadow: 0 10px 25px rgba(144, 27, 33, 0.1); */
     animation: fadeIn 0.5s ease-out;
   }
   
   .login-animation-container {
     flex: 1;
-    background-color: #f7eded;
+    /* background-color: #f7eded; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +84,7 @@
   
   .form-label {
     font-weight: 600;
-    color: #495057;
+    /* color: #495057; */
     font-size: 0.9rem;
   }
   
