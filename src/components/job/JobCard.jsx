@@ -259,7 +259,7 @@ function JobCard({ job, type , isSelected}) {
                 left: 0,
                 right: 0,
                 height: "24px",
-                background: isLight ? "linear-gradient(to bottom, #f5f5f5, #fff)" : "linear-gradient(to bottom, #242424, #121212)",
+                background: isLight ? "linear-gradient(to bottom,rgba(245, 245, 245, 0.47), #fff)" : "linear-gradient(to bottom,rgba(29, 29, 29, 0.57), #121212)",
               },
             }}
           >

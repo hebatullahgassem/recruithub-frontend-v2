@@ -37,134 +37,136 @@ import { userContext } from "../../../context/UserContext";
 import { ThemeProvider, createTheme, keyframes } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import { SiLeetcode } from "react-icons/si";
+import { light } from "@mui/material/styles/createPalette";
 
-// Custom color palette
-const primaryColor = "#d43132"; // Soft red/pink
-const secondaryColor = "#4a7b9d"; // Complementary blue
-const accentColor = "#d06c79"; // Peach accent
-const backgroundColor = "#f9f5f4"; // Warm white background
-const darkTextColor = "#3a3a3a"; // Dark gray for text
-const lightTextColor = "#5d5d5d"; // Lighter gray for secondary text
+const UserProfile = () => {
+  const navigate = useNavigate();
+  const { user, refetchUser, isLight } = useContext(userContext);
+  // const theme = useTheme();
+  // Custom color palette
+  const primaryColor = "#d43132"; // Soft red/pink
+  const secondaryColor = "#4a7b9d"; // Complementary blue
+  const accentColor = "#d06c79"; // Peach accent
+  const backgroundColor = isLight ? "#f9f5f4" : '#121212'; // Warm white background
+  const lightBackgroundColor = isLight ? "#f9f5f4" : '#242424';
+  const darkTextColor = "#3a3a3a"; // Dark gray for text
+  const lightTextColor = "#5d5d5d"; // Lighter gray for secondary text
 
-// Animations
-const pulse = keyframes`
+  // Animations
+  const pulse = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 `;
 
-const float = keyframes`
+  const float = keyframes`
   0% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
   100% { transform: translateY(0px); }
 `;
 
-// Styled components
-const ProfileCard = styled(Paper)(({ theme }) => ({
-  borderRadius: "16px",
-  overflow: "hidden",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "translateY(-5px)",
-    boxShadow: theme.shadows[6],
-  },
-}));
+  // Styled components
+  const ProfileCard = styled(Paper)(({ theme }) => ({
+    borderRadius: "16px",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-5px)",
+      boxShadow: theme.shadows[6],
+    },
+  }));
 
-const PrimaryButton = styled(Button)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
-  color: "white",
-  fontWeight: 600,
-  borderRadius: "12px",
-  padding: "10px 24px",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: theme.shadows[4],
-  },
-}));
+  const PrimaryButton = styled(Button)(({ theme }) => ({
+    background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
+    color: "white",
+    fontWeight: 600,
+    borderRadius: "12px",
+    padding: "10px 24px",
+    transition: "all 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: theme.shadows[4],
+    },
+  }));
 
-const SecondaryButton = styled(Button)(({ theme }) => ({
-  color: primaryColor,
-  borderColor: primaryColor,
-  borderRadius: "12px",
-  fontWeight: 500,
-  transition: "all 0.3s ease",
-  "&:hover": {
-    backgroundColor: "rgba(208, 108, 121, 0.08)",
+  const SecondaryButton = styled(Button)(({ theme }) => ({
+    color: primaryColor,
     borderColor: primaryColor,
-  },
-}));
+    borderRadius: "12px",
+    fontWeight: 500,
+    transition: "all 0.3s ease",
+    "&:hover": {
+      backgroundColor: "rgba(208, 108, 121, 0.08)",
+      borderColor: primaryColor,
+    },
+  }));
 
-// Create theme
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: primaryColor,
-      contrastText: "#ffffff",
+  // Create theme
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: primaryColor,
+        contrastText: "#ffffff",
+      },
+      secondary: {
+        main: secondaryColor,
+        contrastText: "#ffffff",
+      },
+      background: {
+        default: backgroundColor,
+        paper: "#ffffff",
+      },
+      text: {
+        primary: darkTextColor,
+        secondary: lightTextColor,
+      },
     },
-    secondary: {
-      main: secondaryColor,
-      contrastText: "#ffffff",
+    typography: {
+      fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
+      h4: {
+        fontWeight: 700,
+        color: darkTextColor,
+      },
+      h5: {
+        fontWeight: 700,
+        color: darkTextColor,
+      },
+      h6: {
+        fontWeight: 600,
+        color: darkTextColor,
+      },
+      subtitle1: {
+        fontWeight: 500,
+      },
+      body1: {
+        lineHeight: 1.6,
+      },
     },
-    background: {
-      default: backgroundColor,
-      paper: "#ffffff",
-    },
-    text: {
-      primary: darkTextColor,
-      secondary: lightTextColor,
-    },
-  },
-  typography: {
-    fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
-    h4: {
-      fontWeight: 700,
-      color: darkTextColor,
-    },
-    h5: {
-      fontWeight: 700,
-      color: darkTextColor,
-    },
-    h6: {
-      fontWeight: 600,
-      color: darkTextColor,
-    },
-    subtitle1: {
-      fontWeight: 500,
-    },
-    body1: {
-      lineHeight: 1.6,
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            borderRadius: "12px !important",
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            borderRadius: "8px",
+          },
         },
       },
     },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: "12px !important",
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderRadius: "8px",
-        },
-      },
-    },
-  },
-});
-
-const UserProfile = () => {
-  const navigate = useNavigate();
-  const { user, refetchUser } = useContext(userContext);
-  const theme = useTheme();
+  });
+  
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
@@ -207,6 +209,7 @@ const UserProfile = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Box sx={{ display: "flex", minWidth:'100vw', justifyContent: "center", backgroundColor: lightBackgroundColor }}>
       <Box
         sx={{
           backgroundColor: backgroundColor,
@@ -356,7 +359,7 @@ const UserProfile = () => {
                           </IconButton>
                         </Tooltip>
                       )}
-                      {user.accounts.leetcode&& (
+                      {user.accounts.leetcode && (
                         <Tooltip title="Leetcode">
                           <IconButton
                             size="small"
@@ -755,6 +758,7 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </Container>
+      </Box>
       </Box>
     </ThemeProvider>
   );

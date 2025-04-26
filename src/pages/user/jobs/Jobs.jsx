@@ -747,7 +747,7 @@ function UserJobs() {
                   sx={{
                     "& .MuiPaginationItem-root": {
                       fontWeight: 600,
-                      color: "white",
+                      color: isLight ? '#121212' : "white",
                       "&.Mui-selected": {
                         backgroundColor: primaryColor,
                         color: "#fff",

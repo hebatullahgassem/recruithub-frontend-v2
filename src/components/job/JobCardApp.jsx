@@ -1,4 +1,4 @@
- import React from "react";
+ import React, { useContext } from "react";
  import {
    Box,
    Typography,
@@ -15,11 +15,13 @@
    ArrowForward
  } from "@mui/icons-material";
  import { useNavigate } from "react-router-dom";
+import { userContext } from "../../context/UserContext";
  
  const  JobCardApp  = ({ application, index, primaryColor }) => {
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
    const navigate = useNavigate();
+   const {isLight} = useContext(userContext)
  
    const getStatusChipProps = (status, fail) => {
     if(fail){
@@ -70,7 +72,7 @@
            padding: isMobile ? 2 : 3,
            cursor: "pointer",
            transition: "all 0.3s ease",
-           backgroundColor: "#fff",
+           backgroundColor: isLight ? "#fff" : '#242424',
            height: "100%",
            display: "flex",
            flexDirection: "column",
@@ -137,7 +139,7 @@
                variant="h6" 
                sx={{ 
                  fontWeight: 700,
-                 color: "#2d3748",
+                 color: isLight ? "#2d3748" : '#fff',
                  mb: 0.5,
                  pr: 4
                }}
@@ -156,8 +158,8 @@
                  label={application?.job_details?.company_name}
                  size="small"
                  sx={{
-                   backgroundColor: "#f8fafc",
-                   color: "#4a5568",
+                   backgroundColor: isLight ? "#f8fafc" : '#121212',
+                   color: isLight ? "#4a5568" : 'white',
                    fontWeight: 500
                  }}
                />
@@ -166,8 +168,8 @@
                  label={application?.job_details?.location}
                  size="small"
                  sx={{
-                   backgroundColor: "#f8fafc",
-                   color: "#4a5568",
+                   backgroundColor: isLight ? "#f8fafc" : '#121212',
+                   color: isLight ? "#4a5568" : 'white',
                    fontWeight: 500
                  }}
                />
@@ -179,7 +181,19 @@
                  size="small"
                  sx={{
                    backgroundColor: `${primaryColor}10`,
-                   color: primaryColor,
+                   color: isLight ? primaryColor : 'red',
+                   fontWeight: 500
+                 }}
+               />
+             )}
+             {application?.job_details?.attend && (
+               <Chip
+                 icon={<Schedule sx={{ fontSize: 16 }} />}
+                 label={application?.job_details?.attend}
+                 size="small"
+                 sx={{
+                   backgroundColor: `${primaryColor}10`,
+                   color: isLight ? primaryColor : 'red',
                    fontWeight: 500
                  }}
                />
@@ -193,7 +207,7 @@
            alignItems: "center",
            mb: 2,
            p: 1.5,
-           backgroundColor: "#f8fafc",
+           backgroundColor: isLight ? "#f8fafc" : '#121212',
            borderRadius: 2
          }}>
            <Box>
@@ -204,7 +218,7 @@
              }}>
                Applied On
              </Typography>
-             <Typography variant="body2" sx={{ fontWeight: 600 }}>
+             <Typography variant="body2" sx={{ fontWeight: 600, color: isLight ? "#2d3748" : '#fff' }}>
                {formatDate(application?.created_at)}
              </Typography>
            </Box>
@@ -216,7 +230,7 @@
              }}>
                Last Updated
              </Typography>
-             <Typography variant="body2" sx={{ fontWeight: 600 }}>
+             <Typography variant="body2" sx={{ fontWeight: 600, color: isLight ? "#2d3748" : '#fff' }}>
                {formatDate(application?.updated_at)}
              </Typography>
            </Box>
@@ -226,7 +240,7 @@
            variant="body2"
            sx={{
              mt: 1,
-             color: "#4a5568",
+             color: isLight ? "#4a5568" : '#fff',
              overflow: "hidden",
              textOverflow: "ellipsis",
              display: "-webkit-box",
@@ -234,18 +248,19 @@
              WebkitBoxOrient: "vertical",
              lineHeight: 1.6,
              position: "relative",
+             minHeight: '20%',
              "&:after": {
                content: '""',
                position: "absolute",
                bottom: 0,
                left: 0,
                right: 0,
-               height: "32px",
-               background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
+               height: "24px",
+               background: isLight ? "linear-gradient(to bottom,rgba(245, 245, 245, 0.47), #fff)" : "linear-gradient(to bottom,rgba(29, 29, 29, 0.57), #121212)",
              }
            }}
          >
-           {application?.job_details?.description}
+           {application?.job_details?.description || "No description provided"}
          </Typography>
  
          {application?.job_details?.skills_required?.length > 0 && (

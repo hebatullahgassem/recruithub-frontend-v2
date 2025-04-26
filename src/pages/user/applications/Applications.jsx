@@ -127,8 +127,6 @@ import {
 import JobCard from "../../../components/job/JobCard";
 import JobCardApp from "../../../components/job/JobCardApp";
 
-
-
 const JobApplication = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -208,7 +206,7 @@ const JobApplication = () => {
   };
 
   const primaryColor = "#d43132";
-const secondaryColor = "#f5f5f5";
+  const secondaryColor = "#f5f5f5";
 
   return (
     <Box
@@ -228,13 +226,13 @@ const secondaryColor = "#f5f5f5";
         sx={{
           p: isMobile ? 1 : 3,
           // maxWidth: "1200px",
-          width: '80%',
+          width: "80%",
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: isLight ? "#fff" : '#121212',
-          margin:'10px 0',
-          borderRadius: '10px',
+          backgroundColor: isLight ? "#fff" : "#121212",
+          margin: "10px 0",
+          borderRadius: "10px",
           // color: isLight ? "#2d3748" : '#fff'
         }}
       >
@@ -251,7 +249,7 @@ const secondaryColor = "#f5f5f5";
               mb: 3,
               flexWrap: "wrap",
               gap: 2,
-              background: isLight ? "#fff" : '#121212',
+              background: isLight ? "#fff" : "#121212",
               p: 3,
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -264,7 +262,7 @@ const secondaryColor = "#f5f5f5";
                 sx={{
                   fontWeight: 800,
                   fontSize: isMobile ? "1.8rem" : "2.125rem",
-                  color: "#2d3748",
+                  color: isLight ? "#2d3748" : "#fff",
                   lineHeight: 1.2,
                   mb: 1,
                 }}
@@ -298,14 +296,28 @@ const secondaryColor = "#f5f5f5";
               <FormControl
                 size="small"
                 sx={{
-                  minWidth: isMobile ? "100%" : 180,
+                  minWidth: 140,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    background: "#fff",
+                    background: isLight ? "#fff" : "#121212",
+                    color: isLight ? "black" : "white",
+                    border: "0.5px solid #901b20",
+                  },
+                  "& .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon": {
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root": {
+                    color: isLight ? "black" : "white",
+                    background: isLight ? "#fff" : "#121212",
                   },
                 }}
               >
-                <InputLabel id="status-filter-label">Status</InputLabel>
+                <InputLabel
+                  id="status-filter-label"
+                  sx={{ color: isLight ? "black" : "white" }}
+                >
+                  Status
+                </InputLabel>
                 <Select
                   labelId="status-filter-label"
                   value={filters.status}
@@ -325,14 +337,28 @@ const secondaryColor = "#f5f5f5";
               <FormControl
                 size="small"
                 sx={{
-                  minWidth: isMobile ? "100%" : 140,
+                  minWidth: 140,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    background: "#fff",
+                    background: isLight ? "#fff" : "#121212",
+                    color: isLight ? "black" : "white",
+                    border: "0.5px solid #901b20",
+                  },
+                  "& .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon": {
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root": {
+                    color: isLight ? "black" : "white",
+                    background: isLight ? "#fff" : "#121212",
                   },
                 }}
               >
-                <InputLabel id="page-size-label">Per page</InputLabel>
+                <InputLabel
+                  id="page-size-label"
+                  sx={{ color: isLight ? "black" : "white" }}
+                >
+                  Per page
+                </InputLabel>
                 <Select
                   labelId="page-size-label"
                   value={pagination.pageSize}
@@ -365,7 +391,7 @@ const secondaryColor = "#f5f5f5";
                     backgroundColor: "#e2e8f0",
                   },
                 }}
-                startIcon={<Refresh />}
+                startIcon={applicationsLoading ? <CircularProgress size={18} color="white" /> : <Refresh />}
               >
                 Refresh
               </Button>
@@ -380,7 +406,7 @@ const secondaryColor = "#f5f5f5";
               justifyContent: "center",
               alignItems: "center",
               minHeight: "300px",
-              background: "#fff",
+              background: isLight ? "#fff" : '#121212',
               borderRadius: 3,
               p: 4,
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -418,13 +444,14 @@ const secondaryColor = "#f5f5f5";
                 borderRadius: 3,
                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
                 borderLeft: `4px solid ${primaryColor}`,
+                background: isLight ? "#fff" : '#121212',
               }}
               icon={false}
             >
               <Box sx={{ display: "flex", alignItems: "flex-start" }}>
                 <Box
                   sx={{
-                    backgroundColor: `${primaryColor}20`,
+                    backgroundColor: isLight ? `${primaryColor}20` : "#121212",
                     p: 1,
                     borderRadius: "50%",
                     mr: 2,
@@ -434,10 +461,10 @@ const secondaryColor = "#f5f5f5";
                   <WorkOutline sx={{ color: primaryColor }} />
                 </Box>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: "#2d3748" }}>
+                  <Typography sx={{ fontWeight: 600, color: isLight ? "#2d3748" : "#fff" }}>
                     Couldn't load applications
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#718096" }}>
+                  <Typography variant="body2" sx={{ color: isLight ? "#718096" : "#fff" }}>
                     {applicationsError.message ||
                       "Please try refreshing the page"}
                   </Typography>
@@ -453,7 +480,7 @@ const secondaryColor = "#f5f5f5";
           >
             <Box
               sx={{
-                background: "#fff",
+                background: isLight ? "#fff" : "#121212",
                 p: 4,
                 borderRadius: 3,
                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -485,7 +512,7 @@ const secondaryColor = "#f5f5f5";
                 sx={{
                   fontWeight: 700,
                   mb: 1,
-                  color: "#2d3748",
+                  color: isLight ? "#2d3748" : "#fff",
                 }}
               >
                 No applications found
@@ -559,9 +586,9 @@ const secondaryColor = "#f5f5f5";
                 py: 3,
                 position: "sticky",
                 bottom: 0,
-                backgroundColor: "#fff",
+                backgroundColor: isLight ? "#fff" : "#121212",
                 zIndex: 1,
-                borderTop: `1px solid #e2e8f0`,
+                // borderTop: `1px solid #e2e8f0`,
                 boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.05)",
               }}
             >
@@ -576,18 +603,15 @@ const secondaryColor = "#f5f5f5";
                   sx={{
                     "& .MuiPaginationItem-root": {
                       fontWeight: 600,
-                      color: isLight ? "#4a5568" : 'white',
+                      color: isLight ? "#121212" : "white",
                       "&.Mui-selected": {
                         backgroundColor: primaryColor,
-                        color: "#fff",
+                        color: isLight ? "#121212" : "#fff",
                         "&:hover": {
                           backgroundColor: "#b32828",
                         },
                       },
                     },
-                    "& .css-1m1xoz7-MuiPagination-root .MuiPaginationItem-root": {
-                      color: 'white',
-                    }
                   }}
                 />
               </motion.div>

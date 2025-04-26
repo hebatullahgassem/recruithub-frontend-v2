@@ -26,6 +26,7 @@ import { Toaster } from "react-hot-toast";
 // import ChatBot from "./components/chatbot/ChatBot.jsx";
 import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
 import { LinearProgress, Typography } from "@mui/material";
+import Loading from "./pages/helpers/Loading.jsx";
 
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
@@ -122,16 +123,7 @@ function App() {
                     overflowX: "hidden",
                   }}
                 >
-                  <Suspense fallback={<div style={{minHeight:'70vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:'5px'}}>
-                    <Typography variant="h6" sx={{
-                      fontWeight: 700,
-                      color: "#882024",
-                      letterSpacing: "-0.5px"
-                    }}>
-                      RecruitHub
-                    </Typography>
-                    <LinearProgress style={{ color: "#882024"}}/>
-                  </div>}>
+                  <Suspense fallback={<Loading />}>
                     <Routes>
 
                       <Route path="/" element={<Home />} />
