@@ -7,7 +7,8 @@ import CustomPagination from "../../../components/pagination/pagination";
 import { Button, TextField, Box, Card, Typography, CircularProgress, Alert } from "@mui/material";
 import TalentCard from "../../../components/talent/TalentCard";
 import { motion, AnimatePresence } from "framer-motion";
-
+import '../../../styles/company/talents/talents.css';
+import '../../../styles/company/companyteme.css';
 const primaryColor = "#901b26";
 const hoverColor = "#6a1320";
 
@@ -70,123 +71,111 @@ function Talents() {
     py: 1
   };
 
-  if (talentsLoading) return <CircularProgress sx={{ color: primaryColor, mt: 4 }} />;
-  if (talentsError) return <Alert severity="error" sx={{ mt: 2 }}>Error loading talents</Alert>;
-
+  if (talentsLoading) return <div className="loading-spinner"></div>
+  if (talentsError) return <div className="error-message">Error loading talents</div>
   return (
-    <Box sx={{ maxWidth: '100vw', margin: "0 auto" }}>
-      <Card sx={{
-        p: 3,
-        mb: 3,
-        borderRadius: 3,
-        boxShadow: 3,
-        background: "linear-gradient(to bottom right, #fff 0%, #f8f0f2 100%)"
-      }}>
-        <Typography variant="h4" sx={{ 
-          color: primaryColor,
-          fontWeight: 700,
-          mb: 3,
-          textAlign: "center"
-        }}>
-          Find Talent
-        </Typography>
+    <div className="talents-container">
+      <div className="talents-header">
+        <h1>Find Talent</h1>
 
-        <Box
-          component="form"
+        <form
+          className="talents-search"
           onSubmit={(e) => {
-            e.preventDefault();
-            setSearchFilters(filters);
+            e.preventDefault()
+            setSearchFilters(filters)
+            setPage(1)
+            talentsRefetch()
           }}
-          sx={{ display: "flex", flexWrap: "wrap", gap: 2, justifyContent: "center" }}
         >
           {Object.entries(filters).map(([key, value]) => (
             <TextField
               key={key}
               label={key.charAt(0).toUpperCase() + key.slice(1)}
               value={value}
-              onChange={(e) => setFilters(prev => ({ ...prev, [key]: e.target.value }))}
-              sx={{
-                flex: "1 1 200px",
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: `${primaryColor} !important`
-                }
-              }}
+              onChange={(e) => setFilters((prev) => ({ ...prev, [key]: e.target.value }))}
+              className="talents-search-field"
             />
           ))}
 
-          <Box sx={{ display: "flex", gap: 2, width: "100%", justifyContent: "center", mt: 2 }}>
-            <Button type="submit" sx={buttonStyle}>
+          <div className="talents-search-buttons">
+            <button type="submit" className="talents-button talents-button--primary">
               Search
-            </Button>
-            <Button
-              onClick={handleReset}
-              sx={{
-                ...buttonStyle,
-                backgroundColor: "#fff",
-                color: primaryColor,
-                border: `2px solid ${primaryColor}`,
-                "&:hover": {
-                  backgroundColor: "#f8f0f2"
-                }
-              }}
-            >
+            </button>
+            <button type="button" className="talents-button talents-button--secondary" onClick={handleReset}>
               Reset
-            </Button>
-          </Box>
-        </Box>
-      </Card>
-      <Box sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr", // Single column layout
-          marginLeft: "-24px", // Counteract parent padding
-          gap: 3,
-          p: 3,
-          width: "100vw",
-          minHeight: "100vh"
-        }}>
-          <AnimatePresence>
-            {talents?.map((talent) => (
-              <motion.div
-                key={talent.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                style={{ width: "100%" }}
-              >
-                <TalentCard
-                  img={talent.img}
-                  name={talent.name}
-                  description={talent.about}
-                  experience={talent.experience}
-                  location={talent.location}
-                  skills={talent.skills}
-                  onClick={() => navigate(`/company/talents/TalentProfile`, { state: { talentId: talent.id }})}                  sx={{
-                    width: "95vw", // 95% of viewport width
-                    maxWidth: "1800px", // Maximum card width
-                    height: 400,
-                    mx: "auto", // Center card horizontally
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: `0 8px 16px ${primaryColor}20`
-                    }
-                  }}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-      </Box>
-      <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-        <CustomPagination
-          page={page}
-          setPage={setPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          total={total}
-          color={primaryColor}
-        />
-      </Box>
-    </Box>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="talents-grid">
+        {talents?.map((talent) => (
+          <motion.div
+            key={talent.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="talent-card">
+              <div className="talent-card__header">
+                <img src={talent.img || "/placeholder.svg"} alt={talent.name} className="talent-card__avatar" />
+                <div>
+                  <h3 className="talent-card__name">{talent.name}</h3>
+                  {talent.title && <p className="talent-card__title">{talent.title}</p>}
+                </div>
+              </div>
+
+              <div className="talent-card__body">
+                <p className="talent-card__description">
+                  {talent.about?.substring(0, 150)}
+                  {talent.about?.length > 150 ? "..." : ""}
+                </p>
+
+                <div className="talent-card__info">
+                  <span>Experience: {talent.experience}</span>
+                </div>
+
+                <div className="talent-card__info">
+                  <span>Location: {talent.location}</span>
+                </div>
+
+                <div className="talent-card__skills">
+                  {talent.skills
+                    ?.split(",")
+                    .slice(0, 3)
+                    .map((skill, index) => (
+                      <span key={index} className="talent-card__skill">
+                        {skill.trim()}
+                      </span>
+                    ))}
+                  {talent.skills?.split(",").length > 3 && (
+                    <span className="talent-card__skill">+{talent.skills.split(",").length - 3}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="talent-card__footer">
+                <button
+                  className="talent-card__button"
+                  onClick={() =>
+                    navigate(`/company/talents/TalentProfile`, {
+                      state: { talentId: talent.id },
+                    })
+                  }
+                >
+                  View Profile
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="talents-pagination">
+        <CustomPagination page={page} setPage={setPage} pageSize={pageSize} setPageSize={setPageSize} total={total} />
+      </div>
+    </div>
   );
 }
 

@@ -1,0 +1,250 @@
+.job-application-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  min-height: 70vh;
+  background-color: #f8f9fa;
+}
+
+.job-application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 3px solid #d43132;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.job-application-title {
+  font-weight: 800;
+  color: #2d3748;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.job-application-title-highlight {
+  color: #d43132;
+}
+
+.job-application-subtitle {
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.job-application-icon {
+  font-size: 18px;
+  color: #d43132;
+}
+
+.job-application-refresh-button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 600;
+  background-color: #2d3748;
+}
+
+.job-application-refresh-button:hover {
+  background-color: #1a202c;
+}
+
+.job-application-refresh-button:disabled {
+  background-color: #e2e8f0;
+}
+
+.job-application-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  gap: 1.5rem;
+}
+
+.job-application-spinner {
+  color: #d43132;
+}
+
+.job-application-loading-text {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.job-application-error {
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #d43132;
+}
+
+.job-application-error-icon {
+  color: #d43132;
+}
+
+.job-application-error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.job-application-error-title {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.job-application-error-message {
+  color: #718096;
+}
+
+.job-application-error-button {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  background-color: #d43132;
+  color: white;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.job-application-error-button:hover {
+  background-color: #b32828;
+}
+
+.job-application-empty {
+  background-color: #fff;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  border-left: 4px solid #d43132;
+}
+
+.job-application-empty-icon-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(212, 49, 50, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.job-application-empty-icon {
+  font-size: 40px;
+  color: #d43132;
+}
+
+.job-application-empty-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+}
+
+.job-application-empty-message {
+  color: #718096;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.job-application-browse-button {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: none;
+  font-size: 1rem;
+  background-color: #d43132;
+  color: white;
+}
+
+.job-application-browse-button:hover {
+  background-color: #b32828;
+  box-shadow: 0 6px 20px rgba(212, 49, 50, 0.2);
+}
+
+.job-application-status-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.job-application-status-chip {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.job-application-status-chip:hover {
+  background-color: rgba(212, 49, 50, 0.1);
+  color: #d43132;
+}
+
+.job-application-status-chip.active {
+  background-color: #d43132;
+  color: white;
+}
+
+.job-application-divider {
+  margin: 1rem 0;
+}
+
+.job-application-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.job-application-pagination-container {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .job-application-container {
+    padding: 0.5rem;
+  }
+
+  .job-application-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .job-application-title {
+    font-size: 1.8rem;
+  }
+
+  .job-application-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .job-application-status-summary {
+    justify-content: center;
+  }
+}

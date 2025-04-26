@@ -95,8 +95,10 @@ function UserJobs() {
   };
 
   const handleSearch = () => {
+    setPagination(prev => ({ ...prev, page: 1 }));
+    setSearchFilters(filters);
     setSearchFilters(filters); // Update search filters
-    setPage(1); // Reset to first page
+    //setPage(1); // Reset to first page
     refetch(); // Fetch with new filters
   };
 
@@ -111,7 +113,9 @@ function UserJobs() {
       status: "1",
       ordering: "",
     });
-    setPage(1); // Reset page
+    setFilters(defaultFilters);
+  setSearchFilters(defaultFilters);
+  setPagination(prev => ({ ...prev, page: 1 }));
     refetch(); // Fetch without filters
   };
 

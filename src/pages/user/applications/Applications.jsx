@@ -115,6 +115,8 @@ import {
 } from "@mui/material";
 import { getApplicationsByUser } from "../../../services/Application";
 import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion"
+import JobCardApp from "../../../components/job/JobCardApp";
 import { userContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, color } from "framer-motion";
@@ -141,13 +143,22 @@ const JobApplication = () => {
   });
 
   const [filters, setFilters] = useState({
-    status: "2,3,4,5,6", // Default to all active statuses
+    user: "",
+    job: "",
+    status: "",
+  });
+ const [statusFilter, setStatusFilter] = useState("2,3,4,5,6"); // default to all active statuses
+
+  const [searchFilters, setSearchFilters] = useState({
+    user: `${user.id}`,
+    job: "",
+    status: "2,3,4,5,6",
   });
 
   const {
-    data: applications,
-    error: applicationsError,
-    isLoading: applicationsLoading,
+    data: application,
+    error: applicationError,
+    isLoading: applicationLoading,
     refetch,
   } = useQuery({
     queryKey: [
@@ -188,7 +199,7 @@ const JobApplication = () => {
   const handlePageSizeChange = (event) => {
     setPagination((prev) => ({
       ...prev,
-      pageSize: event.target.value,
+      pageSize: newPageSize,
       page: 1,
     }));
   };
@@ -196,7 +207,7 @@ const JobApplication = () => {
   const handleStatusFilterChange = (event) => {
     setFilters((prev) => ({
       ...prev,
-      status: event.target.value,
+      status: newStatus,
     }));
     setPagination((prev) => ({ ...prev, page: 1 }));
   };

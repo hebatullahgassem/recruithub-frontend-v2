@@ -9,6 +9,8 @@ import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
 import { MdAddBox } from "react-icons/md";
+import '../../../styles/company/companyteme.css';
+import '../../../styles/company/job/jobs_company.css';
 
 function CompanyJobs() {
   //   const location = useLocation();
@@ -68,90 +70,154 @@ function CompanyJobs() {
   // };
 
   return (
-    <div
-      className="container"
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <h1 style={{ fontSize: "2rem", margin: "1rem" }}>Company Jobs</h1>
-        {/* <Button onClick={() => navigate("/company/jobCreate")}>
-          Create New Job
-        </Button> */}
-        <MdAddBox
+    <div className="company-jobs">
+    <div className="container">
+      <header className="company-jobs__header">
+        <h1 className="company-jobs__title">Company Jobs</h1>
+        <button
+          className="company-jobs__add-button"
           onClick={() => navigate("/company/jobCreate")}
-          style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
           title="Add New Job"
-        />
+        >
+          <MdAddBox />
+        </button>
       </header>
 
       {companyJobsLoading ? (
-        <CircularProgress />
+        <div className="loading-spinner"></div>
       ) : companyJobs && companyJobs.length < 1 ? (
-        <div
-          style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}
-        >
-          <h2>No jobs found</h2>
-          <p>Please create a job</p>
-
-          <MdAddBox
+        <div className="company-jobs__empty">
+          <h2 className="company-jobs__empty-title">No jobs found</h2>
+          <p className="company-jobs__empty-text">Please create a job</p>
+          <button
+            className="company-jobs__add-button"
             onClick={() => navigate("/company/jobCreate")}
-            style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
             title="Add New Job"
-          />
+          >
+            <MdAddBox />
+          </button>
         </div>
       ) : (
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="company-jobs__search">
             <TextField
               label="Search by name"
               name="title"
               value={filters.title}
               onChange={handleChange}
-              style={{ margin: "1rem" }}
+              className="company-jobs__search-input"
             />
-            <Button variant="contained" onClick={handleSearch}>
+            <button className="company-jobs__button company-jobs__button--primary" onClick={handleSearch}>
               Search
-            </Button>
-            <Button variant="contained" onClick={handleReset}>
+            </button>
+            <button className="company-jobs__button company-jobs__button--secondary" onClick={handleReset}>
               Reset
-            </Button>
+            </button>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "1rem",
-              minWidth: "100%",
-              flexDirection: "column",
-            }}
-          >
+
+          <div className="company-jobs__list">
             {companyJobs?.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
-          <CustomPagination
-            page={page}
-            setPage={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            total={total}
-          />
+
+          <div className="company-jobs__pagination">
+            <CustomPagination
+              page={page}
+              setPage={setPage}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              total={total}
+            />
+          </div>
         </>
       )}
     </div>
+  </div>
+    // <div
+    //   className="container"
+    //   style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    // >
+    //   <header
+    //     style={{
+    //       display: "flex",
+    //       justifyContent: "center",
+    //       alignItems: "center",
+    //     }}
+    //   >
+    //     <h1 style={{ fontSize: "2rem", margin: "1rem" }}>Company Jobs</h1>
+    //     {/* <Button onClick={() => navigate("/company/jobCreate")}>
+    //       Create New Job
+    //     </Button> */}
+    //     <MdAddBox
+    //       onClick={() => navigate("/company/jobCreate")}
+    //       style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
+    //       title="Add New Job"
+    //     />
+    //   </header>
+
+    //   {companyJobsLoading ? (
+    //     <CircularProgress />
+    //   ) : companyJobs && companyJobs.length < 1 ? (
+    //     <div
+    //       style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}
+    //     >
+    //       <h2>No jobs found</h2>
+    //       <p>Please create a job</p>
+
+    //       <MdAddBox
+    //         onClick={() => navigate("/company/jobCreate")}
+    //         style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
+    //         title="Add New Job"
+    //       />
+    //     </div>
+    //   ) : (
+    //     <>
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //         }}
+    //       >
+    //         <TextField
+    //           label="Search by name"
+    //           name="title"
+    //           value={filters.title}
+    //           onChange={handleChange}
+    //           style={{ margin: "1rem" }}
+    //         />
+    //         <Button variant="contained" onClick={handleSearch}>
+    //           Search
+    //         </Button>
+    //         <Button variant="contained" onClick={handleReset}>
+    //           Reset
+    //         </Button>
+    //       </div>
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           gap: "1rem",
+    //           minWidth: "100%",
+    //           flexDirection: "column",
+    //         }}
+    //       >
+    //         {companyJobs?.map((job) => (
+    //           <JobCard key={job.id} job={job} />
+    //         ))}
+    //       </div>
+    //       <CustomPagination
+    //         page={page}
+    //         setPage={setPage}
+    //         pageSize={pageSize}
+    //         setPageSize={setPageSize}
+    //         total={total}
+    //       />
+    //     </>
+    //   )}
+    // </div>
   );
 }
 export default CompanyJobs;
