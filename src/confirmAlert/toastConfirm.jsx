@@ -1,112 +1,133 @@
 import toast from "react-hot-toast";
-import {
-CheckCircle,
-AlertCircle,
-Info,
-AlertTriangle,
-X 
-} from "lucide-react"; 
-import React from "react";
-import '../styles/toastConfirm/toastConfirm.css';
+import { CheckCircle, AlertCircle, Info, AlertTriangle, X } from "lucide-react";
+import React, { useContext } from "react";
+import "../styles/toastConfirm/toastConfirm.css";
+import { userContext } from "../context/UserContext";
 /**
  * Show a success toast notification
  * @param {string} message - The message to display
  * @param {number} duration - Duration in milliseconds (default: 4000)
  */
-export const showSuccessToast = (message, duration = 4000) => {
+export const showSuccessToast = (message, duration = 4000, isLight = false) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container success ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container success ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container success">
-          <CheckCircle size={18} />
+          <CheckCircle size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
-          <p className="toast-title">Success</p>
-          <p className="toast-message">{message}</p>
+          <p
+            className="toast-title"
+            style={{ color: isLight ? "black" : "white" }}
+          >
+            Success
+          </p>
+          <p
+            className="toast-message"
+            style={{ color: isLight ? "black" : "white" }}
+          >
+            {message}
+          </p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "white"} />
         </button>
       </div>
     ),
-    { duration },
-  )
-}
+    { duration }
+  );
+};
 
 /**
  * Show an error toast notification
  * @param {string} message - The message to display
  * @param {number} duration - Duration in milliseconds (default: 5000)
  */
-export const showErrorToast = (message, duration = 5000) => {
+export const showErrorToast = (message, duration = 5000, isLight = false) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container error ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container error ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container error">
-          <AlertCircle size={18} />
+          <AlertCircle size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
-          <p className="toast-title">Error</p>
-          <p className="toast-message">{message}</p>
+          <p className="toast-title" style={{ color: isLight ? "black" : "white" }}>Error</p>
+          <p className="toast-message" style={{ color: isLight ? "black" : "white" }}>{message}</p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "blackwhite"} />
         </button>
       </div>
     ),
-    { duration },
-  )
-}
+    { duration }
+  );
+};
 
 /**
  * Show an info toast notification
  * @param {string} message - The message to display
  * @param {number} duration - Duration in milliseconds (default: 4000)
  */
-export const showInfoToast = (message, duration = 4000) => {
+export const showInfoToast = (message, duration = 4000, isLight = false) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container info ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container info ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container info">
-          <Info size={18} />
+          <Info size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
           <p className="toast-title">Information</p>
           <p className="toast-message">{message}</p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "black"} />
         </button>
       </div>
     ),
-    { duration },
-  )
-}
+    { duration }
+  );
+};
 
 /**
  * Show a warning toast notification
  * @param {string} message - The message to display
  * @param {number} duration - Duration in milliseconds (default: 4500)
  */
-export const showWarningToast = (message, duration = 4500) => {
+export const showWarningToast = (message, duration = 4500, isLight = false) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container warning ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container warning ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container warning">
-          <AlertTriangle size={18} />
+          <AlertTriangle size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
           <p className="toast-title">Warning</p>
           <p className="toast-message">{message}</p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "white"} />
         </button>
       </div>
     ),
-    { duration },
-  )
-}
+    { duration }
+  );
+};
 
 /**
  * Show a confirmation toast with confirm and cancel buttons
@@ -125,59 +146,71 @@ export const showConfirmToast = ({
   onCancel,
   confirmText = "Confirm",
   cancelText = "Cancel",
+  isLight = false,
 }) => {
-  toast.custom(
-    (t) => (
-      <div className={`toast-container confirm ${t.visible ? "animate-enter" : "animate-leave"}`}>
-        <div className="toast-content-confirm">
-          <p className="toast-title">{title}</p>
-          <p className="toast-message">{message || "Are you sure?"}</p>
+  const toastId = toast.custom(
+    (t) => {
+      return (
+        <div
+          className={`toast-container confirm ${
+            t.visible ? "animate-enter" : "animate-leave"
+          } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+        >
+          <div className="toast-content-confirm">
+            <p className="toast-title" style={{ color: isLight ? "black" : "white" }}>{title}</p>
+            <p className="toast-message" style={{ color: isLight ? "black" : "white" }}>{message || "Are you sure?"}</p>
 
-          <div className="toast-actions">
-            <button
-              className="toast-button cancel"
-              onClick={() => {
-                toast.dismiss(t.id)
-                onCancel?.()
-              }}
-            >
-              {cancelText}
-            </button>
-            <button
-              className="toast-button confirm"
-              onClick={() => {
-                toast.dismiss(t.id)
-                onConfirm?.()
-              }}
-            >
-              {confirmText}
-            </button>
+            <div className="toast-actions">
+              <button
+                className="toast-button cancel"
+                onClick={() => {
+                  toast.dismiss(toastId);
+                  onCancel?.();
+                }}
+              >
+                {cancelText}
+              </button>
+              <button
+                className="toast-button confirm"
+                onClick={() => {
+                  toast.dismiss(toastId);
+                  onConfirm?.();
+                }}
+              >
+                {confirmText}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    ),
-    { duration: 100000 }, // Long duration since user needs to interact with it
-  )
-}
+      );
+    },
+    { duration: 100000 } // Long duration since user needs to interact with it
+  );
+  return toastId;
+};
 
 /**
  * Show a loading toast that can be updated or dismissed
  * @param {string} message - The loading message
  * @returns {string} Toast ID that can be used to update or dismiss the toast
  */
-export const showLoadingToast = (message) => {
+export const showLoadingToast = (message, isLight = false) => {
   return toast.custom(
     (t) => (
-      <div className={`toast-container loading ${t.visible ? "animate-enter" : "animate-leave"}`}>
-        <div className="toast-loading-spinner"></div>
+      <div
+        className={`toast-container loading ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
+        <div className="toast-loading-spinner" style={{ color: isLight ? "black" : "white" }}></div>
         <div className="toast-content">
-          <p className="toast-message">{message || "Loading..."}</p>
+          <p className="toast-message" style={{ color: isLight ? "black" : "white" }}>{message || "Loading..."}</p>
         </div>
       </div>
     ),
-    { duration: Number.POSITIVE_INFINITY },
-  )
-}
+    { duration: Number.POSITIVE_INFINITY }
+  );
+};
 
 /**
  * Update a loading toast with a success message
@@ -185,25 +218,34 @@ export const showLoadingToast = (message) => {
  * @param {string} message - The success message
  * @param {number} duration - Duration in milliseconds (default: 2000)
  */
-export const updateToastSuccess = (toastId, message, duration = 2000) => {
+export const updateToastSuccess = (
+  toastId,
+  message,
+  duration = 2000,
+  isLight = false
+) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container success ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container success ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container success">
-          <CheckCircle size={18} />
+          <CheckCircle size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
-          <p className="toast-title">Success</p>
-          <p className="toast-message">{message}</p>
+          <p className="toast-title" style={{ color: isLight ? "black" : "white" }}>Success</p>
+          <p className="toast-message" style={{ color: isLight ? "black" : "white" }}>{message}</p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "white"} />
         </button>
       </div>
     ),
-    { id: toastId, duration },
-  )
-}
+    { id: toastId, duration }
+  );
+};
 
 /**
  * Update a loading toast with an error message
@@ -211,38 +253,31 @@ export const updateToastSuccess = (toastId, message, duration = 2000) => {
  * @param {string} message - The error message
  * @param {number} duration - Duration in milliseconds (default: 3000)
  */
-export const updateToastError = (toastId, message, duration = 3000) => {
+export const updateToastError = (
+  toastId,
+  message,
+  duration = 3000,
+  isLight = false
+) => {
   toast.custom(
     (t) => (
-      <div className={`toast-container error ${t.visible ? "animate-enter" : "animate-leave"}`}>
+      <div
+        className={`toast-container error ${
+          t.visible ? "animate-enter" : "animate-leave"
+        } ${isLight ? "bg-white text-black" : "bg-black text-white"}`}
+      >
         <div className="toast-icon-container error">
-          <AlertCircle size={18} />
+          <AlertCircle size={18} color={isLight ? "black" : "white"} />
         </div>
         <div className="toast-content">
-          <p className="toast-title">Error</p>
-          <p className="toast-message">{message}</p>
+          <p className="toast-title" style={{ color: isLight ? "black" : "white" }}>Error</p>
+          <p className="toast-message" style={{ color: isLight ? "black" : "white" }}>{message}</p>
         </div>
         <button className="toast-close" onClick={() => toast.dismiss(t.id)}>
-          <X size={16} />
+          <X size={16} color={isLight ? "black" : "white"} />
         </button>
       </div>
     ),
-    { id: toastId, duration },
-  )
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    { id: toastId, duration }
+  );
+};

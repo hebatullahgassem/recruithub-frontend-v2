@@ -51,7 +51,7 @@ function UserSaved() {
   });
 
   const [searchFilters, setSearchFilters] = useState({
-    user: `${user.id}`,
+    user: `${user?.id}`,
     job_title: "",
     company_name: "",
     status: "1",
@@ -471,6 +471,7 @@ function UserSaved() {
                           job={save.job_details}
                           user={"user"}
                           type={"saved"}
+                          refetch={refetch}
                         />
                       {/* </Box> */}
                     </Grid>

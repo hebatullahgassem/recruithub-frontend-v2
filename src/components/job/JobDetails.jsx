@@ -75,6 +75,7 @@ function JobDetails({ job, refetch }) {
       className="job-details-container"
       style={{
         minWidth: "80vw",
+        maxWidth: "80vw",
         backgroundColor: isLight ? "#fff" : "#121212",
         borderRadius: "10px",
         padding:'2rem',
