@@ -26,6 +26,7 @@ export const getAllApplications = async () => {
 
 // Get Applications by User ID
 export const getApplicationsByUser = async ({ filters = {}, page = 1, pageSize = 10 }) => {
+  console.log(filters);
   const params = new URLSearchParams({
     ...filters,
     page,

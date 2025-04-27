@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { getApplicationsByUser } from "../../../services/Application";
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import JobCardApp from "../../../components/job/JobCardApp";
 import { userContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -44,9 +44,10 @@ const JobApplication = () => {
   const [filters, setFilters] = useState({
     user: "",
     job: "",
-    status: "",
+    fail: 'False',
+    status: "2,3,4,5,6",
   });
- const [statusFilter, setStatusFilter] = useState("2,3,4,5,6"); // default to all active statuses
+  const [statusFilter, setStatusFilter] = useState("2,3,4,5,6"); // default to all active statuses
 
   const [searchFilters, setSearchFilters] = useState({
     user: `${user?.id}`,
@@ -72,11 +73,12 @@ const JobApplication = () => {
         console.error("User not authenticated");
         return [];
       }
+      const newFilters = {
+        ...filters,
+        user: user?.id,
+      };
       const response = await getApplicationsByUser({
-        filters: {
-          user: `${user.id}`,
-          ...filters,
-        },
+        filters: newFilters,
         page: pagination.page,
         pageSize: pagination.pageSize,
       });
@@ -98,15 +100,29 @@ const JobApplication = () => {
   const handlePageSizeChange = (event) => {
     setPagination((prev) => ({
       ...prev,
-      pageSize: newPageSize,
+      pageSize: event.target.value,
       page: 1,
     }));
   };
 
   const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value);
+    console.log(event.target.value);
+    if (event.target.value == 7) {
+      setFilters((prev) => ({
+        ...prev,
+        status: "2,3,4,5,6",
+        fail: 'True',
+      }));
+
+      setPagination((prev) => ({ ...prev, page: 1 }));
+      return;
+    }
+
     setFilters((prev) => ({
       ...prev,
       status: event.target.value,
+      fail: 'False',
     }));
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
@@ -230,17 +246,17 @@ const JobApplication = () => {
                 </InputLabel>
                 <Select
                   labelId="status-filter-label"
-                  value={filters.status}
+                  value={statusFilter}
                   onChange={(e) => handleStatusFilterChange(e)}
                   label="Status"
                 >
                   <MenuItem value="2,3,4,5,6">All Active</MenuItem>
-                  <MenuItem value="1">Applied</MenuItem>
-                  <MenuItem value="2">Under Review</MenuItem>
-                  <MenuItem value="3">Shortlisted</MenuItem>
-                  <MenuItem value="4">Interview</MenuItem>
-                  <MenuItem value="5">Offered</MenuItem>
-                  <MenuItem value="6">Rejected</MenuItem>
+                  <MenuItem value="2">Applied</MenuItem>
+                  <MenuItem value="3">Technical Assessment</MenuItem>
+                  <MenuItem value="4">Technical Interview</MenuItem>
+                  <MenuItem value="5">Hr Interview</MenuItem>
+                  <MenuItem value="6">Offer Phase</MenuItem>
+                  <MenuItem value="7">Rejected</MenuItem>
                 </Select>
               </FormControl>
 
@@ -301,7 +317,13 @@ const JobApplication = () => {
                     backgroundColor: "#e2e8f0",
                   },
                 }}
-                startIcon={applicationLoading ? <CircularProgress size={18} color="white" /> : <Refresh />}
+                startIcon={
+                  applicationLoading ? (
+                    <CircularProgress size={18} color="white" />
+                  ) : (
+                    <Refresh />
+                  )
+                }
               >
                 Refresh
               </Button>
@@ -316,7 +338,7 @@ const JobApplication = () => {
               justifyContent: "center",
               alignItems: "center",
               minHeight: "300px",
-              background: isLight ? "#fff" : '#121212',
+              background: isLight ? "#fff" : "#121212",
               borderRadius: 3,
               p: 4,
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -354,7 +376,7 @@ const JobApplication = () => {
                 borderRadius: 3,
                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
                 borderLeft: `4px solid ${primaryColor}`,
-                background: isLight ? "#fff" : '#121212',
+                background: isLight ? "#fff" : "#121212",
               }}
               icon={false}
             >
@@ -371,10 +393,18 @@ const JobApplication = () => {
                   <WorkOutline sx={{ color: primaryColor }} />
                 </Box>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: isLight ? "#2d3748" : "#fff" }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: isLight ? "#2d3748" : "#fff",
+                    }}
+                  >
                     Couldn't load applications
                   </Typography>
-                  <Typography variant="body2" sx={{ color: isLight ? "#718096" : "#fff" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: isLight ? "#718096" : "#fff" }}
+                  >
                     {applicationsError.message ||
                       "Please try refreshing the page"}
                   </Typography>
@@ -435,9 +465,9 @@ const JobApplication = () => {
                   mx: "auto",
                 }}
               >
-                {filters.status === "6"
+                {statusFilter === "7"
                   ? "You don't have any rejected applications."
-                  : filters.status !== "2,3,4,5,6"
+                  : statusFilter !== "2,3,4,5,6"
                   ? `You don't have any applications with this status.`
                   : "You haven't applied to any jobs yet."}
               </Typography>
