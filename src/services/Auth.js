@@ -95,3 +95,11 @@ export const verifyCompany = async (companyId, token) => {
 
   return await res.json();
 };
+
+export const getCompanyById = async (id) => {
+  console.log("ID:", id);  // Check if the ID is valid and exists
+  if(id === undefined || id == 0) return {};
+  const response = await AxiosApi.get(`user/companies/${id}/`);
+
+  return response.data;
+};

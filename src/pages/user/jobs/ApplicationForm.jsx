@@ -25,7 +25,7 @@ import '../../../styles/theme.css';
 import '../../../ComponentsStyles/application_form.css';
 const ApplicationForm = ({ questions, answers: savedAnswers, application, refetch }) => {
   const location = useLocation();
-  const { user, setUser } = useContext(userContext);
+  const { user, setUser, isLight } = useContext(userContext);
   const [answers, setAnswers] = useState(
     savedAnswers ? { ...savedAnswers } : {}
   );
@@ -124,8 +124,8 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
   return (
 
     <Container className="application-form-container">
-    <Paper className="application-form-paper">
-      <Typography variant="h4" className="form-title">
+    <Paper className="application-form-paper" style={{background: isLight ? '#fff' : '#242424'}}>
+      <Typography variant="h4" className="form-title" style={{color: isLight ? '#242424' : '#fff'}}>
         Job Application
       </Typography>
 

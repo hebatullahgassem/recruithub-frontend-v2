@@ -28,7 +28,6 @@ function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { user, setUser, setToken, isLight, setIsLight } =
     useContext(userContext);
-  console.log(isLight);
   const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
@@ -46,6 +45,11 @@ function Navbar() {
     : user?.user_type?.toLowerCase() === "admin"
     ? "/admin/itians"
     : "/applicant/profile");
+  };
+
+  const handleSidebar = (path) => {
+    setMobileOpen(false);
+    navigate(path);
   };
 
   const handleLogout = (e) => {
@@ -106,10 +110,12 @@ function Navbar() {
   const NavDrawerItem = ({ to, text, icon }) => (
     <ListItem
       // button
-      component={Link}
-      to={to}
+      // component={Link}
+      // to={to}
+      onClick={() => handleSidebar(to)}
       sx={{
         borderRadius: "8px",
+        cursor: "pointer",
         mb: 0.5,
         "&:hover": {
           backgroundColor: "rgba(136, 32, 36, 0.05)",

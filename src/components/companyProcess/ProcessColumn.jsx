@@ -1,9 +1,11 @@
 import { Tab, Tabs } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import '../../ComponentsStyles/process_column.css';
 import'../../styles/theme.css';
+import { userContext } from "../../context/UserContext";
 
 function ProcessColumn({setter, column, phases, application}) {
+  const{isLight} = useContext(userContext);
     console.log(application);
     useEffect(() => {
         if(application?.status){
@@ -24,6 +26,11 @@ function ProcessColumn({setter, column, phases, application}) {
             style: {
               backgroundColor: "#722732",
             },
+          }}
+          sx={{
+            '.process-tab':{
+              color: isLight ?'var(--gray-700)' :'red',
+            }
           }}
         >
           {phases.map((phase, index) => (

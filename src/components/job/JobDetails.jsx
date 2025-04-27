@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import { TbCancel } from "react-icons/tb";
 import { FaEdit } from "react-icons/fa";
 import { IoIosCloudDone } from "react-icons/io";
-import '../../ComponentsStyles/job/job_details.css';
+import "../../ComponentsStyles/job/job_details.css";
 // interface JobDetailsProps {
 //   job: any
 //   refetch: () => void
@@ -15,12 +15,10 @@ import '../../ComponentsStyles/job/job_details.css';
 function JobDetails({ job, refetch }) {
   console.log(job);
   if (!job) return null;
-  const { user } = useContext(userContext);
+  const { user, isLight } = useContext(userContext);
   const navigate = useNavigate();
   const id = job.id;
   const [loading, setLoading] = useState(false);
-
- 
 
   const handleActivation = async (state) => {
     setLoading(true);
@@ -71,115 +69,139 @@ function JobDetails({ job, refetch }) {
   //   fontSize: "1.1rem",
   //   marginTop: "0.2rem",
   // };
-  
 
   return (
-    <div className="job-details-container">
-    {user?.user_type === "COMPANY" && (
-      <div className="job-actions">
-        {job?.status == 1 ? (
-          <button
-            className="action-icon deactivate"
-            onClick={() => handleActivation(0)}
-            title="Deactivate Job"
-            disabled={loading}
-          >
-            <TbCancel />
-          </button>
-        ) : (
-          <button
-            className="action-icon activate"
-            onClick={() => handleActivation(1)}
-            title="Activate Job"
-            disabled={loading}
-          >
-            <IoIosCloudDone />
-          </button>
-        )}
-
-        <button className="action-icon edit" onClick={() => navigate("/company/jobEdit/" + id)} title="Edit Job">
-          <FaEdit />
-        </button>
-      </div>
-    )}
-
-    <div className="job-card">
-      <div className="job-header">
-        <h1 className="job-title">{job.title}</h1>
-
-        <div className="company-info">
-          <img
-            src={job.company_logo || "https://static.thenounproject.com/png/3198584-200.png" || "/placeholder.svg"}
-            alt={job.company_name}
-            className="company-logo"
-          />
-          <div>
-            <p className="company-name">
-              <span className="label">Company:</span> {job.company_name}
-            </p>
-            <span className={`status-badge ${job.status === "1" ? "active" : "inactive"}`}>
-              {job.status === "1" ? "Open" : "Closed"}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="job-details-grid">
-        <div className="details-column">
-          <div className="detail-item">
-            <span className="detail-icon">📍</span>
-            <div>
-              <span className="label">Location:</span> {job.location}
-            </div>
-          </div>
-
-          {job.keywords && job.keywords.length > 0 && (
-            <div className="detail-item">
-              <span className="detail-icon">🔧</span>
-              <div>
-                <span className="label">Skills:</span> {job.keywords.join(", ")}
-              </div>
-            </div>
+    <div
+      className="job-details-container"
+      style={{
+        minWidth: "80vw",
+        backgroundColor: isLight ? "#fff" : "#121212",
+        borderRadius: "10px",
+        padding:'2rem',
+        position: "relative",
+      }}
+    >
+      {user?.user_type === "COMPANY" && (
+        <div className="job-actions">
+          {job?.status == 1 ? (
+            <button
+              className="action-icon deactivate"
+              onClick={() => handleActivation(0)}
+              title="Deactivate Job"
+              disabled={loading}
+            >
+              <TbCancel />
+            </button>
+          ) : (
+            <button
+              className="action-icon activate"
+              onClick={() => handleActivation(1)}
+              title="Activate Job"
+              disabled={loading}
+            >
+              <IoIosCloudDone />
+            </button>
           )}
 
-          <div className="detail-item">
-            <span className="detail-icon">💼</span>
+          <button
+            className="action-icon edit"
+            onClick={() => navigate("/company/jobEdit/" + id)}
+            title="Edit Job"
+          >
+            <FaEdit />
+          </button>
+        </div>
+      )}
+
+      <div className="job-card">
+        <div className="job-header">
+          <h1 className="job-title" style={{ color: isLight ? "#121212" : "#fff" }}>{job.title}</h1>
+
+          <div className="company-info">
+            <img
+              src={
+                job.company_logo ||
+                "https://static.thenounproject.com/png/3198584-200.png" ||
+                "/placeholder.svg"
+              }
+              alt={job.company_name}
+              className="company-logo"
+            />
             <div>
-              <span className="label">Experience:</span> {job.experience || "Not specified"}
+              <p className="company-name" style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label" style={{ color: isLight ? "#3498db" : "#882024 " }}>Company:</span> {job.company_name}
+              </p>
+              <span
+                className={`status-badge ${
+                  job.status === "1" ? "active" : "inactive"
+                }`}
+                style={{ backgroundColor: job.status === "1" ? (isLight ? "#2ecc71" : "#27ae60") : (isLight ? "#e74c3c" : "#c0392b") }}
+              >
+                {job.status === "1" ? "Open" : "Closed"}
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="details-column">
-          <div className="detail-item">
-            <span className="detail-icon">📄</span>
-            <div>
-              <span className="label">Job Type:</span> {job.type_of_job}
+        <div className="job-details-grid">
+          <div className="details-column">
+            <div className="detail-item">
+              <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>📍</span>
+              <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label" style={{ color: isLight ? "#3498db" : "#882024 " }}>Location:</span> {job.location}
+              </div>
+            </div>
+
+            {job.keywords && job.keywords.length > 0 && (
+              <div className="detail-item">
+                <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>🔧</span>
+                <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                  <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Skills:</span>{" "}
+                  {job.keywords.join(", ")}
+                </div>
+              </div>
+            )}
+
+            <div className="detail-item">
+              <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>💼</span>
+              <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Experience:</span>{" "}
+                {job.experience || "Not specified"}
+              </div>
             </div>
           </div>
 
-          <div className="detail-item">
-            <span className="detail-icon">🏢</span>
-            <div>
-              <span className="label">Attendance:</span> {job.attend}
+          <div className="details-column">
+            <div className="detail-item">
+              <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>📄</span>
+              <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Job Type:</span> {job.type_of_job}
+              </div>
             </div>
-          </div>
 
-          <div className="detail-item">
-            <span className="detail-icon">📅</span>
-            <div>
-              <span className="label">Posted:</span> {job.posted_date || "Recently"}
+            <div className="detail-item">
+              <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>🏢</span>
+              <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Attendance:</span> {job.attend}
+              </div>
+            </div>
+
+            <div className="detail-item">
+              <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>📅</span>
+              <div style={{ color: isLight ? "#121212" : "#fff" }}>
+                <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Posted:</span>{" "}
+                {job.posted_date || "Recently"}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="job-description">
-        <h2 className="section-title">Job Description</h2>
-        <div className="description-content">{job.description}</div>
+        <div className="job-description">
+          <h2 className="section-title" style={{ color: isLight ? "#3498db" : "#882024 " }}>Job Description</h2>
+          <div className="description-content" style={{ color: isLight ? "#121212" : "#fff" }}>{job.description}</div>
+        </div>
       </div>
     </div>
-  </div>
     // <div
     //   className="mt-4"
     //   style={{
@@ -357,7 +379,7 @@ function JobDetails({ job, refetch }) {
     //     </div>
 
     //     {/* Action Buttons */}
-    //     {/* <div style={{ 
+    //     {/* <div style={{
     //       display: 'flex',
     //       gap: '0.75rem',
     //       marginTop: '2.5rem'
@@ -373,4 +395,4 @@ function JobDetails({ job, refetch }) {
     // </div>
   );
 }
- export default JobDetails;
+export default JobDetails;

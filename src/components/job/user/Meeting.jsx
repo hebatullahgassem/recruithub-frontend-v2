@@ -8,7 +8,8 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { userContext } from "../../../context/UserContext";
 
 const locales = { "en-US": enUS };
 
@@ -21,6 +22,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const Meeting = ({ phase, clickedColumn, applicationData }) => {
+  const { isLight } = useContext(userContext);
   if (!applicationData) {
     return <p className="text-danger text-center">You didnt apply yet</p>;
   }
@@ -92,16 +94,26 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
   console.log("Application :", appStatus, clickedColumn);
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", marginTop:'10px' }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "10px",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      <Typography variant="h4" gutterBottom>
-      {phase === "Technical Assessment"
+      <Typography
+        variant="h4"
+        gutterBottom
+        style={{ color: isLight ? "black" : "white" }}
+      >
+        {phase === "Technical Assessment"
           ? "Technical Assessment"
           : `${phase} Meeting`}
       </Typography>
 
       {appStatus === clickedColumn && applicationData.fail ? (
-        <p>Unfortunately you have failed this phase</p>
+        <p style={{ color: "red" }}>Unfortunately you have failed this phase</p>
       ) : appStatus === clickedColumn ? (
         <>
           {/* <p>Status is eligible for this phase.</p> */}
@@ -126,7 +138,9 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
           {/* Show Reminder Calendar */}
           {phaseTime && (
             <Box mt={3} style={{ height: 500 }}>
-              <h4>Meeting Schedule</h4>
+              <h4 style={{ color: isLight ? "black" : "white" }}>
+                Meeting Schedule
+              </h4>
               <Button
                 variant="outlined"
                 color="primary"
@@ -151,7 +165,10 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
                 date={viewDate}
                 onNavigate={(date) => setViewDate(date)}
                 onView={setView}
-                style={{ height: 400 }}
+                style={{ 
+                  height: 400, 
+                  color: isLight ? "black" : "white",
+                }}
                 eventPropGetter={eventPropGetter}
               />
             </Box>
@@ -164,8 +181,21 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
       ) : (
         <p className="text-warning">You didn't proceed to this phase yet.</p>
       )}
+      <style>
+        {`
+          .rbc-today {
+            background-color:rgb(153, 0, 0);
+            color: #fff;
+            border-radius: 8px;
+            padding: 5px;
+          }
+        `}
+      </style>
     </div>
+    
   );
+  
 };
 
 export default Meeting;
+
