@@ -21,7 +21,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutline';
 const EditCV = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user } = useContext(userContext);
+  const { user, isLight } = useContext(userContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -150,13 +150,15 @@ const EditCV = () => {
   }
 
   return (
+    <Box sx={{ minWidth: '100vw', backgroundColor: isLight ? '#f5f5f5' : '#242424' }}>
     <Box sx={{ 
       maxWidth: 800, 
       mx: 'auto', 
       p: isMobile ? 2 : 3,
-      my: 4
+      my: 4,
+      backgroundColor: isLight ? '#f5f5f5' : '#121212',
     }}>
-      <Card variant="outlined" sx={{ borderRadius: 2 }}>
+      <Card variant="outlined" sx={{ borderRadius: 2, backgroundColor: isLight ? '#fff' : '#242424' }}>
         <CardContent sx={{ p: isMobile ? 2 : 3 }}>
           <Typography 
             variant="h5" 
@@ -167,7 +169,8 @@ const EditCV = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 1.5,
-              fontSize: isMobile ? '1.25rem' : '1.5rem'
+              fontSize: isMobile ? '1.25rem' : '1.5rem',
+              color: isLight ? 'black' : 'white',
             }}
           >
             <DescriptionIcon fontSize={isMobile ? "medium" : "large"} />
@@ -194,6 +197,8 @@ const EditCV = () => {
                   borderStyle: 'dashed',
                   borderWidth: 2,
                   borderColor: theme.palette.divider,
+                  backgroundColor: isLight ? '#f5f5f5' : '#121212',
+                  color: isLight ? 'black' : '#901b26',
                   '&:hover': {
                     borderColor: theme.palette.primary.main,
                     backgroundColor: theme.palette.action.hover
@@ -210,7 +215,7 @@ const EditCV = () => {
                 }}>
                   <CloudUploadIcon sx={{ 
                     fontSize: isMobile ? 32 : 40, 
-                    color: 'text.secondary' 
+                    color: isLight ? 'text.secondary' : '#901b26' 
                   }} />
                   <Box>
                     <Typography variant="body1" component="div">
@@ -218,7 +223,7 @@ const EditCV = () => {
                         Click to upload
                       </Box>
                     </Typography>
-                    <Typography variant="caption" color="textSecondary">
+                    <Typography variant="caption" color={isLight ? "textSecondary" : "#901b26"}>
                       PDF format (max 5MB)
                     </Typography>
                   </Box>
@@ -232,14 +237,14 @@ const EditCV = () => {
                   alignItems: 'center', 
                   justifyContent: 'space-between',
                   p: 1.5,
-                  backgroundColor: theme.palette.grey[50],
+                  backgroundColor: isLight ? theme.palette.grey[50] : '#121212',
                   borderRadius: 1
                 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, color: isLight ? 'text.secondary' : '#901b26' }}>
                     <DescriptionIcon color="primary" />
-                    <Box>
+                    <Box sx={{color: isLight ? 'text.secondary' : '#901b26'}}>
                       <Typography variant="body2">{cvFile.name}</Typography>
-                      <Typography variant="caption" color="textSecondary">
+                      <Typography variant="caption" >
                         {(cvFile.size / 1024 / 1024).toFixed(2)} MB
                       </Typography>
                     </Box>
@@ -260,16 +265,16 @@ const EditCV = () => {
             {/* Current CV Section */}
             {cvUrl && (
               <Box sx={{ 
-                backgroundColor: theme.palette.grey[50],
+                backgroundColor: isLight ? theme.palette.grey[50] : '#121212',
                 borderRadius: 1,
                 p: 2,
                 border: `1px solid ${theme.palette.divider}`
               }}>
-                <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+                <Typography variant="subtitle2" color={isLight ? "textSecondary" : "white"} gutterBottom>
                   Existing CV:
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <DescriptionIcon color="action" />
+                  <DescriptionIcon color="primary" />
                   <Button
                     href={cvUrl}
                     target="_blank"
@@ -336,6 +341,7 @@ const EditCV = () => {
           </Box>
         </CardContent>
       </Card>
+    </Box>
     </Box>
   );
 };

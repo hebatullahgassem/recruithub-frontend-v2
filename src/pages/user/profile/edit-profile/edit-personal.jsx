@@ -489,7 +489,11 @@ const EditPersonal = () => {
                         },
                         '.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled': {
                           // color: isLight ? "black" : "white",
-                          WebkitTextStroke: isLight ? 'black' : "1px grey"
+                          WebkitTextStroke: isLight ? 'black' : "1px grey",
+                          color: isLight ? "black" : "white",
+                          "& fieldset": {
+                            borderColor: "#901b20",
+                          },
                         }
                       }}
                     />

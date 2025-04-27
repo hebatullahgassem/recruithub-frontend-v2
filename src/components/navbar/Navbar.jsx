@@ -38,6 +38,15 @@ function Navbar() {
   const handleProfileToggle = () => {
     setIsProfileOpen(!isProfileOpen);
   };
+  const handleProfile = () => {
+    
+    setIsProfileOpen(false);
+    navigate(user?.user_type?.toLowerCase() === "company"
+    ? "/company/profile"
+    : user?.user_type?.toLowerCase() === "admin"
+    ? "/admin/itians"
+    : "/applicant/profile");
+  };
 
   const handleLogout = (e) => {
     e.stopPropagation();
@@ -440,14 +449,7 @@ function Navbar() {
                         <List sx={{ py: 0 }}>
                           <ListItem
                             // button
-                            component={Link}
-                            to={
-                              user?.user_type?.toLowerCase() === "company"
-                                ? "/company/profile"
-                                : user?.user_type?.toLowerCase() === "admin"
-                                ? "/admin/itians"
-                                : "/applicant/profile"
-                            }
+                            onClick={() => handleProfile()}
                             sx={{
                               "&:hover": {
                                 backgroundColor: "rgba(136, 32, 36, 0.05)",

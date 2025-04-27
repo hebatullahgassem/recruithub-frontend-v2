@@ -34,7 +34,7 @@ import {
 const RecommendedJobs = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { user } = useContext(userContext);
+  const { user, isLight } = useContext(userContext);
   
   console.log("User:", user);
   const navigate = useNavigate();
@@ -42,12 +42,12 @@ const RecommendedJobs = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const primaryColor = "#d43132";
+  const primaryColor = isLight ? "#d43132" : "#901b26";
   const secondaryColor = "#f5f5f5";
 
   const [pagination, setPagination] = useState({
     page: 1,
-    pageSize: 5,
+    pageSize: 6,
     totalPages: 1,
     totalResults: 0,
   });
@@ -112,7 +112,7 @@ const RecommendedJobs = () => {
           alignItems: "center",
           justifyContent: "center",
           minHeight: "60vh",
-          background: "linear-gradient(135deg, #f9f9f9 0%, #fff 100%)",
+          background: isLight ? "linear-gradient(135deg, #f9f9f9 0%, #fff 100%)" : "linear-gradient(135deg, #161616 0%, #2c2c2c 100%)",
           borderRadius: 3,
           mx: isMobile ? 1 : 3,
           my: 3,
@@ -174,6 +174,7 @@ const RecommendedJobs = () => {
   }
 
   return (
+    <Box sx={{ background: isLight ? "#f9f9f9" : "#242424", minWidth: "100vw" }}>
     <Box
       sx={{
         p: isMobile ? 1 : 3,
@@ -182,7 +183,7 @@ const RecommendedJobs = () => {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#fff",
+        background: isLight ? "#fff" : "#121212",
       }}
     >
       <motion.div
@@ -197,7 +198,7 @@ const RecommendedJobs = () => {
           mb: 3,
           flexWrap: "wrap",
           gap: 2,
-          background: "#fff",
+          background: isLight ? "#fff" : "#242424",
           p: 3,
           borderRadius: 3,
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -209,7 +210,7 @@ const RecommendedJobs = () => {
               sx={{ 
                 fontWeight: 800,
                 fontSize: isMobile ? "1.8rem" : "2.125rem",
-                color: "#2d3748",
+                color: isLight ? "#2d3748" : "#fff",
                 lineHeight: 1.2,
                 mb: 1
               }}
@@ -234,14 +235,22 @@ const RecommendedJobs = () => {
             flexDirection: isMobile ? "column" : "row",
             width: isMobile ? "100%" : "auto"
           }}>
-            <FormControl size="small" sx={{ 
-              minWidth: isMobile ? "100%" : 140,
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 2,
-                background: "#fff"
-              }
-            }}>
-              <InputLabel id="page-size-label">Jobs per page</InputLabel>
+            <FormControl size="small" sx={{
+                  minWidth: 140,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    background: isLight ? "#fff" : "#121212",
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon": {
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root": {
+                    color: isLight ? "black" : "white",
+                    background: isLight ? "#fff" : "#121212",
+                  },
+                }}>
+              <InputLabel id="page-size-label"style={{ color: isLight ? "black" : "white" }}>Jobs per page</InputLabel>
               <Select
                 labelId="page-size-label"
                 value={pagination.pageSize}
@@ -288,7 +297,7 @@ const RecommendedJobs = () => {
             justifyContent: "center", 
             alignItems: "center",
             minHeight: "300px",
-            background: "#fff",
+            background: isLight ? "#fff" : '#242424',
             borderRadius: 3,
             p: 4,
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)"
@@ -357,7 +366,7 @@ const RecommendedJobs = () => {
           transition={{ duration: 0.5 }}
         >
           <Box sx={{ 
-            background: "#fff",
+            background: isLight ? "#fff" : '#242424',
             p: 4,
             borderRadius: 3,
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -738,6 +747,7 @@ const RecommendedJobs = () => {
           </Box>
         </>
       )}
+    </Box>
     </Box>
   );
 };
