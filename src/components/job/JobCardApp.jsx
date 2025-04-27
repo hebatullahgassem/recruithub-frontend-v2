@@ -28,9 +28,9 @@ import { userContext } from "../../context/UserContext";
       return { label: "fail", color: "error" }
     }
      switch(status) {
-       case '1': // Applied
+       case 1: // Applied
          return { label: "Applied", color: "default" };
-       case '2': // Under Review
+       case 2: // Under Review
          return { label: "Under Review", color: "info" };
        case 3: // Shortlisted
          return { label: "Technical Assessment", color: "primary" };

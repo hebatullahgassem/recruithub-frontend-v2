@@ -1,101 +1,3 @@
-// import React, { useContext, useState } from "react";
-// import {
-//   TextField,
-//   RadioGroup,
-//   FormControlLabel,
-//   Radio,
-//   Button,
-//   Typography,
-// } from "@mui/material";
-// import { getApplicationsByUser } from "../../../services/Application";
-// import { useQuery } from "@tanstack/react-query";
-// import JobCard from "../../../components/job/JobCard";
-// import { userContext } from "../../../context/UserContext";
-// import { useNavigate } from "react-router";
-// import CustomPagination from "../../../components/pagination/pagination";
-
-// const JobApplication = () => {
-//   const { user } = useContext(userContext);
-//   const [page, setPage] = useState(1);
-//   const [pageSize, setPageSize] = useState(10);
-//   const [total, setTotal] = useState(0);
-//   const navigate = useNavigate();
-
-//   const [filters, setFilters] = useState({
-//     user: "",
-//     job: "",
-//     status: "",
-//   });
-
-//   const [searchFilters, setSearchFilters] = useState({
-//     user: `${user.id}`,
-//     job: "",
-//     status: "2,3,4,5,6",
-//   });
-
-//   const {
-//     data: application,
-//     error: applicationError,
-//     isLoading: applicationLoading,
-//     refetch,
-//   } = useQuery({
-//     queryKey: ["application", page, pageSize, searchFilters],
-//     queryFn: async () => {
-//       const res = await getApplicationsByUser({
-//         filters: searchFilters,
-//         page,
-//         pageSize,
-//       });
-//       console.log(res);
-//       setTotal(res.count);
-//       return res.results;
-//     },
-//   });
-
-//   return (
-//     <div className="d-flex flex-column align-items-center w-100" style={{ minHeight: "70vh" }}>
-//       <h2 className="m-3">Your Jobs Applications</h2>
-//       {application?.length > 0 ? (
-//         application.map((application) => (
-//           <JobCard
-//             key={application.id}
-//             job={application.job_details}
-//             user={"user"}
-//           />
-//         ))
-//       ) : (
-//         <div
-//           style={{
-//             minHeight: "30vh",
-//             display: "flex",
-//             flexDirection: "column",
-//             justifyContent: "center",
-//             alignItems: "center",
-//           }}
-//         >
-//           <Typography variant="h4">No applications found</Typography>
-//           <button
-//             className="btn btn-primary"
-//             onClick={() => navigate("/applicant/jobs")}
-//           >
-//             Browse Jobs
-//           </button>
-//         </div>
-//       )}
-//       {application && application.length > 0 && (
-//         <CustomPagination
-//           page={page}
-//           setPage={setPage}
-//           pageSize={pageSize}
-//           setPageSize={setPageSize}
-//           total={total}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default JobApplication;
 import React, { useContext, useState } from "react";
 import {
   Box,
@@ -119,15 +21,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import JobCardApp from "../../../components/job/JobCardApp";
 import { userContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence, color } from "framer-motion";
 import {
   WorkOutline,
   Refresh,
   Search,
   ArrowForward,
 } from "@mui/icons-material";
-import JobCard from "../../../components/job/JobCard";
-import JobCardApp from "../../../components/job/JobCardApp";
 
 const JobApplication = () => {
   const theme = useTheme();
@@ -150,7 +49,7 @@ const JobApplication = () => {
  const [statusFilter, setStatusFilter] = useState("2,3,4,5,6"); // default to all active statuses
 
   const [searchFilters, setSearchFilters] = useState({
-    user: `${user.id}`,
+    user: `${user?.id}`,
     job: "",
     status: "2,3,4,5,6",
   });
@@ -207,7 +106,7 @@ const JobApplication = () => {
   const handleStatusFilterChange = (event) => {
     setFilters((prev) => ({
       ...prev,
-      status: newStatus,
+      status: event.target.value,
     }));
     setPagination((prev) => ({ ...prev, page: 1 }));
   };
@@ -332,7 +231,7 @@ const JobApplication = () => {
                 <Select
                   labelId="status-filter-label"
                   value={filters.status}
-                  onChange={handleStatusFilterChange}
+                  onChange={(e) => handleStatusFilterChange(e)}
                   label="Status"
                 >
                   <MenuItem value="2,3,4,5,6">All Active</MenuItem>
@@ -387,7 +286,7 @@ const JobApplication = () => {
               <Button
                 variant="contained"
                 onClick={handleRefresh}
-                disabled={applicationsLoading}
+                disabled={applicationLoading}
                 sx={{
                   px: 3,
                   borderRadius: 2,
@@ -402,7 +301,7 @@ const JobApplication = () => {
                     backgroundColor: "#e2e8f0",
                   },
                 }}
-                startIcon={applicationsLoading ? <CircularProgress size={18} color="white" /> : <Refresh />}
+                startIcon={applicationLoading ? <CircularProgress size={18} color="white" /> : <Refresh />}
               >
                 Refresh
               </Button>
@@ -410,7 +309,7 @@ const JobApplication = () => {
           </Box>
         </motion.div>
 
-        {applicationsLoading ? (
+        {applicationLoading ? (
           <Box
             sx={{
               display: "flex",
@@ -442,7 +341,7 @@ const JobApplication = () => {
               />
             </motion.div>
           </Box>
-        ) : applicationsError ? (
+        ) : applicationError ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -483,7 +382,7 @@ const JobApplication = () => {
               </Box>
             </Alert>
           </motion.div>
-        ) : applications?.length === 0 ? (
+        ) : application?.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -578,7 +477,7 @@ const JobApplication = () => {
               }}
             >
               <AnimatePresence>
-                {applications?.map((application, index) => (
+                {application?.map((application, index) => (
                   <JobCardApp
                     key={application.id}
                     application={application}
@@ -688,7 +587,7 @@ export default JobApplication;
 //   const {
 //     data: applications,
 //     error: applicationsError,
-//     isLoading: applicationsLoading,
+//     isLoading: applicationLoading,
 //     refetch,
 //   } = useQuery({
 //     queryKey: ["applications", user?.id, pagination.page, pagination.pageSize, filters],
@@ -850,7 +749,7 @@ export default JobApplication;
 //             <Button
 //               variant="contained"
 //               onClick={handleRefresh}
-//               disabled={applicationsLoading}
+//               disabled={applicationLoading}
 //               sx={{
 //                 px: 3,
 //                 borderRadius: 2,
@@ -873,7 +772,7 @@ export default JobApplication;
 //         </Box>
 //       </motion.div>
 
-//       {applicationsLoading ? (
+//       {applicationLoading ? (
 //         <Box
 //           sx={{
 //             display: "flex",

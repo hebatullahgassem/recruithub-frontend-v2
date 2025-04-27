@@ -17,19 +17,16 @@ import {
 import { toast } from "react-hot-toast";
 import { userContext } from "../../../context/UserContext";
 import { getJobById } from "../../../services/Job";
+import Loading from "../../helpers/Loading";
+import NotFound from "../../helpers/NotFound";
 const UserSingleJob = () => {
   const { jobId } = useParams();
   const { user } = useContext(userContext);
   const navigate = useNavigate();
-  const [userJob, setUserJob] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [clickedColumn, setClickedColumn] = useState(1);
-  // const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
-  const [apply, setApply] = useState(false);
 
   const [searchFilters, setSearchFilters] = useState({
     user: `${user?.id}`,
@@ -89,15 +86,20 @@ const UserSingleJob = () => {
   } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
+      try{
       const res = await getJobById(jobId);
       // console.log(res);
-      return res;
+      return res;}
+      catch(err){
+        return []
+      }
     },
   });
-
+  console.log(jobsData)
   if (jobsLoading || userAppLoading)
-    return <p className="text-center">Loading...</p>;
-  if (error) return <p className="text-danger">{error}</p>;
+    return <Loading />;
+  if(userApp?.length === 0) return 
+  if (userAppError) return <NotFound/>;
 
   return (
     <div

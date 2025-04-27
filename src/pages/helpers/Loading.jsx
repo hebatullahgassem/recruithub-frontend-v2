@@ -18,7 +18,7 @@ const Loading = () => {
       }}
     >
       <Typography
-        variant="h1"
+        variant="h3"
         sx={{
           fontWeight: 700,
           color: "#882024",
@@ -27,7 +27,7 @@ const Loading = () => {
       >
         RecruitHub
       </Typography>
-      <CircularProgress sx={{ color: "#882024", scale: "2" }} />
+      <CircularProgress sx={{ color: "#882024", scale: "1" }} />
     </div>
   );
 };

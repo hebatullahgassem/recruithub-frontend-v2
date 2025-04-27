@@ -44,7 +44,7 @@ function UserSaved() {
 
   // Filters state
   const [filters, setFilters] = useState({
-    user: `${user.id}`,
+    user: `${user?.id}`,
     job_title: "",
     company_name: "",
     status: "1",
@@ -389,7 +389,7 @@ function UserSaved() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: "#f8fafc",
+                  backgroundColor: isLight ? "#f8fafc" : '#242424',
                 }}
               >
                 <motion.div
@@ -451,50 +451,53 @@ function UserSaved() {
             animate="visible"
             sx={{ width: "100%" }}
           >
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" color={isLight ? 'black' : 'white'}>
-                Showing {saved.length} of {total} saved jobs
-                {isSearching && " matching your search"}
-              </Typography>
-            </Box>
+            {saved.length > 0 && (
+              <>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="body2" color={isLight ? 'black' : 'white'}>
+                    Showing {saved.length} of {total} saved jobs
+                    {isSearching && " matching your search"}
+                  </Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  {saved.map((save, index) => (
+                    <Grid item xs={12} md={6} key={save.id}>
+                      {/* <Box
+                        component={motion.div}
+                        variants={itemVariants}
+                        custom={index}
+                      > */}
+                        <JobCard
+                          job={save.job_details}
+                          user={"user"}
+                          type={"saved"}
+                        />
+                      {/* </Box> */}
+                    </Grid>
+                  ))}
+                </Grid>
 
-            <Grid container spacing={3}>
-              {saved.map((save, index) => (
-                <Grid item xs={12} md={6} key={save.id}>
+                {total > pageSize && (
                   <Box
-                    component={motion.div}
-                    variants={itemVariants}
-                    custom={index}
+                    sx={{
+                      mt: 4,
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 2,
+                      borderRadius: "12px",
+                      backgroundColor: "#f8fafc",
+                    }}
                   >
-                    <JobCard
-                      job={save.job_details}
-                      user={"user"}
-                      type={"saved"}
+                    <CustomPagination
+                      page={page}
+                      setPage={setPage}
+                      pageSize={pageSize}
+                      setPageSize={setPageSize}
+                      total={total}
                     />
                   </Box>
-                </Grid>
-              ))}
-            </Grid>
-
-            {total > pageSize && (
-              <Box
-                sx={{
-                  mt: 4,
-                  display: "flex",
-                  justifyContent: "center",
-                  p: 2,
-                  borderRadius: "12px",
-                  backgroundColor: "#f8fafc",
-                }}
-              >
-                <CustomPagination
-                  page={page}
-                  setPage={setPage}
-                  pageSize={pageSize}
-                  setPageSize={setPageSize}
-                  total={total}
-                />
-              </Box>
+                )}
+              </>
             )}
           </Box>
         ) : (
@@ -535,14 +538,14 @@ function UserSaved() {
               sx={{
                 fontWeight: 700,
                 textAlign: "center",
-                color: "#2d3748",
+                color: isLight ? "#2d3748" : '#fff',
               }}
             >
               {isSearching ? "No Matching Jobs Found" : "No Saved Jobs Found"}
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
+              color={isLight ? "text.secondary" : '#718096'}
               sx={{
                 textAlign: "center",
                 maxWidth: 500,
