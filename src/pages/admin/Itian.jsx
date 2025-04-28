@@ -18,6 +18,10 @@ import {
   Grid,
   Divider,
   IconButton, // For delete icon button
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { FaTrashAlt, FaUserPlus, FaFileUpload } from "react-icons/fa"; // Icons
 import { userContext } from "../../context/UserContext";
@@ -50,6 +54,9 @@ function AdminItian() {
   const [feedback, setFeedback] = useState({ message: "", severity: "info" });
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [openSingleForm, setOpenSingleForm] = useState(false);
+  const [openBulkForm, setOpenBulkForm] = useState(false);
 
   // Modern color palette
   const colors = {
@@ -200,10 +207,16 @@ function AdminItian() {
 
   
   return (
-    <Box className="content-box" sx={{ padding: 3, backgroundColor: theme.background, color: theme.text, minHeight: "100vh", padding: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3, color: isLight ? "black" : "white",}}>
-        Manage ITIans
-      </Typography>
+    <Box 
+        sx={{ 
+          padding: 3, 
+          backgroundColor: theme.background, 
+          color: theme.text, 
+          minHeight: "100vh", 
+          padding: 3,
+          width: "70%"
+          }}
+    >
 
       {/* Display Feedback Messages */}
       {feedback.message && (
@@ -212,95 +225,102 @@ function AdminItian() {
         </Alert>
       )}
 
-      {/* --- Creation Forms --- */}
-      <Grid container spacing={4} sx={{ mb: 4 }}>
-        {/* Single Create Form */}
-        <Grid item xs={12} md={6}>
-        <Paper
-          elevation={2}
-          sx={{
-            p: 3,
-            backgroundColor: isLight ? "white" : "rgba(33, 33, 33, 0.9)",  // Adjust background color for dark mode
-            filter: isLight ? "brightness(1)" : "brightness(0.7) saturate(0.8)",  // Adjust brightness and saturation
-            transition: "background-color 0.5s ease, filter 0.5s ease",  // Smooth transition for both background and filter
-          }}
-        >
-          <Typography variant="h6" gutterBottom sx={{ color: theme.text}}> 
-            Add Single ITIan
-          </Typography>
-          <Box component="form" onSubmit={handleSingleSubmit} noValidate>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={singleCreateMutation.isLoading}
-              sx={{
-                backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",  // Light background in light mode, darker in dark mode
-                color: isLight ? "black" : "white",  // Text color contrast
-                "& .MuiInputLabel-root": {
-                  color: isLight ? "black" : "white",  // Label color
-                },
-                "& .MuiInputBase-root": {
-                  color: isLight ? "black" : "white",  // Input text color
-                },
-              }}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="nationalId"
-              label="National ID"
-              name="nationalId"
-              value={nationalId}
-              onChange={(e) => setNationalId(e.target.value)}
-              disabled={singleCreateMutation.isLoading}
-              sx={{
-                backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",
-                color: isLight ? "black" : "white",
-                "& .MuiInputLabel-root": {
-                  color: isLight ? "black" : "white",
-                },
-                "& .MuiInputBase-root": {
-                  color: isLight ? "black" : "white",
-                },
-              }}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 2, mb: 1 }}
-              disabled={singleCreateMutation.isLoading}
-              startIcon={singleCreateMutation.isLoading ? <CircularProgress size={20} color="inherit" /> : <FaUserPlus />}
-            >
-              {singleCreateMutation.isLoading ? "Adding..." : "Add ITIan"}
-            </Button>
-          </Box>
-        </Paper>
+      {/* --- Itian Table --- */}
+      <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 4, color: isLight ? "black" : "white", }}>
+        ITIans
+      </Typography>
 
-        </Grid>
-
-        {/* Bulk Create Form */}
-        <Grid item xs={12} md={6}>
-        <Paper
-            elevation={2}
-            sx={{
-              p: 3,
-              backgroundColor: isLight ? "white" : "rgba(33, 33, 33, 0.9)", // Dark background in dark mode
-              filter: isLight ? "brightness(1)" : "brightness(0.7) saturate(0.8)", // Dark mode adjustments
-              transition: "background-color 0.5s ease, filter 0.5s ease", // Smooth transition
-            }}
+      {/* Search Bar */}
+      <Grid container xs={12} md={12} sx={{ mb: 4, justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Buttons to trigger modals */}
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+          <Button
+            variant="contained"
+            startIcon={<FaUserPlus />}
+            onClick={() => setOpenSingleForm(true)}
           >
-            <Typography variant="h6" gutterBottom sx={{ color: isLight ? "black" : "white" }}>
-              Add ITIans from File
-            </Typography>
+            Add Single ITian
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<FaFileUpload />}
+            onClick={() => setOpenBulkForm(true)}
+          >
+            Add ITIans from File
+          </Button>
+        </Box>
+
+        {/* --- Modal for Single ITian Form --- */}
+        <Dialog open={openSingleForm} onClose={() => setOpenSingleForm(false)}>
+          <DialogTitle>Add Single ITian</DialogTitle>
+          <DialogContent>
+            <Box component="form" onSubmit={handleSingleSubmit} noValidate>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={singleCreateMutation.isLoading}
+                sx={{
+                  backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",
+                  color: isLight ? "black" : "white",
+                  "& .MuiInputLabel-root": {
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .MuiInputBase-root": {
+                    color: isLight ? "black" : "white",
+                  },
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nationalId"
+                label="National ID"
+                name="nationalId"
+                value={nationalId}
+                onChange={(e) => setNationalId(e.target.value)}
+                disabled={singleCreateMutation.isLoading}
+                sx={{
+                  backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",
+                  color: isLight ? "black" : "white",
+                  "& .MuiInputLabel-root": {
+                    color: isLight ? "black" : "white",
+                  },
+                  "& .MuiInputBase-root": {
+                    color: isLight ? "black" : "white",
+                  },
+                }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, mb: 1 }}
+                disabled={singleCreateMutation.isLoading}
+                startIcon={singleCreateMutation.isLoading ? <CircularProgress size={20} color="inherit" /> : <FaUserPlus />}
+              >
+                {singleCreateMutation.isLoading ? "Adding..." : "Add ITian"}
+              </Button>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenSingleForm(false)} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* --- Modal for Bulk ITian Form --- */}
+        <Dialog open={openBulkForm} onClose={() => setOpenBulkForm(false)}>
+          <DialogTitle>Add ITIans from File</DialogTitle>
+          <DialogContent>
             <Box component="form" onSubmit={handleBulkSubmit} noValidate>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 Upload a .csv or .xlsx file with 'email' and 'national_id' columns.
@@ -312,10 +332,10 @@ function AdminItian() {
                 sx={{
                   mt: 1,
                   mb: 2,
-                  backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)", // Button background in dark mode
-                  color: isLight ? "black" : "white", // Button text color
+                  backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",
+                  color: isLight ? "black" : "white",
                   "&:hover": {
-                    backgroundColor: isLight ? "#f5f5f5" : "rgba(255, 255, 255, 0.2)", // Hover effect in dark mode
+                    backgroundColor: isLight ? "#f5f5f5" : "rgba(255, 255, 255, 0.2)",
                   },
                 }}
                 disabled={bulkCreateMutation.isLoading}
@@ -337,58 +357,45 @@ function AdminItian() {
                 disabled={!selectedFile || bulkCreateMutation.isLoading}
                 startIcon={bulkCreateMutation.isLoading ? <CircularProgress size={20} color="inherit" /> : <FaFileUpload />}
                 sx={{
-                  backgroundColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.1)", // Adjust for dark mode
-                  color: isLight ? "white" : "black", // Button text color
+                  backgroundColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.1)",
+                  color: isLight ? "white" : "black",
                   "&:hover": {
-                    backgroundColor: isLight ? "primary.dark" : "rgba(255, 255, 255, 0.2)", // Hover effect for dark mode
+                    backgroundColor: isLight ? "primary.dark" : "rgba(255, 255, 255, 0.2)",
                   },
                 }}
               >
                 {bulkCreateMutation.isLoading ? "Uploading..." : "Upload and Add"}
               </Button>
             </Box>
-          </Paper>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenBulkForm(false)} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
 
+        <Grid item xs={6}>
+          <TextField
+            label="Search by Email or National ID"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0); // Reset page on search
+            }}
+            sx={{
+              backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)",
+              color: isLight ? "black" : "white",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
+              },
+            }}
+          />
         </Grid>
       </Grid>
-
-      <Divider sx={{ my: 3 }} />
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-      <TextField
-        label="Search by Email or National ID"
-        variant="outlined"
-        size="small"
-        value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-          setPage(0); // reset to first page when searching
-        }}
-        sx={{
-          width: "60%",
-          backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)", // Lighter background for dark mode
-          color: isLight ? "black" : "white", // Text color for dark mode
-          "& .MuiInputLabel-root": {
-            color: isLight ? "black" : "white", // Label color for dark mode
-          },
-          "& .MuiInputBase-root": {
-            color: isLight ? "black" : "white", // Input text color for dark mode
-          },
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)", // Lighter border in dark mode
-          },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.8)", // Hover border color
-          },
-        }}
-      />
-
-    </Box>
-
-
-      {/* --- Itian Table --- */}
-      <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 2, color: isLight ? "black" : "white", }}>
-         Existing ITIans
-      </Typography>
 
        {/* Loading/Error/Empty States for Table */}
       {isFetchingItians && !isRefetchingItians && (
@@ -432,6 +439,7 @@ function AdminItian() {
             overflow: "hidden", 
             backgroundColor: isLight ? "white" : "rgba(33, 33, 33, 0.9)", 
             transition: "background-color 0.5s ease",
+            mb: 12
           }}
         >
           {/* Optional: Indicate background refetching */}
@@ -447,17 +455,18 @@ function AdminItian() {
             <Table stickyHeader aria-label="itians table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ color: isLight ? "text.primary" : "black", borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)" }}>
+                  <TableCell sx={{ color: isLight ? "text.primary" : "black", borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)", backgroundColor: isLight ? "rgba(202, 200, 200, 0.5)" : "white"}}>
                     Email
                   </TableCell>
-                  <TableCell sx={{ color: isLight ? "text.primary" : "black", borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)" }}>
+                  <TableCell sx={{ color: isLight ? "text.primary" : "black", borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)", backgroundColor: isLight ? "rgba(202, 200, 200, 0.5)" : "white" }}>
                     National ID
                   </TableCell>
                   <TableCell 
                     sx={{ 
                       color: isLight ? "text.primary" : "black", 
                       borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
-                      textAlign: "center" 
+                      textAlign: "center",
+                      backgroundColor: isLight ? "rgba(202, 200, 200, 0.5)" : "white"
                     }} 
                   >
                     Action
@@ -502,7 +511,6 @@ function AdminItian() {
           />
         </Paper>
       )}
-
     </Box>
   );
 }
