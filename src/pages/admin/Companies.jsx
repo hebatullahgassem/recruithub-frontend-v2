@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Paper,
@@ -16,13 +16,18 @@ import {
   Typography,
   Alert, // For showing errors/success
 } from "@mui/material";
-import { FaCheckCircle } from "react-icons/fa"; // Using a check icon for verify
+import { FaCheckCircle, FaSearch } from "react-icons/fa"; // Using a check icon for verify
+
 
 // Import your API service functions
 import { getUnverifiedCompanies, verifyCompany } from "../../services/Admin"; // Adjust path as needed
 import CompanyVerification from "./CompanyVerification";
 
+import { userContext } from "../../context/UserContext";
+
+
 function AdminCompany() {
+  const { isLight } = useContext(userContext);
   const queryClient = useQueryClient(); // Get QueryClient instance
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -32,6 +37,35 @@ function AdminCompany() {
     companyId: null,
   });
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Modern color palette
+  const colors = {
+    light: {
+      background: "#ffffff",
+      cardBg: "#ffffff",
+      sectionBg: "#f8f9fa",
+      text: "#333333",
+      accent: "#e63946", // Modern red
+      accentHover: "#d62b3a",
+      secondary: "#457b9d", // Blue accent
+      muted: "#6c757d",
+      border: "#dee2e6",
+    },
+    dark: {
+      background: "#121212",
+      cardBg: "#1e1e1e",
+      sectionBg: "#242424",
+      text: "#f8f9fa",
+      accent: "#e63946", // Same red accent for consistency
+      accentHover: "#f25d69",
+      secondary: "#64b5f6", // Lighter blue for dark mode
+      muted: "#adb5bd",
+      border: "#343a40",
+    },
+  };
+
+  // Get current theme colors
+  const theme = isLight ? colors.light : colors.dark;
 
 
   // --- Data Fetching ---
@@ -101,24 +135,76 @@ function AdminCompany() {
   const totalCompanies = companyData?.count || 0;
 
   return (
-    <Box sx={{ padding: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+<div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: theme.background,
+        color: theme.text,
+        transition: "background-color 0.3s ease, color 0.3s ease",
+        padding: "20px",
+      }}
+    >
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 3 },
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: theme.text,
+          width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+          mx: "auto",
+          my: 4,
+          borderRadius: "12px",
+          boxShadow: theme.shadow,
+          transition: "all 0.3s ease",
+        }}
+      >
+
+      <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 3, fontWeight: 600,
+      color: isLight ? "black" : "white"
+      }}>
+        Verify Companies
+      </Typography>
+
       <TextField
         label="Search by Name or Email"
         variant="outlined"
+        fullWidth
         size="small"
         value={searchQuery}
         onChange={(e) => {
           setSearchQuery(e.target.value);
           setPage(0); // reset to first page when searching
         }}
-        sx={{ width: "60%" }}
+        InputProps={{
+                        startAdornment: <FaSearch style={{ marginRight: 8, opacity: 0.6, }} />,
+                      }}
+                      sx={{
+                        mb: 3,
+                        backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.05)",
+                        borderRadius: "8px",
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "8px",
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#882024",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#882024",
+                          },
+                        },
+                        "& .MuiInputLabel-root": {
+                          color: isLight ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.7)",
+                          "&.Mui-focused": {
+                            color: "white",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          color: theme.text,
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: isLight ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)",
+                        },
+                      }}
       />
-    </Box>
-
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3 }}>
-        Verify Companies
-      </Typography>
 
       {/* Display Feedback Messages */}
       {verificationStatus.message && verificationStatus.companyId && (
@@ -154,29 +240,73 @@ function AdminCompany() {
                <Typography sx={{ml: 1}} variant="caption">Updating...</Typography>
              </Box>
            )}
-          <TableContainer sx={{ maxHeight: 600 }}> {/* Adjust max height as needed */}
+         <TableContainer sx={{ maxHeight: 600 }}>
             <Table stickyHeader aria-label="unverified companies table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={headerStyle}>Company Name</TableCell>
-                  <TableCell sx={headerStyle}>Email</TableCell>
-                  <TableCell sx={headerStyle} align="center">Accounts</TableCell>
-                  <TableCell sx={headerStyle} align="center">Action</TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
+                    }}
+                  >
+                    Company Name
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
+                    }}
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
+                    }}
+                  >
+                    Accounts
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
+                    }}
+                  >
+                    Action
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {companies.map((company, index) => (
                   <TableRow
-                    hover // Add hover effect
                     key={company.id}
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9", // Subtle striping
+                      backgroundColor: index % 2 === 0 ? 
+                      (isLight ? "#ffffff" : "#333333") : 
+                      (isLight ? "#f9f9f9" : "#444444"),
                     }}
                   >
-                    <TableCell>{company.name || "N/A"}</TableCell>
-                    <TableCell>{company.email || "N/A"}</TableCell>
-                    
-                    <TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
+                      {company.name || "N/A"}
+                    </TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
+                      {company.email || "N/A"}
+                    </TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
                       {company.accounts ? (
                         Object.entries(company.accounts).map(([key, value]) => (
                           value ? (
@@ -185,6 +315,7 @@ function AdminCompany() {
                               href={value}
                               target="_blank"
                               rel="noopener noreferrer"
+                              style={{ color: isLight ? "#000" : "#fff" }}
                             >
                               {key.charAt(0).toUpperCase() + key.slice(1)}{" "}
                             </a>
@@ -196,18 +327,7 @@ function AdminCompany() {
                         </Typography>
                       )}
                     </TableCell>
-                    {/* Add other cells */}
                     <TableCell align="center">
-                      {/* <Button
-                        variant="contained"
-                        color="success" // Use success color for verify action
-                        size="small"
-                        startIcon={verifyMutation.isLoading && verifyMutation.variables === company.id ? <CircularProgress size={16} color="inherit" /> : <FaCheckCircle />}
-                        onClick={() => handleVerifyClick(company.id)}
-                        disabled={verifyMutation.isLoading && verifyMutation.variables === company.id} // Disable only the button clicked while processing
-                      >
-                        {verifyMutation.isLoading && verifyMutation.variables === company.id ? 'Verifying...' : 'Verify'}
-                      </Button> */}
                       <CompanyVerification
                         companyId={company.id}
                         onSuccess={() =>
@@ -217,10 +337,10 @@ function AdminCompany() {
                           variant: "contained",
                           size: "small",
                           sx: {
-                            backgroundColor: "rgb(163, 161, 161)",
+                            backgroundColor: "#882024",
                             color: "#fff",
                             "&:hover": {
-                              backgroundColor: "#5a6268",
+                              backgroundColor: "rgb(85, 18, 20)",
                             },
                             textTransform: "none",
                             fontWeight: "bold",
@@ -230,14 +350,41 @@ function AdminCompany() {
                           },
                         }}
                       />
-
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
           <TablePagination
+            sx={{
+              borderTop: `1px solid ${theme.border}`,
+                  color: theme.text,
+                  backgroundColor: isLight ? "white" : "#333333",
+                  ".MuiTablePagination-toolbar": {
+                    display: "flex",
+                    justifyContent: "center", // Center all contents
+                    alignItems: "center",
+                    flexWrap: "nowrap",
+                    gap: 2,
+                  }, 
+                  ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows": {
+                    color: theme.muted,
+                  },
+                  ".MuiTablePagination-select": {
+                    color: theme.text,
+                  },
+                  ".MuiTablePagination-selectIcon": {
+                    color: theme.muted,
+                  },
+                  ".MuiTablePagination-actions button": {
+                    color: theme.primary,
+                    "&.Mui-disabled": {
+                      color: theme.muted,
+                    },
+                  },
+            }}
             rowsPerPageOptions={[5, 10, 25, 50]} // Standard options
             component="div"
             count={totalCompanies} // Total number of items from API
@@ -249,6 +396,7 @@ function AdminCompany() {
         </Paper>
       )}
     </Box>
+    </div>
   );
 }
 
