@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Paper,
@@ -18,11 +18,16 @@ import {
 } from "@mui/material";
 import { FaCheckCircle } from "react-icons/fa"; // Using a check icon for verify
 
+
 // Import your API service functions
 import { getUnverifiedCompanies, verifyCompany } from "../../services/Admin"; // Adjust path as needed
 import CompanyVerification from "./CompanyVerification";
 
+import { userContext } from "../../context/UserContext";
+
+
 function AdminCompany() {
+  const { isLight } = useContext(userContext);
   const queryClient = useQueryClient(); // Get QueryClient instance
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -32,6 +37,35 @@ function AdminCompany() {
     companyId: null,
   });
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Modern color palette
+  const colors = {
+    light: {
+      background: "#ffffff",
+      cardBg: "#ffffff",
+      sectionBg: "#f8f9fa",
+      text: "#333333",
+      accent: "#e63946", // Modern red
+      accentHover: "#d62b3a",
+      secondary: "#457b9d", // Blue accent
+      muted: "#6c757d",
+      border: "#dee2e6",
+    },
+    dark: {
+      background: "#121212",
+      cardBg: "#1e1e1e",
+      sectionBg: "#242424",
+      text: "#f8f9fa",
+      accent: "#e63946", // Same red accent for consistency
+      accentHover: "#f25d69",
+      secondary: "#64b5f6", // Lighter blue for dark mode
+      muted: "#adb5bd",
+      border: "#343a40",
+    },
+  };
+
+  // Get current theme colors
+  const theme = isLight ? colors.light : colors.dark;
 
 
   // --- Data Fetching ---
@@ -101,7 +135,7 @@ function AdminCompany() {
   const totalCompanies = companyData?.count || 0;
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, backgroundColor: theme.background, color: theme.text, minHeight: "100vh" }}>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
       <TextField
         label="Search by Name or Email"
@@ -112,11 +146,28 @@ function AdminCompany() {
           setSearchQuery(e.target.value);
           setPage(0); // reset to first page when searching
         }}
-        sx={{ width: "60%" }}
+        sx={{ width: "60%", 
+          backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)", // Lighter background for dark mode
+          color: isLight ? "black" : "white", // Text color for dark mode
+          "& .MuiInputLabel-root": {
+            color: isLight ? "black" : "white", // Label color for dark mode
+          },
+          "& .MuiInputBase-root": {
+            color: isLight ? "black" : "white", // Input text color for dark mode
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)", // Lighter border in dark mode
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.8)", // Hover border color
+          },
+         }}
       />
     </Box>
 
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3 }}>
+      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3,
+      color: isLight ? "black" : "white"
+      }}>
         Verify Companies
       </Typography>
 
@@ -154,29 +205,63 @@ function AdminCompany() {
                <Typography sx={{ml: 1}} variant="caption">Updating...</Typography>
              </Box>
            )}
-          <TableContainer sx={{ maxHeight: 600 }}> {/* Adjust max height as needed */}
+         <TableContainer sx={{ maxHeight: 600 }}>
             <Table stickyHeader aria-label="unverified companies table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={headerStyle}>Company Name</TableCell>
-                  <TableCell sx={headerStyle}>Email</TableCell>
-                  <TableCell sx={headerStyle} align="center">Accounts</TableCell>
-                  <TableCell sx={headerStyle} align="center">Action</TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)"
+                    }}
+                  >
+                    Company Name
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)"
+                    }}
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
+                      textAlign: "center"
+                    }}
+                  >
+                    Accounts
+                  </TableCell>
+                  <TableCell 
+                    sx={{
+                      color: isLight ? "text.primary" : "black",
+                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
+                      textAlign: "center"
+                    }}
+                  >
+                    Action
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {companies.map((company, index) => (
                   <TableRow
-                    hover // Add hover effect
                     key={company.id}
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9", // Subtle striping
+                      backgroundColor: index % 2 === 0 ? 
+                      (isLight ? "#ffffff" : "#333333") : 
+                      (isLight ? "#f9f9f9" : "#444444"),
                     }}
                   >
-                    <TableCell>{company.name || "N/A"}</TableCell>
-                    <TableCell>{company.email || "N/A"}</TableCell>
-                    
-                    <TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
+                      {company.name || "N/A"}
+                    </TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
+                      {company.email || "N/A"}
+                    </TableCell>
+                    <TableCell sx={{ color: isLight ? "text.primary" : "white" }}>
                       {company.accounts ? (
                         Object.entries(company.accounts).map(([key, value]) => (
                           value ? (
@@ -185,6 +270,7 @@ function AdminCompany() {
                               href={value}
                               target="_blank"
                               rel="noopener noreferrer"
+                              style={{ color: isLight ? "#000" : "#fff" }}
                             >
                               {key.charAt(0).toUpperCase() + key.slice(1)}{" "}
                             </a>
@@ -196,18 +282,7 @@ function AdminCompany() {
                         </Typography>
                       )}
                     </TableCell>
-                    {/* Add other cells */}
                     <TableCell align="center">
-                      {/* <Button
-                        variant="contained"
-                        color="success" // Use success color for verify action
-                        size="small"
-                        startIcon={verifyMutation.isLoading && verifyMutation.variables === company.id ? <CircularProgress size={16} color="inherit" /> : <FaCheckCircle />}
-                        onClick={() => handleVerifyClick(company.id)}
-                        disabled={verifyMutation.isLoading && verifyMutation.variables === company.id} // Disable only the button clicked while processing
-                      >
-                        {verifyMutation.isLoading && verifyMutation.variables === company.id ? 'Verifying...' : 'Verify'}
-                      </Button> */}
                       <CompanyVerification
                         companyId={company.id}
                         onSuccess={() =>
@@ -220,7 +295,7 @@ function AdminCompany() {
                             backgroundColor: "rgb(163, 161, 161)",
                             color: "#fff",
                             "&:hover": {
-                              backgroundColor: "#5a6268",
+                              backgroundColor: "gray",
                             },
                             textTransform: "none",
                             fontWeight: "bold",
@@ -230,13 +305,13 @@ function AdminCompany() {
                           },
                         }}
                       />
-
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50]} // Standard options
             component="div"
