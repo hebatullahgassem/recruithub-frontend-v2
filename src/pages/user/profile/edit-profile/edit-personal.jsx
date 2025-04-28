@@ -22,7 +22,7 @@ import {
   Error,
   AddAPhoto,
 } from "@mui/icons-material";
-import ProfileStepper from "../../../../components/profile/ProfileStepper";
+
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -671,7 +671,7 @@ const EditPersonal = () => {
                           WebkitTextStroke: isLight ? 'black' : "1px grey"
                         }
                       }}
-                      disabled
+                     
                     />
                   </Grid>
                 </Grid>

@@ -10,7 +10,6 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
-import ProfileStepper from "../../../../components/profile/ProfileStepper";
 import { useNavigate, useLocation } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 
@@ -34,7 +33,6 @@ const ReviewProfile = () => {
     <Grid container justifyContent="center" sx={{ p: 3 }}>
       <Grid item xs={12} md={8}>
         <Paper elevation={3} sx={{ p: 4 }}>
-          {/* <ProfileStepper activeStep={6} /> */}
           <Typography variant="h4" align="center" gutterBottom>
             Review Your Profile
           </Typography>

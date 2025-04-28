@@ -44,9 +44,9 @@ const UserProfile = () => {
   const { user, refetchUser, isLight } = useContext(userContext);
   // const theme = useTheme();
   // Custom color palette
-  const primaryColor = "#d43132"; // Soft red/pink
-  const secondaryColor = "#4a7b9d"; // Complementary blue
-  const accentColor = "#d06c79"; // Peach accent
+  const primaryColor = "#d33233"; // Soft red/pink 
+  const secondaryColor = "#d33233"; // Complementary blue
+  const accentColor = "#882123"; // Peach accent
   const backgroundColor = isLight ? "#f9f5f4" : '#121212'; // Warm white background
   const lightBackgroundColor = isLight ? "#f9f5f4" : '#242424';
   const cardsBackgroundColor = isLight ? "#fff" : '#242424';

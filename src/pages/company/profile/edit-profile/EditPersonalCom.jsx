@@ -1,28 +1,34 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import {
-  Button,
-  TextField,
-  Avatar,
+  CircularProgress,
   Box,
   Typography,
-  CircularProgress,
+  TextField,
+  Button,
+  Paper,
+  Avatar,
+  Container,
+  Grid,
+  Divider,
   Alert,
-  Fade,
-  Grow,
-  Slide
-} from "@mui/material";
-import { Edit } from "@mui/icons-material"
+  IconButton,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material"
+import { ArrowBack,
+Save,
+CameraAlt,
+CheckCircle,
+ErrorOutline } from "@mui/icons-material"
+import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 import Lottie from "lottie-react";
-// import loadingAnimation from "../../../../assets/animations/loading.json";
-// import successAnimation from "../../../../assets/animations/success.json";
-import '../../../../styles/company/companyteme.css';
 import '../../../../styles/company/profile/edit_profile_Personal.css';
 
 const EditPersonalCom = () => {
-  const { user, setUser } = useContext(userContext);
+  const { user, setUser ,isLight} = useContext(userContext);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [uploadStatus, setUploadStatus] = useState({ img: null });
@@ -30,6 +36,16 @@ const EditPersonalCom = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const id = location.state?.id;
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+
+  const primaryColor = "#e53946"
+  const backgroundColor = isLight ? "#f9f9f9" : "#121212"
+  const textColor = isLight ? "#2d3748" : "#e2e8f0"
+  const borderColor = isLight ? "#e3cdcd" : "#2d3748"
+  const cardBackground = isLight ? "#ffffff" : "#1e1e1e"
+  const inputBackground = isLight ? "#f9f9f9" : "#242424"
 
   const [localData, setLocalData] = useState({
     name: "",
@@ -68,8 +84,11 @@ const EditPersonalCom = () => {
     if (!file) return;
 
     try {
-      if (!file.type.match("image.*")) throw new Error("Please upload a valid image.");
-      if (file.size > 10 * 1024 * 1024) throw new Error("File size should be less than 10MB");
+      if (!file.type.match("image.*")) throw new 
+      showErrorToast("Please upload a valid image.");
+      if (file.size > 10 * 1024 * 1024) throw new 
+      
+      showErrorToast("File size should be less than 10MB");
 
       setUploadStatus({ img: "uploading" });
       const formData = new FormData();
@@ -98,6 +117,7 @@ const EditPersonalCom = () => {
     } catch (error) {
       console.error("Error uploading img:", error);
       setUploadStatus({ img: "error" });
+      showErrorToast(error.message)
       setError(error.message);
     }
   };
@@ -121,13 +141,10 @@ const EditPersonalCom = () => {
         },
       });
 
-      // setUser((prev) => ({
-      //   ...prev,
-      //   ...response.data,
-      // }));
-
       setSuccess(true);
       setError(null);
+
+      showSuccessToast("Profile updated successfully! Redirecting...")
 
       setTimeout(() => navigate("/company/profile"), 2000);
     } catch (err) {
@@ -135,7 +152,7 @@ const EditPersonalCom = () => {
       const errorMessage = err.response?.data
         ? Object.values(err.response.data).join(" ")
         : "Failed to save changes.";
-      setError(errorMessage);
+      showErrorToast(errorMessage)
     }
   };
 
@@ -147,7 +164,7 @@ const EditPersonalCom = () => {
     const missing = requiredFields.filter((f) => !localData[f]);
 
     if (missing.length > 0) {
-      setError(`Missing required fields: ${missing.join(", ")}`);
+      showErrorToast(`Missing required fields: ${missing.join(", ")}`);
       return false;
     }
 
@@ -157,33 +174,121 @@ const EditPersonalCom = () => {
   
  
     return (
-      <div className="edit-profile">
-        <div className="edit-profile-card">
-          <div className="edit-profile-header">
-            <h1 className="edit-profile-title">Edit Company Profile</h1>
-            <p className="edit-profile-subtitle">Update your company information</p>
-          </div>
-  
-          <div className="edit-profile-content">
-            {success ? (
-              <div className="form-success">Profile updated successfully! Redirecting...</div>
-            ) : (
-              <>
-                <div className="edit-profile-avatar">
-                  <div className="avatar-container">
-                    <img
-                      src={localData.img || "/placeholder.svg?height=120&width=120"}
-                      alt="Company Logo"
-                      className="profile-avatar"
-                      onClick={() => logoRef.current.click()}
-                    />
-                    <div className="avatar-upload" onClick={() => logoRef.current.click()}>
-                      <Edit fontSize="small" />
-                    </div>
-                  </div>
-                  <span className="avatar-text" onClick={() => logoRef.current.click()}>
-                    {localData.img ? "Change Logo" : "Upload Logo"}
-                  </span>
+      <Box
+      className={`edit-profile-container ${isLight ? "light-mode" : "dark-mode"}`}
+      sx={{
+        backgroundColor: backgroundColor,
+        minHeight: "100vh",
+        width: "100%",
+        py: 4,
+        px: { xs: 2, sm: 3, md: 4 },
+      }}
+    >
+      <Container maxWidth="lg">
+        <Paper
+          elevation={3}
+          sx={{
+            backgroundColor: cardBackground,
+            borderRadius: "16px",
+            overflow: "hidden",
+            border: `1px solid ${borderColor}`,
+            transition: "all 0.3s ease",
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: primaryColor,
+              py: 3,
+              px: 4,
+              color: "#fff",
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h4" fontWeight={700}>
+              Edit Company Profile
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 1, opacity: 0.9 }}>
+              Update your company information and settings
+            </Typography>
+          </Box>
+
+          {success ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Alert
+                severity="success"
+                icon={<CheckCircle fontSize="inherit" />}
+                sx={{
+                  mb: 3,
+                  alignItems: "center",
+                  backgroundColor: isLight ? "#def7ec" : "#1a3b2c",
+                  color: isLight ? "#057a55" : "#84e1bc",
+                  "& .MuiAlert-icon": {
+                    color: isLight ? "#057a55" : "#84e1bc",
+                  },
+                }}
+              >
+                <Typography variant="body1" fontWeight={500}>
+                  Profile updated successfully! Redirecting...
+                </Typography>
+              </Alert>
+              <CircularProgress sx={{ color: primaryColor }} />
+            </Box>
+          ) : (
+            <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
+              {error && (
+                <Alert
+                  severity="error"
+                  icon={<ErrorOutline fontSize="inherit" />}
+                  sx={{
+                    mb: 3,
+                    alignItems: "center",
+                    backgroundColor: isLight ? "#fde8e8" : "#3b1a1a",
+                    color: isLight ? "#e02424" : "#f8b4b4",
+                    "& .MuiAlert-icon": {
+                      color: isLight ? "#e02424" : "#f8b4b4",
+                    },
+                  }}
+                >
+                  <Typography variant="body1" fontWeight={500}>
+                    {error}
+                  </Typography>
+                </Alert>
+              )}
+
+              <Box sx={{ textAlign: "center", mb: 4 }}>
+                <Box sx={{ position: "relative", display: "inline-block" }}>
+                  <Avatar
+                    src={localData.img || "/placeholder.svg?height=150&width=150"}
+                    alt="Company Logo"
+                    sx={{
+                      width: 150,
+                      height: 150,
+                      border: `3px solid ${primaryColor}`,
+                      boxShadow: `0 4px 20px ${primaryColor}33`,
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                      },
+                    }}
+                    onClick={() => logoRef.current.click()}
+                  />
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: primaryColor,
+                      color: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#c62a37",
+                      },
+                      boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                    }}
+                    onClick={() => logoRef.current.click()}
+                  >
+                    <CameraAlt />
+                  </IconButton>
                   <input
                     type="file"
                     accept="image/*"
@@ -191,100 +296,346 @@ const EditPersonalCom = () => {
                     style={{ display: "none" }}
                     onChange={handleImageUpload}
                   />
-                </div>
-  
-                {error && <div className="form-error">{error}</div>}
-  
-                <div className="edit-profile-form">
-                  <div className="form-field">
-                    <label className="form-label">Company Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={localData.name}
-                      onChange={handleChange}
-                      className="form-input"
-                    />
-                  </div>
-  
-                  <div className="form-field">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={localData.email}
-                      disabled
-                      className="form-input form-input--disabled"
-                    />
-                  </div>
-  
-                  <div className="form-field">
-                    <label className="form-label">Location</label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={localData.location}
-                      onChange={handleChange}
-                      className="form-input"
-                    />
-                  </div>
-  
-                  <div className="form-field">
-                    <label className="form-label">Phone Number</label>
-                    <input
-                      type="text"
-                      name="phone"
-                      value={localData.phone}
-                      onChange={handleChange}
-                      className="form-input"
-                    />
-                  </div>
-  
-                  <div className="form-field">
-                    <label className="form-label">Establishment Date</label>
-                    <input type="date" name="est" value={localData.est} onChange={handleChange} className="form-input" />
-                  </div>
-  
-                  <div className="form-field">
-                    <label className="form-label">Industry</label>
-                    <input
-                      type="text"
-                      name="industry"
-                      value={localData.industry}
-                      onChange={handleChange}
-                      className="form-input"
-                    />
-                  </div>
-  
-                  <div className="form-field form-field--full">
-                    <label className="form-label">About</label>
-                    <textarea
-                      name="about"
-                      value={localData.about}
-                      onChange={handleChange}
-                      className="form-input form-textarea"
-                    ></textarea>
-                  </div>
-  
-                  <div className="form-actions">
-                    <button className="form-button form-button--secondary" onClick={() => navigate("/company/profile")}>
-                      Cancel
-                    </button>
-                    <button
-                      className="form-button form-button--primary"
-                      onClick={handleSave}
-                      disabled={uploadStatus.img === "uploading"}
-                    >
-                      {uploadStatus.img === "uploading" ? "Uploading..." : "Save Changes"}
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    
+                </Box>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    mt: 2,
+                    color: primaryColor,
+                    cursor: "pointer",
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                  onClick={() => logoRef.current.click()}
+                >
+                  {localData.img ? "Change company logo" : "Upload company logo"}
+                </Typography>
+                {uploadStatus.img === "uploading" && (
+                  <Box sx={{ mt: 1, display: "flex", justifyContent: "center", alignItems: "center", gap: 1 }}>
+                    <CircularProgress size={16} sx={{ color: primaryColor }} />
+                    <Typography variant="body2" sx={{ color: isLight ? "#718096" : "#a0aec0" }}>
+                      Uploading...
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+
+              <Divider sx={{ mb: 4, borderColor: borderColor }} />
+
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Company Name*
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="name"
+                    value={localData.name}
+                    onChange={handleChange}
+                    placeholder="Enter company name"
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Email (Cannot be changed)
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="email"
+                    value={localData.email}
+                    disabled
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: isLight ? "#edf2f7" : "#2d3748",
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        color: isLight ? "#718096" : "#a0aec0",
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Phone Number*
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="phone"
+                    value={localData.phone}
+                    onChange={handleChange}
+                    placeholder="Enter phone number"
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Location*
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="location"
+                    value={localData.location}
+                    onChange={handleChange}
+                    placeholder="Enter company location"
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Industry
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="industry"
+                    value={localData.industry}
+                    onChange={handleChange}
+                    placeholder="Enter company industry"
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    Establishment Date
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="est"
+                    type="date"
+                    value={localData.est}
+                    onChange={handleChange}
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    sx={{
+                      mb: 1,
+                      color: textColor,
+                    }}
+                  >
+                    About Company
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    name="about"
+                    value={localData.about}
+                    onChange={handleChange}
+                    placeholder="Enter company description"
+                    variant="outlined"
+                    InputProps={{
+                      sx: {
+                        backgroundColor: inputBackground,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: borderColor,
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: primaryColor,
+                        },
+                        color: textColor,
+                      },
+                    }}
+                  />
+                </Grid>
+              </Grid>
+
+              <Box
+                sx={{
+                  mt: 4,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: isMobile ? "column" : "row",
+                  gap: isMobile ? 2 : 0,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  startIcon={<ArrowBack />}
+                  onClick={() => navigate("/company/profile")}
+                  sx={{
+                    borderColor: isLight ? "#e2e8f0" : "#2d3748",
+                    color: textColor,
+                    borderRadius: "10px",
+                    py: 1.5,
+                    px: 3,
+                    fontWeight: 600,
+                    "&:hover": {
+                      borderColor: primaryColor,
+                      backgroundColor: `${primaryColor}10`,
+                      transform: "translateY(-3px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Cancel & Go Back
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={
+                    uploadStatus.img === "uploading" ? <CircularProgress size={20} sx={{ color: "#fff" }} /> : <Save />
+                  }
+                  onClick={handleSave}
+                  disabled={uploadStatus.img === "uploading"}
+                  sx={{
+                    backgroundColor: primaryColor,
+                    color: "#fff",
+                    borderRadius: "10px",
+                    py: 1.5,
+                    px: 3,
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "#c62a37",
+                      transform: "translateY(-3px)",
+                      boxShadow: `0 4px 12px ${primaryColor}33`,
+                    },
+                    "&:disabled": {
+                      backgroundColor: isLight ? "#e9d8d9" : "#3a2a2b",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  {uploadStatus.img === "uploading" ? "Uploading..." : "Save Changes"}
+                </Button>
+              </Box>
+            </Box>
+          )}
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

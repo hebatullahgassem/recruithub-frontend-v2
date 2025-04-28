@@ -14,7 +14,7 @@ import '../../../styles/company/job/jobs_company.css';
 
 function CompanyJobs() {
   //   const location = useLocation();
-  const { user } = useContext(userContext);
+  const { user, isLight } = useContext(userContext);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -72,7 +72,7 @@ function CompanyJobs() {
   return (
     <div className="company-jobs">
     <div className="container">
-      <header className="company-jobs__header">
+      <header className="company-jobs__header" style={{background: isLight ? '#fff' : '#121212'}}>
         <h1 className="company-jobs__title">Company Jobs</h1>
         <button
           className="company-jobs__add-button"
@@ -99,7 +99,7 @@ function CompanyJobs() {
         </div>
       ) : (
         <>
-          <div className="company-jobs__search">
+          <div className="company-jobs__search" style={{background: isLight ? '#fff' : '#121212'}}>
             <TextField
               label="Search by name"
               name="title"

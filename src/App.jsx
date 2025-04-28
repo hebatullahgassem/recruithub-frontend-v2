@@ -27,6 +27,7 @@ import { Toaster } from "react-hot-toast";
 import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
 import { LinearProgress, Typography } from "@mui/material";
 import Loading from "./pages/helpers/Loading.jsx";
+import { ThemeProvider } from "../themeDarkLight/themeProvider.jsx";
 
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
@@ -107,6 +108,7 @@ function App() {
       <QueryClientProvider client={new QueryClient()}>
         <BrowserRouter>
         <Toaster position="top-right" reverseOrder={false} />
+        <ThemeProvider>
           <ProfileProvider>
             <ComProfileProvider>
             <UserContextProvider>
@@ -225,6 +227,7 @@ function App() {
             </UserContextProvider>
             </ComProfileProvider>
           </ProfileProvider>
+         </ThemeProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </>

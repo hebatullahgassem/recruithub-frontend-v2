@@ -23,6 +23,7 @@ import { getCompanyById } from "../../../services/Auth";
 import { id, se } from "date-fns/locale";
 import CompanyBox from "../../../components/accounts/CompanyBox";
 import CompanyJobsBox from "../../../components/job/CompanyJobsBox";
+import { showErrorToast,showSuccessToast } from "../../../confirmAlert/toastConfirm";
 const UserSingleJob = () => {
   const { jobId } = useParams();
   const { user, isLight } = useContext(userContext);
@@ -40,7 +41,7 @@ const UserSingleJob = () => {
     job: `${jobId}` || null,
   });
 
-  const formRef = useRef(null);
+  
 
   const phases = [
     "Application",
@@ -61,7 +62,7 @@ const UserSingleJob = () => {
       console.log(res);
       userAppRefetch();
     } catch (error) {
-      toast.error("Complete your profile before applying!");
+      showErrorToast("Complete your profile before applying!");
       console.error("Error creating application:", error);
     }
   }
@@ -97,7 +98,7 @@ const UserSingleJob = () => {
         page: 1,
         pageSize: 5,
       });
-      // console.log(res);
+      console.log(res);
       setTotal(res.count);
       return res?.data?.results || {};
     },
@@ -138,7 +139,7 @@ const UserSingleJob = () => {
       }
     },
   });
-  console.log(jobsData);
+  // console.log(jobsData);
   if (jobsLoading || userAppLoading) return <Loading />;
   if (userApp?.length === 0) return;
   if (userAppError) return <NotFound />;

@@ -22,6 +22,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import DynamicSwitcher from "../companyProcess/DynamicSwitcher";
 import { MdSunny } from "react-icons/md";
+import { showConfirmToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -54,13 +55,24 @@ function Navbar() {
 
   const handleLogout = (e) => {
     e.stopPropagation();
-    if (window.confirm("Are you sure you want to logout?")) {
-      logoutUser();
-      setUser({});
-      setToken(null);
-      setIsProfileOpen(false);
-      navigate("/");
-    }
+    showConfirmToast({
+      title: "Logout Confirmation",
+      message: "Are you sure you want to logout?",
+      confirmText: "Logout",
+      cancelText: "Cancel",
+      onConfirm: () => {
+        logoutUser();
+        setUser({});
+        setToken(null);
+        setIsProfileOpen(false);
+        navigate("/");
+        showSuccessToast("Successfully logged out!");
+      },
+      onCancel: () => {
+        showInfoToast("Logout cancelled.");
+      },
+    });
+    
   };//rgb(0, 0, 0)
   // Custom color palette based on #882024 
   const theme = {

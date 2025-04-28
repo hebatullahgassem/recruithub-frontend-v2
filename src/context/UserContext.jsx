@@ -29,7 +29,7 @@ export function UserContextProvider({ children }) {
       console.error("Error fetching user data:", error);
     }
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchUser = async () => {
       if (token) {
         try {

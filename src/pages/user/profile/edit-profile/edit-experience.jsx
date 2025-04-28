@@ -23,7 +23,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { Delete, Add, Check, Work } from "@mui/icons-material";
-import { v4 as uuidv4 } from 'uuid';
+
 
 
 const EditExperience = () => {
@@ -130,11 +130,9 @@ const EditExperience = () => {
   }, [userId]);
 
   const handleAddExperience = () => {
-    console.log(uuidv4());
     setExperiences([
       ...experiences,
       {
-        id: uuidv4(),
         title: "",
         company: "",
         location: "",
@@ -662,3 +660,4 @@ const EditExperience = () => {
 };
 
 export default EditExperience;
+

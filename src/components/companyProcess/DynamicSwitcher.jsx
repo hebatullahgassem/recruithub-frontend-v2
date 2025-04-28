@@ -98,49 +98,7 @@ import { memo } from "react";
 import '../../ComponentsStyles/CompanyProcess/calender_switcher.css';
 
 const DynamicSwitcher = memo(({ getter, setter }) => {
-  // const PrimarySwitch = styled(Switch)(({ theme }) => ({
-  //   width: 48,
-  //   height: 28,
-  //   padding: 0,
-  //   "& .MuiSwitch-switchBase": {
-  //     padding: 0,
-  //     margin: 2,
-  //     transitionDuration: "200ms",
-  //     "&.Mui-checked": {
-  //       transform: "translateX(20px)",
-  //       color: "#fff",
-  //       "& + .MuiSwitch-track": {
-  //         backgroundColor: "#880001",
-  //         opacity: 1,
-  //       },
-  //       "& .MuiSwitch-thumb::before": {
-  //         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent("#fff")}"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>')`,
-  //       },
-  //     },
-  //   },
-  //   "& .MuiSwitch-thumb": {
-  //     backgroundColor: "#880001",
-  //     width: 24,
-  //     height: 24,
-  //     "&::before": {
-  //       content: "''",
-  //       position: "absolute",
-  //       width: "100%",
-  //       height: "100%",
-  //       backgroundRepeat: "no-repeat",
-  //       backgroundPosition: "center",
-  //       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent("#880001")}"><path d="M4 13h5v2H4zm0-4h5v2H4zm6 4h9v2h-9zm0-4h9v2h-9z"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>')`,
-  //     },
-  //   },
-  //   "& .MuiSwitch-track": {
-  //     borderRadius: 28 / 2,
-  //     backgroundColor: "#e0e0e0",
-  //     opacity: 1,
-  //     transition: theme.transitions.create(["background-color"], {
-  //       duration: 200,
-  //     }),
-  //   },
-  // }));
+  
 
   return (
     <div className="calendar-switcher">

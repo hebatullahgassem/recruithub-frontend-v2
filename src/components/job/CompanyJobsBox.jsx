@@ -4,6 +4,7 @@ import { Link } from "react-router";
 
 const CompanyJobsBox = ({ profileData, job }) => {
   const { isLight } = useContext(userContext);
+  console.log("profileData",profileData);
   const textColor = isLight ? "#121212" : "#fff";
   const style = {
     card: {
