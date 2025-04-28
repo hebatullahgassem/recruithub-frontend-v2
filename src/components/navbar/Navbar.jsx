@@ -295,7 +295,7 @@ function Navbar() {
           backgroundColor: theme.background,
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
           position: "relative",
-          zIndex: 1100,
+          zIndex: 98,
         }}
       >
         <Container maxWidth="xl">

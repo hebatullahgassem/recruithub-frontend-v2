@@ -8,7 +8,8 @@ export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chatBot, setChatBot] = useState(false);
-  const [isLight, setIsLight] = useState(true)
+  const [isLight, setIsLight] = useState(true);
+  const [update, setUpdate] = useState({ user: {}, settings: {} });
 
   const refetchUser = async (tok) => {
     console.log(tok);
@@ -87,7 +88,21 @@ export function UserContextProvider({ children }) {
   };
 
   return (
-    <userContext.Provider value={{ token, setToken, user, setUser, refetchUser, chatBot, setChatBot, isLight, setIsLight }}>
+    <userContext.Provider
+      value={{
+        token,
+        setToken,
+        user,
+        setUser,
+        refetchUser,
+        chatBot,
+        setChatBot,
+        isLight,
+        setIsLight,
+        update,
+        setUpdate,
+      }}
+    >
       {children}
     </userContext.Provider>
   );

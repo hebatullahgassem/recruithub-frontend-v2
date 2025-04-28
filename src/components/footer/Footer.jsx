@@ -11,6 +11,7 @@ function Footer() {
         textAlign: "center",
         padding: "20px",
         backgroundColor: isLight ? "#f8f9fa" : 'black',
+        zIndex: 0
       }}
     >
       

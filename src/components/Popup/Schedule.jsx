@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
@@ -18,9 +18,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { showConfirmToast } from "../../confirmAlert/toastConfirm";
+import { showConfirmToast, showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 //import { useMediaQuery } from "@mui/material";
 import "../../ComponentsStyles/companyProcess/schedule.css";
+import { userContext } from "../../context/UserContext";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Dialog {...props} ref={ref} TransitionComponent={Transition} />;
@@ -30,6 +31,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [meetingLink, setMeetingLink] = useState("");
   const [loading, setLoading] = useState(false);
+  const{isLight} = useContext(userContext)
   console.log(phase)
   const isMobile = useMediaQuery("(max-width:768px)");
   // Populate state with applicant's existing interview details
@@ -86,15 +88,18 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         }
       );
       console.log("Update successful:", response.data);
-      toast.success(
-        `Interview scheduled for ${applicant.user_name} on ${dayjs(
+      
+      handleClose();
+      const message = `Interview scheduled for ${applicant.user_name} on ${dayjs(
           selectedDateTime
         ).format("YYYY-MM-DD HH:mm")}.\nMeeting Link: ${meetingLink}`
+      showSuccessToast(
+        message,3000
+        ,isLight
       );
-      handleClose();
     } catch (error) {
       console.error("Error updating interview details:", error);
-      toast.error("Failed to schedule interview. Please try again.");
+      showErrorToast("Failed to schedule interview. Please try again.", isLight);
     } finally {
       setLoading(false);
     }
@@ -118,38 +123,56 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       );
 
       console.log("Assessment link updated successfully:", response.data);
-      toast.success("Assessment link updated successfully.");
+      showSuccessToast("Assessment link updated successfully.", isLight);
       handleClose();
     } catch (error) {
       console.error("Error updating assessment link:", error);
-      toast.error("Failed to update assessment link. Please try again.");
+      showErrorToast("Failed to update assessment link. Please try again.", isLight);
     } finally {
       setLoading(false);
     }
   };
 
   const content = (
-    <div className="schedule-container fade-in">
-      <Typography variant="h6" className="applicant-name">
+    <div className="schedule-container fade-in" style={{backgroundColor:isLight?"white":"black"}}>
+      <Typography variant="h6" className="applicant-name" style={{color:isLight?"black":"white"}}>
         <strong>{phase !== 2 ? "Schedule Interview" : "Assign Assessment"} for:</strong> {applicant.user_name || "Applicant"}
       </Typography>
 
       {phase !== 2 && (
         <div className="datetime-section">
-          <Typography variant="h6" className="section-title">
+          <Typography variant="h6" className="section-title" style={{color:isLight?"black":"white"}}>
             Select Date & Time:
           </Typography>
           <DateTimePicker
             label="Pick a Date & Time"
             value={selectedDateTime}
             onChange={setSelectedDateTime}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", 
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 2,
+              background: isLight ? "#fff" : "#121212",
+              color: isLight ? "black" : "white",
+              "& fieldset": {
+                borderColor: "#901b20",
+              },
+              "&:hover fieldset": {
+                borderColor: "#901b20",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: isLight ? "black" : "white",
+            },
+            "& .MuiButtonBase-root": {
+              color: isLight ? "black" : "white",
+            }
+             }}
           />
         </div>
       )}
 
       <div className="link-section">
-        <Typography variant="h6" className="section-title">
+        <Typography variant="h6" className="section-title" style={{color:isLight?"black":"white"}}>
           {phase !== 2 ? "Meeting Link:" : "Assessment Link:"}
         </Typography>
         <TextField
@@ -157,6 +180,30 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
           value={meetingLink}
           onChange={(e) => setMeetingLink(e.target.value)}
           placeholder={phase === 2 ? "Enter assessment link" : "Enter meeting link (e.g., Zoom, Google Meet)"}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 2,
+              background: isLight ? "#fff" : "#121212",
+              color: isLight ? "black" : "white",
+              "& fieldset": {
+                borderColor: "#901b20",
+              },
+              "&:hover fieldset": {
+                borderColor: "#901b20",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: isLight ? "black" : "white",
+            },
+            "& .MuiInputBase-input": {
+              backgroundColor: isLight
+                ? "rgba(255, 255, 255, 0.95)"
+                : "#121212",
+              color: isLight ? "black" : "white",
+              paddingLeft: 1,
+              borderRadius: "10px",
+            },
+          }}
         />
       </div>
 
@@ -166,6 +213,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         onClick={phase === 2 ? handleAssessment : handleSubmit}
         disabled={loading}
         className="submit-button"
+        style={{ backgroundColor: "#901b20" }}
       >
         {loading ? "Processing..." : phase === 2 ? "Assign Assessment" : "Schedule Interview"}
       </Button>
