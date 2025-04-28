@@ -16,7 +16,7 @@ import {
   Typography,
   Alert, // For showing errors/success
 } from "@mui/material";
-import { FaCheckCircle } from "react-icons/fa"; // Using a check icon for verify
+import { FaCheckCircle, FaSearch } from "react-icons/fa"; // Using a check icon for verify
 
 
 // Import your API service functions
@@ -135,41 +135,76 @@ function AdminCompany() {
   const totalCompanies = companyData?.count || 0;
 
   return (
-    <Box sx={{ padding: 3, backgroundColor: theme.background, color: theme.text, minHeight: "100vh" }}>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+<div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: theme.background,
+        color: theme.text,
+        transition: "background-color 0.3s ease, color 0.3s ease",
+        padding: "20px",
+      }}
+    >
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 3 },
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: theme.text,
+          width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+          mx: "auto",
+          my: 4,
+          borderRadius: "12px",
+          boxShadow: theme.shadow,
+          transition: "all 0.3s ease",
+        }}
+      >
+
+      <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 3, fontWeight: 600,
+      color: isLight ? "black" : "white"
+      }}>
+        Verify Companies
+      </Typography>
+
       <TextField
         label="Search by Name or Email"
         variant="outlined"
+        fullWidth
         size="small"
         value={searchQuery}
         onChange={(e) => {
           setSearchQuery(e.target.value);
           setPage(0); // reset to first page when searching
         }}
-        sx={{ width: "60%", 
-          backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.1)", // Lighter background for dark mode
-          color: isLight ? "black" : "white", // Text color for dark mode
-          "& .MuiInputLabel-root": {
-            color: isLight ? "black" : "white", // Label color for dark mode
-          },
-          "& .MuiInputBase-root": {
-            color: isLight ? "black" : "white", // Input text color for dark mode
-          },
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)", // Lighter border in dark mode
-          },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.8)", // Hover border color
-          },
-         }}
+        InputProps={{
+                        startAdornment: <FaSearch style={{ marginRight: 8, opacity: 0.6, }} />,
+                      }}
+                      sx={{
+                        mb: 3,
+                        backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.05)",
+                        borderRadius: "8px",
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "8px",
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#882024",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#882024",
+                          },
+                        },
+                        "& .MuiInputLabel-root": {
+                          color: isLight ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.7)",
+                          "&.Mui-focused": {
+                            color: "white",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          color: theme.text,
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: isLight ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)",
+                        },
+                      }}
       />
-    </Box>
-
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3,
-      color: isLight ? "black" : "white"
-      }}>
-        Verify Companies
-      </Typography>
 
       {/* Display Feedback Messages */}
       {verificationStatus.message && verificationStatus.companyId && (
@@ -212,7 +247,10 @@ function AdminCompany() {
                   <TableCell 
                     sx={{
                       color: isLight ? "text.primary" : "black",
-                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)"
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
                     }}
                   >
                     Company Name
@@ -220,7 +258,10 @@ function AdminCompany() {
                   <TableCell 
                     sx={{
                       color: isLight ? "text.primary" : "black",
-                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)"
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
                     }}
                   >
                     Email
@@ -228,8 +269,10 @@ function AdminCompany() {
                   <TableCell 
                     sx={{
                       color: isLight ? "text.primary" : "black",
-                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
-                      textAlign: "center"
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
                     }}
                   >
                     Accounts
@@ -237,8 +280,10 @@ function AdminCompany() {
                   <TableCell 
                     sx={{
                       color: isLight ? "text.primary" : "black",
-                      borderColor: isLight ? "grey.300" : "rgba(255, 255, 255, 0.5)",
-                      textAlign: "center"
+                      borderColor: isLight
+                        ? "grey.300"
+                        : "rgba(255, 255, 255, 0.5)",
+                      backgroundColor: "rgba(202, 200, 200, 0.5)",
                     }}
                   >
                     Action
@@ -292,10 +337,10 @@ function AdminCompany() {
                           variant: "contained",
                           size: "small",
                           sx: {
-                            backgroundColor: "rgb(163, 161, 161)",
+                            backgroundColor: "#882024",
                             color: "#fff",
                             "&:hover": {
-                              backgroundColor: "gray",
+                              backgroundColor: "rgb(85, 18, 20)",
                             },
                             textTransform: "none",
                             fontWeight: "bold",
@@ -313,6 +358,33 @@ function AdminCompany() {
           </TableContainer>
 
           <TablePagination
+            sx={{
+              borderTop: `1px solid ${theme.border}`,
+                  color: theme.text,
+                  backgroundColor: isLight ? "white" : "#333333",
+                  ".MuiTablePagination-toolbar": {
+                    display: "flex",
+                    justifyContent: "center", // Center all contents
+                    alignItems: "center",
+                    flexWrap: "nowrap",
+                    gap: 2,
+                  }, 
+                  ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows": {
+                    color: theme.muted,
+                  },
+                  ".MuiTablePagination-select": {
+                    color: theme.text,
+                  },
+                  ".MuiTablePagination-selectIcon": {
+                    color: theme.muted,
+                  },
+                  ".MuiTablePagination-actions button": {
+                    color: theme.primary,
+                    "&.Mui-disabled": {
+                      color: theme.muted,
+                    },
+                  },
+            }}
             rowsPerPageOptions={[5, 10, 25, 50]} // Standard options
             component="div"
             count={totalCompanies} // Total number of items from API
@@ -324,6 +396,7 @@ function AdminCompany() {
         </Paper>
       )}
     </Box>
+    </div>
   );
 }
 

@@ -352,8 +352,8 @@ function AdminItian() {
             open={openSingleForm}
             onClose={() => setOpenSingleForm(false)}
           >
-            <DialogTitle>Add Single ITian</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)", color: isLight ? "black" : "white", fontWeight: "bold"}}>Add Single ITian</DialogTitle>
+            <DialogContent sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
               <Box component="form" onSubmit={handleSingleSubmit} noValidate>
                 <TextField
                   margin="normal"
@@ -420,8 +420,8 @@ function AdminItian() {
                 </Button>
               </Box>
             </DialogContent>
-            <DialogActions>
-              <Button sx={{color:"#882024"}} onClick={() => setOpenSingleForm(false)} >
+            <DialogActions sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
+              <Button sx={{ fontWeight: 600,color:"#882024",backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}} onClick={() => setOpenSingleForm(false)} >
                 Close
               </Button>
             </DialogActions>
@@ -429,8 +429,8 @@ function AdminItian() {
 
           {/* --- Modal for Bulk ITian Form --- */}
           <Dialog open={openBulkForm} onClose={() => setOpenBulkForm(false)}>
-            <DialogTitle>Add ITIans from File</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)", color: isLight ? "black" : "white", fontWeight: "bold"}}>Add ITIans from File</DialogTitle>
+            <DialogContent sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
               <Box component="form" onSubmit={handleBulkSubmit} noValidate>
                 <Typography
                   variant="body2"
@@ -450,7 +450,7 @@ function AdminItian() {
                     backgroundColor: isLight
                       ? "white"
                       : "rgba(255, 255, 255, 0.1)",
-                      borderColor: "rgba(239, 68, 68, 0.2)",
+                      border: "3px solid #882024",
                     color: isLight ? "black" : "white",
                     "&:hover": {
                       backgroundColor: isLight
@@ -496,8 +496,8 @@ function AdminItian() {
                 </Button>
               </Box>
             </DialogContent>
-            <DialogActions>
-              <Button sx={{color: "#882024"}} onClick={() => setOpenBulkForm(false)}>
+            <DialogActions sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
+              <Button sx={{ fontWeight: 600,color:"#882024",backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}  onClick={() => setOpenBulkForm(false)}>
                 Close
               </Button>
             </DialogActions>
@@ -505,7 +505,7 @@ function AdminItian() {
 
           <Grid item xs={12} md={5} sx={{ mb: 3 }}>
             <TextField
-              placeholder="Search by Email or National ID"
+              label="Search by Email or National ID"
               variant="outlined"
               size="small"
               fullWidth
@@ -523,16 +523,16 @@ function AdminItian() {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "8px",
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: theme.primary,
+                    borderColor: "#882024",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: theme.primary,
+                    borderColor: "#882024",
                   },
                 },
                 "& .MuiInputLabel-root": {
                   color: isLight ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.7)",
                   "&.Mui-focused": {
-                    color: theme.primary,
+                    color: "white",
                   },
                 },
                 "& .MuiInputBase-input": {

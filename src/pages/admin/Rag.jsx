@@ -17,6 +17,7 @@ import {
   Grid,
   Divider,
   IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions
 } from "@mui/material";
 import { FaTrashAlt, FaFileUpload } from "react-icons/fa";
 import { createRag, deleteRag, getRag } from "../../services/ChatBot";
@@ -25,6 +26,7 @@ import { userContext } from "../../context/UserContext";
 
 
 function AdminRag() {
+  const [open, setOpen] = useState(false);
   const { isLight } = useContext(userContext);
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
@@ -184,8 +186,30 @@ function AdminRag() {
     console.log(loading);
   }, [loading]);
   return (
-    <Box sx={{ padding: 3, maxWidth: "100%", overflowX: "auto",backgroundColor: theme.background, color: theme.text, minHeight: "100vh" }}>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center", mb: 3 ,
+<div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: theme.background,
+        color: theme.text,
+        transition: "background-color 0.3s ease, color 0.3s ease",
+        padding: "20px",
+      }}
+    >
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 3 },
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: theme.text,
+          width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+          mx: "auto",
+          my: 4,
+          borderRadius: "12px",
+          boxShadow: theme.shadow,
+          transition: "all 0.3s ease",
+        }}
+      >
+      <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 3 ,
         color: isLight ? "black" : "white", // Text color for dark mode
         "& .MuiInputLabel-root": {
           color: isLight ? "black" : "white", // Label color for dark mode
@@ -199,11 +223,12 @@ function AdminRag() {
         "&:hover .MuiOutlinedInput-notchedOutline": {
           borderColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.8)", // Hover border color
         },
+        fontWeight: 600,
       }}>
         Manage RAG Documents
       </Typography>
 
-      {/* Display Feedback Messages */}
+      {/* Display Feedback Messages
       {feedback.message && (
         <Alert
           severity={feedback.severity}
@@ -235,7 +260,7 @@ function AdminRag() {
                 variant="outlined"
                 component="label" // Makes the button act like a label for the hidden input
                 fullWidth
-                sx={{ mt: 1, mb: 2, backgroundColor: theme.background, color: theme.text }}
+                sx={{ mt: 1, mb: 2, backgroundColor: theme.background, color: theme.text, borderColor: "#882024" }}
                 disabled={createRagMutation.isLoading}
               >
                 {selectedFile
@@ -251,7 +276,7 @@ function AdminRag() {
                 />
               </Button>
               <Button
-                sx={{ mt: 1, mb: 2, backgroundColor: theme.background, color: theme.text }}
+                sx={{ mt: 1, mb: 2, backgroundColor: "#882024", color: "white" }}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -291,7 +316,7 @@ function AdminRag() {
           borderColor: isLight ? "primary.main" : "rgba(255, 255, 255, 0.8)", // Hover border color
         },
       }}>
-        Existing RAG Documents
+        RAG Documents
       </Typography>
 
       {/* Loading/Error/Empty States for Table */}
@@ -389,6 +414,7 @@ function AdminRag() {
         </Paper>
       )}
     </Box>
+    </div>
   );
 }
 
