@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../../../context/UserContext";
-import {
-  Button,
-  TextField,
-  Box,
-  Chip,
-  Grid,
-  CircularProgress,
+import { 
+  Button, 
+  TextField, 
+  Box, 
+  Chip, 
+  Grid, 
+  CircularProgress, 
   Alert,
   Typography,
   Container,
@@ -14,16 +14,57 @@ import {
   useMediaQuery,
   styled,
   IconButton,
-  Paper,
+  Paper 
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { updateUserProfile } from "../../../../services/Auth";
 import { Add, Check, Build, Delete } from "@mui/icons-material";
 
+// Consistent Color Palette
+const primaryColor = '#d7323e'; // IIT Maroon
+const secondaryColor = '#901b26'; // Complementary Gold
+const accentColor = '#d7323e'; // Darker Maroon
+const backgroundColor = '#e8e8e8'; // Off-white
+const textPrimary = '#2d2829'; // Dark Charcoal
+const textSecondary = '#5a5252'; // Warm Gray
+
+const SkillCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  marginBottom: theme.spacing(3),
+  borderRadius: '12px',
+  backgroundColor: '#fff',
+  border: `1px solid ${primaryColor}20`,
+  boxShadow: '0 8px 24px rgba(112,43,46,0.08)',
+  transition: 'all 0.3s ease',
+  position: 'relative',
+}));
+
+const AddButton = styled(Button)(({ theme }) => ({
+  padding: `${theme.spacing(1.5)} ${theme.spacing(3)}`,
+  borderRadius: '8px',
+  fontWeight: 600,
+  textTransform: 'none',
+  borderWidth: 2,
+  '&:hover': {
+    borderWidth: 2
+  }
+}));
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: '8px',
+  fontWeight: 700,
+  textTransform: 'none',
+  fontSize: '1.1rem',
+  minWidth: 200,
+  letterSpacing: 0.5,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+}));
+
 const EditSkills = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { user, isLight } = useContext(userContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,48 +75,6 @@ const EditSkills = () => {
   const [newSkill, setNewSkill] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Consistent Color Palette
-  const primaryColor = isLight ? "#d7323e" : "#901b26";
-  const secondaryColor = isLight ? "#901b26" : "#d7323e";
-  const accentColor = isLight ? "#d7323e" : "#901b26";
-  const backgroundColor = isLight ? "#e8e8e8" : "#121212";
-  const lightBackgroundColor = isLight ? "#f8f2ec" : "#242424";
-  const textPrimary = isLight ? "#2d2829" : "#e2e8f0";
-  const textSecondary = isLight ? "#5a5252" : "#e2e8f0";
-
-  const SkillCard = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(3),
-    borderRadius: "12px",
-    backgroundColor: lightBackgroundColor,
-    border: `1px solid ${primaryColor}20`,
-    boxShadow: "0 8px 24px rgba(112,43,46,0.08)",
-    transition: "all 0.3s ease",
-    position: "relative",
-  }));
-
-  const AddButton = styled(Button)(({ theme }) => ({
-    padding: `${theme.spacing(1.5)} ${theme.spacing(3)}`,
-    borderRadius: "8px",
-    fontWeight: 600,
-    textTransform: "none",
-    borderWidth: 2,
-    "&:hover": {
-      borderWidth: 2,
-    },
-  }));
-
-  const SaveButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(2),
-    borderRadius: "8px",
-    fontWeight: 700,
-    textTransform: "none",
-    fontSize: "1.1rem",
-    minWidth: 200,
-    letterSpacing: 0.5,
-    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-  }));
 
   useEffect(() => {
     if (!userId) {
@@ -146,17 +145,16 @@ const EditSkills = () => {
     navigate("/applicant/profile/edit-experience", { userId });
   };
 
+ 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mt: 4,
-          color: textPrimary,
-        }}
-      >
-        <CircularProgress sx={{ color: primaryColor }} />
+      <Box sx={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        mt: 4,
+        color: textPrimary
+      }}>
+        <CircularProgress sx={{ color: isLight ? "#d7323e" : "#901b26" }} />
         <Typography variant="body1" sx={{ ml: 2 }}>
           Loading skills...
         </Typography>
@@ -165,26 +163,26 @@ const EditSkills = () => {
   }
 
   return (
-    <Box sx={{ backgroundColor: lightBackgroundColor, minWidth: "100vw" }}>
-    <Container maxWidth="md" sx={{ py: 4, minHeight: "80vh", backgroundColor }}>
+    <Box sx={{ backgroundColor: isLight ? "#f8f2ec" : "#242424", minWidth: "100vw" }}>
+    <Container maxWidth="md" sx={{ py: 4, minHeight: "80vh", backgroundColor: isLight ? "#e8e8e8" : "#121212" }}>
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h3"
           sx={{
             fontWeight: 700,
-            color: textPrimary,
+            color: isLight ? "#d7323e" : "#901b26",
             fontSize: isMobile ? "1.8rem" : "2.125rem",
             display: "flex",
             alignItems: "center",
             gap: 2,
           }}
         >
-          <Build fontSize="large" sx={{ color: primaryColor }} />
+          <Build fontSize="large" sx={{ color: isLight ? "#d7323e" : "#901b26" }} />
           Edit Skills
         </Typography>
       </Box>
 
-      <SkillCard>
+      <SkillCard style={{ backgroundColor: isLight ? "#f8f2ec" : "#242424" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <TextField
@@ -287,7 +285,7 @@ const EditSkills = () => {
                 minHeight: 100,
                 p: 2,
                 borderRadius: "8px",
-                backgroundColor: backgroundColor,
+                backgroundColor: isLight ? "#e8e8e8" : "#121212",
               }}
             >
               {skills.map((skill, index) => (
@@ -299,21 +297,21 @@ const EditSkills = () => {
                   variant="outlined"
                   sx={{
                     "& .MuiChip-deleteIcon": {
-                      color: accentColor,
+                      color: isLight ? "#d7323e" : "#901b26",
                       "&:hover": {
-                        color: secondaryColor,
+                        color: isLight ? "#901b26" : "#d7323e",
                       },
                     },
-                    borderColor: primaryColor,
+                    borderColor: isLight ? "#d7323e" : "#901b26",
                     backgroundColor: "#fff",
                     "&:hover": {
-                      backgroundColor: `${primaryColor}08`,
+                      backgroundColor: isLight ? "#d7323e" : "#901b26",
                     },
                   }}
                 />
               ))}
               {skills.length === 0 && (
-                <Typography variant="body2" sx={{ color: textSecondary }}>
+                <Typography variant="body2" sx={{ color: isLight ? "#d7323e" : "#901b26" }}>
                   No skills added yet. Start typing to add skills!
                 </Typography>
               )}
@@ -332,9 +330,9 @@ const EditSkills = () => {
             variant="contained"
             onClick={handleSave}
             sx={{
-              backgroundColor: primaryColor,
+              backgroundColor: isLight ? "#d7323e" : "#901b26",
               "&:hover": {
-                backgroundColor: secondaryColor,
+                backgroundColor: isLight ? "#901b26" : "#d7323e",
                 boxShadow: "0px 4px 12px rgba(215, 50, 62, 0.4)",
               },
             }}

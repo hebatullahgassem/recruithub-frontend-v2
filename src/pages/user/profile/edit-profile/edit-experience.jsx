@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../../../context/UserContext";
-import {
-  Button,
-  TextField,
-  Box,
-  Grid,
-  CircularProgress,
-  Alert,
+import { 
+  Button, 
+  TextField, 
+  Box, 
+  Grid, 
+  CircularProgress, 
+  Alert, 
   Switch,
   Typography,
   IconButton,
@@ -15,20 +15,65 @@ import {
   useTheme,
   useMediaQuery,
   styled,
-  MenuItem,
-  Select,
-  InputLabel,
   FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { Delete, Add, Check, Work } from "@mui/icons-material";
 
+// Updated Color Palette
+const primaryColor = '#901b26'; // IIT Maroon
+const secondaryColor = '#d7323e'; // Complementary Gold
+const accentColor = '#a0454e'; // Darker Maroon
+const backgroundColor = '#f8f2ec'; // Off-white with warm tint
+const textPrimary = '#2d2829'; // Dark Charcoal
+const textSecondary = '#5a5252'; // Warm Gray
 
+const ExperienceCard = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  marginBottom: theme.spacing(3),
+  borderRadius: '12px',
+  backgroundColor: '#fff',
+  border: `1px solid ${primaryColor}20`,
+  boxShadow: '0 8px 24px rgba(112,43,46,0.08)',
+  transition: 'all 0.3s ease',
+  position: 'relative',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: '0 12px 28px rgba(112,43,46,0.12)'
+  }
+}));
+
+const AddButton = styled(Button)(({ theme }) => ({
+  padding: `${theme.spacing(1.5)} ${theme.spacing(3)}`,
+  borderRadius: '8px',
+  fontWeight: 600,
+  textTransform: 'none',
+  margin: `${theme.spacing(3)} auto`,
+  width: 'fit-content',
+  borderWidth: 2,
+  '&:hover': {
+    borderWidth: 2
+  }
+}));
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: '8px',
+  fontWeight: 700,
+  textTransform: 'none',
+  fontSize: '1.1rem',
+  minWidth: 200,
+  letterSpacing: 0.5,
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+}));
 
 const EditExperience = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const location = useLocation();
   const navigate = useNavigate();
   const locationUserId = location.state?.userId;
@@ -37,54 +82,6 @@ const EditExperience = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Updated Color Palette
-  const primaryColor = isLight ? "#901b26" : "#d7323e"; // IIT Maroon
-  const secondaryColor = isLight ? "#d7323e" : "#901b26"; // Complementary Gold
-  const accentColor = isLight ? "#a0454e" : "#722732"; // Darker Maroon
-  const backgroundColor = isLight ? "#f8f2ec" : "#121212"; // Off-white with warm tint
-  const lightBackgroundColor = isLight ? "#f8f2ec" : "#242424"; // Off-white
-  const textPrimary = isLight ? "#2d2829" : "#ffffff"; // Dark Charcoal
-  const textSecondary = isLight ? "#5a5252" : "#adb5bd"; // Warm Gray
-
-  const ExperienceCard = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(3),
-    borderRadius: "12px",
-    backgroundColor: lightBackgroundColor,
-    border: `1px solid ${primaryColor}20`,
-    boxShadow: "0 8px 24px rgba(112,43,46,0.08)",
-    transition: "all 0.3s ease",
-    position: "relative",
-    "&:hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 12px 28px rgba(112,43,46,0.12)",
-    },
-  }));
-
-  const AddButton = styled(Button)(({ theme }) => ({
-    padding: `${theme.spacing(1.5)} ${theme.spacing(3)}`,
-    borderRadius: "8px",
-    fontWeight: 600,
-    textTransform: "none",
-    margin: `${theme.spacing(3)} auto`,
-    width: "fit-content",
-    borderWidth: 2,
-    "&:hover": {
-      borderWidth: 2,
-    },
-  }));
-
-  const SaveButton = styled(Button)(({ theme }) => ({
-    padding: theme.spacing(2),
-    borderRadius: "8px",
-    fontWeight: 700,
-    textTransform: "none",
-    fontSize: "1.1rem",
-    minWidth: 200,
-    letterSpacing: 0.5,
-    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-  }));
 
   // Fetch experience on mount
   useEffect(() => {
@@ -110,8 +107,6 @@ const EditExperience = () => {
         } else {
           try {
             const parsed = JSON.parse(expData);
-            parsed.map((exp) => (exp.id = uuidv4()));
-            console.log(parsed);
             setExperiences(Array.isArray(parsed) ? parsed : [parsed]);
           } catch (err) {
             console.error("Invalid JSON in experience:", err);
@@ -153,54 +148,45 @@ const EditExperience = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
     try {
-      // Make a deep copy, clearing `id` fields
-      const experiencesToSave = experiences.map(({ id, ...rest }) => ({ ...rest }));
-  
       const formData = new FormData();
-      formData.append("experience", JSON.stringify(experiencesToSave));
-  
+      formData.append("experience", JSON.stringify(experiences));
+
       await AxiosApi.patch(`user/jobseekers/${userId}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Token ${localStorage.getItem("token")}`,
         },
       });
-  
-      navigate("/applicant/profile");
+      navigate("/applicant/profile" );
     } catch (err) {
       console.error("Error saving experience:", err);
       setError("Failed to save experience.");
       setLoading(false);
     }
   };
+
+
   
-
   return (
-    <Container sx={{ backgroundColor, minWidth: "100vw" }}>
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 700,
-              color: textPrimary,
-              fontSize: isMobile ? "1.8rem" : "2.125rem",
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-            }}
-          >
-            <Work fontSize="large" sx={{ color: primaryColor }} />
-            Edit Professional Experience
-          </Typography>
-        </Box>
+    <Container sx={{ p: 10, backgroundColor: isLight ? '#fff' : '#121212', minWidth: '100vw' }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" sx={{ 
+          fontWeight: 700, 
+          color: isLight ? "#901b26" : "#d7323e",
+          fontSize: isMobile ? '1.8rem' : '2.125rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
+          <Work fontSize="large" sx={{ color: primaryColor }} />
+          Edit Professional Experience
+        </Typography>
+      </Box>
 
-        <form onSubmit={handleSave}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            {experiences.map((exp, index) => (
-              <ExperienceCard key={exp.id}>
+      <form onSubmit={handleSave}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          {experiences.map((exp, index) => (
+              <ExperienceCard key={exp.id} style={{backgroundColor: isLight ? '#fff' : '#242424'}}>
                 <Box
                   sx={{
                     display: "flex",
@@ -590,7 +576,7 @@ const EditExperience = () => {
                         />
                         <Typography
                           variant="body2"
-                          sx={{ color: textSecondary }}
+                          sx={{ color: isLight ? "#901b26" : "#d7323e" }}
                         >
                           Currently Working Here
                         </Typography>
@@ -601,63 +587,60 @@ const EditExperience = () => {
               </ExperienceCard>
             ))}
 
-            <AddButton
-              variant="outlined"
-              onClick={handleAddExperience}
-              startIcon={<Add />}
-              sx={{
-                borderColor: primaryColor,
-                color: primaryColor,
-                "&:hover": {
-                  backgroundColor: "rgba(42, 92, 125, 0.08)",
-                  borderColor: secondaryColor,
-                },
-              }}
-            >
-              Add Another Position
-            </AddButton>
+          <AddButton
+            variant="outlined"
+            onClick={handleAddExperience}
+            startIcon={<Add />}
+            sx={{
+              borderColor: primaryColor,
+              color: primaryColor,
+              '&:hover': {
+                backgroundColor: 'rgba(42, 92, 125, 0.08)',
+                borderColor: secondaryColor
+              }
+            }}
+          >
+            Add Another Position
+          </AddButton>
 
-            <Box
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'flex-end',
+            mt: 4
+          }}>
+            <SaveButton
+              type="submit"
+              variant="contained"
               sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                mt: 4,
+                backgroundColor: primaryColor,
+                '&:hover': {
+                  backgroundColor: secondaryColor,
+                  boxShadow: '0px 4px 12px rgba(244, 162, 97, 0.4)'
+                }
               }}
+              startIcon={<Check />}
             >
-              <SaveButton
-                type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: primaryColor,
-                  "&:hover": {
-                    backgroundColor: secondaryColor,
-                    boxShadow: "0px 4px 12px rgba(244, 162, 97, 0.4)",
-                  },
-                }}
-                startIcon={<Check />}
-              >
-                Save Experience
-              </SaveButton>
-            </Box>
-
-            {error && (
-              <Alert
-                severity="error"
-                sx={{
-                  mt: 2,
-                  borderRadius: "12px",
-                  "& .MuiAlert-message": { color: textPrimary },
-                }}
-              >
-                {error}
-              </Alert>
-            )}
+              Save Experience
+            </SaveButton>
           </Box>
-        </form>
-      </Container>
+
+          {error && (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mt: 2, 
+                borderRadius: '12px',
+                '& .MuiAlert-message': { color: textPrimary }
+              }}
+            >
+              {error}
+            </Alert>
+          )}
+        </Box>
+      </form>
     </Container>
   );
 };
 
-export default EditExperience;
 
+export default EditExperience;
