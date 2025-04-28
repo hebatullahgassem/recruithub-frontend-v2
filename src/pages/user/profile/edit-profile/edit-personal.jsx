@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery,
   styled,
+  Autocomplete,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -25,6 +26,7 @@ import {
 
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
+import CustomAutoComplete from "../../../../components/autoComplete/CustomAutoComplete";
 
 const IDImage = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -55,6 +57,7 @@ const EditPersonal = () => {
     nationalId: "",
     img: "",
     nationalIdImg: "",
+    specialization: "",
   });
   const [uploadStatus, setUploadStatus] = useState({
     img: null,
@@ -91,6 +94,8 @@ const EditPersonal = () => {
   const backgroundColor = "#f9f5f4";
   const textSecondary = "#6c757d";
 
+  
+
   const ProfileImage = styled(Box)(({ theme }) => ({
     width: 200,
     height: 200,
@@ -120,6 +125,7 @@ const EditPersonal = () => {
             nationalId: data.national_id || "",
             img: data.img || "",
             nationalIdImg: data.national_id_img || "",
+            specialization: data.specialization || "",
           });
         })
         .catch((err) => {
@@ -130,6 +136,7 @@ const EditPersonal = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setLocalData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -195,6 +202,7 @@ const EditPersonal = () => {
       formData.append("about", localData.about);
       formData.append("phone_number", localData.phone);
       formData.append("national_id", localData.nationalId);
+      formData.append("specialization", localData.specialization);
 
       if (localData.img instanceof File) {
         formData.append("img", localData.img);
@@ -323,6 +331,18 @@ const EditPersonal = () => {
                     >
                       {localData.name || "Your Name"}
                     </Typography>
+                    {localData.nationalId && (
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: primaryColor,
+                          fontWeight: 600,
+                          mt: 1,
+                        }}
+                      >
+                        {localData.nationalId}
+                      </Typography>
+                    )}
 
                     {uploadStatus.img && (
                       <Box
@@ -487,14 +507,15 @@ const EditPersonal = () => {
                           paddingLeft: 1,
                           borderRadius: "10px",
                         },
-                        '.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled': {
-                          // color: isLight ? "black" : "white",
-                          WebkitTextStroke: isLight ? 'black' : "1px grey",
-                          color: isLight ? "black" : "white",
-                          "& fieldset": {
-                            borderColor: "#901b20",
+                        ".css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled":
+                          {
+                            // color: isLight ? "black" : "white",
+                            WebkitTextStroke: isLight ? "black" : "1px grey",
+                            color: isLight ? "black" : "white",
+                            "& fieldset": {
+                              borderColor: "#901b20",
+                            },
                           },
-                        }
                       }}
                     />
                   </Grid>
@@ -637,7 +658,7 @@ const EditPersonal = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField
+                    {/* <TextField
                       fullWidth
                       label="National ID"
                       name="nationalId"
@@ -667,11 +688,16 @@ const EditPersonal = () => {
                           borderRadius: "10px",
                         },
                         '.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled': {
-                          // color: isLight ? "black" : "white",
+                          backgroundColor: isLight ? "black" : "red",
                           WebkitTextStroke: isLight ? 'black' : "1px grey"
                         }
                       }}
+                      disabled
                      
+                    /> */}
+                    <CustomAutoComplete
+                      setter={setLocalData}
+                      getter={localData.specialization}
                     />
                   </Grid>
                 </Grid>

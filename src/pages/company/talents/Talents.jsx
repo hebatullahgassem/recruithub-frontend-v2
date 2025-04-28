@@ -33,6 +33,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import TalentCard from "../../../components/talent/TalentCard";
 import '../../../styles/company/talents/talents.css';
 import '../../../styles/company/companyteme.css';
+import CustomAutoComplete from "../../../components/autoComplete/CustomAutoComplete";
 
 function Talents() {
   const { user, isLight } = useContext(userContext);
@@ -56,12 +57,14 @@ function Talents() {
     experience: "",
     location: "",
     skills: "",
+    specialization: "",
   });
   const [searchFilters, setSearchFilters] = useState({
     name: "",
     experience: "",
     location: "",
     skills: "",
+    specialization: "",
   });
 
   const handleReset = () => {
@@ -273,48 +276,6 @@ function Talents() {
               />
             </Box>
 
-            {/* <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              <LocationOn
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                  fontSize: "20px",
-                }}
-              />
-              <TextField
-                label="Location"
-                value={filters.location}
-                onChange={(e) => setFilters((prev) => ({ ...prev, location: e.target.value }))}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  sx: {
-                    pl: 4,
-                    borderRadius: "8px",
-                    backgroundColor: sectionBackground,
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: borderColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    color: textColor,
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    color: isLight ? "#718096" : "#a0aec0",
-                  },
-                }}
-              />
-            </Box> */}
 
             <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
               <School
@@ -358,6 +319,19 @@ function Talents() {
                 }}
               />
             </Box>
+            <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
+              <School
+                sx={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: primaryColor,
+                  fontSize: "20px",
+                }}
+              />
+              <CustomAutoComplete setter={setFilters} getter={filters.specialization} />
+            </Box>
           </Box>
         </Paper>
       </div>
@@ -380,7 +354,21 @@ function Talents() {
           </Typography>
           <Typography sx={{ color: textColor }}>Please try again later or contact support.</Typography>
         </div>
-      ) : (
+      ) : talents?.length === 0 ? (
+        <div
+          className="talents-error"
+          style={{
+            backgroundColor: cardBackground,
+            borderColor: borderColor,
+          }}
+        >
+          <Typography variant="h5" sx={{ color: primaryColor, fontWeight: 600 }}>
+            No talents found
+          </Typography>
+          <Typography sx={{ color: textColor }}>No talents found for the given filters.</Typography>
+        </div>
+      ) :
+        (
         <>
           <div className="talents-grid">
             <AnimatePresence>
@@ -422,10 +410,13 @@ function Talents() {
                           mr: 2,
                         }}
                       />
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: textColor, mb: 0.5 }}>
+                      <Box sx={{display: "flex", flexDirection: "column", }}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: textColor, mb: 0.5, textAlign: "right" }}>
                           {talent.name}
                         </Typography>
+                        {talent.specialization && <Typography variant="p" sx={{ fontWeight: 50, color: textColor, mb: 0.5 }}>
+                          {talent.specialization}
+                        </Typography>}
                         {talent.title && (
                           <Typography variant="body2" sx={{ color: primaryColor, fontWeight: 500, mb: 1 }}>
                             {talent.title}

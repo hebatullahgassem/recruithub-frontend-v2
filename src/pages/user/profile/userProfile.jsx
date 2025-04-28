@@ -51,7 +51,7 @@ const UserProfile = () => {
   const lightBackgroundColor = isLight ? "#f9f5f4" : '#242424';
   const cardsBackgroundColor = isLight ? "#fff" : '#242424';
   const darkTextColor = isLight ? "#3a3a3a" : '#fff'; // Dark gray for text
-  const lightTextColor = isLight ? "#5d5d5d" : '#fff'; // Lighter gray for secondary text
+  const lightTextColor = isLight ? "#121212" : '#fff'; // Lighter gray for secondary text
 
   // Animations
   const pulse = keyframes`
@@ -217,6 +217,7 @@ const UserProfile = () => {
           minHeight: "100vh",
           py: isMobile ? 2 : 4,
           px: isMobile ? 1 : 0,
+          minWidth:'80vw',
         }}
       >
         <Container maxWidth="xl" sx={{ px: isMobile ? 2 : 4 }}>
@@ -267,12 +268,21 @@ const UserProfile = () => {
                       flexDirection: isMobile ? "column" : "row",
                     }}
                   >
+                    <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
                     <Typography
                       variant={isMobile ? "h5" : "h4"}
                       sx={{ fontWeight: 700 }}
                     >
                       {user.name || "Your Name"}
                     </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      sx={{ mt: 1 }}
+                    >
+                      {user.specialization || "No Specialization Added"}
+                    </Typography>
+                    </Box>
                     <PrimaryButton
                       startIcon={<Edit />}
                       onClick={goToEditPersonal}
