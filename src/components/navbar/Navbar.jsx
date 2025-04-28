@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
+import { NavLink as RouterNavLink } from "react-router-dom";
 import {
   Avatar,
   Typography,
@@ -87,35 +88,46 @@ function Navbar() {
   };
   // Custom NavLink component for desktop
   const NavLink = ({ to, text }) => (
-    <Link to={to} style={{ textDecoration: "none" }}>
+    <RouterNavLink to={to} 
+    style={({ isActive }) => ({
+      textDecoration: "none",
+    })}>
+
+    {({ isActive }) => (
       <Box
-        sx={{
-          px: 2,
-          py: 1.5,
-          borderRadius: "6px",
-          transition: "all 0.2s ease",
-          "&:hover": {
-            backgroundColor: isLight ? "rgba(136, 32, 36, 0.05)" : "rgba(255, 0, 0, 0.05)",
-            "& .nav-text": {
-              color: isLight ? "#882024" : "#ff0000",
-              fontWeight: 600,
-            },
+      sx={{
+        px: 2,
+        py: 1.5,
+        borderRadius: "6px",
+        backgroundColor: isActive
+          ? (isLight ? "rgba(136, 32, 36, 0.15)" : "rgba(255, 0, 0, 0.15)")
+          : "transparent",
+        transition: "all 0.2s ease",
+        "&:hover": {
+          backgroundColor: isLight
+            ? "rgba(136, 32, 36, 0.05)"
+            : "rgba(255, 0, 0, 0.05)",
+          "& .nav-text": {
+            color: isLight ? "#882024" : "#ff0000",
+            fontWeight: 600,
           },
-        }}
+        },
+      }}
       >
         <Typography
           className="nav-text"
           variant="body1"
           sx={{
-            fontWeight: 500,
-            color: theme.textSecondary,
+            fontWeight: isActive ? 600 : 500,
+            color: isActive ? (isLight ? "#882024" : "#ff0000") : theme.textSecondary,
             transition: "all 0.2s ease",
           }}
         >
           {text}
         </Typography>
       </Box>
-    </Link>
+      )}
+    </RouterNavLink>
   );
 
   // Custom NavDrawerItem component
@@ -219,9 +231,9 @@ function Navbar() {
           {user?.user_type?.toLowerCase() === "admin" && (
             <>
               {/* <NavLink to="/admin/users" text="Manage Users" /> */}
-              <NavLink to="/admin/itians" text="Manage Itians" />
-              <NavLink to="/admin/companies" text="Manage Companies" />
-              <NavLink to="/admin/rag" text="Manage Rag files" />
+              <NavDrawerItem to="/admin/itians" text="Manage Itians" />
+              <NavDrawerItem to="/admin/companies" text="Manage Companies" />
+              <NavDrawerItem to="/admin/rag" text="Manage Rag files" />
             </>
           )}
         </List>

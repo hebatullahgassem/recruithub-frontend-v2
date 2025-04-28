@@ -20,7 +20,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { showConfirmToast, showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 //import { useMediaQuery } from "@mui/material";
-import "../../ComponentsStyles/companyProcess/schedule.css";
+import "../../ComponentsStyles/CompanyProcess/Schedule.css";
 import { userContext } from "../../context/UserContext";
 
 const Transition = React.forwardRef(function Transition(props, ref) {

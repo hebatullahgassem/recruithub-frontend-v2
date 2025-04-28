@@ -12,6 +12,7 @@ import { toast } from "react-hot-toast";
 import { set } from "date-fns";
 function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
+  const { isLight } = useContext(userContext);
   const [fail, setFail] = useState(false);
   const [filters, setFilters] = useState(false);
   const [display, setDisplay] = useState(false);
@@ -20,6 +21,36 @@ function ProcessCard({ column, phases, job }) {
   const [fetch, setFetch] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(userContext);
+
+        // Modern color palette
+        const colors = {
+          light: {
+            background: "#ffffff",
+            cardBg: "#ffffff",
+            sectionBg: "#f8f9fa",
+            text: "#333333",
+            accent: "#e63946", // Modern red
+            accentHover: "#d62b3a",
+            secondary: "#457b9d", // Blue accent
+            muted: "#6c757d",
+            border: "#dee2e6",
+          },
+          dark: {
+            background: "#121212",
+            cardBg: "#1e1e1e",
+            sectionBg: "#242424",
+            text: "#f8f9fa",
+            accent: "#e63946", // Same red accent for consistency
+            accentHover: "#f25d69",
+            secondary: "#64b5f6", // Lighter blue for dark mode
+            muted: "#adb5bd",
+            border: "#343a40",
+          },
+        };
+    
+      // Get current theme colors
+      const theme = isLight ? colors.light : colors.dark;
+  
   const updateAts = async () => {
     if (
       !confirm(
@@ -87,9 +118,9 @@ function ProcessCard({ column, phases, job }) {
   //   ];
   return (
 
-    <div className="recruitment-card slide-in-up" style={{ padding: "1.5rem", margin: "1rem 0" }}>
+    <div className="recruitment-card slide-in-up" style={{ padding: "1.5rem", margin: "1rem 0", backgroundColor: isLight ? "white" : "rgb(37, 36, 36)"}}>
       <div className="phase-header">
-        <h1 className="phase-title">{phases[column - 1]}</h1>
+        <h1 className="phase-title" style={{ color: isLight ? "black" : "white"}}>{phases[column - 1]}</h1>
         <div className="phase-actions">
           {column === 1 && filters && (
             <button className="btn-primary" onClick={() => setDisplay(!display)}>

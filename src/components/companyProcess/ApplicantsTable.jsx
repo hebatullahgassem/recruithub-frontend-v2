@@ -38,6 +38,7 @@ import { preconnect } from "react-dom";
 // import { FaCalendarPlus } from 'react-icons/fa';
 
 function ApplicantsTable({ phase, setFilters, fetch }) {
+  const { isLight } = useContext(userContext);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [total, setTotal] = useState(1);
@@ -166,6 +167,35 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
     setPage(newPage + 1);
   };
 
+      // Modern color palette
+      const colors = {
+        light: {
+          background: "#ffffff",
+          cardBg: "#ffffff",
+          sectionBg: "#f8f9fa",
+          text: "#333333",
+          accent: "#e63946", // Modern red
+          accentHover: "#d62b3a",
+          secondary: "#457b9d", // Blue accent
+          muted: "#6c757d",
+          border: "#dee2e6",
+        },
+        dark: {
+          background: "#121212",
+          cardBg: "#1e1e1e",
+          sectionBg: "#242424",
+          text: "#f8f9fa",
+          accent: "#e63946", // Same red accent for consistency
+          accentHover: "#f25d69",
+          secondary: "#64b5f6", // Lighter blue for dark mode
+          muted: "#adb5bd",
+          border: "#343a40",
+        },
+      };
+  
+    // Get current theme colors
+    const theme = isLight ? colors.light : colors.dark;
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
   };
@@ -257,7 +287,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
   }
 
   return (
-    <div className="applicants-table-container">
+    <div className="applicants-table-container" style={{ backgroundColor: theme.background }}>
       {applicants?.length < 1 && (
         <div className="no-applicants-message">
           <p>There are no applicants in the current phase of this job.</p>
@@ -320,7 +350,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             className="recruitment-table"
           >
             <TableHead>
-              <TableRow>
+              <TableRow sx={{backgroundColor: isLight ? "gray" : " black"}}>
                 <TableCell padding="checkbox">
                   <Checkbox
                     indeterminate={
@@ -354,8 +384,9 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             <TableBody>
               {applicants?.map((applicant, index) => (
                 <TableRow
+                  style={{backgroundColor: isLight ? "white" : "rgb(100, 98, 98)"}}
                   key={applicant.id}
-                  className={index % 2 === 0 ? "row-even" : "row-odd"}
+                  // className={index % 2 === 0 ? "row-even" : "row-odd"}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -473,6 +504,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           sx={{
+            backgroundColor: isLight ? "rgb(231, 227, 227)" : "rgb(80, 78, 78)",
             ".MuiTablePagination-selectIcon": {
               color: "#2f3744",
             },
