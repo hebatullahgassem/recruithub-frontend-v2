@@ -23,11 +23,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import DynamicSwitcher from "../companyProcess/DynamicSwitcher";
 import { MdSunny } from "react-icons/md";
-import { showConfirmToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import {
+  showConfirmToast,
+  showSuccessToast,
+} from "../../confirmAlert/toastConfirm";
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [hover, setHover] = useState(false);
   const { user, setUser, setToken, isLight, setIsLight } =
     useContext(userContext);
   const navigate = useNavigate();
@@ -40,13 +44,14 @@ function Navbar() {
     setIsProfileOpen(!isProfileOpen);
   };
   const handleProfile = () => {
-    
     setIsProfileOpen(false);
-    navigate(user?.user_type?.toLowerCase() === "company"
-    ? "/company/profile"
-    : user?.user_type?.toLowerCase() === "admin"
-    ? "/admin/itians"
-    : "/applicant/profile");
+    navigate(
+      user?.user_type?.toLowerCase() === "company"
+        ? "/company/profile"
+        : user?.user_type?.toLowerCase() === "admin"
+        ? "/admin/itians"
+        : "/applicant/profile"
+    );
   };
 
   const handleSidebar = (path) => {
@@ -73,59 +78,65 @@ function Navbar() {
         showInfoToast("Logout cancelled.");
       },
     });
-    
-  };//rgb(0, 0, 0)
-  // Custom color palette based on #882024 
+  }; //rgb(0, 0, 0)
+  // Custom color palette based on #882024
   const theme = {
     primary: isLight ? "#882024" : "#a83236",
     primaryLight: isLight ? "#a83236" : "#882024",
     primaryDark: "#6c1519",
     secondary: "#f5f5f5",
-    textPrimary: isLight ?"#2d2d2d" : "#a83236",
+    textPrimary: isLight ? "#2d2d2d" : "#a83236",
     textSecondary: isLight ? "#555555" : "#a83236",
     background: isLight ? "#ffffff" : "rgb(0, 0, 0)",
-    divider: isLight ?"#e0e0e0" : '#a83236',
+    divider: isLight ? "#e0e0e0" : "#a83236",
   };
   // Custom NavLink component for desktop
   const NavLink = ({ to, text }) => (
-    <RouterNavLink to={to} 
-    style={({ isActive }) => ({
-      textDecoration: "none",
-    })}>
-
-    {({ isActive }) => (
-      <Box
-      sx={{
-        px: 2,
-        py: 1.5,
-        borderRadius: "6px",
-        backgroundColor: isActive
-          ? (isLight ? "rgba(136, 32, 36, 0.15)" : "rgba(255, 0, 0, 0.15)")
-          : "transparent",
-        transition: "all 0.2s ease",
-        "&:hover": {
-          backgroundColor: isLight
-            ? "rgba(136, 32, 36, 0.05)"
-            : "rgba(255, 0, 0, 0.05)",
-          "& .nav-text": {
-            color: isLight ? "#882024" : "#ff0000",
-            fontWeight: 600,
-          },
-        },
-      }}
-      >
-        <Typography
-          className="nav-text"
-          variant="body1"
+    <RouterNavLink
+      to={to}
+      style={({ isActive }) => ({
+        textDecoration: "none",
+      })}
+    >
+      {({ isActive }) => (
+        <Box
           sx={{
-            fontWeight: isActive ? 600 : 500,
-            color: isActive ? (isLight ? "#882024" : "#ff0000") : theme.textSecondary,
+            px: 2,
+            py: 1.5,
+            borderRadius: "6px",
+            backgroundColor: isActive
+              ? isLight
+                ? "rgba(136, 32, 36, 0.15)"
+                : "rgba(255, 0, 0, 0.15)"
+              : "transparent",
             transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: isLight
+                ? "rgba(136, 32, 36, 0.05)"
+                : "rgba(255, 0, 0, 0.05)",
+              "& .nav-text": {
+                color: isLight ? "#882024" : "#ff0000",
+                fontWeight: 600,
+              },
+            },
           }}
         >
-          {text}
-        </Typography>
-      </Box>
+          <Typography
+            className="nav-text"
+            variant="body1"
+            sx={{
+              fontWeight: isActive ? 600 : 500,
+              color: isActive
+                ? isLight
+                  ? "#882024"
+                  : "#ff0000"
+                : theme.textSecondary,
+              transition: "all 0.2s ease",
+            }}
+          >
+            {text}
+          </Typography>
+        </Box>
       )}
     </RouterNavLink>
   );
@@ -208,7 +219,7 @@ function Navbar() {
           {user?.user_type?.toLowerCase() === "jobseeker" && (
             <>
               <NavDrawerItem
-                to="/applicant/profile/recom"
+                to="/applicant/recommended"
                 text="Recommended"
                 icon="📌"
               />
@@ -340,7 +351,7 @@ function Navbar() {
               <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1 }}>
                 {user?.user_type?.toLowerCase() === "jobseeker" && (
                   <>
-                    <NavLink to="/applicant/profile/recom" text="Recommended" />
+                    <NavLink to="/applicant/recommended" text="Recommended" />
                     <NavLink to="/applicant/jobs" text="Jobs" />
                     <NavLink to="/applicant/saved" text="Saved" />
                     <NavLink to="/applicant/applications" text="Applications" />
@@ -366,10 +377,20 @@ function Navbar() {
 
             {/* User/Auth Section */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <MdSunny
-                    onClick={() => setIsLight(!isLight)}
-                    style={{ color: isLight ? "yellow" : "white", scale: 2, cursor:'pointer' }}
-                  />
+              <MdSunny
+                onClick={() => setIsLight(!isLight)}
+                style={{
+                  color: isLight ? "yellow" : "white",
+                  transform: "scale(2)",
+                  cursor: "pointer",
+                  transition: "transform 0.3s ease, color 0.3s ease",
+                  ...(hover && {
+                    transform: "scale(2.5)",
+                  }),
+                }}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              />
               {user && Object.keys(user).length > 0 ? (
                 <>
                   {/* <IconButton sx={{ color: theme.textPrimary }}>
@@ -378,7 +399,6 @@ function Navbar() {
                     </Badge>
                   </IconButton> */}
 
-                  
                   <Box sx={{ position: "relative" }}>
                     <Box
                       sx={{
@@ -496,14 +516,16 @@ function Navbar() {
                             }}
                           >
                             <Typography
-                            className="drawer-text-profile"
+                              className="drawer-text-profile"
                               primary="My Profile"
                               sx={{
                                 color: theme.primary,
                                 fontWeight: 600,
                                 transition: "all 0.2s ease",
-                               }}
-                            >My Profile</Typography>
+                              }}
+                            >
+                              My Profile
+                            </Typography>
                           </ListItem>
 
                           {/* <ListItem
@@ -547,7 +569,7 @@ function Navbar() {
                               color: theme.primary,
                               fontWeight: 600,
                               transition: "all 0.2s ease",
-                             }}
+                            }}
                           >
                             Sign Out
                           </Typography>

@@ -18,15 +18,20 @@ import {
   Alert,
   useMediaQuery,
   useTheme,
+  Collapse,
 } from "@mui/material";
 import {
   Search as SearchIcon,
   Refresh as RefreshIcon,
   WorkOutline as WorkOutlineIcon,
+  LaunchOutlined,
+  ExpandLess,
+  ExpandMore,
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaFilterCircleXmark } from "react-icons/fa6";
 import { userContext } from "../../../context/UserContext";
+import CustomAutoComplete from "../../../components/autoComplete/CustomAutoComplete";
 
 const primaryColor = "#d43132";
 const secondaryColor = "#f5f5f5";
@@ -37,7 +42,19 @@ function UserJobs() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+  const [expand,setExpand] = useState(false);
   const { isLight } = useContext(userContext);
+
+  const experienceOptions = 
+    [
+      "Intern",
+      "Junior",
+      "Mid-Level",
+      "Senior",
+      "Lead",
+      "Manager",
+    
+  ]
 
   const [filters, setFilters] = useState({
     title: "",
@@ -47,6 +64,8 @@ function UserJobs() {
     attend: "",
     status: "1",
     ordering: "",
+    specialization: "",
+    company_name: "",
   });
 
   const [pagination, setPagination] = useState({
@@ -64,6 +83,8 @@ function UserJobs() {
     attend: "",
     status: "1",
     ordering: "",
+    specialization: "",
+    company_name: "",
   });
 
   const {
@@ -95,15 +116,22 @@ function UserJobs() {
   };
 
   const handleSearch = () => {
-    setPagination(prev => ({ ...prev, page: 1 }));
+    setPagination((prev) => ({ ...prev, page: 1 }));
     setSearchFilters(filters);
-    setSearchFilters(filters); // Update search filters
-    //setPage(1); // Reset to first page
-    refetch(); // Fetch with new filters
   };
 
   const handleReset = () => {
-    setFilters({ title: "", location: "", experince: "", type_of_job: "" });
+    setFilters({
+      title: "",
+      location: "",
+      experince: "",
+      type_of_job: "",
+      attend: "",
+      status: "1",
+      ordering: "",
+      specialization: "",
+      company_name: "",
+    });
     setSearchFilters({
       title: "",
       location: "",
@@ -112,10 +140,12 @@ function UserJobs() {
       attend: "",
       status: "1",
       ordering: "",
+      specialization: "",
+      company_name: "",
     });
     setFilters(defaultFilters);
-  setSearchFilters(defaultFilters);
-  setPagination(prev => ({ ...prev, page: 1 }));
+    setSearchFilters(defaultFilters);
+    setPagination((prev) => ({ ...prev, page: 1 }));
     refetch(); // Fetch without filters
   };
 
@@ -294,10 +324,8 @@ function UserJobs() {
 
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: isMobile
-                ? "1fr"
-                : "repeat(auto-fill, minmax(200px, 1fr))",
+              display: "flex",
+              flexWrap: "wrap",
               gap: 2,
               mb: 2,
             }}
@@ -309,6 +337,7 @@ function UserJobs() {
               value={filters.title}
               onChange={handleChange}
               sx={{
+                flex: "1 1 200px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 2,
                   background: isLight ? "#fff" : "#121212",
@@ -334,13 +363,14 @@ function UserJobs() {
               }}
             />
 
-            <TextField
+            {/* <TextField
               size="small"
               label="Location"
               name="location"
               value={filters.location}
               onChange={handleChange}
               sx={{
+                flex: "1 1 200px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 2,
                   background: isLight ? "#fff" : "#121212",
@@ -364,15 +394,16 @@ function UserJobs() {
                   borderRadius: "10px",
                 },
               }}
-            />
+            /> */}
 
             <TextField
               size="small"
-              label="Experience"
-              name="experince"
-              value={filters.experince}
+              label="Company"
+              name="company_name"
+              value={filters.company_name}
               onChange={handleChange}
               sx={{
+                flex: "1 1 200px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 2,
                   background: isLight ? "#fff" : "#121212",
@@ -397,10 +428,44 @@ function UserJobs() {
                 },
               }}
             />
-
             <FormControl
               size="small"
               sx={{
+                flex: "1 1 200px",
+                minWidth: 140,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  background: isLight ? "#fff" : "#121212",
+                  color: isLight ? "black" : "white",
+                  border: "0.5px solid #901b20",
+                },
+                "& .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon": {
+                  color: isLight ? "black" : "white",
+                },
+                "& .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root": {
+                  color: isLight ? "black" : "white",
+                  background: isLight ? "#fff" : "#121212",
+                },
+              }}
+            >
+              <InputLabel sx={{ color: isLight ? "black" : "white" }}>
+                Sort By
+              </InputLabel>
+              <Select
+                name="ordering"
+                value={filters.ordering || ""}
+                onChange={handleChange}
+                label="Sort By"
+              >
+                <MenuItem value="">Default</MenuItem>
+                <MenuItem value="-created_at">Newest First</MenuItem>
+                <MenuItem value="created_at">Oldest First</MenuItem>
+              </Select>
+            </FormControl>
+            {/* <FormControl
+              size="small"
+              sx={{
+                flex: "1 1 200px",
                 minWidth: 140,
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 2,
@@ -431,11 +496,11 @@ function UserJobs() {
                 <MenuItem value="Hybrid">Hybrid</MenuItem>
                 <MenuItem value="Remote">Remote</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl
-              size="small"
+            {/* <FormControl
               sx={{
+                flex: "1 1 200px",
                 minWidth: 140,
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 2,
@@ -467,44 +532,66 @@ function UserJobs() {
                 <MenuItem value="Internship">Internship</MenuItem>
                 <MenuItem value="Freelance">Freelance</MenuItem>
               </Select>
-            </FormControl>
-
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 140,
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
-                  background: isLight ? "#fff" : "#121212",
-                  color: isLight ? "black" : "white",
-                  border: "0.5px solid #901b20",
-                },
-                "& .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon": {
-                  color: isLight ? "black" : "white",
-                },
-                "& .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root": {
-                  color: isLight ? "black" : "white",
-                  background: isLight ? "#fff" : "#121212",
-                },
-              }}
-            >
-              <InputLabel sx={{ color: isLight ? "black" : "white" }}>
-                Sort By
-              </InputLabel>
-              <Select
-                name="ordering"
-                value={filters.ordering || ""}
-                onChange={handleChange}
-                label="Sort By"
-              >
-                <MenuItem value="">Default</MenuItem>
-                <MenuItem value="-created_at">Newest First</MenuItem>
-                <MenuItem value="created_at">Oldest First</MenuItem>
-              </Select>
-            </FormControl>
+            </FormControl> */}
           </Box>
+          <Collapse in={expand} timeout={500} orientation="vertical">
+            <Box sx={{ display: "flex", gap: 2, flexDirection: "column", mb: 2 }}>
+            <Box sx={{ display: "flex", gap: 2 }}>
+            <CustomAutoComplete
+              getter={filters.location}
+              setter={setFilters}
+              label={"Location"}
+              value={"location"}
+              border={"#901b20"}
+              background={isLight ? "#fff" : "#121212"}
+              multiple={true}
+              type={'egypt'}
+            />
+            <CustomAutoComplete
+                  options={experienceOptions}
+                  getter={filters.experince}
+                  setter={setFilters}
+                  value={"experince"}
+                  label={"Experince"}
+                  border={"#901b20"}
+                  background={isLight ? "#fff" : "#121212"}
+                  multiple={true}
+                />
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+            <CustomAutoComplete
+              getter={filters.attend}
+              setter={setFilters}
+              options={["Onsite", "Hybrid", "Remote"]}
+              label={"Attendance"}
+              value={"attend"}
+              border={"#901b20"}
+              background={isLight ? "#fff" : "#121212"}
+              multiple={true}
+            />
+            <CustomAutoComplete
+              getter={filters.type_of_job}
+              setter={setFilters}
+              options={["Full-time", "Part-time", "Internship", "Freelance"]}
+              label={"Job Type"}
+              value={"type_of_job"}
+              border={"#901b20"}
+              background={isLight ? "#fff" : "#121212"}
+              multiple={true}
+            />
+            </Box>
 
-          <Box sx={{ display: "flex", gap: 2 }}>
+            <CustomAutoComplete
+              setter={setFilters}
+              getter={filters.specialization}
+              border={"#901b20"}
+              background={isLight ? "#fff" : "#121212"}
+              multiple={true}
+            />
+          </Box>
+          </Collapse>
+          <Box sx={{ display: "flex", justifyContent: 'space-between' }}>
+            <Box sx={{ display: "flex", gap: 2}}>
             <Button
               variant="outlined"
               onClick={handleReset}
@@ -553,6 +640,29 @@ function UserJobs() {
             >
               Search
             </Button>
+            </Box>
+            <Button
+              variant="contained"
+              onClick={() => setExpand(!expand)}
+              sx={{
+                px: 3,
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                backgroundColor: primaryColor,
+                "&:hover": {
+                  backgroundColor: "#b32828",
+                  boxShadow: `0 6px 20px ${primaryColor}33`,
+                },
+                "&:disabled": {
+                  backgroundColor: "#e2e8f0",
+                },
+                boxShadow: `0 4px 14px ${primaryColor}33`,
+              }}
+              startIcon={expand ? <ExpandLess /> : <ExpandMore />}
+            >
+              {expand ? "Close Filters" : "Expand Filters"}
+            </Button>
           </Box>
         </Box>
 
@@ -563,7 +673,7 @@ function UserJobs() {
               justifyContent: "center",
               alignItems: "center",
               minHeight: "300px",
-              background: "#fff",
+              background: isLight ? "#fff" : '#121212',
               borderRadius: 3,
               p: 4,
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -635,7 +745,7 @@ function UserJobs() {
           >
             <Box
               sx={{
-                background: "#fff",
+                background: isLight ? "#fff" : '#242424',
                 p: 4,
                 borderRadius: 3,
                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
@@ -667,7 +777,7 @@ function UserJobs() {
                 sx={{
                   fontWeight: 700,
                   mb: 1,
-                  color: "#2d3748",
+                  color: isLight ? "#2d3748" : "#fff",
                 }}
               >
                 No jobs found
@@ -751,7 +861,7 @@ function UserJobs() {
                   sx={{
                     "& .MuiPaginationItem-root": {
                       fontWeight: 600,
-                      color: isLight ? '#121212' : "white",
+                      color: isLight ? "#121212" : "white",
                       "&.Mui-selected": {
                         backgroundColor: primaryColor,
                         color: "#fff",
@@ -759,7 +869,7 @@ function UserJobs() {
                           backgroundColor: "#b32828",
                         },
                       },
-                    }
+                    },
                   }}
                 />
               </motion.div>

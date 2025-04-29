@@ -5,16 +5,16 @@ import { set } from "date-fns";
 //import { useQuery } from "@tanstack/react-query";
 import { getJobById } from "../../services/Job";
 import {
-  Box,
-  Typography,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  FormControlLabel,
+  // Box,
+  // Typography,
+  // Button,
+  // TextField,
+  // Select,
+  // MenuItem,
+  // FormControl,
+  // InputLabel,
+  // Checkbox,
+  // FormControlLabel,
   useMediaQuery,
   useTheme,
   IconButton,
@@ -23,20 +23,21 @@ import {
 //import { userContext } from "../context/UserContext"
 import { motion, AnimatePresence } from "framer-motion"
 import { useQuery } from "@tanstack/react-query"
-import {
-  Add,
-  Remove,
-  Delete,
-  Business,
-  LocationOn,
-  Description,
-  WorkOutline,
-  Schedule,
-  Save,
-  ArrowBack,
-} from "@mui/icons-material"
+// import {
+//   Add,
+//   Remove,
+//   Delete,
+//   Business,
+//   LocationOn,
+//   Description,
+//   WorkOutline,
+//   Schedule,
+//   Save,
+//   ArrowBack,
+// } from "@mui/icons-material"
 import {showSuccessToast,showWarningToast,showConfirmToast,showErrorToast} from "../../confirmAlert/toastConfirm";
 import '../../ComponentsStyles/job/jobCreate.css';
+import CustomAutoComplete from "../autoComplete/CustomAutoComplete";
 const JobCreate = () => {
    const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
@@ -48,6 +49,16 @@ const JobCreate = () => {
   const backgroundColor = isLight ? "#fff" : "#242424"
   const textColor = isLight ? "#2d3748" : "#e2e8f0"
   const borderColor = isLight ? "#e2e8f0" : "#4a5568"
+  const experienceOptions = 
+    [
+      "Intern",
+      "Junior",
+      "Mid-Level",
+      "Senior",
+      "Lead",
+      "Manager",
+    
+  ]
 
   const [jobData, setJobData] = useState({
     title: "",
@@ -195,15 +206,15 @@ const JobCreate = () => {
   };
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (questions.length === 0) {
-      showConfirm({
-        message: "Are you sure no questions will be added?",
-        onConfirm: () => {},
-        onCancel: () => {
-          return;
-        },
-      });
-    }
+    // if (questions.length === 0) {
+    //   showConfirm({
+    //     message: "Are you sure no questions will be added?",
+    //     onConfirm: () => {},
+    //     onCancel: () => {
+    //       return;
+    //     },
+    //   });
+    // }
     if (
       questions.some((q) => q.type === "multichoice" && q.choices.length === 0)
     ) {
@@ -288,7 +299,7 @@ const JobCreate = () => {
                 <label htmlFor="location" className="form-label">
                   Location
                 </label>
-                <input
+                {/* <input
                   type="text"
                   id="location"
                   name="location"
@@ -297,7 +308,16 @@ const JobCreate = () => {
                   onChange={handleJobChange}
                   className="form-input"
                   required
-                />
+                /> */}
+                <CustomAutoComplete
+                  setter={setJobData}
+                  getter={jobData.location}
+                  value={'location'}
+                  label={'Governates'}
+                  background={isLight ? '#fff' : '#1a202c'}
+                  required
+                  type={'egypt'}
+                  />
               </div>
 
               <div className="form-group">
@@ -341,14 +361,13 @@ const JobCreate = () => {
                 <label htmlFor="experince" className="form-label">
                   Experience Required
                 </label>
-                <input
-                  type="text"
-                  id="experince"
-                  name="experince"
-                  placeholder="Enter required experience"
-                  value={jobData.experince}
-                  onChange={handleJobChange}
-                  className="form-input"
+                <CustomAutoComplete
+                  options={experienceOptions}
+                  getter={jobData.experince}
+                  setter={setJobData}
+                  value={"experince"}
+                  label={"Experince"}
+                  background={isLight ? '#fff' : '#1a202c'}
                   required
                 />
               </div>

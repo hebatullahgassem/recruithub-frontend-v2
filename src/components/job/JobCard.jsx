@@ -26,6 +26,8 @@ import {
   Star,
   House,
   BookmarkBorder,
+  Stairs,
+  DateRange,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import {
@@ -260,7 +262,7 @@ function JobCard({ job, type, isSelected, refetch }) {
             >
               <Chip
                 icon={
-                  <AccessTime
+                  <DateRange
                     sx={{ fontSize: 14, color: isLight ? "#718096" : "white" }}
                   />
                 }
@@ -294,6 +296,20 @@ function JobCard({ job, type, isSelected, refetch }) {
                 <Chip
                   icon={<House sx={{ fontSize: 14 }} />}
                   label={job.attend}
+                  size="small"
+                  sx={{
+                    backgroundColor: isLight ? "#f0fdf4" : "#121212",
+                    color: "#16a34a",
+                    fontWeight: 500,
+                    height: 24,
+                    fontSize: "0.7rem",
+                  }}
+                />
+              )}
+              {job?.experince && (
+                <Chip
+                  icon={<Stairs sx={{ fontSize: 14 }} />}
+                  label={job.experince}
                   size="small"
                   sx={{
                     backgroundColor: isLight ? "#f0fdf4" : "#121212",

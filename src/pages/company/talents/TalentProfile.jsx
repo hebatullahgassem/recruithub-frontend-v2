@@ -42,7 +42,7 @@ import {
   Code,
 } from "@mui/icons-material"
 import { motion } from "framer-motion"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { getTalentById } from "../../../services/Talents"
 import { styled } from "@mui/material/styles"
@@ -362,7 +362,8 @@ const TalentProfile = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const navigate = useNavigate()
   const location = useLocation()
-  const talentId = location.state?.talentId
+  const {id} = useParams()
+  const talentId = id
   const [shortlisted, setShortlisted] = useState(false)
   const [expandedExp, setExpandedExp] = useState({})
 

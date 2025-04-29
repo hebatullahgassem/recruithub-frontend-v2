@@ -167,7 +167,7 @@ function JobDetails({ job, refetch }) {
               <span className="detail-icon" style={{ color: isLight ? "#3498db" : "#2980b9" }}>💼</span>
               <div style={{ color: isLight ? "#121212" : "#fff" }}>
                 <span className="label"  style={{ color: isLight ? "#3498db" : "#882024 " }}>Experience:</span>{" "}
-                {job.experience || "Not specified"}
+                {job.experince || "Not specified"}
               </div>
             </div>
           </div>

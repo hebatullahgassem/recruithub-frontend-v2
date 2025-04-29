@@ -166,7 +166,7 @@ function App() {
                         path="/company/talents"
                         element={<CompanyTalents />}
                       />
-                      <Route path="/company/talents/TalentProfile/" element={<TalantProfile />} />
+                      <Route path="/company/talents/:id/" element={<TalantProfile />} />
          
 
                       <Route path="/company/jobCreate" element={<JobCreate />} />
@@ -204,7 +204,7 @@ function App() {
                         element={<EditCV />}
                       />
                       <Route 
-                        path="/applicant/profile/recom" 
+                        path="/applicant/recommended" 
                         element={<RecommendedJobs />} 
                       />
 

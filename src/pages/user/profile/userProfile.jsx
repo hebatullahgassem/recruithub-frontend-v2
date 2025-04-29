@@ -189,7 +189,7 @@ const UserProfile = () => {
     });
   const ShowRecommendedJobs = () =>
     user?.id &&
-    navigate(`/applicant/profile/recom`, { state: { userId: user.id } });
+    navigate(`/applicant/recommended`, { state: { userId: user.id } });
 
   const calculateProfileCompleteness = () => {
     let completeness = 20;

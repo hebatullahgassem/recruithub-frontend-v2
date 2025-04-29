@@ -135,7 +135,7 @@ const EditSkills = () => {
 
       await updateUserProfile(userId, formData);
 
-      navigate("/applicant/profile", { replace: true });
+      navigate("/applicant/profile");
     } catch (err) {
       console.error("Error saving skills:", err);
       setError("Failed to save skills.");

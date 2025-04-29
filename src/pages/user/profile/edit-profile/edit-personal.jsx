@@ -58,6 +58,7 @@ const EditPersonal = () => {
     img: "",
     nationalIdImg: "",
     specialization: "",
+    seniority: '',
   });
   const [uploadStatus, setUploadStatus] = useState({
     img: null,
@@ -126,6 +127,7 @@ const EditPersonal = () => {
             img: data.img || "",
             nationalIdImg: data.national_id_img || "",
             specialization: data.specialization || "",
+            seniority: data.seniority || "",
           });
         })
         .catch((err) => {
@@ -203,6 +205,7 @@ const EditPersonal = () => {
       formData.append("phone_number", localData.phone);
       formData.append("national_id", localData.nationalId);
       formData.append("specialization", localData.specialization);
+      formData.append("seniority", localData.seniority);
 
       if (localData.img instanceof File) {
         formData.append("img", localData.img);
@@ -225,7 +228,7 @@ const EditPersonal = () => {
       // updateUser(response.data);
       setSuccess(true);
       setError(null);
-      navigate(`/applicant/profile`, { userId });
+      navigate(`/applicant/profile`);
     } catch (err) {
       console.error("Error updating profile:", err);
       const errorMessage = err.response?.data
@@ -475,6 +478,7 @@ const EditPersonal = () => {
                           borderRadius: "10px",
                         },
                       }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -658,44 +662,17 @@ const EditPersonal = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    {/* <TextField
-                      fullWidth
-                      label="National ID"
-                      name="nationalId"
-                      value={localData.nationalId}
-                      onChange={handleChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 2,
-                          background: isLight ? "#fff" : "#121212",
-                          color: isLight ? "black" : "white",
-                          "& fieldset": {
-                            borderColor: "#901b20",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#901b20",
-                          },
-                        },
-                        "& .MuiInputLabel-root": {
-                          color: isLight ? "black" : "white",
-                        },
-                        "& .MuiInputBase-input": {
-                          backgroundColor: isLight
-                            ? "rgba(255, 255, 255, 0.95)"
-                            : "#121212",
-                          color: isLight ? "black" : "white",
-                          paddingLeft: 1,
-                          borderRadius: "10px",
-                        },
-                        '.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled': {
-                          backgroundColor: isLight ? "black" : "red",
-                          WebkitTextStroke: isLight ? 'black' : "1px grey"
-                        }
-                      }}
-                      disabled
-                     
-                    /> */}
+                    
                     <CustomAutoComplete
+                      setter={setLocalData}
+                      getter={localData.seniority}
+                      value={'seniority'}
+                      label={'Experience'}
+                      type={'experience'}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                  <CustomAutoComplete
                       setter={setLocalData}
                       getter={localData.specialization}
                     />

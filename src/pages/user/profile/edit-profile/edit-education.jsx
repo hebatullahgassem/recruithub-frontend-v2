@@ -149,7 +149,7 @@ const EditEducation = () => {
       });
 
       // updateProfile("education", education);
-      goToNextStep(`/applicant/profile`, { userId });
+      goToNextStep(`/applicant/profile`);
     } catch (err) {
       console.error("Error updating education:", err);
       setError("Failed to save education data");

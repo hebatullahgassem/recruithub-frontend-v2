@@ -16,17 +16,17 @@ import {
   Box,
   Paper,
   Button,
-  Container,
-  InputAdornment,
-  Pagination,
-  Select,
-  MenuItem,
-  FormControl,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  IconButton,
+  // Container,
+  // InputAdornment,
+  // Pagination,
+  // Select,
+  // MenuItem,
+  // FormControl,
+  // Grid,
+  // Card,
+  // CardContent,
+  // CardActions,
+  // IconButton,
 } from "@mui/material"
 import {
   Search,
@@ -49,10 +49,10 @@ import CustomAutoComplete from "../../../components/autoComplete/CustomAutoCompl
 function Talents() {
   const { user, isLight } = useContext(userContext);
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate();
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"))
+  // const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  // const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"))
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
@@ -65,14 +65,14 @@ function Talents() {
 
   const [filters, setFilters] = useState({
     name: "",
-    experience: "",
+    seniority: "",
     location: "",
     skills: "",
     specialization: "",
   });
   const [searchFilters, setSearchFilters] = useState({
     name: "",
-    experience: "",
+    seniority: "",
     location: "",
     skills: "",
     specialization: "",
@@ -81,13 +81,13 @@ function Talents() {
   const handleReset = () => {
     setFilters({
       name: "",
-      experience: "",
+      seniority: "",
       location: "",
       skills: "",
     });
     setSearchFilters({
       name: "",
-      experience: "",
+      seniority: "",
       location: "",
       skills: "",
     });
@@ -181,6 +181,7 @@ function Talents() {
                 size="small"
                 InputProps={{
                   sx: {
+                    height: 50,
                     pl: 4,
                     borderRadius: "8px",
                     backgroundColor: sectionBackground,
@@ -203,7 +204,7 @@ function Talents() {
 
           <Box className="filter-row" sx={{ display: "flex", gap: 2, mt: 2, flexWrap: "wrap" }}>
           <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              <School
+              {/* <School
                 sx={{
                   position: "absolute",
                   left: "12px",
@@ -212,11 +213,11 @@ function Talents() {
                   color: primaryColor,
                   fontSize: "20px",
                 }}
-              />
+              /> */}
               <CustomAutoComplete setter={setFilters} getter={filters.specialization} />
             </Box>
             <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              <Work
+              {/* <Work
                 sx={{
                   position: "absolute",
                   left: "12px",
@@ -225,42 +226,20 @@ function Talents() {
                   color: primaryColor,
                   fontSize: "20px",
                 }}
-              />
-              <TextField
-                label="Experience"
-                value={filters.experience}
-                onChange={(e) => setFilters((prev) => ({ ...prev, experience: e.target.value }))}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  sx: {
-                    pl: 4,
-                    borderRadius: "8px",
-                    backgroundColor: sectionBackground,
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: borderColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    color: textColor,
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    color: isLight ? "#718096" : "#a0aec0",
-                  },
-                }}
-              />
+              /> */}
+              <CustomAutoComplete
+                      setter={setFilters}
+                      getter={filters.seniority}
+                      value={'seniority'}
+                      label={'Experience'}
+                      type={'experience'}
+                      multiple={true}
+                    />
             </Box>
 
 
             <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              <School
+              {/* <School
                 sx={{
                   position: "absolute",
                   left: "12px",
@@ -269,7 +248,7 @@ function Talents() {
                   color: primaryColor,
                   fontSize: "20px",
                 }}
-              />
+              /> */}
               <TextField
                 label="Skills"
                 value={filters.skills}
@@ -279,7 +258,7 @@ function Talents() {
                 size="small"
                 InputProps={{
                   sx: {
-                    height: "40px",
+                    height: 50,
                     pl: 4,
                     borderRadius: "8px",
                     backgroundColor: sectionBackground,
@@ -612,9 +591,7 @@ function Talents() {
                         variant="contained"
                         fullWidth
                         onClick={() =>
-                          navigate(`/company/talents/TalentProfile`, {
-                            state: { talentId: talent.id },
-                          })
+                          navigate(`/company/talents/${talent.id}`)
                         }
                         startIcon={<Visibility />}
                         sx={{
