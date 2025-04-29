@@ -20,6 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { updateUserProfile } from "../../../../services/Auth";
 import { Add, Check, Build, Delete } from "@mui/icons-material";
+import Loading from "../../../helpers/Loading";
 
 // Consistent Color Palette
 const primaryColor = '#d7323e'; // IIT Maroon
@@ -98,8 +99,8 @@ const EditSkills = () => {
           setSkills(skillData);
         } else {
           try {
-            const parsed = JSON.parse(skillData);
-            setSkills(Array.isArray(parsed) ? parsed : [parsed]);
+            // const parsed = JSON.parse(skillData);
+            setSkills(Array.isArray(skillData) ? skillData : [skillData]);
           } catch (err) {
             console.error("Invalid JSON in skills:", err);
             setSkills([]);
@@ -148,17 +149,7 @@ const EditSkills = () => {
  
   if (loading) {
     return (
-      <Box sx={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        mt: 4,
-        color: textPrimary
-      }}>
-        <CircularProgress sx={{ color: isLight ? "#d7323e" : "#901b26" }} />
-        <Typography variant="body1" sx={{ ml: 2 }}>
-          Loading skills...
-        </Typography>
-      </Box>
+      <Loading />
     );
   }
 

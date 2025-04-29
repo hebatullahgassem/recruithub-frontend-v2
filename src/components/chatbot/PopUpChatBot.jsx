@@ -125,7 +125,7 @@ const PopupChatBot = () => {
             <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Bot size={20} />
-              <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>AI Assistant</h2>
+              <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600, color: isLight ? "white" : 'black' }}>AI Assistant</h2>
             </div>
               <p style={{ margin: 0, fontSize: "12px", fontWeight: 400 }}>limit resets on <span style={{ fontSize: "11px" }}>{quota?.date}</span></p>
             </div>

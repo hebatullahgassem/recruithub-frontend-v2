@@ -50,9 +50,12 @@ function Login() {
       refetchUser(res);
       // setUser(res.user);
       // setToken(res.token);
+      showSuccessToast("Welcome back!");
       navigate("/");
     } catch (error) {
       // Clear user/token if login failed
+      
+      setIsLoading(false);
       setUser(null);
       setToken(null);
       localStorage.removeItem("token");
