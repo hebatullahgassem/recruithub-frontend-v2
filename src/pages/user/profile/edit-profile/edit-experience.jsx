@@ -23,6 +23,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { Delete, Add, Check, Work } from "@mui/icons-material";
+import { showErrorToast } from "../../../../confirmAlert/toastConfirm";
 
 // Updated Color Palette
 const primaryColor = '#901b26'; // IIT Maroon
@@ -106,8 +107,8 @@ const EditExperience = () => {
           setExperiences(expData);
         } else {
           try {
-            const parsed = JSON.parse(expData);
-            setExperiences(Array.isArray(parsed) ? parsed : [parsed]);
+            // const parsed = JSON.parse(expData);
+            setExperiences(Array.isArray(expData) ? expData : [expData]);
           } catch (err) {
             console.error("Invalid JSON in experience:", err);
             setExperiences([]);
@@ -140,6 +141,10 @@ const EditExperience = () => {
   };
 
   const handleChange = (index, key, value) => {
+    if (key === 'endDate' && value < experiences[index].startDate) {
+      showErrorToast("End date cannot be before start date.", 2000,isLight);
+      return;
+    }
     const updatedExperiences = [...experiences];
     updatedExperiences[index][key] = value;
     setExperiences(updatedExperiences);
@@ -148,10 +153,9 @@ const EditExperience = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const formData = new FormData();
+    formData.append("experience", JSON.stringify(experiences));
     try {
-      const formData = new FormData();
-      formData.append("experience", JSON.stringify(experiences));
-
       await AxiosApi.patch(`user/jobseekers/${userId}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

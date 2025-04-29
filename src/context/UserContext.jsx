@@ -18,14 +18,14 @@ export function UserContextProvider({ children }) {
       const response = await getUser(tok || token);
       // console.log(response);
       // Safely parse JSON fields
-      const parsedResponse = {
-        ...response,
-        skills: safeParseJSON(response.skills, []),
-        education: safeParseJSON(response.education, []),
-        experience: safeParseJSON(response.experience, []),
-      };
-      setUser(parsedResponse);
-      console.log(parsedResponse);
+      // const parsedResponse = {
+      //   ...response,
+      //   skills: safeParseJSON(response.skills, []),
+      //   education: safeParseJSON(response.education, []),
+      //   experience: safeParseJSON(response.experience, []),
+      // };
+      setUser(response);
+      console.log(response);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }

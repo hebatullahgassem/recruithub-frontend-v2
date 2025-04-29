@@ -101,6 +101,7 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
     top: 0,
     marginBottom: theme.spacing(3),
   },
+  minWidth: "30vw",
 }))
 
 const ContentContainer = styled(Box)(({ theme }) => ({
@@ -451,33 +452,33 @@ const TalentProfile = () => {
         </ActionButton>
       </Box>
 
-      <Grid container spacing={3} sx={{ p: 3 }}>
+      <Box container spacing={3} sx={{ p: 1, display: "flex" }}>
         {/* Left Sidebar */}
-        <Grid item xs={12} md={4} lg={3}>
+        <Box item xs={12} md={2} lg={3}>
           <SidebarContainer>
             <ProfileHeader>
               <Badge
                 overlap="circular"
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                badgeContent={
-                  <Tooltip title={shortlisted ? "Remove from shortlist" : "Add to shortlist"}>
-                    <IconButton
-                      size="small"
-                      sx={{
-                        bgcolor: atheistTheme.background,
-                        border: `2px solid ${atheistTheme.primary}`,
-                        "&:hover": { bgcolor: atheistTheme.accent },
-                      }}
-                      onClick={() => setShortlisted(!shortlisted)}
-                    >
-                      {shortlisted ? (
-                        <Bookmark sx={{ color: atheistTheme.primary, fontSize: 16 }} />
-                      ) : (
-                        <BookmarkBorder sx={{ color: atheistTheme.primary, fontSize: 16 }} />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                }
+                // badgeContent={
+                //   <Tooltip title={shortlisted ? "Remove from shortlist" : "Add to shortlist"}>
+                //     <IconButton
+                //       size="small"
+                //       sx={{
+                //         bgcolor: atheistTheme.background,
+                //         border: `2px solid ${atheistTheme.primary}`,
+                //         "&:hover": { bgcolor: atheistTheme.accent },
+                //       }}
+                //       onClick={() => setShortlisted(!shortlisted)}
+                //     >
+                //       {shortlisted ? (
+                //         <Bookmark sx={{ color: atheistTheme.primary, fontSize: 16 }} />
+                //       ) : (
+                //         <BookmarkBorder sx={{ color: atheistTheme.primary, fontSize: 16 }} />
+                //       )}
+                //     </IconButton>
+                //   </Tooltip>
+                // }
               >
                 <ProfileAvatar src={talent.img} alt={talent.name} />
               </Badge>
@@ -531,18 +532,18 @@ const TalentProfile = () => {
                 )}
               </Box>
 
-              <Stack direction="row" spacing={1} sx={{ mb: 3, width: "100%" }}>
-                <ActionButton
+              <Stack direction="row" spacing={1} sx={{ mb: 3, width: "100%" , justifyContent: "center"}}>
+                {/* <ActionButton
                   variant="contained"
                   fullWidth
                   startIcon={<Bookmark />}
                   onClick={() => setShortlisted(!shortlisted)}
                 >
                   {shortlisted ? "Shortlisted" : "Shortlist"}
-                </ActionButton>
+                </ActionButton> */}
                 {talent.cv && (
-                  <ActionButton variant="outlined" href={talent.cv} target="_blank">
-                    <Download />
+                  <ActionButton variant="outlined" href={talent.cv.endsWith(".pdf") ? talent.cv : talent.cv + ".pdf"} target="_blank">
+                    Download Cv<Download />
                   </ActionButton>
                 )}
               </Stack>
@@ -617,10 +618,10 @@ const TalentProfile = () => {
               </Typography>
             </Box>
           </SidebarContainer>
-        </Grid>
+        </Box>
 
         {/* Main Content */}
-        <Grid item xs={12} md={8} lg={9}>
+        <Box item xs={12} md={8} lg={9}>
           <ContentContainer>
             {/* Summary Section */}
             {talent.about && (
@@ -636,9 +637,12 @@ const TalentProfile = () => {
                   </SectionTitle>
                 </SectionHeader>
                 <SectionContent>
-                  <Typography variant="body1" sx={{ lineHeight: 1.8, color: atheistTheme.textSecondary }}>
-                    {talent.about}
-                  </Typography>
+                  {talent.about && <Typography variant="body1" sx={{ lineHeight: 1.8, color: atheistTheme.textSecondary }}>
+                    About: <strong>{talent.about}</strong>
+                  </Typography>}
+                  {talent.specialization && <Typography variant="body1" sx={{ lineHeight: 1.8, color: atheistTheme.textSecondary }}>
+                    Specialization: <strong>{talent.specialization}</strong>
+                  </Typography>}
                 </SectionContent>
               </SectionCard>
             )}
@@ -880,8 +884,8 @@ const TalentProfile = () => {
               </SectionCard>
             )}
           </ContentContainer>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </ProfileContainer>
   )
 }

@@ -652,6 +652,8 @@ const UserProfile = () => {
                     </SecondaryButton>
                   </Box>
 
+                  {console.log(user.skills)}
+
                   {user.skills?.length > 0 ? (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                       {user.skills.map((skill, index) => (

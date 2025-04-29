@@ -8,28 +8,29 @@ const CustomAutoComplete = ({setter, getter}) => {
     "Game Development",
     "Graphic Design",
     "Embedded Systems",
-    "Systems Administration and Cloud",
-    "Cyber Security",
+    "System Administration & Cloud",
+    "Cybersecurity",
     "Geographic Information Systems",
-    "ERP & CRM Development",
-    "Data Science and AI",
+    "ERP and CRM Development",
+    "Data Science & AI",
     "Web Development",
-    "Mobile Development",
-    "UI/UX Developer",
-    "Software Tester",
+    "Mobile App Development",
+    "UI/UX Design",
+    "Software Testing",
   ];
 
   return (
     <Autocomplete
       options={specializationOptions}
       sx={{
+        height: "auto",
         width: "100%",
         "& .MuiOutlinedInput-root": {
           borderRadius: 2,
-          background: isLight ? "#fff" : "#121212",
+          background: isLight ? "#fff" : "#242424",
           color: isLight ? "black" : "white",
           "& fieldset": {
-            borderColor: "#901b20",
+            borderColor: isLight ? "#ddd5d6" : "#2a2b2f",
           },
           "&:hover fieldset": {
             borderColor: "#901b20",
@@ -39,10 +40,13 @@ const CustomAutoComplete = ({setter, getter}) => {
           color: isLight ? "black" : "white",
         },
         "& .MuiInputBase-input": {
-          backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : "#121212",
+          backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : "#242424",
           color: isLight ? "black" : "white",
           paddingLeft: 1,
         },
+        '.css-1umw9bq-MuiSvgIcon-root': {
+          color: isLight ? "black" : "white",
+        }
       }}
       renderInput={(params) => <TextField {...params} label="Specialization" />}
       value={getter}

@@ -198,52 +198,23 @@ function Talents() {
                 }}
               />
             </Box>
-            <Box sx={{ display: "flex", gap: 1, ml: 2  , paddingTop: "8px",}}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setSearchFilters(filters)
-                  setPage(1)
-                  talentsRefetch()
-                }}
-                sx={{
-                  backgroundColor: primaryColor,
-                  color: "#ffffff",
-                  "&:hover": {
-                    backgroundColor: "#c62a37",
-                    transform: "translateY(-3px)",
-                    boxShadow: `0 4px 12px ${primaryColor}33`,
-                  },
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  textTransform: "none",
-                }}
-              >
-                Search
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={handleReset}
-                sx={{
-                  borderColor: borderColor,
-                  color: textColor,
-                 
-                  "&:hover": {
-                    borderColor: primaryColor,
-                    backgroundColor: `${primaryColor}10`,
-                    transform: "translateY(-3px)",
-                  },
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  textTransform: "none",
-                }}
-              >
-                Reset
-              </Button>
-            </Box>
+            
           </Box>
 
           <Box className="filter-row" sx={{ display: "flex", gap: 2, mt: 2, flexWrap: "wrap" }}>
+          <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
+              <School
+                sx={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: primaryColor,
+                  fontSize: "20px",
+                }}
+              />
+              <CustomAutoComplete setter={setFilters} getter={filters.specialization} />
+            </Box>
             <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
               <Work
                 sx={{
@@ -308,6 +279,7 @@ function Talents() {
                 size="small"
                 InputProps={{
                   sx: {
+                    height: "40px",
                     pl: 4,
                     borderRadius: "8px",
                     backgroundColor: sectionBackground,
@@ -330,20 +302,51 @@ function Talents() {
                 }}
               />
             </Box>
-            <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              <School
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                  fontSize: "20px",
-                }}
-              />
-              <CustomAutoComplete setter={setFilters} getter={filters.specialization} />
-            </Box>
+            
           </Box>
+          <Box sx={{ display: "flex", gap: 1, ml: 2  , paddingTop: "8px", flexDirection: "row-reverse"}}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setSearchFilters(filters)
+                  setPage(1)
+                  talentsRefetch()
+                }}
+                sx={{
+                  backgroundColor: primaryColor,
+                  color: "#ffffff",
+                  "&:hover": {
+                    backgroundColor: "#c62a37",
+                    transform: "translateY(-3px)",
+                    boxShadow: `0 4px 12px ${primaryColor}33`,
+                  },
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  textTransform: "none",
+                }}
+              >
+                Search
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleReset}
+                sx={{
+                  borderColor: borderColor,
+                  color: textColor,
+                 
+                  "&:hover": {
+                    borderColor: primaryColor,
+                    backgroundColor: `${primaryColor}10`,
+                    transform: "translateY(-3px)",
+                  },
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  textTransform: "none",
+                }}
+              >
+                Reset
+              </Button>
+            </Box>
         </Paper>
       </div>
 
@@ -381,6 +384,8 @@ function Talents() {
       ) :
         (
         <>
+        
+        {console.log(talents)}
           <div className="talents-grid">
             <AnimatePresence>
               {talents?.map((talent) => (
@@ -469,9 +474,8 @@ function Talents() {
                       sx={{ p: "0 20px 20px", flex: 1, display: "flex", flexDirection: "column" }}
                     >
                       <Box className="applicant-skills" sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
-                        {talent.skills
-                          ?.split(",")
-                          .slice(0, 5)
+                        {talent?.skills
+                          ?.slice(0, 5)
                           .map((skill, index) => (
                             <Chip
                               key={index}
@@ -490,7 +494,7 @@ function Talents() {
                               }}
                             />
                           ))}
-                        {talent.skills?.split(",").length > 5 && (
+                        {talent?.skills?.length > 5 && (
                           <Chip
                             label={`+${talent.skills.split(",").length - 5}`}
                             size="small"
