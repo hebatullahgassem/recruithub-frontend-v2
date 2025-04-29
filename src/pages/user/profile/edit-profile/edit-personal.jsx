@@ -27,6 +27,7 @@ import {
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomAutoComplete from "../../../../components/autoComplete/CustomAutoComplete";
+import { showErrorToast } from "../../../../confirmAlert/toastConfirm";
 
 const IDImage = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -190,7 +191,7 @@ const EditPersonal = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     if (!validatePhoneNumber(localData.phone)) {
-      console.log(localData.phone);
+      showErrorToast('Please enter valid egyptian phone number', 2000, isLight)
       return;
     }
     try {
@@ -523,6 +524,7 @@ const EditPersonal = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
+                    disabled
                       fullWidth
                       label="Date of Birth"
                       name="dob"

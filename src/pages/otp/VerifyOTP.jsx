@@ -15,7 +15,7 @@ import animationData from '../../assets/animations/otp.json';
 import { toast } from "react-hot-toast";
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(60);
   const [resendDisabled, setResendDisabled] = useState(false);
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -68,7 +68,7 @@ const VerifyOTP = () => {
 
   const handleResendOtp = async () => {
     setResendDisabled(true);
-    setSeconds(30);  // Reset the timer
+    setSeconds(60);  // Reset the timer
 
     try {
       const response = await axios.post("http://localhost:8000/user/resend-otp/", {

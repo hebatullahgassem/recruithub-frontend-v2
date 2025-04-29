@@ -26,6 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
 import Lottie from "lottie-react";
 import '../../../../styles/company/profile/edit_profile_Personal.css';
+import CustomAutoComplete from "../../../../components/autoComplete/CustomAutoComplete";
 
 const EditPersonalCom = () => {
   const { user, setUser ,isLight} = useContext(userContext);
@@ -144,9 +145,9 @@ const EditPersonalCom = () => {
       setSuccess(true);
       setError(null);
 
-      showSuccessToast("Profile updated successfully! Redirecting...")
+      showSuccessToast("Profile updated successfully! Redirecting...", 2000, isLight)
 
-      setTimeout(() => navigate("/company/profile"), 2000);
+      setTimeout(() => navigate("/company/profile"), 1000);
     } catch (err) {
       console.error("Error updating profile:", err);
       const errorMessage = err.response?.data
@@ -212,28 +213,7 @@ const EditPersonalCom = () => {
             </Typography>
           </Box>
 
-          {success ? (
-            <Box sx={{ p: 4, textAlign: "center" }}>
-              <Alert
-                severity="success"
-                icon={<CheckCircle fontSize="inherit" />}
-                sx={{
-                  mb: 3,
-                  alignItems: "center",
-                  backgroundColor: isLight ? "#def7ec" : "#1a3b2c",
-                  color: isLight ? "#057a55" : "#84e1bc",
-                  "& .MuiAlert-icon": {
-                    color: isLight ? "#057a55" : "#84e1bc",
-                  },
-                }}
-              >
-                <Typography variant="body1" fontWeight={500}>
-                  Profile updated successfully! Redirecting...
-                </Typography>
-              </Alert>
-              <CircularProgress sx={{ color: primaryColor }} />
-            </Box>
-          ) : (
+          
             <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
               {error && (
                 <Alert
@@ -436,7 +416,7 @@ const EditPersonalCom = () => {
                   >
                     Location*
                   </Typography>
-                  <TextField
+                  {/* <TextField
                     fullWidth
                     name="location"
                     value={localData.location}
@@ -459,7 +439,16 @@ const EditPersonalCom = () => {
                         color: textColor,
                       },
                     }}
-                  />
+                  /> */}
+                  <CustomAutoComplete
+                      getter={localData.location}
+                      setter={setLocalData}
+                      label={"Location"}
+                      value={"location"}
+                      border={"#901b20"}
+                      background={isLight ? "#fff" : "#121212"}
+                      type={"egypt"}
+                    />
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Typography
@@ -632,7 +621,7 @@ const EditPersonalCom = () => {
                 </Button>
               </Box>
             </Box>
-          )}
+          
         </Paper>
       </Container>
     </Box>

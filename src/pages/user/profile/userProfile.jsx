@@ -192,15 +192,18 @@ const UserProfile = () => {
     navigate(`/applicant/recommended`, { state: { userId: user.id } });
 
   const calculateProfileCompleteness = () => {
-    let completeness = 20;
+    let completeness = 0;
     if (user?.name) completeness += 10;
-    if (user?.about) completeness += 10;
+    if (user?.about) completeness += 5;
     if (user?.location) completeness += 5;
-    if (user?.img) completeness += 5;
-    if (user?.education?.length > 0) completeness += 15;
-    if (user?.experience?.length > 0) completeness += 15;
-    if (user?.skills?.length > 0) completeness += 10;
-    if (user?.cv) completeness += 10;
+    if (user?.img) completeness += 10;
+    if (user?.education?.length > 0) completeness += 10;
+    if (user?.experience?.length > 0) completeness += 10;
+    if (user?.skills?.length > 0) completeness += 5;
+    if (user?.cv) completeness += 20;
+    if(user?.accounts?.length > 0) completeness += user?.accounts?.length * 5
+    if(user?.specialization) completeness += 5
+    if(user?.seniority) completeness += 5
     return Math.min(completeness, 100);
   };
 
@@ -384,7 +387,7 @@ const UserProfile = () => {
                         </Tooltip>
                       )}
                       {Object.keys(user.accounts).length === 0 && (
-                        <Typography variant="body2" sx={{ ml: 1 }}>
+                        <Typography variant="body2" onClick={() => navigate("/applicant/profile/edit-accounts")} sx={{ ml: 1, textDecoration: "underline", cursor: "pointer" }}>
                           Add your accounts
                         </Typography>
                       )}
