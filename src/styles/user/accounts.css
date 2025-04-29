@@ -1,306 +1,237 @@
-/* Accounts Page Styling */
 .accounts-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 80vh;
-    padding-top: 10vh;
-    background-color: var(--background);
-    color: var(--text-primary);
-    animation: fadeIn var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+  padding-top: 10vh;
+  transition: all var(--transition-normal);
+}
+
+.light-mode .accounts-container {
+  background-color: var(--background-light);
+}
+
+.dark-mode .accounts-container {
+  background-color: var(--background-dark);
+}
+
+.accounts-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.light-mode .back-button {
+  color: var(--text-primary-light);
+}
+
+.dark-mode .back-button {
+  color: var(--text-primary-dark);
+}
+
+.accounts-title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.light-mode .accounts-title {
+  color: var(--text-primary-light);
+}
+
+.dark-mode .accounts-title {
+  color: var(--text-primary-dark);
+}
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  width: 100%;
+  max-width: 1200px;
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .accounts-grid {
+    grid-template-columns: 5fr 7fr;
   }
-  
-  .accounts-header {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-  
-  .accounts-title {
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 2rem;
-    margin: 0;
-  }
-  
-  .back-button {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: background-color var(--transition-fast);
-  }
-  
-  .back-button:hover {
-    background-color: var(--card-bg);
+}
+
+.accounts-list-title {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+}
+
+.light-mode .accounts-list-title {
+  color: var(--text-primary-light);
+}
+
+.dark-mode .accounts-list-title {
+  color: var(--text-primary-dark);
+}
+
+.accounts-list {
+  background-color: var(--surface-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.light-mode .accounts-list {
+  background-color: var(--surface-light);
+  border: 1px solid var(--border-light);
+}
+
+.dark-mode .accounts-list {
+  background-color: var(--surface-dark);
+  border: 1px solid var(--border-dark);
+}
+
+.account-item {
+  padding: var(--spacing-md);
+  transition: background-color var(--transition-fast);
+}
+
+.light-mode .account-item:hover {
+  background-color: var(--background-alt-light);
+}
+
+.dark-mode .account-item:hover {
+  background-color: var(--background-alt-dark);
+}
+
+.account-link {
+  word-break: break-all;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.account-link:hover {
+  text-decoration: underline;
+}
+
+.account-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.light-mode .account-actions button {
+  color: var(--text-secondary-light);
+}
+
+.dark-mode .account-actions button {
+  color: var(--text-secondary-dark);
+}
+
+.account-actions button:hover {
+  color: var(--primary-color);
+}
+
+.add-account-title {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+}
+
+.light-mode .add-account-title {
+  color: var(--text-primary-light);
+}
+
+.dark-mode .add-account-title {
+  color: var(--text-primary-dark);
+}
+
+.add-account-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-select, .form-input {
+  width: 100%;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  transition: all var(--transition-fast);
+}
+
+.light-mode .form-select, .light-mode .form-input {
+  background-color: var(--background-light);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary-light);
+}
+
+.dark-mode .form-select, .dark-mode .form-input {
+  background-color: var(--background-alt-dark);
+  border: 1px solid var(--border-dark);
+  color: var(--text-primary-dark);
+}
+
+.form-select:focus, .form-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.add-button:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.add-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  border-left: 4px solid var(--danger-color);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.dark-mode .error-message {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.empty-state {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--text-secondary-light);
+}
+
+.dark-mode .empty-state {
+  color: var(--text-secondary-dark);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .accounts-container {
+    padding-top: 5vh;
   }
   
   .accounts-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    width: 100%;
-    padding: 0 1rem;
-    max-width: 1200px;
+    gap: var(--spacing-lg);
   }
-  
-  @media (min-width: 768px) {
-    .accounts-grid {
-      grid-template-columns: 5fr 7fr;
-    }
-  }
-  
-  .accounts-section {
-    animation: slideInUp var(--transition-normal);
-  }
-  
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-  }
-  
-  /* Account List Styling */
-  .accounts-list {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 8px var(--shadow);
-    overflow: hidden;
-    transition: box-shadow var(--transition-fast);
-  }
-  
-  .accounts-list:hover {
-    box-shadow: 0 4px 12px var(--shadow);
-  }
-  
-  .account-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    transition: background-color var(--transition-fast);
-  }
-  
-  .account-item:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  
-  [data-theme="dark"] .account-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-  
-  .account-content {
-    flex: 1;
-  }
-  
-  .account-name {
-    font-weight: 500;
-    margin: 0 0 0.25rem 0;
-    color: var(--text-primary);
-  }
-  
-  .account-link {
-    font-size: 0.875rem;
-    color: var(--primary);
-    word-break: break-all;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-  
-  .account-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .icon-button {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: all var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .icon-button:hover {
-    background-color: var(--card-bg);
-    color: var(--primary);
-  }
-  
-  .icon-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  .account-divider {
-    height: 1px;
-    background-color: var(--divider);
-    margin: 0;
-  }
-  
-  .empty-state {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-secondary);
-  }
-  
-  /* Form Styling */
-  .account-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .form-label {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-  
-  .form-select,
-  .form-input {
-    padding: 0.75rem;
-    border-radius: 4px;
-    border: 1px solid var(--input-border);
-    background-color: var(--input-bg);
-    color: var(--text-primary);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  }
-  
-  .form-select:focus,
-  .form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
-  }
-  
-  [data-theme="dark"] .form-select:focus,
-  [data-theme="dark"] .form-input:focus {
-    box-shadow: 0 0 0 2px rgba(121, 134, 203, 0.2);
-  }
-  
-  .form-input-icon {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-  
-  .form-input-icon svg {
-    position: absolute;
-    left: 0.75rem;
-    color: var(--text-secondary);
-  }
-  
-  .form-input-icon input {
-    padding-left: 2.5rem;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    position: relative;
-  }
-  
-  .primary-button {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
-  }
-  
-  .primary-button:hover:not(:disabled) {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-  }
-  
-  .primary-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-  
-  /* Loading spinner */
-  .spinner {
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 3px solid var(--primary);
-    width: 24px;
-    height: 24px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Theme toggle button */
-  .theme-toggle {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 10px var(--shadow);
-    z-index: 100;
-    transition: transform var(--transition-fast), background-color var(--transition-fast);
-  }
-  
-  .theme-toggle:hover {
-    transform: scale(1.1);
-    background-color: var(--primary-hover);
-  }
-  
-  /* Alert styling */
-  .alert {
-    padding: 0.75rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    animation: slideInUp var(--transition-normal);
-  }
-  
-  .alert-error {
-    background-color: rgba(244, 67, 54, 0.1);
-    border-left: 4px solid var(--error);
-    color: var(--error);
-  }
-  
-  [data-theme="dark"] .alert-error {
-    background-color: rgba(229, 115, 115, 0.1);
-  }
-  
+}

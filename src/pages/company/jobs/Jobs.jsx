@@ -17,7 +17,7 @@ function CompanyJobs() {
   const { user, isLight } = useContext(userContext);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(3);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState({
     title: "",
@@ -72,7 +72,7 @@ function CompanyJobs() {
   return (
     <div className="company-jobs">
     <div className="container">
-      <header className="company-jobs__header" style={{background: isLight ? '#fff' : '#121212'}}>
+      <header className="company-jobs__header" style={{background: isLight ? '#fff' : '#121212',minWidth: '80vw'}}>
         <h1 className="company-jobs__title">Company Jobs</h1>
         <button
           className="company-jobs__add-button"
@@ -84,7 +84,7 @@ function CompanyJobs() {
       </header>
 
       {companyJobsLoading ? (
-        <div className="loading-spinner"></div>
+        <div className="loading-spinner" ></div>
       ) : companyJobs && companyJobs.length < 1 ? (
         <div className="company-jobs__empty">
           <h2 className="company-jobs__empty-title">No jobs found</h2>
@@ -99,7 +99,7 @@ function CompanyJobs() {
         </div>
       ) : (
         <>
-          <div className="company-jobs__search" style={{background: isLight ? '#fff' : '#121212'}}>
+          <div className="company-jobs__search" style={{background: isLight ? '#fff' : '#121212',minWidth: '80vw'}}>
             <TextField
               label="Search by name"
               name="title"

@@ -9,7 +9,7 @@ import { userContext } from "../../context/UserContext";
 import '../../ComponentsStyles/process_card.css';
 import '../../styles/theme.css';
 import { toast } from "react-hot-toast";
-import { set } from "date-fns";
+
 function ProcessCard({ column, phases, job }) {
   const [ats, setAts] = useState(50);
   const { isLight } = useContext(userContext);
