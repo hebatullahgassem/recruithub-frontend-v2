@@ -198,6 +198,37 @@ function Talents() {
                   },
                 }}
               />
+              <TextField
+                label="Skills"
+                value={filters.skills}
+                onChange={(e) => setFilters((prev) => ({ ...prev, skills: e.target.value }))}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputProps={{
+                  sx: {
+                    height: 50,
+                    pl: 4,
+                    borderRadius: "8px",
+                    backgroundColor: sectionBackground,
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: borderColor,
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: primaryColor,
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: primaryColor,
+                    },
+                    color: textColor,
+                  },
+                }}
+                InputLabelProps={{
+                  sx: {
+                    color: isLight ? "#718096" : "#a0aec0",
+                  },
+                }}
+              />
             </Box>
             
           </Box>
@@ -249,37 +280,14 @@ function Talents() {
                   fontSize: "20px",
                 }}
               /> */}
-              <TextField
-                label="Skills"
-                value={filters.skills}
-                onChange={(e) => setFilters((prev) => ({ ...prev, skills: e.target.value }))}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  sx: {
-                    height: 50,
-                    pl: 4,
-                    borderRadius: "8px",
-                    backgroundColor: sectionBackground,
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: borderColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    color: textColor,
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    color: isLight ? "#718096" : "#a0aec0",
-                  },
-                }}
-              />
+              <CustomAutoComplete
+                      getter={filters.location}
+                      setter={setFilters}
+                      label={"Location"}
+                      value={"location"}
+                      type={"egypt"}
+                      multiple={true}
+                    />
             </Box>
             
           </Box>

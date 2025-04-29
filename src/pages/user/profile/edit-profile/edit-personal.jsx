@@ -58,7 +58,7 @@ const EditPersonal = () => {
     img: "",
     nationalIdImg: "",
     specialization: "",
-    seniority: '',
+    seniority: "",
   });
   const [uploadStatus, setUploadStatus] = useState({
     img: null,
@@ -94,8 +94,6 @@ const EditPersonal = () => {
   const accentColor = "#901b21";
   const backgroundColor = "#f9f5f4";
   const textSecondary = "#6c757d";
-
-  
 
   const ProfileImage = styled(Box)(({ theme }) => ({
     width: 200,
@@ -559,36 +557,14 @@ const EditPersonal = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField
-                      fullWidth
-                      label="Location"
-                      name="location"
-                      value={localData.location}
-                      onChange={handleChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 2,
-                          background: isLight ? "#fff" : "#121212",
-                          color: isLight ? "black" : "white",
-                          "& fieldset": {
-                            borderColor: "#901b20",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#901b20",
-                          },
-                        },
-                        "& .MuiInputLabel-root": {
-                          color: isLight ? "black" : "white",
-                        },
-                        "& .MuiInputBase-input": {
-                          backgroundColor: isLight
-                            ? "rgba(255, 255, 255, 0.95)"
-                            : "#121212",
-                          color: isLight ? "black" : "white",
-                          paddingLeft: 1,
-                          borderRadius: "10px",
-                        },
-                      }}
+                    <CustomAutoComplete
+                      getter={localData.location}
+                      setter={setLocalData}
+                      label={"Location"}
+                      value={"location"}
+                      border={"#901b20"}
+                      background={isLight ? "#fff" : "#121212"}
+                      type={"egypt"}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -662,17 +638,16 @@ const EditPersonal = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    
                     <CustomAutoComplete
                       setter={setLocalData}
                       getter={localData.seniority}
-                      value={'seniority'}
-                      label={'Experience'}
-                      type={'experience'}
+                      value={"seniority"}
+                      label={"Experience"}
+                      type={"experience"}
                     />
                   </Grid>
                   <Grid item xs={12} md={12}>
-                  <CustomAutoComplete
+                    <CustomAutoComplete
                       setter={setLocalData}
                       getter={localData.specialization}
                     />
