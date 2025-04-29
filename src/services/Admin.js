@@ -1,12 +1,16 @@
 import { AxiosApi } from "./Api";
 
 export const getUnverifiedCompanies = async (page = 1, pageSize = 10, searchQuery = "") => {
+  const token = localStorage.getItem('token');
   const response = await AxiosApi.get("user/admin/company/", {
     params: {
       page: page,
       page_size: pageSize,
       search: searchQuery,
     },
+    headers: {
+      Authorization: `Token ${token}` // Add the token here
+    }
   });
   return response.data;
 };
@@ -22,12 +26,16 @@ export const verifyCompany = async (companyId) => {
 
 // --- Itian Functions ---
 export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
+  const token = localStorage.getItem('token');
     const response = await AxiosApi.get("user/admin/itian/", {
       params: {
         page: page,
         page_size: pageSize,
         search: searchQuery,
       },
+      headers: {
+        Authorization: `Token ${token}` // Add the token here
+      }
     });
     return response.data; // Expect { count, results }
   };

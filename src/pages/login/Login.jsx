@@ -34,7 +34,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // const [openSnackbar, setOpenSnackbar] = useState(false);
-  // const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
   const { setUser, refetchUser, setToken, isLight } = useContext(userContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,15 +56,16 @@ function Login() {
       setUser(null);
       setToken(null);
       localStorage.removeItem("token");
-      showErrorToast("Incorrect email or password. Please try again.");
-      setError("");
 
       // Extract message from backend if available
-      const backendMessage = error.response.data.non_field_errors[0];
+      const backendMessage = error.response.data.error;
 
-      // Set the custom error message
-      setSnackbarMessage(backendMessage);
-      setOpenSnackbar(true);
+      showErrorToast(backendMessage || "Login failed. Please check your email and password!");
+      setError("");
+      
+      // // Set the custom error message
+      // setSnackbarMessage(backendMessage);
+      // setOpenSnackbar(true);
     }
   }
 

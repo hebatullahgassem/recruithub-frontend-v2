@@ -81,11 +81,20 @@ function AdminCompany() {
       // Pass current page and rowsPerPage to the API call
       // API uses 1-based indexing for page, MUI uses 0-based
       const data = await getUnverifiedCompanies(page + 1, rowsPerPage, searchQuery);
+      console.log(data);
       return data; // Expect { count, results }
     },
     keepPreviousData: true, // Keep showing old data while fetching new page
     staleTime: 5 * 60 * 1000, // Optional: Data considered fresh for 5 minutes
   });
+
+  if (isFetching) {
+    console.log('Loading...');
+  }
+  
+  if (fetchError) {
+    console.error('Error:', fetchError);
+  }
 
   // --- Data Mutation (Verification) ---
   const verifyMutation = useMutation({

@@ -384,7 +384,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             <TableBody>
               {applicants?.map((applicant, index) => (
                 <TableRow
-                  style={{backgroundColor: isLight ? "white" : "rgb(100, 98, 98)"}}
+                  style={{backgroundColor: isLight ? "white" : "rgb(136, 135, 135)"}}
                   key={applicant.id}
                   // className={index % 2 === 0 ? "row-even" : "row-odd"}
                 >
