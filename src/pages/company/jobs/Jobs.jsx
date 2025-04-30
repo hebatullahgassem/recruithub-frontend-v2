@@ -2,17 +2,16 @@ import { useNavigate, useLocation } from "react-router";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { CircularProgress, Pagination, TextField, Box } from "@mui/material";
-import { Button } from "react-bootstrap";
+import { TextField, Button, Box, Typography, Box } from "@mui/material";
+import { Add, Search, Refresh } from "@mui/icons-material"
 import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
-import { MdAddBox } from "react-icons/md";
 
 import '../../../styles/company/companyteme.css';
 import '../../../styles/company/job/jobs_company.css';
-
+import { motion, AnimatePresence } from "framer-motion"
 function CompanyJobs() {
   //   const location = useLocation();
   const { user, isLight } = useContext(userContext);
@@ -101,168 +100,119 @@ function CompanyJobs() {
   // };
 
   return (
-    <div
-          style={{
-            width: "100%",
-            minHeight: "100vh",
-            backgroundColor: theme.background,
-            color: theme.text,
-            transition: "background-color 0.3s ease, color 0.3s ease",
-            padding: "20px",
-          }}
-        >
-          
-    <div className="company-jobs">
-    <div className="container">
-      <header className="company-jobs__header" style={{background: isLight ? '#fff' : '#121212',minWidth: '80vw'}}>
-        <h1 className="company-jobs__title">Company Jobs</h1>
-        <button
-          className="company-jobs__add-button"
-          onClick={() => navigate("/company/jobCreate")}
-          title="Add New Job"
-        >
-          <MdAddBox />
-        </button>
-      </header>
-
-      {companyJobsLoading ? (
-        <div className="loading-spinner" ></div>
-      ) : companyJobs && companyJobs.length < 1 ? (
-        <div className="company-jobs__empty">
-          <h2 className="company-jobs__empty-title">No jobs found</h2>
-          <p className="company-jobs__empty-text">Please create a job</p>
+    <div className={`company-jobs ${isLight ? "light-mode" : "dark-mode"}`}>
+      <div className="container">
+        <div className="company-jobs__header">
+          <h1 className="company-jobs__title">Company Jobs</h1>
           <button
             className="company-jobs__add-button"
             onClick={() => navigate("/company/jobCreate")}
             title="Add New Job"
           >
-            <MdAddBox />
+            <Add />
           </button>
         </div>
-      ) : (
-        <>
-          <div className="company-jobs__search" style={{background: isLight ? '#fff' : '#121212',minWidth: '80vw'}}>
-            <TextField
-              label="Search by name"
-              name="title"
-              value={filters.title}
-              onChange={handleChange}
-              className="company-jobs__search-input"
-            />
-            <button className="company-jobs__button company-jobs__button--primary" onClick={handleSearch}>
-              Search
-            </button>
-            <button className="company-jobs__button company-jobs__button--secondary" onClick={handleReset}>
-              Reset
-            </button>
-          </div>
 
-          <div className="company-jobs__list">
-            {companyJobs?.map((job) => (
-              <JobCard key={job.id} job={job} />
-            ))}
+        {companyJobsLoading ? (
+          <div className="company-jobs__loading">
+            <div className="loading-spinner"></div>
+            <Typography sx={{ mt: 2 }}>Loading jobs...</Typography>
           </div>
+        ) : companyJobsError ? (
+          <div className="company-jobs__empty">
+            <Typography variant="h5" className="company-jobs__empty-title">
+              Error loading jobs
+            </Typography>
+            <Typography className="company-jobs__empty-text">Please try again later or contact support.</Typography>
+            <Button
+              variant="contained"
+              onClick={() => companyJobsRefetch()}
+              className="company-jobs__button company-jobs__button--primary"
+            >
+              Try Again
+            </Button>
+          </div>
+        ) : companyJobs && companyJobs.length < 1 ? (
+          <div className="company-jobs__empty">
+            <Typography variant="h5" className="company-jobs__empty-title">
+              No jobs found
+            </Typography>
+            <Typography className="company-jobs__empty-text">Create your first job posting to get started</Typography>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/company/jobCreate")}
+              startIcon={<Add />}
+              className="company-jobs__button company-jobs__button--primary company-jobs__add-button--large"
+            >
+              Create New Job
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="company-jobs__search">
+              <Box className="search-field-wrapper">
+                <Search className="search-icon" />
+                <TextField
+                  label="Search by job title"
+                  name="title"
+                  value={filters.title}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  className="company-jobs__search-input"
+                />
+              </Box>
+              <Box className="search-buttons">
+                <Button
+                  variant="contained"
+                  onClick={handleSearch}
+                  startIcon={<Search />}
+                  className="company-jobs__button company-jobs__button--primary"
+                >
+                  <span className="button-text">Search</span>
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleReset}
+                  startIcon={<Refresh />}
+                  className="company-jobs__button company-jobs__button--secondary"
+                >
+                  <span className="button-text">Reset</span>
+                </Button>
+              </Box>
+            </div>
 
-          <div className="company-jobs__pagination">
-            <CustomPagination
-              page={page}
-              setPage={setPage}
-              pageSize={pageSize}
-              setPageSize={setPageSize}
-              total={total}
-            />
-          </div>
-        </>
-      )}
+            <AnimatePresence>
+              <div className="company-jobs__list">
+                {companyJobs?.map((job, index) => (
+                  <motion.div
+                    key={job.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="job-card-wrapper"
+                  >
+                    <JobCard job={job} index={index} />
+                  </motion.div>
+                ))}
+              </div>
+            </AnimatePresence>
+
+            <div className="company-jobs__pagination">
+              <CustomPagination
+                page={page}
+                setPage={setPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                total={total}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
-  </div>
-  </div>
-
-    // <div
-    //   className="container"
-    //   style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    // >
-    //   <header
-    //     style={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       alignItems: "center",
-    //     }}
-    //   >
-    //     <h1 style={{ fontSize: "2rem", margin: "1rem" }}>Company Jobs</h1>
-    //     {/* <Button onClick={() => navigate("/company/jobCreate")}>
-    //       Create New Job
-    //     </Button> */}
-    //     <MdAddBox
-    //       onClick={() => navigate("/company/jobCreate")}
-    //       style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
-    //       title="Add New Job"
-    //     />
-    //   </header>
-
-    //   {companyJobsLoading ? (
-    //     <CircularProgress />
-    //   ) : companyJobs && companyJobs.length < 1 ? (
-    //     <div
-    //       style={{ textAlign: "center", marginTop: "2rem", minHeight: "50vh" }}
-    //     >
-    //       <h2>No jobs found</h2>
-    //       <p>Please create a job</p>
-
-    //       <MdAddBox
-    //         onClick={() => navigate("/company/jobCreate")}
-    //         style={{ scale: "2", color: "#0d6efd", cursor: "pointer" }}
-    //         title="Add New Job"
-    //       />
-    //     </div>
-    //   ) : (
-    //     <>
-    //       <div
-    //         style={{
-    //           display: "flex",
-    //           justifyContent: "center",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         <TextField
-    //           label="Search by name"
-    //           name="title"
-    //           value={filters.title}
-    //           onChange={handleChange}
-    //           style={{ margin: "1rem" }}
-    //         />
-    //         <Button variant="contained" onClick={handleSearch}>
-    //           Search
-    //         </Button>
-    //         <Button variant="contained" onClick={handleReset}>
-    //           Reset
-    //         </Button>
-    //       </div>
-    //       <div
-    //         style={{
-    //           display: "flex",
-    //           justifyContent: "center",
-    //           alignItems: "center",
-    //           gap: "1rem",
-    //           minWidth: "100%",
-    //           flexDirection: "column",
-    //         }}
-    //       >
-    //         {companyJobs?.map((job) => (
-    //           <JobCard key={job.id} job={job} />
-    //         ))}
-    //       </div>
-    //       <CustomPagination
-    //         page={page}
-    //         setPage={setPage}
-    //         pageSize={pageSize}
-    //         setPageSize={setPageSize}
-    //         total={total}
-    //       />
-    //     </>
-    //   )}
-    // </div>
-
   );
 }
 export default CompanyJobs;

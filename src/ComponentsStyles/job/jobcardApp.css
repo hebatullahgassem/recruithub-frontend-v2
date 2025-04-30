@@ -195,6 +195,8 @@
     box-shadow: 0 4px 14px rgba(212, 49, 50, 0.2);
   }
   
+
+  
   /* Responsive styles */
   @media (max-width: 768px) {
     .job-application-card {

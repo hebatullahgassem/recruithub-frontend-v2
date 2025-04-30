@@ -22,7 +22,7 @@ import { userContext } from "../../context/UserContext";
    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
    const navigate = useNavigate();
    const {isLight} = useContext(userContext)
- 
+   const firstUpdate = application?.updates?.[0]?.timestamp;
    const getStatusChipProps = (status, fail) => {
     if(fail){
       return { label: "fail", color: "error" }
@@ -77,6 +77,9 @@ import { userContext } from "../../context/UserContext";
            backgroundColor: isLight ? "#fff" : '#242424',
            height: "100%",
            display: "flex",
+           justifyContent: "space-between",
+           width: "100%", 
+           maxWidth: 400,
            flexDirection: "column",
            "&:hover": {
              borderColor: primaryColor,
@@ -188,7 +191,7 @@ import { userContext } from "../../context/UserContext";
                  }}
                />
              )}
-             {application?.job_details?.attend && (
+             {/* {application?.job_details?.attend && (
                <Chip
                  icon={<Schedule sx={{ fontSize: 16 }} />}
                  label={application?.job_details?.attend}
@@ -199,7 +202,7 @@ import { userContext } from "../../context/UserContext";
                    fontWeight: 500
                  }}
                />
-             )}
+             )} */}
            </Box>
          </Box>
  
@@ -218,7 +221,7 @@ import { userContext } from "../../context/UserContext";
                fontWeight: 500,
                display: "block"
              }}>
-               Applied On
+              Applied On
              </Typography>
              <Typography variant="body2" sx={{ fontWeight: 600, color: isLight ? "#2d3748" : '#fff' }}>
                {formatDate(application?.created_at)}

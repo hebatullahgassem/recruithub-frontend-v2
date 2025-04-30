@@ -1,0 +1,197 @@
+/* Theme.css - Global theme variables and styles */
+
+:root {
+    /* Primary colors */
+    --primary: #d43132;
+    --primary-light: rgba(212, 49, 50, 0.1);
+    --primary-hover: #b32828;
+  
+    /* Light mode colors */
+    --light-bg: #ffffff;
+    --light-card-bg: #ffffff;
+    --light-section-bg: #f8f9fa;
+    --light-text: #333333;
+    --light-text-secondary: #6c757d;
+    --light-border: #dee2e6;
+  
+    /* Dark mode colors */
+    --dark-bg: #121212;
+    --dark-card-bg: #1e1e1e;
+    --dark-section-bg: #242424;
+    --dark-text: #f8f9fa;
+    --dark-text-secondary: #adb5bd;
+    --dark-border: #343a40;
+  
+    /* Font sizes */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+  
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+  
+    /* Spacing */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+  
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+    /* Transitions */
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+  }
+  
+  /* Global button styles */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    background-color: var(--primary);
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 49, 50, 0.3);
+  }
+  
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background-color: transparent;
+  }
+  
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+  }
+  
+  .btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Animation classes */
+  .slide-in-up {
+    animation: slideInUp 0.5s ease-out;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Form elements */
+  .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    transition: var(--transition-fast);
+  }
+  
+  .light .form-control {
+    background-color: var(--light-bg);
+    color: var(--light-text);
+    border: 1px solid var(--light-border);
+  }
+  
+  .dark .form-control {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border);
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  
+  /* Responsive utilities */
+  @media (max-width: 768px) {
+    :root {
+      --font-size-4xl: 2rem;
+      --font-size-3xl: 1.75rem;
+      --font-size-2xl: 1.375rem;
+      --font-size-xl: 1.125rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    :root {
+      --font-size-4xl: 1.75rem;
+      --font-size-3xl: 1.5rem;
+      --font-size-2xl: 1.25rem;
+      --font-size-xl: 1rem;
+    }
+  
+    .btn-primary,
+    .btn-secondary {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+  

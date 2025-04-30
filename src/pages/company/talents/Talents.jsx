@@ -16,32 +16,21 @@ import {
   Box,
   Paper,
   Button,
-  // Container,
-  // InputAdornment,
-  // Pagination,
-  // Select,
-  // MenuItem,
-  // FormControl,
-  // Grid,
-  // Card,
-  // CardContent,
-  // CardActions,
-  // IconButton,
 } from "@mui/material"
 import {
   Search,
   LocationOn,
   Work,
-  School,
   Mail,
   Phone,
   Visibility,
   BookmarkBorder,
   PersonAdd,
-  CheckCircle,
+  FilterList,
+  Refresh,
+  Clear,
 } from "@mui/icons-material"
 import { motion, AnimatePresence } from "framer-motion"
-import TalentCard from "../../../components/talent/TalentCard";
 import '../../../styles/company/talents/talents.css';
 import '../../../styles/company/companyteme.css';
 import CustomAutoComplete from "../../../components/autoComplete/CustomAutoComplete";
@@ -49,6 +38,7 @@ import CustomAutoComplete from "../../../components/autoComplete/CustomAutoCompl
 function Talents() {
   const { user, isLight } = useContext(userContext);
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate();
   // const isTablet = useMediaQuery(theme.breakpoints.down("md"))
@@ -105,6 +95,33 @@ function Talents() {
     keepPreviousData: true,
   });
 
+  const getSkillsArray = (skills) => {
+    if (!skills) return []
+
+    // If skills is a string, split it by comma
+    if (typeof skills === "string") {
+      return skills
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean)
+    }
+
+    // If skills is already an array
+    if (Array.isArray(skills)) {
+      return skills
+        .map((skill) => {
+          // If skill is an object, extract the relevant property (assuming it has a name or value property)
+          if (typeof skill === "object" && skill !== null) {
+            return skill.name || skill.value || JSON.stringify(skill)
+          }
+          return String(skill).trim()
+        })
+        .filter(Boolean)
+    }
+
+    // If skills is an object but not an array, return an empty array
+    return []
+  }
   
 
   // if (talentsLoading) return <div className="loading-spinner"></div>
@@ -131,167 +148,71 @@ function Talents() {
                 </span>
               </div>
             </div>
-
-            {/* <div className="stat-item" style={{ backgroundColor: cardBackground, borderColor }}>
-              <div className="stat-icon" style={{ backgroundColor: `${primaryColor}15`, color: primaryColor }}>
-                <CheckCircle />
-              </div>
-              <div className="stat-content">
-                <span className="stat-value" style={{ color: textColor }}>
-                  {talents?.filter((talent) => talent.status === '6').length}
-                </span>
-                <span className="stat-label" style={{ color: isLight ? "#718096" : "#a0aec0" }}>
-                  Hired
-                </span>
-              </div>
-            </div> */}
           </div>
         </div>
 
-        <Paper
-          className="search-container"
-          sx={{
-            backgroundColor: cardBackground,
-            borderColor: borderColor,
-            border: `1px solid ${borderColor}`,
-            borderRadius: "12px",
-            padding: "20px",
-            marginBottom: "24px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-          }}
-        >
-          <Box className="search-row">
-            <Box className="search-field-wrapper" sx={{ position: "relative", flex: 1 }}>
-              <Search
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  padding: "8px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                }}
-              />
-              <TextField
-                placeholder="Search applicants by name..."
-                value={filters.name}
-                onChange={(e) => setFilters((prev) => ({ ...prev, name: e.target.value }))}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  sx: {
-                    height: 50,
-                    pl: 4,
-                    borderRadius: "8px",
-                    backgroundColor: sectionBackground,
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: borderColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    color: textColor,
-                  },
-                }}
-              />
-              <TextField
-                label="Skills"
-                value={filters.skills}
-                onChange={(e) => setFilters((prev) => ({ ...prev, skills: e.target.value }))}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  sx: {
-                    height: 50,
-                    pl: 4,
-                    borderRadius: "8px",
-                    backgroundColor: sectionBackground,
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: borderColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: primaryColor,
-                    },
-                    color: textColor,
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    color: isLight ? "#718096" : "#a0aec0",
-                  },
-                }}
-              />
-            </Box>
-            
-          </Box>
-
-          <Box className="filter-row" sx={{ display: "flex", gap: 2, mt: 2, flexWrap: "wrap" }}>
-          <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              {/* <School
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                  fontSize: "20px",
-                }}
-              /> */}
-              <CustomAutoComplete setter={setFilters} getter={filters.specialization} />
-            </Box>
-            <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              {/* <Work
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                  fontSize: "20px",
-                }}
-              /> */}
-              <CustomAutoComplete
-                      setter={setFilters}
-                      getter={filters.seniority}
-                      value={'seniority'}
-                      label={'Experience'}
-                      type={'experience'}
-                      multiple={true}
-                    />
+        <Paper className="search-container">
+            <Box className="search-row">
+              <Box className="search-field-wrapper">
+                <Search className="search-icon" />
+                <TextField
+                  placeholder="Search applicants by name..."
+                  value={filters.name}
+                  onChange={(e) => setFilters((prev) => ({ ...prev, name: e.target.value }))}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  className="search-input"
+                />
+              </Box>
             </Box>
 
+            <Box className="filter-row">
+              <Box className="filter-field-wrapper">
+                <TextField
+                  label="Skills"
+                  value={filters.skills}
+                  onChange={(e) => setFilters((prev) => ({ ...prev, skills: e.target.value }))}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  className="filter-input"
+                />
+              </Box>
 
-            <Box className="filter-field-wrapper" sx={{ position: "relative", flex: 1, minWidth: "200px" }}>
-              {/* <School
-                sx={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: primaryColor,
-                  fontSize: "20px",
-                }}
-              /> */}
-              <CustomAutoComplete
-                      getter={filters.location}
-                      setter={setFilters}
-                      label={"Location"}
-                      value={"location"}
-                      type={"egypt"}
-                      multiple={true}
-                    />
+              <Box className="filter-field-wrapper">
+                <CustomAutoComplete
+                  setter={setFilters}
+                  getter={filters.specialization}
+                  label="Specialization"
+                  value="specialization"
+                />
+              </Box>
+
+              <Box className="filter-field-wrapper">
+                <CustomAutoComplete
+                  setter={setFilters}
+                  getter={filters.seniority}
+                  value="seniority"
+                  label="Experience"
+                  type="experience"
+                  multiple={true}
+                />
+              </Box>
+
+              <Box className="filter-field-wrapper">
+                <CustomAutoComplete
+                  getter={filters.location}
+                  setter={setFilters}
+                  label="Location"
+                  value="location"
+                  type="egypt"
+                  multiple={true}
+                />
+              </Box>
             </Box>
-            
-          </Box>
-          <Box sx={{ display: "flex", gap: 1, ml: 2  , paddingTop: "8px", flexDirection: "row-reverse"}}>
+
+            <Box className="filter-actions">
               <Button
                 variant="contained"
                 onClick={() => {
@@ -299,344 +220,179 @@ function Talents() {
                   setPage(1)
                   talentsRefetch()
                 }}
-                sx={{
-                  backgroundColor: primaryColor,
-                  color: "#ffffff",
-                  "&:hover": {
-                    backgroundColor: "#c62a37",
-                    transform: "translateY(-3px)",
-                    boxShadow: `0 4px 12px ${primaryColor}33`,
-                  },
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  textTransform: "none",
-                }}
+                startIcon={<Search />}
+                className="filter-button filter-button--primary"
               >
                 Search
               </Button>
               <Button
                 variant="outlined"
                 onClick={handleReset}
-                sx={{
-                  borderColor: borderColor,
-                  color: textColor,
-                 
-                  "&:hover": {
-                    borderColor: primaryColor,
-                    backgroundColor: `${primaryColor}10`,
-                    transform: "translateY(-3px)",
-                  },
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  textTransform: "none",
-                }}
+                startIcon={<Refresh />}
+                className="filter-button filter-button--secondary"
               >
                 Reset
               </Button>
             </Box>
-        </Paper>
-      </div>
+          </Paper>
+        </div>
 
-      {talentsLoading ? (
-        <div className="talents-loading">
-          <CircularProgress size={60} thickness={4} sx={{ color: primaryColor }} />
-          <Typography sx={{ mt: 2, color: textColor }}>Loading applicants...</Typography>
-        </div>
-      ) : talentsError ? (
-        <div
-          className="talents-error"
-          style={{
-            backgroundColor: cardBackground,
-            borderColor: borderColor,
-          }}
-        >
-          <Typography variant="h5" sx={{ color: primaryColor, fontWeight: 600 }}>
-            Error loading applicants
-          </Typography>
-          <Typography sx={{ color: textColor }}>Please try again later or contact support.</Typography>
-        </div>
-      ) : talents?.length === 0 ? (
-        <div
-          className="talents-error"
-          style={{
-            backgroundColor: cardBackground,
-            borderColor: borderColor,
-          }}
-        >
-          <Typography variant="h5" sx={{ color: primaryColor, fontWeight: 600 }}>
-            No talents found
-          </Typography>
-          <Typography sx={{ color: textColor }}>No talents found for the given filters.</Typography>
-        </div>
-      ) :
-        (
-        <>
-        
-        {console.log(talents)}
-          <div className="talents-grid">
-            <AnimatePresence>
-              {talents?.map((talent) => (
-                <motion.div
-                  key={talent.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="applicant-card-wrapper"
-                >
-                  <Paper
-                    className="applicant-card"
-                    sx={{
-                      backgroundColor: cardBackground,
-                      borderColor: borderColor,
-                      border: `1px solid ${borderColor}`,
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
-                      },
-                    }}
-                  >
-                    <Box className="applicant-card__header" sx={{ p: 2.5, display: "flex", alignItems: "center" }}>
-                      <Avatar
-                        src={talent.img || "/placeholder.svg"}
-                        alt={talent.name}
-                        sx={{
-                          width: 70,
-                          height: 70,
-                          border: `2px solid ${primaryColor}`,
-                          mr: 2,
-                        }}
-                      />
-                      <Box sx={{display: "flex", flexDirection: "column", }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: textColor, mb: 0.5, textAlign: "right" }}>
-                          {talent.name}
-                        </Typography>
-                        {talent.specialization && <Typography variant="p" sx={{ fontWeight: 50, color: textColor, mb: 0.5 }}>
-                          {talent.specialization}
-                        </Typography>}
-                        {talent.title && (
-                          <Typography variant="body2" sx={{ color: primaryColor, fontWeight: 500, mb: 1 }}>
-                            {talent.title}
-                          </Typography>
-                        )}
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-                          {/* {talent.location && (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                color: isLight ? "#718096" : "#a0aec0",
-                                fontSize: "13px",
-                              }}
-                            >
-                              <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
-                              <span>{talent.location}</span>
-                            </Box> 
-                          )} */}
-                          {/* {talent.experience && (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                color: isLight ? "#718096" : "#a0aec0",
-                                fontSize: "13px",
-                              }}
-                            >
-                              <Work sx={{ fontSize: 16, mr: 0.5 }} />
-                              <span>{talent.experience} yrs</span>
-                            </Box>
-                          )} */}
-                        </Box>
-                      </Box>
-                    </Box>
+        {talentsLoading ? (
+          <div className="talents-loading">
+            <div className="loading-spinner"></div>
+            <Typography>Loading applicants...</Typography>
+          </div>
+        ) : talentsError ? (
+          <div className="talents-error">
+            <Typography variant="h5" className="error-title">
+              Error loading applicants
+            </Typography>
+            <Typography className="error-message">Please try again later or contact support.</Typography>
+          </div>
+        ) : talents?.length === 0 ? (
+          <div className="talents-error">
+            <Typography variant="h5" className="error-title">
+              No talents found
+            </Typography>
+            <Typography className="error-message">No talents found for the given filters.</Typography>
+          </div>
+        ) : (
+          <>
+            <div className="talents-grid">
+              <AnimatePresence>
+                {talents?.map((talent, index) => {
+                  // Process skills safely
+                  const skillsArray = getSkillsArray(talent.skills)
 
-                    <Box
-                      className="applicant-card__body"
-                      sx={{ p: "0 20px 20px", flex: 1, display: "flex", flexDirection: "column" }}
+                  return (
+                    <motion.div
+                      key={talent.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="applicant-card-wrapper"
                     >
-                      <Box className="applicant-skills" sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
-                        {talent?.skills
-                          ?.slice(0, 5)
-                          .map((skill, index) => (
-                            <Chip
-                              key={index}
-                              label={skill.trim()}
-                              size="small"
-                              sx={{
-                                backgroundColor: `${primaryColor}15`,
-                                color: primaryColor,
-                                borderRadius: "50px",
-                                fontWeight: 500,
-                                "&:hover": {
-                                  backgroundColor: `${primaryColor}25`,
-                                  transform: "translateY(-2px)",
-                                },
-                                transition: "all 0.2s ease",
-                              }}
-                            />
-                          ))}
-                        {talent?.skills?.length > 5 && (
-                          <Chip
-                            label={`+${talent.skills.split(",").length - 5}`}
-                            size="small"
-                            sx={{
-                              backgroundColor: isLight ? "#f8f9fa" : "#2d3748",
-                              color: isLight ? "#718096" : "#a0aec0",
-                              borderRadius: "50px",
-                              fontWeight: 500,
-                            }}
+                      <Paper className="applicant-card">
+                        <Box className="applicant-card__header">
+                          <Avatar
+                            src={talent.img || "/placeholder.svg"}
+                            alt={talent.name}
+                            className="applicant-avatar"
                           />
-                        )}
-                      </Box>
-
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: isLight ? "#4a5568" : "#cbd5e0",
-                          mb: 2,
-                          flex: 1,
-                          lineHeight: 1.6,
-                        }}
-                      >
-                        {talent.about
-                          ? `${talent.about.substring(0, 120)}${talent.about.length > 120 ? "..." : ""}`
-                          : "No summary available for this applicant."}
-                      </Typography>
-
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        {talent.email && (
-                          <Tooltip title={talent.email}>
-                            <Box
-                              component="a"
-                              href={`mailto:${talent.email}`}
-                              sx={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 1,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: isLight ? "#f8f9fa" : "#2d3748",
-                                color: isLight ? "#718096" : "#a0aec0",
-                                transition: "all 0.2s ease",
-                                "&:hover": {
-                                  transform: "translateY(-3px)",
-                                },
-                              }}
-                            >
-                              <Mail fontSize="small" />
+                          <Box className="applicant-details">
+                            <Typography variant="h6" className="applicant-name">
+                              {talent.name}
+                            </Typography>
+                            {talent.specialization && (
+                              <Typography variant="body2" className="applicant-specialization">
+                                {talent.specialization}
+                              </Typography>
+                            )}
+                            {talent.title && (
+                              <Typography variant="body2" className="applicant-title">
+                                {typeof talent.title === "string" ? talent.title : "Professional"}
+                              </Typography>
+                            )}
+                            <Box className="applicant-meta">
+                              {talent.location && (
+                                <Box className="meta-item">
+                                  <LocationOn fontSize="small" />
+                                  <span>{typeof talent.location === "string" ? talent.location : "Location"}</span>
+                                </Box>
+                              )}
+                              {talent.experience && (
+                                <Box className="meta-item">
+                                  <Work fontSize="small" />
+                                  <span>
+                                    {typeof talent.experience === "string" || typeof talent.experience === "number"
+                                      ? `${talent.experience} yrs`
+                                      : "Experienced"}
+                                  </span>
+                                </Box>
+                              )}
                             </Box>
-                          </Tooltip>
-                        )}
-                        {talent.phone_number && (
-                          <Tooltip title={talent.phone_number}>
-                            <Box
-                              component="a"
-                              href={`tel:${talent.phone_number}`}
-                              sx={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 1,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: isLight ? "#f8f9fa" : "#2d3748",
-                                color: isLight ? "#718096" : "#a0aec0",
-                                transition: "all 0.2s ease",
-                                "&:hover": {
-                                  transform: "translateY(-3px)",
-                                },
-                              }}
-                            >
-                              <Phone fontSize="small" />
-                            </Box>
-                          </Tooltip>
-                        )}
-                        {talent.cv && (
-                          <Tooltip title="SHOW CV">
-                            <Box
-                              component="a"
-                              href={talent.cv+".pdf"}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 1,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: `${primaryColor}15`,
-                                color: primaryColor,
-                                transition: "all 0.2s ease",
-                                "&:hover": {
-                                  transform: "translateY(-3px)",
-                                },
-                              }}
-                            >
-                              <BookmarkBorder fontSize="small" />
-                            </Box>
-                          </Tooltip>
-                        )}
-                      </Box>
-                    </Box>
+                          </Box>
+                        </Box>
 
-                    <Box
-                      className="applicant-card__footer"
-                      sx={{
-                        p: 2,
-                        borderTop: `1px solid ${borderColor}`,
-                        textAlign: "center",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={() =>
-                          navigate(`/company/talents/${talent.id}`)
-                        }
-                        startIcon={<Visibility />}
-                        sx={{
-                          backgroundColor: primaryColor,
-                          color: "#ffffff",
-                          "&:hover": {
-                            backgroundColor: "#c62a37",
-                            transform: "translateY(-3px)",
-                            boxShadow: `0 4px 12px ${primaryColor}33`,
-                          },
-                          borderRadius: "8px",
-                          fontWeight: 600,
-                          textTransform: "none",
-                        }}
-                      >
-                        View Full Profile
-                      </Button>
-                    </Box>
-                  </Paper>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                        <Box className="applicant-card__body">
+                          <Box className="applicant-skills">
+                            {skillsArray.slice(0, 5).map((skill, index) => (
+                              <Chip key={index} label={skill} size="small" className="skill-chip" />
+                            ))}
+                            {skillsArray.length > 5 && (
+                              <Chip label={`+${skillsArray.length - 5}`} size="small" className="more-skills-chip" />
+                            )}
+                          </Box>
 
-          <div className="talents-pagination">
-            <CustomPagination
-              page={page}
-              setPage={setPage}
-              pageSize={pageSize}
-              setPageSize={setPageSize}
-              total={total}
-            />
-          </div>
-        </>
-      )}
+                          <Typography variant="body2" className="applicant-summary">
+                            {talent.about && typeof talent.about === "string"
+                              ? `${talent.about.substring(0, 120)}${talent.about.length > 120 ? "..." : ""}`
+                              : "No summary available for this applicant."}
+                          </Typography>
+
+                          <Box className="applicant-contact">
+                            {talent.email && (
+                              <Tooltip title={talent.email}>
+                                <Box component="a" href={`mailto:${talent.email}`} className="contact-item">
+                                  <Mail fontSize="small" />
+                                </Box>
+                              </Tooltip>
+                            )}
+                            {talent.phone_number && (
+                              <Tooltip title={talent.phone_number}>
+                                <Box component="a" href={`tel:${talent.phone_number}`} className="contact-item">
+                                  <Phone fontSize="small" />
+                                </Box>
+                              </Tooltip>
+                            )}
+                            {talent.cv && (
+                              <Tooltip title="View CV">
+                                <Box
+                                  component="a"
+                                  href={talent.cv + ".pdf"}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="contact-item contact-item--primary"
+                                >
+                                  <BookmarkBorder fontSize="small" />
+                                </Box>
+                              </Tooltip>
+                            )}
+                          </Box>
+                        </Box>
+
+                        <Box className="applicant-card__footer">
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            onClick={() => navigate(`/company/talents/${talent.id}`)}
+                            startIcon={<Visibility />}
+                            className="view-profile-button"
+                          >
+                            View Full Profile
+                          </Button>
+                        </Box>
+                      </Paper>
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
+            </div>
+
+            <div className="talents-pagination">
+              <CustomPagination
+                page={page}
+                setPage={setPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                total={total}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
-  </div>
   );
 }
 
