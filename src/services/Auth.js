@@ -17,8 +17,14 @@ export const loginUser = async (email, password) => {
 };
 
 // Signup Function
+
 export const signupUser = async (userData) => {
-  await AxiosApi.post("user/register/", userData);
+  try {
+    const response = await axios.post("http://localhost:8000/user/register/", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Get Authenticated User Data

@@ -2,13 +2,14 @@ import { useNavigate, useLocation } from "react-router";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { CircularProgress, Pagination, TextField } from "@mui/material";
+import { CircularProgress, Pagination, TextField, Box } from "@mui/material";
 import { Button } from "react-bootstrap";
 import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
 import { MdAddBox } from "react-icons/md";
+
 import '../../../styles/company/companyteme.css';
 import '../../../styles/company/job/jobs_company.css';
 
@@ -27,6 +28,36 @@ function CompanyJobs() {
     title: "",
     company: user?.id,
   });
+
+  // Modern color palette
+  const colors = {
+    light: {
+      background: "#ffffff",
+      cardBg: "#ffffff",
+      sectionBg: "#f8f9fa",
+      text: "#333333",
+      accent: "#e63946", // Modern red
+      accentHover: "#d62b3a",
+      secondary: "#457b9d", // Blue accent
+      muted: "#6c757d",
+      border: "#dee2e6",
+    },
+    dark: {
+      background: "#121212",
+      cardBg: "#1e1e1e",
+      sectionBg: "#242424",
+      text: "#f8f9fa",
+      accent: "#e63946", // Same red accent for consistency
+      accentHover: "#f25d69",
+      secondary: "#64b5f6", // Lighter blue for dark mode
+      muted: "#adb5bd",
+      border: "#343a40",
+    },
+  };
+
+  // Get current theme colors
+  const theme = isLight ? colors.light : colors.dark;
+
 
   const {
     data: companyJobs,
@@ -70,6 +101,17 @@ function CompanyJobs() {
   // };
 
   return (
+    <div
+          style={{
+            width: "100%",
+            minHeight: "100vh",
+            backgroundColor: theme.background,
+            color: theme.text,
+            transition: "background-color 0.3s ease, color 0.3s ease",
+            padding: "20px",
+          }}
+        >
+          
     <div className="company-jobs">
     <div className="container">
       <header className="company-jobs__header" style={{background: isLight ? '#fff' : '#121212',minWidth: '80vw'}}>
@@ -134,6 +176,8 @@ function CompanyJobs() {
       )}
     </div>
   </div>
+  </div>
+
     // <div
     //   className="container"
     //   style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -218,6 +262,7 @@ function CompanyJobs() {
     //     </>
     //   )}
     // </div>
+
   );
 }
 export default CompanyJobs;

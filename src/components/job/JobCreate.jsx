@@ -3,6 +3,8 @@ import { userContext } from "../../context/UserContext";
 import { useNavigate, useParams } from "react-router";
 import { set } from "date-fns";
 //import { useQuery } from "@tanstack/react-query";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { getJobById } from "../../services/Job";
 import {
   // Box,

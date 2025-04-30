@@ -37,7 +37,9 @@ function ForgotPassword() {
     return () => clearTimeout(timer);
   }, [countdown]);
 
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();  // prevent form refresh
+    setIsSubmitting(true); 
     try {
       await axios.post("http://127.0.0.1:8000/user/password-reset/", { email });
       // setMessage("Password reset email sent. Please check your inbox.");
@@ -52,6 +54,7 @@ function ForgotPassword() {
       // setError("Failed to send password reset email.");
       // setMessage("");
       const errorMessage = err.response?.data?.error || "Failed to send password reset email."
+      console.log(err)
       showErrorToast(errorMessage)
       setStatus({
         type: "error",
@@ -87,7 +90,7 @@ function ForgotPassword() {
 
             <div className="forgot-password-notice">
               <AlertCircle size={18} />
-              <p>You can request a password reset up to 2 times per day.</p>
+              <p>You can request a password reset up to 3 times per day.</p>
             </div>
 
             {status.message && (

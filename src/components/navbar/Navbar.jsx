@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
 import { NavLink as RouterNavLink } from "react-router-dom";
+import logo from '../../../public/assets/logo.png';
 import {
   Avatar,
   Typography,
@@ -319,6 +320,11 @@ function Navbar() {
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
           position: "relative",
           zIndex: 98,
+          height: "90px", // Or increase padding instead
+          alignItems: "center", // Ensure vertical alignment of children
+          py: 1, // optional horizontal padding
+          position: "sticky", // Make the navbar sticky
+          top: 0, 
         }}
       >
         <Container maxWidth="xl">
@@ -332,20 +338,11 @@ function Navbar() {
           >
             {/* Logo/Brand */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    color: theme.primary,
-                    letterSpacing: "-0.5px",
-                    fontSize: "1.5rem",
-                    "&:hover": { opacity: 0.9 },
-                  }}
-                >
-                  RecruitHub
-                </Typography>
-              </Link>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ height: '130px', marginRight: '8px' }} // adjust as needed
+            />
 
               {/* Desktop Navigation */}
               <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1 }}>
