@@ -23,7 +23,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { Delete, Add, Check, Work } from "@mui/icons-material";
-import { showErrorToast } from "../../../../confirmAlert/toastConfirm";
+import { showErrorToast, showInfoToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 
 // Updated Color Palette
 const primaryColor = '#901b26'; // IIT Maroon
@@ -142,7 +142,7 @@ const EditExperience = () => {
 
   const handleChange = (index, key, value) => {
     if (key === 'endDate' && value < experiences[index].startDate) {
-      showErrorToast("End date cannot be before start date.", 2000,isLight);
+      showInfoToast("End date cannot be before start date.", 2000,isLight);
       return;
     }
     const updatedExperiences = [...experiences];
@@ -161,9 +161,11 @@ const EditExperience = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      showSuccessToast("Experience updated successfully.", 2000, isLight);
       navigate("/applicant/profile" );
     } catch (err) {
       console.error("Error saving experience:", err);
+      showErrorToast("Failed to save experience.", 2000, isLight);
       setError("Failed to save experience.");
       setLoading(false);
     }

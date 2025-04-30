@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
 import { verifyCompany } from "../../services/Auth";
+import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 
 const CompanyVerification = ({ companyId, onSuccess, buttonProps = {}}) => {
   const [status, setStatus] = useState("");
@@ -10,9 +11,11 @@ const CompanyVerification = ({ companyId, onSuccess, buttonProps = {}}) => {
     try {
       await verifyCompany(companyId, token);
       setStatus("Company verified successfully ✅");
+      showSuccessToast("Company verified successfully ✅", 2000, isLight);
       if (onSuccess) onSuccess();
     } catch (err) {
-      setStatus(`Error: ${err.message}`);
+      setStatus(`Error: Company verification failed`);
+      showErrorToast(`Verification failed`, 2000, isLight);
     }
   };
 

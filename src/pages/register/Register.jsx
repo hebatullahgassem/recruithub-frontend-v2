@@ -23,6 +23,7 @@ import animationData from "../../assets/animations/LoginRegister.json";
 import { debounce } from "lodash";
 import { signupUser } from "../../services/Auth";
 import { userContext } from "../../context/UserContext";
+import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 
 const Register = () => {
   const [isEmployer, setIsEmployer] = useState(false);
@@ -205,9 +206,11 @@ const Register = () => {
         }
       await signupUser(formattedData);
       localStorage.setItem("email", formData.email);
+      showSuccessToast("Registration successful, please verify your email", 3000, isLight);
       navigate("/verify-otp", { state: { email: formData.email } });
     } catch (error) {
       console.error("Registration failed", error.response.data.error);
+      showErrorToast("Registration failed", 2000, isLight);
       setAlert({
         type: "error",
         message: `Registration failed. Please check your details.\n${error.response.data.error}`,

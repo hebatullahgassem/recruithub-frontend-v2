@@ -154,16 +154,7 @@ const JobCreate = () => {
     setQuestions(updatedQuestions);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (questions.length === 0) {
-      showConfirmToast(
-        "Are you sure no questions will be added ?",
-        "No questions will be added"
-      ).then((result) => {
-        if (!result.isConfirmed) return;
-      });
-    }
+  const uploadJob = async () => {
     if (
       questions.some((q) => q.type === "multichoice" && q.choices.length === 0)
     ) {
@@ -183,7 +174,7 @@ const JobCreate = () => {
         body: JSON.stringify(jobPayload),
       });
       if (response.ok) {
-        toast.success("Job created successfully!");
+        showSuccessToast("Job created successfully!", 2000, isLight);
         setJobData({
           title: "",
           description: "",
@@ -195,28 +186,28 @@ const JobCreate = () => {
         });
         setQuestions([]);
         console.log("Job created successfully!", response.body);
-        toast.success("Job created successfully!");
+        showSuccessToast("Job created successfully!", 2000, isLight);
         navigate("/company/jobs");
       } else {
-        toast.error("Failed to create job");
+        showErrorToast("Failed to create job", 2000, isLight);
         console.error("Failed to create job");
       }
     } catch (error) {
-      toast.error("Failed to create job");
+      showErrorToast("Failed to create job", 2000, isLight);
       console.error("Error:", error);
     }
-  };
-  const handleUpdate = async (e) => {
+  }
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (questions.length === 0) {
-    //   showConfirm({
-    //     message: "Are you sure no questions will be added?",
-    //     onConfirm: () => {},
-    //     onCancel: () => {
-    //       return;
-    //     },
-    //   });
-    // }
+    if (questions.length === 0) {
+      showConfirmToast(
+        {message:"Are you sure no questions will be added ?", onConfirm: uploadJob, isLight: isLight},
+      )
+    }
+    
+  };
+
+  const updateJob = async () => {
     if (
       questions.some((q) => q.type === "multichoice" && q.choices.length === 0)
     ) {
@@ -235,7 +226,7 @@ const JobCreate = () => {
         body: JSON.stringify(jobPayload),
       });
       if (response.ok) {
-        showSuccessToast("Job updated successfully!");
+        showSuccessToast("Job updated successfully!", 2000, isLight);
         setJobData({
           title: "",
           description: "",
@@ -250,10 +241,16 @@ const JobCreate = () => {
         navigate("/company/jobs/" + jobId);
       } else {
         console.error("Failed to update job");
+        showErrorToast("Failed to update job", 2000, isLight);
       }
     } catch (error) {
       console.error("Error:", error);
+      showErrorToast("Failed to update job", 2000, isLight);
     }
+  }
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    showConfirmToast({message:"Are you sure you want to update this job ?", onConfirm: updateJob, isLight: isLight})
   };
 
   return (

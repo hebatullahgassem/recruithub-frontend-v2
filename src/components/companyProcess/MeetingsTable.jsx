@@ -12,7 +12,6 @@ import { userContext } from "../../context/UserContext"
 function MeetingsTable({ column, phases }) {
   const { isLight, setUpdate } = useContext(userContext)
   const { id } = useParams()
-  console.log(phases)
   const [selected, setSelected] = useState([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)

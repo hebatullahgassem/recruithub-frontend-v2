@@ -50,7 +50,7 @@ function Login() {
       refetchUser(res);
       // setUser(res.user);
       // setToken(res.token);
-      showSuccessToast("Welcome back!");
+      showSuccessToast("Welcome back!", 2000, isLight);
       navigate("/");
     } catch (error) {
       // Clear user/token if login failed
@@ -63,7 +63,7 @@ function Login() {
       // Extract message from backend if available
       const backendMessage = error.response.data.error;
 
-      showErrorToast(backendMessage || "Login failed. Please check your email and password!");
+      showErrorToast(backendMessage || "Login failed. Please check your email and password!", 2000, isLight);
       setError("");
       
       // // Set the custom error message

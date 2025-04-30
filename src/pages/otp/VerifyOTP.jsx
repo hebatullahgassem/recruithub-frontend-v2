@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -13,6 +13,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Lottie from "lottie-react";
 import animationData from '../../assets/animations/otp.json';
 import { toast } from "react-hot-toast";
+import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import { userContext } from "../../context/UserContext";
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
   const [seconds, setSeconds] = useState(60);
@@ -21,6 +23,7 @@ const VerifyOTP = () => {
   const email = localStorage.getItem("email");
   const location = useLocation();
   const { email: stateEmail } = location.state;
+  const { isLight } = useContext(userContext)
 
   const handleChange = (index, value) => {
     if (/^\d?$/.test(value)) {
@@ -54,15 +57,15 @@ const VerifyOTP = () => {
       console.log("otp", fullOtp);
 
       if (response.data.message === "OTP verified successfully!") {
-        toast.success("OTP Verified Successfully! You can now log in.");
+        showSuccessToast("OTP Verified Successfully! You can now log in.", 2000, isLight);
         localStorage.removeItem("email");
         navigate("/login");
       } else {
-        toast.error("Invalid OTP, please try again.");
+        showErrorToast("Invalid OTP, please try again.", 2000, isLight)
       }
     } catch (error) {
       console.error("OTP verification failed", error);
-      toast.error("OTP verification failed. Please try again.");
+      showErrorToast("Invalid OTP, please try again.", 2000, isLight)
     }
   };
 
@@ -76,13 +79,13 @@ const VerifyOTP = () => {
       });
       
       if (response.data.message === "OTP resent successfully. Check your email for the new OTP.") {
-        toast.success("OTP resent successfully. Please check your inbox.");
+        showSuccessToast("OTP resent successfully. Please check your inbox.", 2000, isLight);
       } else {
-        toast.error("Failed to resend OTP. Please try again.");
+        showErrorToast("Failed to resend OTP. Please try again.", 2000, isLight);
       }
     } catch (error) {
       console.error("Resending OTP failed", error);
-      toast.error("Failed to resend OTP. Please try again.");
+      showErrorToast("Failed to resend OTP. Please try again.", 2000, isLight);
     } finally {
       // Re-enable the button after a delay of 30 seconds
       setTimeout(() => setResendDisabled(false), 30000);

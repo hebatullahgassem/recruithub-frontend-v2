@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, ArrowLeft } from "lucide-react"
@@ -6,6 +6,7 @@ import Lottie from "lottie-react";
 import animationData from "../../assets/animations/LoginRegister.json";
 import { showErrorToast, showSuccessToast,showWarningToast } from "../../confirmAlert/toastConfirm";  
 import '../../styles/registerLogin/reset_password.css';
+import { userContext } from "../../context/UserContext";
 
 
 const ResetPassword = () => {
@@ -19,6 +20,7 @@ const ResetPassword = () => {
   const [passwordHelpText, setPasswordHelpText] = useState(""); // For password criteria help text
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { isLight } = useContext(userContext);
   // Password complexity regex (same as in registration)
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&_\-])[A-Za-z\d@$!%*?&_\-]{8,}$/;
 
@@ -43,7 +45,7 @@ const ResetPassword = () => {
           })
         } else {
           const errorMessage = "Failed to fetch token. Please try again later."
-          showErrorToast(errorMessage)
+          showErrorToast(errorMessage, 2000, isLight)
           setStatus({
             type: "error",
             message: errorMessage,
@@ -110,7 +112,7 @@ const ResetPassword = () => {
     // Check if the passwords match before submitting
     if (newPassword !== confirmPassword) {
       setPasswordError("Passwords do not match")
-      showErrorToast("Passwords do not match. Please ensure both passwords are identical.")
+      showErrorToast("Passwords do not match. Please ensure both passwords are identical.", 2000, isLight)
       setIsSubmitting(false)
       return;
     }
@@ -119,7 +121,7 @@ const ResetPassword = () => {
     const passwordValidation = validatePassword(newPassword)
     if (passwordValidation) {
       setPasswordHelpText(passwordValidation)
-      showErrorToast(passwordValidation)
+      showErrorToast(passwordValidation, 2000, isLight)
       setIsSubmitting(false)
       return
     }
@@ -134,7 +136,7 @@ const ResetPassword = () => {
         type: "success",
         message: response.data.message || "Password reset successful! You can now log in with your new password.",
       })
-      showSuccessToast("Password reset successful! You can now log in with your new password.")
+      showSuccessToast("Password reset successful! You can now log in with your new password.", 2000, isLight)
       setTimeout(() => navigate("/login"), 3000)
     } catch (err) {
       const errorMessage = err.response?.data?.error || "Something went wrong. Please try again."

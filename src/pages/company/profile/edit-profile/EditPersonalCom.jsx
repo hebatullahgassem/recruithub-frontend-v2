@@ -20,7 +20,7 @@ Save,
 CameraAlt,
 CheckCircle,
 ErrorOutline } from "@mui/icons-material"
-import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
+import { showErrorToast, showInfoToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../../../context/UserContext";
@@ -86,10 +86,10 @@ const EditPersonalCom = () => {
 
     try {
       if (!file.type.match("image.*")) throw new 
-      showErrorToast("Please upload a valid image.");
-      if (file.size > 10 * 1024 * 1024) throw new 
+      showErrorToast("Please upload a valid image.", 2000,isLight);
+      if (file.size > 2 * 1024 * 1024) throw new 
       
-      showErrorToast("File size should be less than 10MB");
+      showInfoToast("File size should be less than 2MB", 2000, isLight);
 
       setUploadStatus({ img: "uploading" });
       const formData = new FormData();
@@ -113,12 +113,12 @@ const EditPersonalCom = () => {
         ...prev,
         img: updatedData.img,
       }));
-
+      showSuccessToast("Image uploaded successfully!", 2000, isLight)
       setUploadStatus({ img: "success" });
     } catch (error) {
       console.error("Error uploading img:", error);
       setUploadStatus({ img: "error" });
-      showErrorToast(error.message)
+      showErrorToast(error.message, 2000, isLight)
       setError(error.message);
     }
   };
@@ -153,7 +153,7 @@ const EditPersonalCom = () => {
       const errorMessage = err.response?.data
         ? Object.values(err.response.data).join(" ")
         : "Failed to save changes.";
-      showErrorToast(errorMessage)
+      showErrorToast(errorMessage, 2000, isLight)
     }
   };
 
@@ -165,7 +165,7 @@ const EditPersonalCom = () => {
     const missing = requiredFields.filter((f) => !localData[f]);
 
     if (missing.length > 0) {
-      showErrorToast(`Missing required fields: ${missing.join(", ")}`);
+      showErrorToast(`Missing required fields: ${missing.join(", ")}`, 2000, isLight);
       return false;
     }
 

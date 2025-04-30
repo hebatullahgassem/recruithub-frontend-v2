@@ -23,7 +23,7 @@ import { getCompanyById } from "../../../services/Auth";
 import { id, se } from "date-fns/locale";
 import CompanyBox from "../../../components/accounts/CompanyBox";
 import CompanyJobsBox from "../../../components/job/CompanyJobsBox";
-import { showErrorToast,showSuccessToast } from "../../../confirmAlert/toastConfirm";
+import { showErrorToast,showInfoToast,showSuccessToast } from "../../../confirmAlert/toastConfirm";
 const UserSingleJob = () => {
   const { jobId } = useParams();
   const { user, isLight } = useContext(userContext);
@@ -60,9 +60,10 @@ const UserSingleJob = () => {
       };
       const res = await createApplication(application);
       console.log(res);
+      showSuccessToast("Applying phase started your progress will be in saved section", 2000, isLight);
       userAppRefetch();
     } catch (error) {
-      showErrorToast("Complete your profile before applying!");
+      showInfoToast("Complete your profile before applying!", 2000, isLight);
       console.error("Error creating application:", error);
     }
   }

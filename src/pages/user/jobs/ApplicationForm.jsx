@@ -23,7 +23,7 @@ import { createAnswer } from "../../../services/Answer";
 import { userContext } from "../../../context/UserContext";
 import { patchUser } from "../../../services/Auth";
 import { patchApplication } from "../../../services/Application";
-import { showErrorToast, showSuccessToast } from "../../../confirmAlert/toastConfirm";
+import { showErrorToast, showInfoToast, showSuccessToast } from "../../../confirmAlert/toastConfirm";
 import '../../../styles/theme.css';
 import '../../../ComponentsStyles/application_form.css';
 const ApplicationForm = ({ questions, answers: savedAnswers, application, refetch }) => {
@@ -64,7 +64,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
     const file = event.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        showErrorToast("Cv File size must be less than 1MB");
+        showInfoToast("Cv File size must be less than 5MB", 2000, isLight);
         return;
       }
     }
@@ -81,7 +81,7 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
         const cvForm = new FormData();
         if (!(cv instanceof File)) {
           console.error("cv is not a valid File object:", cv);
-          showErrorToast("cv is not a valid File object");
+          showErrorToast("cv is not a valid File object", 2000, isLight);
           setIsSubmitting(false)
           return;
       }
@@ -90,21 +90,24 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
         const cvRes = await patchUser(user.id, cvForm);
         if(!cvRes) {
           console.error("CV upload failed:", cvRes);
-          showErrorToast("CV upload failed");
+          showErrorToast("CV upload failed", 2000, isLight);
           setIsSubmitting(false)
           return;
         }
         setUser(cvRes)
         console.log("CV Upload Response:", cvRes);
         await patchApplication(application.id,{'status': '2'})
+        showSuccessToast("Application submitted successfully", 2000, isLight);
         refetch()
     } catch (error) {
         console.error("Error uploading CV:", error.response?.data || error);
+        showErrorToast("CV upload failed", 2000, isLight);
+        setIsSubmitting(false)
         return;
     }
     }else if (user.cv) {
       await patchApplication(application.id,{'status': '2'})
-      showSuccessToast("Application submitted successfully");
+      showSuccessToast("Application submitted successfully", 2000, isLight);
       refetch()
     }
     if (Object.keys(answers).length > 0) {
@@ -115,11 +118,11 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
       }));
       const formData = { answers: output };
       const res = await createAnswer(formData);
-      console.log("Submitted Answers:", res);
-      showSuccessToast("Application submitted successfully");
+      showSuccessToast("Application submitted successfully", 2000, isLight);
       setIsSubmitting(false)
     }} catch (error) {
       console.error("Error submitting answers:", error.response?.data || error);
+      showErrorToast("Error submitting answers", 2000, isLight);
       setIsSubmitting(false)
     }
   };

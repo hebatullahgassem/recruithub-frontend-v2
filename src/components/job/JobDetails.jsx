@@ -7,6 +7,7 @@ import { TbCancel } from "react-icons/tb";
 import { FaEdit } from "react-icons/fa";
 import { IoIosCloudDone } from "react-icons/io";
 import "../../ComponentsStyles/job/job_details.css";
+import { showConfirmToast, showErrorToast } from "../../confirmAlert/toastConfirm";
 // interface JobDetailsProps {
 //   job: any
 //   refetch: () => void
@@ -22,26 +23,43 @@ function JobDetails({ job, refetch }) {
 
   const handleActivation = async (state) => {
     setLoading(true);
+    try {
     if (
-      state === 0 &&
-      window.confirm("Are you sure you want to deactivate this job?")
+      state === 0 
     ) {
-      // Implement the deactivation logic here
-      console.log("Deactivating job with ID:", id);
-      const res = await patchJob(id, { status: 0 });
-      console.log(res);
-      refetch();
+      showConfirmToast({
+        message: "Are you sure you want to deactivate this job?", 
+        onConfirm: async () => {
+          // Implement the deactivation logic here
+          console.log("Deactivating job with ID:", id);
+          const res = await patchJob(id, { status: 0 });
+          console.log(res);
+          refetch();
+        },
+        isLight: isLight
+      })
+      
     } else if (
-      state === 1 &&
-      window.confirm("Are you sure you want to activate this job?")
+      state === 1
     ) {
-      // Implement the activation logic here
-      console.log("Activating job with ID:", id);
-      const res = await patchJob(id, { status: 1 });
-      console.log(res);
-      refetch();
+      showConfirmToast({
+        message: "Are you sure you want to activate this job?", 
+        onConfirm: async () => {
+          // Implement the activation logic here
+          console.log("Activating job with ID:", id);
+          const res = await patchJob(id, { status: 1 });
+          console.log(res);
+          refetch();
+        }
+        ,isLight: isLight
+      })   
+      
     }
     setLoading(false);
+  } catch (error) {
+      showErrorToast(error.message, 5000, isLight);
+    setLoading(false);
+    }
   };
 
   // // Status badge style

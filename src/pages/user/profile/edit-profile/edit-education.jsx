@@ -20,6 +20,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { AxiosApi } from "../../../../services/Api";
 import { userContext } from "../../../../context/UserContext";
 import { School, Delete, Add, Check } from "@mui/icons-material";
+import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 
 
 const EducationCard = styled(Paper)(({ theme }) => ({
@@ -149,9 +150,11 @@ const EditEducation = () => {
       });
 
       // updateProfile("education", education);
+      showSuccessToast("Education data saved successfully!", 2000, isLight);
       goToNextStep(`/applicant/profile`);
     } catch (err) {
       console.error("Error updating education:", err);
+      showErrorToast("Failed to save education data", 2000, isLight);
       setError("Failed to save education data");
       setLoading(false);
     }

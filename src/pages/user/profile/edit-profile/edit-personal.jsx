@@ -27,7 +27,7 @@ import {
 import { AxiosApi } from "../../../../services/Api";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomAutoComplete from "../../../../components/autoComplete/CustomAutoComplete";
-import { showErrorToast } from "../../../../confirmAlert/toastConfirm";
+import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 
 const IDImage = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -183,6 +183,7 @@ const EditPersonal = () => {
       setUploadStatus({ ...uploadStatus, [field]: "success" });
     } catch (error) {
       console.error("Error uploading image:", error);
+      showErrorToast('Failed to upload image', 2000, isLight);
       setUploadStatus({ ...uploadStatus, [field]: "error" });
       setError(error.message);
     }
@@ -227,9 +228,11 @@ const EditPersonal = () => {
       // updateUser(response.data);
       setSuccess(true);
       setError(null);
+      showSuccessToast("Profile updated successfully!", 2000, isLight);
       navigate(`/applicant/profile`);
     } catch (err) {
       console.error("Error updating profile:", err);
+      showErrorToast("Failed to save changes.", 2000, isLight);
       const errorMessage = err.response?.data
         ? Object.values(err.response.data).join(" ")
         : "Failed to save changes. Please check your input.";

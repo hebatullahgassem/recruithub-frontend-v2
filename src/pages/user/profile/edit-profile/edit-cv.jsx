@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 
 const EditCV = () => {
   const theme = useTheme();
@@ -99,9 +100,11 @@ const EditCV = () => {
           timeout: 30000,
         }
       );
+      showSuccessToast("CV uploaded successfully!", 2000, isLight);
       navigate("/applicant/profile");
     } catch (err) {
       console.error("Upload error:", err);
+      showErrorToast("Failed to upload CV", 2000, isLight);
       let errorMessage = "Failed to upload CV";
       if (err.response) {
         errorMessage = err.response.status === 413 

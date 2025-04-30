@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import {
@@ -18,6 +18,7 @@ import Lottie from "lottie-react";
 import animationData from "../../assets/animations/LoginRegister.json";
 import '../../styles/registerLogin/forget_password.css';
 import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import { userContext } from "../../context/UserContext";
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   // const [message, setMessage] = useState("");
@@ -25,6 +26,7 @@ function ForgotPassword() {
   const [status, setStatus] = useState({ type: "", message: "" })
   const [countdown, setCountdown] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { isLight } = useContext(userContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +46,7 @@ function ForgotPassword() {
       await axios.post("http://127.0.0.1:8000/user/password-reset/", { email });
       // setMessage("Password reset email sent. Please check your inbox.");
       // setError("");
-      showSuccessToast("Password reset email sent. Please check your inbox.")
+      showSuccessToast("Password reset email sent. Please check your inbox.", 2000, isLight)
       setStatus({
         type: "success",
         message: "Password reset email sent. Please check your inbox.",
@@ -55,7 +57,7 @@ function ForgotPassword() {
       // setMessage("");
       const errorMessage = err.response?.data?.error || "Failed to send password reset email."
       console.log(err)
-      showErrorToast(errorMessage)
+      showErrorToast(errorMessage, 2000, isLight)
       setStatus({
         type: "error",
         message: errorMessage,

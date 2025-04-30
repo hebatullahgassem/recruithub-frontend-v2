@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { TextField, Button, Box, Typography, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import { Add, Search, Refresh } from "@mui/icons-material"
 import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";

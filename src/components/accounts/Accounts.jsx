@@ -63,23 +63,21 @@ const Accounts = () => {
         if (Object.keys(updatedAccountsData).length > Object.keys(currentAccounts).length) {
           setNewAccountKey("");
           setNewAccountValue("");
-         showSuccessToast("Account added successfully!",isLight)
+         showSuccessToast("Account added successfully!", 2000,isLight)
         } else if (editingAccount) {
-          showSuccessToast("Account updated successfully!",
-
-          )
+          showSuccessToast("Account updated successfully!",2000,isLight)
         setEditingAccount(null)
        } else {
         setSuccess("Account removed successfully!",isLight
         )
-        showSuccessToast("Account removed successfully!",isLight)
+        showSuccessToast("Account removed successfully!", 2000,isLight)
       }
       setTimeout(() => {
         setSuccess(null)
       }, 3000)
       } catch (err) {
         console.error("Error updating accounts:", err);
-        showSuccessToast(`Failed to update accounts. ${err?.response?.data?.detail || err.message || ""}`,isLight);
+        showSuccessToast(`Failed to update accounts. ${err?.response?.data?.detail || err.message || ""}`, 2000,isLight);
       } finally {
         setLoading(false);
       }
@@ -98,7 +96,7 @@ const Accounts = () => {
     } catch (_) {
       if (!newAccountValue.startsWith("http://") && !newAccountValue.startsWith("https://")) {
         setError("Profile link should be a valid URL (e.g., start with https://)");
-        showErrorToast("Profile link should be a valid URL (e.g., start with https://)",isLight)
+        showErrorToast("Profile link should be a valid URL (e.g., start with https://)", 3000,isLight)
         return;
       }
     }

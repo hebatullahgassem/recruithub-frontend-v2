@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../context/UserContext";
 import { logoutUser } from "../../services/Auth";
 import { NavLink as RouterNavLink } from "react-router-dom";
-import logo from '../../../public/assets/logo.png';
+import logo from '../../assets/logo.png';
 import {
   Avatar,
   Typography,
@@ -65,19 +65,15 @@ function Navbar() {
     showConfirmToast({
       title: "Logout Confirmation",
       message: "Are you sure you want to logout?",
-      confirmText: "Logout",
-      cancelText: "Cancel",
       onConfirm: () => {
         logoutUser();
         setUser({});
         setToken(null);
         setIsProfileOpen(false);
+        showSuccessToast("Successfully logged out!", 2000, isLight);
         navigate("/");
-        showSuccessToast("Successfully logged out!");
       },
-      onCancel: () => {
-        showInfoToast("Logout cancelled.");
-      },
+      isLight: isLight,
     });
   }; //rgb(0, 0, 0)
   // Custom color palette based on #882024
@@ -318,7 +314,7 @@ function Navbar() {
         sx={{
           backgroundColor: theme.background,
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-          position: "relative",
+          // position: "relative",
           zIndex: 98,
           height: "90px", // Or increase padding instead
           alignItems: "center", // Ensure vertical alignment of children
@@ -341,7 +337,8 @@ function Navbar() {
             <img
               src={logo}
               alt="Logo"
-              style={{ height: '130px', marginRight: '8px' }} // adjust as needed
+              onClick={() => navigate("/")}
+              style={{ height: '130px', marginRight: '8px', cursor: 'pointer' }} // adjust as needed
             />
 
               {/* Desktop Navigation */}

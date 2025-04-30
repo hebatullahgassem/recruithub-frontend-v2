@@ -34,7 +34,7 @@ import {
   deleteApplication,
   getApplicationsByUser,
 } from "../../services/Application";
-import { showConfirmToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import { showConfirmToast, showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 function JobCard({ job, type, isSelected, refetch }) {
   // const keywords = job?.keywords?.join(" · ") || "";
   const { user, isLight } = useContext(userContext);
@@ -105,6 +105,7 @@ function JobCard({ job, type, isSelected, refetch }) {
       refetch();
     } catch (err) {
       console.log(err);
+      showErrorToast("Failed to unsaved job", 2000, isLight);
       refetch();
     }
   };
@@ -112,10 +113,9 @@ function JobCard({ job, type, isSelected, refetch }) {
     showConfirmToast({
       message: `Are you sure you want to unsave job: ${job?.title}?`,
       onConfirm: handleDeleteJob,
-      onCancel: () => {},
       confirmText: "Unsave",
       cancelText: "Cancel",
-      isLight,
+      isLight:isLight,
     });
   };
 

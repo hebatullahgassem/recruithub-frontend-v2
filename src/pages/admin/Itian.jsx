@@ -33,6 +33,7 @@ import {
   createItianBulk,
   deleteItian,
 } from "../../services/Admin"; // Adjust path as needed
+import { showConfirmToast } from "../../confirmAlert/toastConfirm";
 
 function AdminItian() {
   const { isLight } = useContext(userContext);
@@ -105,7 +106,9 @@ function AdminItian() {
       color: theme.primary,
       border: `1px solid ${theme.primary}`,
       "&:hover": {
-        backgroundColor: isLight ? "rgba(67, 97, 238, 0.1)" : "rgba(76, 201, 240, 0.1)",
+        backgroundColor: isLight
+          ? "rgba(67, 97, 238, 0.1)"
+          : "rgba(76, 201, 240, 0.1)",
       },
       transition: "all 0.3s ease",
       fontWeight: 500,
@@ -115,12 +118,12 @@ function AdminItian() {
     danger: {
       color: theme.error,
       "&:hover": {
-        backgroundColor: isLight ? "rgba(239, 68, 68, 0.1)" : "rgba(239, 68, 68, 0.2)",
+        backgroundColor: isLight
+          ? "rgba(239, 68, 68, 0.1)"
+          : "rgba(239, 68, 68, 0.2)",
       },
     },
-  }
-
-  
+  };
 
   // --- Data Fetching ---
   const {
@@ -232,13 +235,14 @@ function AdminItian() {
   };
 
   const handleDeleteClick = (itianId) => {
-    // Optional: Add confirmation dialog here
-    if (
-      window.confirm(`Are you sure you want to delete Itian ID: ${itianId}?`)
-    ) {
-      setFeedback({ message: "", severity: "info" }); // Clear previous feedback
-      deleteMutation.mutate(itianId);
-    }
+    showConfirmToast({
+      message: `Are you sure you want to delete Itian ID: ${itianId}?`,
+      onConfirm: () => {
+        setFeedback({ message: "", severity: "info" }); // Clear previous feedback
+        deleteMutation.mutate(itianId);
+      },
+      isLight: isLight,
+    });
   };
 
   // --- Render Logic ---
@@ -299,49 +303,49 @@ function AdminItian() {
               width: "60px",
               height: "3px",
               backgroundColor: theme.primary,
-              borderRadius: "2px",},
+              borderRadius: "2px",
+            },
           }}
         >
           ITIans
         </Typography>
 
         {/* Search Bar */}
-        <Grid
-         item xs={12} md={7}
-        >
+        <Grid item xs={12} md={7}>
           {/* Buttons to trigger modals */}
-          <Box sx={{
-                display: "flex",
-                gap: 2,
-                flexDirection: { xs: "column", sm: "row" },
-                width: "100%",
-                mb: 4
-              }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              flexDirection: { xs: "column", sm: "row" },
+              width: "100%",
+              mb: 4,
+            }}
+          >
             <Button
-               variant="contained"
-               startIcon={<FaUserPlus />}
-               onClick={() => setOpenSingleForm(true)}
-               sx={{
-                 ...buttonStyle.primary,
-                 flex: { xs: "1", sm: "1 0 auto" },
-                 py: 1.2,
-                 backgroundColor: "#882024"
-               }}
+              variant="contained"
+              startIcon={<FaUserPlus />}
+              onClick={() => setOpenSingleForm(true)}
+              sx={{
+                ...buttonStyle.primary,
+                flex: { xs: "1", sm: "1 0 auto" },
+                py: 1.2,
+                backgroundColor: "#882024",
+              }}
             >
               Add Single ITian
             </Button>
             <Button
-             variant="outlined"
-             startIcon={<FaFileUpload />}
-             onClick={() => setOpenBulkForm(true)}
-             sx={{
-               ...buttonStyle.secondary,
-               flex: { xs: "1", sm: "1 0 auto" },
-               py: 1.2,
-               color: "#882024",
-               borderColor: "#882024",
-               
-             }}
+              variant="outlined"
+              startIcon={<FaFileUpload />}
+              onClick={() => setOpenBulkForm(true)}
+              sx={{
+                ...buttonStyle.secondary,
+                flex: { xs: "1", sm: "1 0 auto" },
+                py: 1.2,
+                color: "#882024",
+                borderColor: "#882024",
+              }}
             >
               Add ITIans from File
             </Button>
@@ -352,8 +356,18 @@ function AdminItian() {
             open={openSingleForm}
             onClose={() => setOpenSingleForm(false)}
           >
-            <DialogTitle sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)", color: isLight ? "black" : "white", fontWeight: "bold"}}>Add Single ITian</DialogTitle>
-            <DialogContent sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
+            <DialogTitle
+              sx={{
+                backgroundColor: isLight ? "white" : "rgb(97, 94, 94)",
+                color: isLight ? "black" : "white",
+                fontWeight: "bold",
+              }}
+            >
+              Add Single ITian
+            </DialogTitle>
+            <DialogContent
+              sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)" }}
+            >
               <Box component="form" onSubmit={handleSingleSubmit} noValidate>
                 <TextField
                   margin="normal"
@@ -420,8 +434,17 @@ function AdminItian() {
                 </Button>
               </Box>
             </DialogContent>
-            <DialogActions sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
-              <Button sx={{ fontWeight: 600,color:"#882024",backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}} onClick={() => setOpenSingleForm(false)} >
+            <DialogActions
+              sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)" }}
+            >
+              <Button
+                sx={{
+                  fontWeight: 600,
+                  color: "#882024",
+                  backgroundColor: isLight ? "white" : "rgb(97, 94, 94)",
+                }}
+                onClick={() => setOpenSingleForm(false)}
+              >
                 Close
               </Button>
             </DialogActions>
@@ -429,8 +452,18 @@ function AdminItian() {
 
           {/* --- Modal for Bulk ITian Form --- */}
           <Dialog open={openBulkForm} onClose={() => setOpenBulkForm(false)}>
-            <DialogTitle sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)", color: isLight ? "black" : "white", fontWeight: "bold"}}>Add ITIans from File</DialogTitle>
-            <DialogContent sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
+            <DialogTitle
+              sx={{
+                backgroundColor: isLight ? "white" : "rgb(97, 94, 94)",
+                color: isLight ? "black" : "white",
+                fontWeight: "bold",
+              }}
+            >
+              Add ITIans from File
+            </DialogTitle>
+            <DialogContent
+              sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)" }}
+            >
               <Box component="form" onSubmit={handleBulkSubmit} noValidate>
                 <Typography
                   variant="body2"
@@ -450,7 +483,7 @@ function AdminItian() {
                     backgroundColor: isLight
                       ? "white"
                       : "rgba(255, 255, 255, 0.1)",
-                      border: "3px solid #882024",
+                    border: "3px solid #882024",
                     color: isLight ? "black" : "white",
                     "&:hover": {
                       backgroundColor: isLight
@@ -496,8 +529,17 @@ function AdminItian() {
                 </Button>
               </Box>
             </DialogContent>
-            <DialogActions sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}>
-              <Button sx={{ fontWeight: 600,color:"#882024",backgroundColor: isLight ? "white" : "rgb(97, 94, 94)"}}  onClick={() => setOpenBulkForm(false)}>
+            <DialogActions
+              sx={{ backgroundColor: isLight ? "white" : "rgb(97, 94, 94)" }}
+            >
+              <Button
+                sx={{
+                  fontWeight: 600,
+                  color: "#882024",
+                  backgroundColor: isLight ? "white" : "rgb(97, 94, 94)",
+                }}
+                onClick={() => setOpenBulkForm(false)}
+              >
                 Close
               </Button>
             </DialogActions>
@@ -511,14 +553,18 @@ function AdminItian() {
               fullWidth
               value={searchQuery}
               onChange={(e) => {
-                setSearchQuery(e.target.value)
-                setPage(0)
+                setSearchQuery(e.target.value);
+                setPage(0);
               }}
               InputProps={{
-                startAdornment: <FaSearch style={{ marginRight: 8, opacity: 0.6 }} />,
+                startAdornment: (
+                  <FaSearch style={{ marginRight: 8, opacity: 0.6 }} />
+                ),
               }}
               sx={{
-                backgroundColor: isLight ? "white" : "rgba(255, 255, 255, 0.05)",
+                backgroundColor: isLight
+                  ? "white"
+                  : "rgba(255, 255, 255, 0.05)",
                 borderRadius: "8px",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "8px",
@@ -530,7 +576,9 @@ function AdminItian() {
                   },
                 },
                 "& .MuiInputLabel-root": {
-                  color: isLight ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.7)",
+                  color: isLight
+                    ? "rgba(0, 0, 0, 0.6)"
+                    : "rgba(255, 255, 255, 0.7)",
                   "&.Mui-focused": {
                     color: "white",
                   },
@@ -539,7 +587,9 @@ function AdminItian() {
                   color: theme.text,
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: isLight ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)",
+                  borderColor: isLight
+                    ? "rgba(0, 0, 0, 0.23)"
+                    : "rgba(255, 255, 255, 0.23)",
                 },
               }}
             />
@@ -644,8 +694,7 @@ function AdminItian() {
                         borderColor: isLight
                           ? "grey.300"
                           : "rgba(255, 255, 255, 0.5)",
-                          backgroundColor: "rgba(202, 200, 200, 0.5)",
-
+                        backgroundColor: "rgba(202, 200, 200, 0.5)",
                       }}
                     >
                       National ID
@@ -658,7 +707,6 @@ function AdminItian() {
                           : "rgba(255, 255, 255, 0.5)",
                         textAlign: "center",
                         backgroundColor: "rgba(202, 200, 200, 0.5)",
-
                       }}
                     >
                       Action
@@ -704,41 +752,41 @@ function AdminItian() {
               </Table>
             </TableContainer>
             <TablePagination
-                sx={{
-                  borderTop: `1px solid ${theme.border}`,
+              sx={{
+                borderTop: `1px solid ${theme.border}`,
+                color: theme.text,
+                ".MuiTablePagination-toolbar": {
+                  display: "flex",
+                  justifyContent: "center", // Center all contents
+                  alignItems: "center",
+                  flexWrap: "nowrap",
+                  gap: 2, // Optional: add a little space between elements
+                },
+                ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows":
+                  {
+                    color: theme.muted,
+                  },
+                ".MuiTablePagination-select": {
                   color: theme.text,
-                  ".MuiTablePagination-toolbar": {
-                    display: "flex",
-                    justifyContent: "center", // Center all contents
-                    alignItems: "center",
-                    flexWrap: "nowrap",
-                    gap: 2, // Optional: add a little space between elements
-                  },
-                  ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows": {
+                },
+                ".MuiTablePagination-selectIcon": {
+                  color: theme.muted,
+                },
+                ".MuiTablePagination-actions button": {
+                  color: theme.primary,
+                  "&.Mui-disabled": {
                     color: theme.muted,
                   },
-                  ".MuiTablePagination-select": {
-                    color: theme.text,
-                  },
-                  ".MuiTablePagination-selectIcon": {
-                    color: theme.muted,
-                  },
-                  ".MuiTablePagination-actions button": {
-                    color: theme.primary,
-                    "&.Mui-disabled": {
-                      color: theme.muted,
-                    },
-                  },
-                }}
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                component="div"
-                count={totalItians}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-
+                },
+              }}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              component="div"
+              count={totalItians}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Paper>
         )}
       </Box>

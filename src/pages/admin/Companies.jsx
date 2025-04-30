@@ -24,6 +24,7 @@ import { getUnverifiedCompanies, verifyCompany } from "../../services/Admin"; //
 import CompanyVerification from "./CompanyVerification";
 
 import { userContext } from "../../context/UserContext";
+import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 
 
 function AdminCompany() {
@@ -100,6 +101,7 @@ function AdminCompany() {
   const verifyMutation = useMutation({
     mutationFn: verifyCompany, // The function that performs the PATCH request
     onSuccess: (data, companyId) => {
+      showSuccessToast("Company verified successfully!", 2000, isLight);
       console.log("Verification successful:", data);
       setVerificationStatus({
         message: data.message || `Company verified successfully!`,
@@ -113,6 +115,7 @@ function AdminCompany() {
       setTimeout(() => setVerificationStatus({ message: "", severity: "info", companyId: null }), 3000);
     },
     onError: (error, companyId) => {
+      showErrorToast("Failed to verify company", 2000, isLight);
       console.error("Verification failed:", error);
       setVerificationStatus({
         message: `Failed to verify company ${companyId}. ${error?.response?.data?.detail || error.message}`,

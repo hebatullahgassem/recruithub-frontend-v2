@@ -6,10 +6,8 @@ import { userContext } from "../../context/UserContext";
 
 function ProcessColumn({setter, column, phases, application}) {
   const{isLight} = useContext(userContext);
-    console.log(application);
     useEffect(() => {
         if(application?.status){
-            console.log(application.status)
             if(application.status === '1') return
             setter(parseInt(application.status)-1);
         }

@@ -21,6 +21,7 @@ import { AxiosApi } from "../../../../services/Api";
 import { updateUserProfile } from "../../../../services/Auth";
 import { Add, Check, Build, Delete } from "@mui/icons-material";
 import Loading from "../../../helpers/Loading";
+import { showErrorToast, showSuccessToast } from "../../../../confirmAlert/toastConfirm";
 
 // Consistent Color Palette
 const primaryColor = '#d7323e'; // IIT Maroon
@@ -134,10 +135,11 @@ const EditSkills = () => {
       formData.append("skills", JSON.stringify(skills));
 
       await updateUserProfile(userId, formData);
-
+      showSuccessToast("Skills updated successfully.", 2000, isLight);
       navigate("/applicant/profile");
     } catch (err) {
       console.error("Error saving skills:", err);
+      showErrorToast("Failed to save skills.", 2000, isLight);
       setError("Failed to save skills.");
     }
   };

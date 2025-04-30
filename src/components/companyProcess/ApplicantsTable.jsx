@@ -29,7 +29,12 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { showConfirmToast } from "../../confirmAlert/toastConfirm.jsx";
+import {
+  showConfirmToast,
+  showErrorToast,
+  showInfoToast,
+  showSuccessToast,
+} from "../../confirmAlert/toastConfirm.jsx";
 // import '../../styles/theme.css';
 import "../../ComponentsStyles/CompanyProcess/application_table.css";
 import { preconnect } from "react-dom";
@@ -105,7 +110,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
 
   const handleBulkAction = async (action) => {
     if (selected.length === 0) {
-      toast.error("Please select at least one applicant");
+      showErrorToast("Please select at least one applicant", 2000, isLight);
       return;
     }
 
@@ -115,7 +120,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
 
     if (action === "next") {
       if (phase >= 5) {
-        toast.error("Cannot move beyond Offer phase");
+        showErrorToast("Cannot move beyond Offer phase", 1000, isLight);
         return;
       }
       confirmMessage = `Move ${selected.length} applicant(s) to next phase?`;
@@ -148,15 +153,19 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
 
           await Promise.all(promises);
           refetch();
-          toast.success(
+          showSuccessToast(
             `Applicants ${
               action === "next" ? "moved" : "rejected"
-            } successfully`
+            } successfully`,
+            2000,
+            isLight
           );
         } catch (error) {
           console.error("Error updating applications:", error);
-          toast.error(
-            `Failed to ${action === "next" ? "move" : "reject"} applicants`
+          showErrorToast(
+            `Failed to ${action === "next" ? "move" : "reject"} applicants`,
+            2000,
+            isLight
           );
         }
       },
@@ -167,34 +176,34 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
     setPage(newPage + 1);
   };
 
-      // Modern color palette
-      const colors = {
-        light: {
-          background: "#ffffff",
-          cardBg: "#ffffff",
-          sectionBg: "#f8f9fa",
-          text: "#333333",
-          accent: "#e63946", // Modern red
-          accentHover: "#d62b3a",
-          secondary: "#457b9d", // Blue accent
-          muted: "#6c757d",
-          border: "#dee2e6",
-        },
-        dark: {
-          background: "#121212",
-          cardBg: "#1e1e1e",
-          sectionBg: "#242424",
-          text: "#f8f9fa",
-          accent: "#e63946", // Same red accent for consistency
-          accentHover: "#f25d69",
-          secondary: "#64b5f6", // Lighter blue for dark mode
-          muted: "#adb5bd",
-          border: "#343a40",
-        },
-      };
-  
-    // Get current theme colors
-    const theme = isLight ? colors.light : colors.dark;
+  // Modern color palette
+  const colors = {
+    light: {
+      background: "#ffffff",
+      cardBg: "#ffffff",
+      sectionBg: "#f8f9fa",
+      text: "#333333",
+      accent: "#e63946", // Modern red
+      accentHover: "#d62b3a",
+      secondary: "#457b9d", // Blue accent
+      muted: "#6c757d",
+      border: "#dee2e6",
+    },
+    dark: {
+      background: "#121212",
+      cardBg: "#1e1e1e",
+      sectionBg: "#242424",
+      text: "#f8f9fa",
+      accent: "#e63946", // Same red accent for consistency
+      accentHover: "#f25d69",
+      secondary: "#64b5f6", // Lighter blue for dark mode
+      muted: "#adb5bd",
+      border: "#343a40",
+    },
+  };
+
+  // Get current theme colors
+  const theme = isLight ? colors.light : colors.dark;
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
@@ -225,13 +234,14 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
               }
             );
             refetch();
-            toast.success("Applicant moved to next phase");
+            showSuccessToast("Applicant moved to next phase", 2000, isLight);
           } catch (error) {
             console.error("Error:", error);
-            toast.error("Failed to update application status");
+            showErrorToast("Failed to update application status", 2000, isLight);
           }
         }
       },
+      isLight: isLight,
     });
   };
   const handleFail = async (applicant, phase) => {
@@ -253,21 +263,22 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             }
           );
           refetch();
-          toast.success("Applicant marked as failed");
+          showSuccessToast("Applicant marked as failed", 2000, isLight);
         } catch (error) {
           console.error("Error:", error);
-          toast.error("Failed to mark applicant as failed");
+          showErrorToast("Failed to mark applicant as failed", 2000, isLight);
         }
       },
+      isLight: isLight,
     });
   };
 
   function handleAnswer(applicant) {
     if (applicant?.answers && applicant?.answers.length > 0) {
       setAnswer(true);
-      setUpdate({user: applicant, settings:{}});
+      setUpdate({ user: applicant, settings: {} });
     } else {
-      toast.error("No answers found for this applicant.", { icon: "ℹ️" });
+      showInfoToast("No answers found for this applicant.", 2000, isLight);
     }
   }
 
@@ -275,9 +286,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
     setAnswer(false);
     setUpdate({
       user: {},
-      settings: {
-        
-      },
+      settings: {},
     });
     refetch();
   }
@@ -287,23 +296,15 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
   }
 
   return (
-    <div className="applicants-table-container" style={{ backgroundColor: theme.background }}>
+    <div
+      className="applicants-table-container"
+      style={{ backgroundColor: theme.background }}
+    >
       {applicants?.length < 1 && (
         <div className="no-applicants-message">
           <p>There are no applicants in the current phase of this job.</p>
         </div>
       )}
-
-      {/* {update.id ? (
-        <CustomPopup
-          answer={answer}
-          phase={phase}
-          update={update}
-          handleClose={handleClose}
-          handleNext={handleNext}
-          handleFail={handleFail}
-        />
-      ) : null} */}
 
       {selected.length > 0 && (
         <Box className="bulk-actions-container">
@@ -350,7 +351,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             className="recruitment-table"
           >
             <TableHead>
-              <TableRow sx={{backgroundColor: isLight ? "gray" : " black"}}>
+              <TableRow sx={{ backgroundColor: isLight ? "gray" : " black" }}>
                 <TableCell padding="checkbox">
                   <Checkbox
                     indeterminate={
@@ -384,7 +385,9 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             <TableBody>
               {applicants?.map((applicant, index) => (
                 <TableRow
-                  style={{backgroundColor: isLight ? "white" : "rgb(136, 135, 135)"}}
+                  style={{
+                    backgroundColor: isLight ? "white" : "rgb(136, 135, 135)",
+                  }}
                   key={applicant.id}
                   // className={index % 2 === 0 ? "row-even" : "row-odd"}
                 >
@@ -469,21 +472,16 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                           }`}
                           // onClick={() => setUpdate(applicant)}
                           onClick={() => {
-                            // const hasLink =
-                            //   (Number(phase) === 2 && applicant.assessment_link) ||
-                            //   (Number(phase) === 3 && applicant.interview_link) ||
-                            //   (Number(phase) === 4 && applicant.hr_link) ||
-                            //   (Number(phase) === 5 && applicant.offer_link);
-
-                            // if (hasLink) {
-                            setUpdate({user: applicant, settings:{answer,
-                              phase,
-                              handleClose,
-                              handleNext,
-                              handleFail,}});
-                            // } else {
-                            //   toast.error("No link available for this phase");
-                            // }
+                            setUpdate({
+                              user: applicant,
+                              settings: {
+                                answer,
+                                phase,
+                                handleClose,
+                                handleNext,
+                                handleFail,
+                              },
+                            });
                           }}
                           size={35}
                         />
@@ -516,239 +514,6 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
       </Paper>
     </div>
 
-    // <div
-    //   className="d-flex flex-column align-items-center justify-content-center"
-    //   style={{ maxWidth: "inherit" }}
-    // >
-    //   {applicants?.length < 1 && (
-    //     <p style={{ color: "red" }}>
-    //       There are no applicants in the current phase of this job.
-    //     </p>
-    //   )}
-    //   {update.id ? (
-    //     <CustomPopup
-    //       answer={answer}
-    //       phase={phase}
-    //       update={update}
-    //       handleClose={handleClose}
-    //     />
-    //   ) : null}
-
-    //   {/* Bulk action buttons */}
-    //   {selected.length > 0 && (
-    //     <Box sx={{ alignSelf:'center', mb: 2, display: "flex", gap: 2 }}>
-    //       <Button
-    //         variant="contained"
-    //         color="primary"
-    //         onClick={() => handleBulkAction("next")}
-    //         disabled={phase >= 5}
-    //       >
-    //         Move {selected.length} to Next Phase
-    //       </Button>
-    //       <Button
-    //         variant="contained"
-    //         color="error"
-    //         onClick={() => handleBulkAction("reject")}
-    //       >
-    //         Reject {selected.length} Applicants
-    //       </Button>
-    //     </Box>
-    //   )}
-
-    //   <Paper
-    //     sx={{
-    //       width: "90%",
-    //       overflow: "hidden",
-    //       marginX: 10,
-    //       maxWidth: "100vw",
-    //     }}
-    //   >
-    //     <TableContainer>
-    //       <Table stickyHeader aria-label="sticky table">
-    //         <TableHead>
-    //           <TableRow>
-    //             <TableCell padding="checkbox">
-    //               <Checkbox
-    //                 indeterminate={
-    //                   selected.length > 0 &&
-    //                   selected.length < applicants?.length
-    //                 }
-    //                 checked={
-    //                   applicants?.length > 0 &&
-    //                   selected.length === applicants?.length
-    //                 }
-    //                 onChange={handleSelectAll}
-    //               />
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               ID
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               Name
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               Phone
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               Email
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               Status & ATS
-    //             </TableCell>
-    //             <TableCell
-    //               style={{
-    //                 backgroundColor: "#dedede",
-    //                 color: "#901b20",
-    //                 fontWeight: "bold",
-    //               }}
-    //             >
-    //               Action
-    //             </TableCell>
-    //           </TableRow>
-    //         </TableHead>
-    //         <TableBody>
-    //           {applicants?.map((applicant, index) => (
-    //             <TableRow
-    //               key={applicant.id}
-    //               style={{
-    //                 backgroundColor: index % 2 === 0 ? "#ffffff" : "#ececec",
-    //               }}
-    //             >
-    //               <TableCell padding="checkbox">
-    //                 <Checkbox
-    //                   checked={selected.includes(applicant.id)}
-    //                   onChange={(event) => handleSelect(event, applicant.id)}
-    //                 />
-    //               </TableCell>
-    //               <TableCell>{index + 1}</TableCell>
-    //               <TableCell>{applicant.user_name}</TableCell>
-    //               <TableCell>{applicant.user_phone}</TableCell>
-    //               <TableCell>{applicant.user_email}</TableCell>
-
-    //               <TableCell>
-    //                 <Chip
-    //                   color={applicant.fail ? "error" : "success"}
-    //                   label={applicant.fail ? "Fail" : "Pending"}
-    //                   size="small"
-    //                   variant="light"
-    //                 />
-    //                 {applicant?.ats_res > 0 && (
-    //                   <Chip
-    //                     color={"primary"}
-    //                     label={applicant.ats_res + "%"}
-    //                     size="small"
-    //                     variant="light"
-    //                   />
-    //                 )}
-    //               </TableCell>
-    //               <TableCell>
-    //                 {!applicant.fail ? (
-    //                   <>
-    //                     <FaUserSlash
-    //                       style={{
-    //                         cursor: "pointer",
-    //                         scale: 1.5,
-    //                         display: applicant.fail ? "none" : "initial",
-    //                         color: "red",
-    //                       }}
-    //                       onClick={() => handleFail(applicant.id, phase)}
-    //                     />
-    //                     <FaUserCheck
-    //                       style={{
-    //                         cursor: "pointer",
-    //                         scale: 1.5,
-    //                         marginLeft: "20px",
-    //                         display: phase === 5 ? "none" : "initial",
-    //                       }}
-    //                       onClick={() => handleNext(applicant.id, phase)}
-    //                     />
-
-    //                     <RiQuestionAnswerFill
-    //                       style={{
-    //                         cursor: "pointer",
-    //                         scale: 1.5,
-    //                         marginLeft: "20px",
-    //                         display:
-    //                           applicant.answers && applicant.answers.length > 0
-    //                             ? "intial"
-    //                             : "none",
-    //                         // color: "red",
-    //                       }}
-    //                       onClick={() => handleAnswer(applicant)}
-    //                     />
-    //                   </>
-    //                 ) : (
-    //                   <span>Rejected</span>
-    //                 )}
-    //                 <FaCalendarPlus
-    //                   style={{
-    //                     cursor: "pointer",
-    //                     scale: 1.5,
-    //                     marginLeft: "20px",
-    //                     display:
-    //                       Number(phase) === 2 ||
-    //                       Number(phase) === 3 ||
-    //                       Number(phase) === 4 ||
-    //                       Number(phase) === 5
-    //                         ? "inline-block"
-    //                         : "none",
-    //                     color:
-    //                       (Number(phase) === 2 && applicant.assessment_link) ||
-    //                       (Number(phase) === 3 && applicant.interview_link) ||
-    //                       (Number(phase) === 4 && applicant.hr_link) ||
-    //                       (Number(phase) === 5 && applicant.offer_link)
-    //                         ? "green"
-    //                         : "black",
-    //                   }}
-    //                   onClick={() => setUpdate(applicant)}
-    //                 />
-    //               </TableCell>
-    //             </TableRow>
-    //           ))}
-    //         </TableBody>
-    //       </Table>
-    //     </TableContainer>
-    //     <TablePagination
-    //       rowsPerPageOptions={[5, 10, 25, 100]}
-    //       component="div"
-    //       count={total}
-    //       rowsPerPage={rowsPerPage}
-    //       page={page - 1}
-    //       onPageChange={handleChangePage}
-    //       onRowsPerPageChange={handleChangeRowsPerPage}
-    //     />
-    //   </Paper>
-    // </div>
   );
 }
 

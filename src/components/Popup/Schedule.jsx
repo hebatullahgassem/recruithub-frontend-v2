@@ -18,7 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { showConfirmToast, showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import { showConfirmToast, showErrorToast, showInfoToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
 //import { useMediaQuery } from "@mui/material";
 import "../../ComponentsStyles/CompanyProcess/Schedule.css";
 import { userContext } from "../../context/UserContext";
@@ -55,7 +55,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
   // Handle form submission
   const handleSubmit = async () => {
     if (!selectedDateTime || !meetingLink) {
-      toast.error("Please fill in all fields: date & time, and meeting link.");
+      showInfoToast("Please fill in all fields: date & time, and meeting link.", 2000, isLight);
       return;
     }
     try {
@@ -99,14 +99,14 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       );
     } catch (error) {
       console.error("Error updating interview details:", error);
-      showErrorToast("Failed to schedule interview. Please try again.", isLight);
+      showErrorToast("Failed to schedule interview. Please try again.", 2000, isLight);
     } finally {
       setLoading(false);
     }
   };
   const handleAssessment = async () => {
     if (!meetingLink) {
-      toast.error("Assessment link is required.");
+      showInfoToast("Assessment link is required.", 2000, isLight);
       return;
     }
     try {
@@ -123,11 +123,11 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       );
 
       console.log("Assessment link updated successfully:", response.data);
-      showSuccessToast("Assessment link updated successfully.", isLight);
+      showSuccessToast("Assessment link updated successfully.", 2000, isLight);
       handleClose();
     } catch (error) {
       console.error("Error updating assessment link:", error);
-      showErrorToast("Failed to update assessment link. Please try again.", isLight);
+      showErrorToast("Failed to update assessment link. Please try again.", 2000, isLight);
     } finally {
       setLoading(false);
     }
