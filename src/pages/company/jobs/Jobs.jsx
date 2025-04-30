@@ -2,8 +2,8 @@ import { useNavigate, useLocation } from "react-router";
 import JobCard from "../../../components/job/JobCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { TextField, Button, Box, Typography } from "@mui/material";
-import { Add, Search, Refresh } from "@mui/icons-material"
+import { TextField, Button, Box, Typography, FormControlLabel, Checkbox } from "@mui/material";
+import { Add, Search, Refresh, CheckBox } from "@mui/icons-material"
 import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
@@ -19,13 +19,16 @@ function CompanyJobs() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(3);
   const [total, setTotal] = useState(0);
+  const [active, setActive] = useState(false);
   const [filters, setFilters] = useState({
     title: "",
     company: user?.id,
+    status: '',
   });
   const [searchFilters, setSearchFilters] = useState({
     title: "",
     company: user?.id,
+    status: ''
   });
 
   // Modern color palette
@@ -64,8 +67,11 @@ function CompanyJobs() {
     isLoading: companyJobsLoading,
     refetch: companyJobsRefetch,
   } = useQuery({
-    queryKey: ["companyJobs", page, pageSize, searchFilters],
+    queryKey: ["companyJobs", page, pageSize],
     queryFn: async () => {
+      if (!user?.id) {
+        return [];
+      }
       const res = await getAllJobs({
         filters: searchFilters,
         page,
@@ -88,10 +94,20 @@ function CompanyJobs() {
   };
 
   const handleReset = () => {
-    setFilters({ title: "", company: user?.id });
-    setSearchFilters({ title: "", company: user?.id });
+    setFilters({ title: "", company: user?.id, status: '' });
+    setSearchFilters({ title: "", company: user?.id, status: '' });
     setPage(1);
     companyJobsRefetch();
+  };
+
+  const handleActive = () => {
+    setActive(!active);
+    if (!active) {
+      setFilters({ ...filters, status: '1' });
+    } else {
+      setFilters({ ...filters, status: '' });
+    }
+    // companyJobsRefetch();
   };
 
   // const handlePageChange = (newPage) => {
@@ -100,7 +116,7 @@ function CompanyJobs() {
   // };
 
   return (
-    <div className={`company-jobs ${isLight ? "light-mode" : "dark-mode"}`}>
+    <div className={`company-jobs ${isLight ? "light-mode" : "dark-mode"}`} style={{ backgroundColor: isLight ? "#f8f9fa" : "#121212" }}>
       <div className="container">
         <div className="company-jobs__header">
           <h1 className="company-jobs__title">Company Jobs</h1>
@@ -114,7 +130,7 @@ function CompanyJobs() {
         </div>
 
         {companyJobsLoading ? (
-          <div className="company-jobs__loading">
+          <div className="company-jobs__loading d-flex flex-column align-items-center">
             <div className="loading-spinner"></div>
             <Typography sx={{ mt: 2 }}>Loading jobs...</Typography>
           </div>
@@ -150,8 +166,8 @@ function CompanyJobs() {
         ) : (
           <>
             <div className="company-jobs__search">
-              <Box className="search-field-wrapper">
-                <Search className="search-icon" />
+              <Box className="search-field-wrapper" sx={{ display: "flex", alignItems: "center", width: "100%", gap: "16px" }}>
+                {/* <Search className="search-icon" /> */}
                 <TextField
                   label="Search by job title"
                   name="title"
@@ -161,9 +177,22 @@ function CompanyJobs() {
                   variant="outlined"
                   size="small"
                   className="company-jobs__search-input"
+                  
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="active"
+                      checked={active}
+                      onChange={handleActive}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  }
+                  label="Active"
+                  sx={{ color: isLight ? "#000" : "#fff" }}
                 />
               </Box>
-              <Box className="search-buttons">
+              <Box className="search-buttons d-flex gap-2">
                 <Button
                   variant="contained"
                   onClick={handleSearch}

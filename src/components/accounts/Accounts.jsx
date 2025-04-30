@@ -31,17 +31,17 @@ const Accounts = () => {
   const [editingAccount, setEditingAccount] = useState(null);
   const navigate = useNavigate();
   const [success, setSuccess] = useState(null)
-  const topWebsites = ["github", "linkedin", "personal website", "leetcode"];
+  const topWebsites = ["Github", "Linkedin", "Personal Website", "Leetcode"];
    // Get icon based on account type
    const getAccountIcon = (accountType) => {
     switch (accountType.toLowerCase()) {
-      case "github":
+      case "Github":
         return <FiGithub />
-      case "linkedin":
+      case "Linkedin":
         return <FiLinkedin />
-      case "personal website":
+      case "Personal Website":
         return <FiGlobe />
-      case "leetcode":
+      case "Leetcode":
         return <FiCode />
       default:
         return <FiLink />
