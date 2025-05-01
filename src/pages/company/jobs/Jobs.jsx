@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router";
-import JobCard from "../../../components/job/JobCard";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import JobCardComp from "../../../components/job/jobCardComp"; 
 import { useContext, useState } from "react";
 import { TextField, Button, Box, Typography, FormControlLabel, Checkbox } from "@mui/material";
 import { Add, Search, Refresh, CheckBox } from "@mui/icons-material"
@@ -223,7 +223,7 @@ function CompanyJobs() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="job-card-wrapper"
                   >
-                    <JobCard job={job} index={index} />
+                    <JobCardComp job={job} index={index} />
                   </motion.div>
                 ))}
               </div>

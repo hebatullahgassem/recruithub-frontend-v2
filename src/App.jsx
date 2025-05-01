@@ -19,6 +19,7 @@ import ResetPassword from "./pages/login/ResetPassword";
 import TalentProfile from "./pages/company/talents/TalentProfile";
 import ComProfile from "./pages/company/profile/ComProfile";
 import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
+import VerificationForm from "./pages/register/verificationForm.jsx";
 // import Users from "./pages/admin/Users.jsx";
 import { Spinner } from "react-bootstrap";
 // import { ToastProvider } from "./confirmAlert/Toast";
@@ -28,7 +29,7 @@ import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
 import { LinearProgress, Typography } from "@mui/material";
 import Loading from "./pages/helpers/Loading.jsx";
 import CustomPopup from "./components/Popup/CustomPopup.jsx";
-
+import jobCardComp from "./components/job/JobCardComp.jsx";
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
 // import Companies from "./admin/Companies.jsx";
@@ -101,7 +102,7 @@ function App() {
   // const Users = React.lazy(() => import("./pages/admin/Users.jsx"));
   const JobCreate = React.lazy(() => import("./components/job/JobCreate"));
   const Accounts = React.lazy(() => import("./components/accounts/Accounts"));
-
+  const jobCardComp = React.lazy(() => import("./components/job/JobCardComp.jsx"));
   return (
     <>
       
@@ -176,7 +177,7 @@ function App() {
                       {/* <Route path="/company/register" element={<RegisterCompany />} /> */}
                       <Route path="/applicant/jobs/:jobId" element={<UserSingleJob />} />
                       <Route path="/application-form" element={<ApplicationForm />} />
-
+                      <Route path="/verfication-form" element={<VerificationForm />} /> 
 
                       {/* Applicant Profile */}
                       <Route
