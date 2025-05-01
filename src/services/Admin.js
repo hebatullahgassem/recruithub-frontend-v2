@@ -28,7 +28,7 @@ export const verifyCompany = async (companyId) => {
 // --- Itian Functions ---
 export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
   const token = localStorage.getItem('token');
-    const response = await axios.get("user/admin/itian/", {
+    const response = await AxiosApi.get("user/admin/itian/", {
       params: {
         page: page,
         page_size: pageSize,
@@ -58,10 +58,11 @@ export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
     const formData = new FormData();
     formData.append('file', file);
     console.log(formData);
-  
+
     const response = await AxiosApi.post("user/admin/create_itian/", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: `Token ${localStorage.getItem("token")}`,
       },
     });
     return response.data;
