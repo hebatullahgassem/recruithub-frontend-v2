@@ -1,32 +1,26 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import "./themeprovider.css"
+"use client"
 
-const ThemeContext = createContext()
+import { useContext } from "react"
+import { FiSun, FiMoon } from "react-icons/fi"
+import { userContext } from "../../context/UserContext"
+import "./ThemeToggle.css"
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // Check for saved theme preference or use system preference
-    const savedTheme = localStorage.getItem("theme")
-    if (savedTheme) return savedTheme
-
-    // Check system preference
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark"
-    }
-    return "light"
-  })
-
-  useEffect(() => {
-    // Update document with theme class
-    document.documentElement.setAttribute("data-theme", theme)
-    localStorage.setItem("theme", theme)
-  }, [theme])
+const ThemeToggle = () => {
+  const { isLight, setIsLight } = useContext(userContext)
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
+    setIsLight(!isLight)
   }
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>
+  return (
+    <button
+      className={`theme-toggle-button ${isLight ? "light-mode" : "dark-mode"}`}
+      onClick={toggleTheme}
+      aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
+    >
+      {isLight ? <FiMoon /> : <FiSun />}
+    </button>
+  )
 }
 
-export const useTheme = () => useContext(ThemeContext)
+export default ThemeToggle

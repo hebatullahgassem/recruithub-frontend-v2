@@ -1,254 +1,545 @@
-body {
-  margin: 0;
-  padding: 0;
-  transition: all 0.3s ease;
+/* Base Styles */
+:root {
+  --primary-color: #d43132;
+  --primary-hover: #b32828;
+  --primary-light: rgba(212, 49, 50, 0.1);
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --border-radius: 12px;
+  --box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 
-body.light-mode {
-  background-color: #f9f9f9;
-  color: #2d3748;
+/* Light Mode Colors */
+.light-mode {
+  --bg-color: #f0f2f5;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --text-color: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #cbd5e1;
+  --input-bg: #ffffff;
+  --hover-bg: #f8fafc;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --accent-bg: #f1f5f9;
+  --pattern-color: rgba(226, 232, 240, 0.5);
 }
 
-body.dark-mode {
-  background-color: #121212;
-  color: #e2e8f0;
+/* Dark Mode Colors */
+.dark-mode {
+  --primary-color: #f87171;
+  --primary-hover: #ef4444;
+  --primary-light: rgba(248, 113, 113, 0.1);
+  --bg-color: #121212;
+  --card-bg: #242424;
+  --card-border: #334155;
+  --text-color: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #475569;
+  --input-bg: #334155;
+  --hover-bg: #2c3e50;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --accent-bg: #1e293b;
+  --pattern-color: rgba(51, 65, 85, 0.5);
 }
 
+/* Container */
 .company-profile-container {
-  padding: 24px;
   min-height: 100vh;
   width: 100%;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 2rem;
+  transition: var(--transition);
+  position: relative;
+  overflow-x: hidden;
 }
 
-.company-profile-container.light-mode {
-  background-color: #f9f9f9;
-  color: #2d3748;
+.background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(var(--pattern-color) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.5;
+  z-index: 0;
 }
 
-.company-profile-container.dark-mode {
-  background-color: #121212;
-  color: #e2e8f0;
-}
-
-.company-card {
+.company-profile-content {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid;
-  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.company-header {
+/* Header Card */
+.company-header-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.company-header-left {
   display: flex;
   align-items: center;
-  padding: 32px;
-  border-bottom: 1px solid;
-  transition: all 0.3s ease;
+  gap: 2rem;
+  flex: 1;
+  min-width: 280px;
+}
+
+.company-avatar-container {
+  position: relative;
+  flex-shrink: 0;
 }
 
 .company-avatar {
   width: 120px;
   height: 120px;
-  border-radius: 12px;
+  border-radius: 16px;
   object-fit: cover;
-  border: 3px solid #e53946;
-  box-shadow: 0 4px 20px rgba(229, 57, 70, 0.2);
+  border: 4px solid var(--card-bg);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-.company-info {
-  margin-left: 24px;
+.company-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .company-name {
-  font-size: 28px;
+  font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 8px;
-  transition: all 0.3s ease;
+  margin: 0;
+  color: var(--text-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .company-tagline {
-  font-size: 16px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
   margin: 0;
-  transition: all 0.3s ease;
 }
 
-.company-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  padding: 32px;
-}
-
-.company-section {
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid;
-  transition: all 0.3s ease;
-}
-
-.company-section-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 24px;
-  transition: all 0.3s ease;
-}
-
-.company-detail {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
-}
-
-.company-detail-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  margin-right: 12px;
-  background-color: rgba(229, 57, 70, 0.1);
-  transition: all 0.3s ease;
-}
-
-.company-detail-label {
-  font-weight: 600;
-  margin-right: 8px;
-  transition: all 0.3s ease;
-}
-
-.company-detail-value {
-  flex: 1;
-  transition: all 0.3s ease;
-}
-
-.company-actions {
-  margin-top: 24px;
-}
-
-.company-button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.company-button--primary {
-  background-color: #e53946;
-  color: white;
-}
-
-.company-button--primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(229, 57, 70, 0.3);
-}
-
-.company-social {
+.company-quick-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
-.company-social-link {
+.quick-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.quick-info-icon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.company-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.edit-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-profile-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button-icon {
+  font-size: 1.2rem;
+}
+
+/* Content Grid */
+.company-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 992px) {
+  .company-content-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* About Card */
+.company-about-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--card-border);
+  height: 100%;
+}
+
+.card-header {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 0.75rem 0;
+}
+
+.card-header-line {
+  height: 3px;
+  width: 60px;
+  background-color: var(--primary-color);
+  border-radius: 3px;
+}
+
+.company-about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.company-about-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.company-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.company-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--accent-bg);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.company-detail-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.detail-icon {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  background-color: var(--primary-light);
+  padding: 0.75rem;
+  border-radius: 12px;
+}
+
+.detail-content {
+  flex: 1;
+}
+
+.detail-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+}
+
+.detail-content p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Social Card */
+.company-social-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--card-border);
+  height: 100%;
+}
+
+.social-accounts-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.social-accounts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-account-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--accent-bg);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  color: var(--text-color);
+  transition: var(--transition);
+  position: relative;
+}
+
+.social-account-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.social-account-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.social-account-item:hover::before {
+  opacity: 1;
+}
+
+.social-account-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  width: 48px;
+  height: 48px;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-radius: 12px;
+  font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
-.company-social-link:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.social-account-details {
+  flex: 1;
+  overflow: hidden;
 }
 
-/* Responsive design for all screen sizes */
-@media (min-width: 1400px) {
-  .company-card {
-    max-width: 1400px;
-  }
-
-  .company-content {
-    padding: 40px;
-    gap: 32px;
-  }
+.social-account-details h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  text-transform: capitalize;
 }
 
-@media (min-width: 992px) and (max-width: 1399px) {
-  .company-card {
-    max-width: 1100px;
-  }
-
-  .company-content {
-    padding: 36px;
-    gap: 28px;
-  }
+.social-account-url {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
-  .company-card {
-    max-width: 900px;
-  }
-
-  .company-content {
-    padding: 28px;
-    gap: 24px;
-  }
+.social-account-arrow {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  transition: var(--transition);
 }
 
+.social-account-item:hover .social-account-arrow {
+  color: var(--primary-color);
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.no-accounts-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--accent-bg);
+}
+
+.no-accounts-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.manage-accounts-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.manage-accounts-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .company-profile-container {
-    padding: 16px;
+    padding: 1rem;
   }
 
-  .company-header {
+  .company-header-card {
+    padding: 1.5rem;
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .company-header-left {
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 24px;
+    width: 100%;
   }
 
-  .company-avatar {
-    margin-bottom: 16px;
+  .company-header-info {
+    align-items: center;
   }
 
-  .company-info {
-    margin-left: 0;
+  .company-quick-info {
+    justify-content: center;
   }
 
-  .company-content {
-    grid-template-columns: 1fr;
-    padding: 24px;
+  .company-header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .edit-profile-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .company-about-card,
+  .company-social-card {
+    padding: 1.5rem;
   }
 }
 
-@media (max-width: 480px) {
-  .company-profile-container {
-    padding: 12px;
-  }
-
-  .company-header {
-    padding: 20px;
-  }
-
+@media (max-width: 576px) {
   .company-avatar {
     width: 100px;
     height: 100px;
   }
 
-  .company-content {
-    padding: 16px;
+  .company-name {
+    font-size: 1.5rem;
   }
 
-  .company-section {
-    padding: 16px;
+  .company-tagline {
+    font-size: 1rem;
   }
+
+  .company-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .social-account-url {
+    max-width: 150px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Accessibility */
+button:focus,
+a:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

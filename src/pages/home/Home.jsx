@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   // Toggle theme function for demo purposes
-  const toggleTheme = () => setIsLight(!isLight);
+  // const toggleTheme = () => setIsLight(!isLight);
 
   const handleClick = () => {
     if (!user) {
@@ -264,7 +264,7 @@ export default function Home() {
       </div>
 
       {/* Split Section for Applicants and Recruiters */}
-      {!user && (
+      {!user?.id && (
         <div
           style={{
             padding: "80px 20px",

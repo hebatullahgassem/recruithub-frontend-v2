@@ -46,7 +46,7 @@ function Login() {
     setIsLoading(true);
     try {
       const res = await loginUser(email, password);
-      // console.log(res);
+      console.log(res);
       refetchUser(res);
       // setUser(res.user);
       // setToken(res.token);

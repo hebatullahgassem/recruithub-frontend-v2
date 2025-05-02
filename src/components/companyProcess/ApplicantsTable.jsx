@@ -442,13 +442,13 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                           <UserX
                             className="action-icon action-icon-error"
                             onClick={() => handleFail(applicant.id, phase)}
-                            size={35}
+                            size={25}
                           />
                           {phase !== 5 && (
                             <UserCheck
                               className="action-icon action-icon-success"
                               onClick={() => handleNext(applicant.id, phase)}
-                              size={35}
+                              size={25}
                             />
                           )}
                           {applicant.answers &&
@@ -456,7 +456,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                               <MessageSquare
                                 className="action-icon action-icon-primary"
                                 onClick={() => handleAnswer(applicant)}
-                                size={35}
+                                size={25}
                               />
                             )}
                         </>

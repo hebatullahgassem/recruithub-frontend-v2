@@ -13,7 +13,7 @@ export function UserContextProvider({ children }) {
 
   const refetchUser = async (tok) => {
     console.log(tok);
-    if (!token && !tok) return; // Exit if no token
+    if (!token && !tok && !localStorage.getItem("token")) return; // Exit if no token
     try {
       const response = await getUser(tok || token);
       // console.log(response);
@@ -25,37 +25,68 @@ export function UserContextProvider({ children }) {
       //   experience: safeParseJSON(response.experience, []),
       // };
       setUser(response);
+      setToken(localStorage.getItem("token") || tok || token);
+      setLoading(false);
       console.log(response);
     } catch (error) {
+      setLoading(false); 
       console.error("Error fetching user data:", error);
     }
   };
+  // useLayoutEffect(() => {
+  //   const fetchUser = async () => {
+  //     if (localStorage.getItem("token")) {
+  //       try {
+  //         setLoading(true);
+  //         const response = await getUser(token);
+  //         // console.log(response);
+
+  //         // Safely parse JSON fields
+  //         const parsedResponse = {
+  //           ...response,
+  //           skills: safeParseJSON(response.skills, []),
+  //           education: safeParseJSON(response.education, []),
+  //           experience: safeParseJSON(response.experience, []),
+  //         };
+
+  //         setUser(parsedResponse);
+  //         setToken(localStorage.getItem("token"));
+  //         // console.log(parsedResponse.img);
+  //         // console.log(token,parsedResponse);
+  //       } catch (error) {
+  //         console.error("Error fetching user data:", error);
+  //       } finally {
+  //         setLoading(false); // Set loading to false when done
+  //       }
+  //     } else {
+  //       setLoading(false); // Also set loading false if no token
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, [localStorage.getItem("token")]);
+
+
   useLayoutEffect(() => {
     const fetchUser = async () => {
-      if (token) {
-        try {
-          setLoading(true);
-          const response = await getUser(token);
-          // console.log(response);
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
-          // Safely parse JSON fields
-          const parsedResponse = {
-            ...response,
-            skills: safeParseJSON(response.skills, []),
-            education: safeParseJSON(response.education, []),
-            experience: safeParseJSON(response.experience, []),
-          };
-
-          setUser(parsedResponse);
-          // console.log(parsedResponse.img);
-          // console.log(token,parsedResponse);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        } finally {
-          setLoading(false); // Set loading to false when done
-        }
-      } else {
-        setLoading(false); // Also set loading false if no token
+      try {
+        const response = await getUser(token);
+        const parsedResponse = {
+          ...response,
+          skills: safeParseJSON(response.skills, []),
+          education: safeParseJSON(response.education, []),
+          experience: safeParseJSON(response.experience, []),
+        };
+        setUser(parsedResponse);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -101,6 +132,8 @@ export function UserContextProvider({ children }) {
         setIsLight,
         update,
         setUpdate,
+        loading,
+        setLoading,
       }}
     >
       {children}
