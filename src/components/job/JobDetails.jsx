@@ -4,7 +4,7 @@ import { patchJob } from "../../services/Job";
 import { useNavigate } from "react-router";
 // import { Button } from "@mui/material";
 import { TbCancel } from "react-icons/tb";
-import { FaEdit, FaMapMarkerAlt, FaRegClock, FaBriefcase, FaRegCalendarAlt } from "react-icons/fa";
+import { FaEdit, FaMapMarkerAlt, FaRegClock, FaBriefcase, FaRegBuilding } from "react-icons/fa";
 import { IoIosCloudDone } from "react-icons/io";
 import { 
 MdOutlineWork,
@@ -13,7 +13,7 @@ MdBusinessCenter,
 MdWorkOutline,
 MdOutlineBusinessCenter
  } from "react-icons/md";
-import { BsLightningCharge } from "react-icons/bs";
+import { BsCalendarDate, BsLightningCharge } from "react-icons/bs";
 import { BsTools } from "react-icons/bs";
 import "../../ComponentsStyles/job/job_details.css";
 import { showConfirmToast, showErrorToast } from "../../confirmAlert/toastConfirm";
@@ -76,13 +76,15 @@ function JobDetails({ job, refetch }) {
 <div className={`job-details-container ${isLight ? "light-mode" : "dark-mode"}`}>
       <div className="background-pattern"></div>
       
-      <div className="job-details-card">
+      <div className="job-details-wrapper">
         {/* Status Banner */}
         <div className={`status-banner ${job.status === "1" ? "active" : "inactive"}`}>
-          <div className="status-indicator"></div>
-          <span className="status-text">
-            This position is currently {job.status === "1" ? "open" : "closed"}
-          </span>
+          <div className="status-content">
+            <div className="status-indicator"></div>
+            <span className="status-text">
+              This position is currently {job.status === "1" ? "open" : "closed"}
+            </span>
+          </div>
           
           {user?.user_type === "COMPANY" && (
             <div className="action-buttons">
@@ -117,87 +119,109 @@ function JobDetails({ job, refetch }) {
           )}
         </div>
         
-        {/* Job Header */}
-        <div className="job-header">
-          <div className="company-logo-container">
-            <img
-              src={job.company_logo || "https://static.thenounproject.com/png/3198584-200.png"}
-              alt={job.company_name}
-              className="company-logo"
-            />
+        <div className="job-content-grid">
+          {/* Main Content */}
+          <div className="job-main-content">
+            {/* Job Header */}
+            <div className="job-header">
+              <div className="company-logo-container">
+                <img
+                  src={job.company_logo || "https://static.thenounproject.com/png/3198584-200.png"}
+                  alt={job.company_name}
+                  className="company-logo"
+                />
+              </div>
+              
+              <div className="job-title-container">
+                <h1 className="job-title">{job.title}</h1>
+                <div className="company-info">
+                  <span className="company-name">
+                    <FaRegBuilding className="company-icon" />
+                    {job.company_name}
+                  </span>
+                  <span className="location">
+                    <FaMapMarkerAlt className="location-icon" />
+                    {job.location}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Job Description */}
+            <div className="job-section description-section">
+              <h2 className="section-title">
+                <span className="section-icon-wrapper">
+                  <FaRegClock className="section-icon" />
+                </span>
+                Job Description
+              </h2>
+              <div className="description-content">{job.description}</div>
+            </div>
+            
+            {/* Skills Section */}
+            {job.keywords && job.keywords.length > 0 && (
+              <div className="job-section skills-section">
+                <h2 className="section-title">
+                  <span className="section-icon-wrapper">
+                    <BsLightningCharge className="section-icon" />
+                  </span>
+                  Required Skills
+                </h2>
+                <div className="skills-container">
+                  {job.keywords.map((skill, index) => (
+                    <span key={index} className="skill-tag">{skill}</span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           
-          <div className="job-title-container">
-            <h1 className="job-title">{job.title}</h1>
-            <div className="company-info">
-              <span className="company-name">{job.company_name}</span>
-              <span className="location">
-                <FaMapMarkerAlt className="location-icon" />
-                {job.location}
-              </span>
+          {/* Sidebar */}
+          <div className="job-sidebar">
+            <div className="sidebar-card job-details-card">
+              <h3 className="sidebar-card-title">Job Details</h3>
+              
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <MdWorkOutline />
+                </div>
+                <div className="detail-content">
+                  <span className="detail-label">Job Type</span>
+                  <span className="detail-value">{job.type_of_job}</span>
+                </div>
+              </div>
+              
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <MdOutlineBusinessCenter />
+                </div>
+                <div className="detail-content">
+                  <span className="detail-label">Work Mode</span>
+                  <span className="detail-value">{job.attend}</span>
+                </div>
+              </div>
+              
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <FaBriefcase />
+                </div>
+                <div className="detail-content">
+                  <span className="detail-label">Experience</span>
+                  <span className="detail-value">{job.experince || "Not specified"}</span>
+                </div>
+              </div>
+              
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <BsCalendarDate />
+                </div>
+                <div className="detail-content">
+                  <span className="detail-label">Posted</span>
+                  <span className="detail-value">{job.posted_date || "Recently"}</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {/* Job Highlights */}
-        <div className="job-highlights">
-          <div className="highlight-item">
-            <div className="highlight-icon">
-              <MdWorkOutline />
-            </div>
-            <div className="highlight-content">
-              <span className="highlight-label">Job Type</span>
-              <span className="highlight-value">{job.type_of_job}</span>
-            </div>
-          </div>
-          
-          <div className="highlight-item">
-            <div className="highlight-icon">
-              <MdOutlineBusinessCenter />
-            </div>
-            <div className="highlight-content">
-              <span className="highlight-label">Work Mode</span>
-              <span className="highlight-value">{job.attend}</span>
-            </div>
-          </div>
-          
-          <div className="highlight-item">
-            <div className="highlight-icon">
-              <FaBriefcase />
-            </div>
-            <div className="highlight-content">
-              <span className="highlight-label">Experience</span>
-              <span className="highlight-value">{job.experince || "Not specified"}</span>
-            </div>
-          </div>
-          
-          <div className="highlight-item">
-            <div className="highlight-icon">
-              <FaRegClock />
-            </div>
-            <div className="highlight-content">
-              <span className="highlight-label">Posted</span>
-              <span className="highlight-value">{job.posted_date || "Recently"}</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* Skills Section */}
-        {job.keywords && job.keywords.length > 0 && (
-          <div className="job-section">
-            <h2 className="section-title">Required Skills</h2>
-            <div className="skills-container">
-              {job.keywords.map((skill, index) => (
-                <span key={index} className="skill-tag">{skill}</span>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Job Description */}
-        <div className="job-section">
-          <h2 className="section-title">Job Description</h2>
-          <div className="description-content">{job.description}</div>
         </div>
       </div>
     </div>

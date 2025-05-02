@@ -15,7 +15,7 @@ import {
   FiTrendingUp,
   FiEdit,
 } from "react-icons/fi";
-import '../../ComponentsStyles/job/jobcard.css';
+import '../../ComponentsStyles/job/jobcardcomp.css';
 const JobCardCompany = ({ job, isSelected }) => {
     const { isLight } = useContext(userContext)
     const navigate = useNavigate()
@@ -161,11 +161,12 @@ const JobCardCompany = ({ job, isSelected }) => {
           </div>
         )} */}
             {/* style={{height: "20.5rem" ,paddingBottom: "10rem"}} */}
+       
         <div className="job-card-footer company-footer" >
-          <div className={`applicants-badge ${getApplicantsBadge(job?.id).className}`}>
+          {/* <div className={`applicants-badge ${getApplicantsBadge(job?.id).className}`}>
             <FiUsers />
             <span>{getApplicantsBadge(job?.id).text}</span>
-          </div>
+          </div> */}
   
           <motion.button className="view-details-button" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} style={{paddingBottom: "1rem"}}>
             <span>Show the job details</span>
