@@ -33,7 +33,7 @@ import jobCardComp from "./components/job/JobCardComp.jsx";
 import CompanyProtected from "./ProtectedRoute/CompanyProtected.jsx";
 import UserProtected from "./ProtectedRoute/UserProtected.jsx";
 import AdminProtected from "./ProtectedRoute/AdminProtected.jsx";
-import AccountProtected from "./ProtectedRoute/accountProtected.jsx";
+import AccountProtected from "./ProtectedRoute/AccountProtected.jsx";
 // import Dashboard from "./admin/Dashboard.jsx";
 // import Jobseekers from "./admin/Jobseekers.jsx";
 // import Companies from "./admin/Companies.jsx";

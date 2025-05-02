@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button } from "@mui/material";
 import { verifyCompany } from "../../services/Auth";
 import { showErrorToast, showSuccessToast } from "../../confirmAlert/toastConfirm";
+import { userContext } from "../../context/UserContext";
 
 const CompanyVerification = ({ companyId, onSuccess, buttonProps = {}}) => {
+  const { isLight } = useContext(userContext);
   const [status, setStatus] = useState("");
   const token = localStorage.getItem("token");
 
