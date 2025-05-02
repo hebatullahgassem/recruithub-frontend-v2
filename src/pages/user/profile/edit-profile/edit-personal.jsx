@@ -111,6 +111,7 @@ const EditPersonal = () => {
   }));
   useEffect(() => {
     if (userId) {
+      console.log(userId);
       AxiosApi.get(`user/jobseekers/${userId}/`)
         .then((res) => {
           const data = res.data;

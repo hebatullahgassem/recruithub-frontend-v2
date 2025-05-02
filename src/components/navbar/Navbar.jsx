@@ -71,7 +71,8 @@ function Navbar() {
         setToken(null);
         setIsProfileOpen(false);
         showSuccessToast("Successfully logged out!", 2000, isLight);
-        navigate("/");
+        setMobileOpen(false);
+        navigate("/", { replace: true });
       },
       isLight: isLight,
     });
