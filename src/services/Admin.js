@@ -58,10 +58,11 @@ export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
     const formData = new FormData();
     formData.append('file', file);
     console.log(formData);
-  
+
     const response = await AxiosApi.post("user/admin/create_itian/", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: `Token ${localStorage.getItem("token")}`,
       },
     });
     return response.data;

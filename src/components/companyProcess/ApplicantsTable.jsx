@@ -38,6 +38,7 @@ import {
 // import '../../styles/theme.css';
 import "../../ComponentsStyles/CompanyProcess/application_table.css";
 import { preconnect } from "react-dom";
+import { set } from "date-fns";
 // import {FaUserSlash, FaUserCheck} from 'react-icons/fa';
 // import { RiQuestionAnswerFill } from 'react-icons/ri';
 // import { FaCalendarPlus } from 'react-icons/fa';
@@ -93,7 +94,9 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
-      const newSelected = applicants.map((app) => app.id);
+      const newSelected = applicants
+        .filter((app) => app.fail === false)
+        .map((app) => app.id);
       setSelected(newSelected);
     } else {
       setSelected([]);
@@ -160,6 +163,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
             2000,
             isLight
           );
+          setSelected([]);
         } catch (error) {
           console.error("Error updating applications:", error);
           showErrorToast(
@@ -169,6 +173,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
           );
         }
       },
+      isLight: isLight,
     });
   };
 
@@ -360,7 +365,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                     }
                     checked={
                       applicants?.length > 0 &&
-                      selected.length === applicants?.length
+                      selected.length === applicants?.length - applicants.filter((item) => item.fail === true).length && selected.length > 0
                     }
                     onChange={handleSelectAll}
                     sx={{
@@ -372,6 +377,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                         color: "white",
                       },
                     }}
+                    
                   />
                 </TableCell>
                 <TableCell>ID</TableCell>
@@ -401,6 +407,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                           color: "#2f3744",
                         },
                       }}
+                      disabled={applicant.fail}
                     />
                   </TableCell>
                   <TableCell>{index + 1}</TableCell>
@@ -456,7 +463,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
                       ) : (
                         <span className="rejected-text">Rejected</span>
                       )}
-                      {(Number(phase) === 2 ||
+                      {!applicant.fail && (Number(phase) === 2 ||
                         Number(phase) === 3 ||
                         Number(phase) === 4 ||
                         Number(phase) === 5) && (

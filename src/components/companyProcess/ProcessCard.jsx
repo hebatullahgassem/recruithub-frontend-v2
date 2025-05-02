@@ -42,9 +42,9 @@ function ProcessCard({ column, phases, job }) {
             ? `\nThis will also fail applicants with ATS score lower than ${ats}%.`
             : ""),
         onConfirm: async () => {
-          if (ats === 50) {
-            showInfoToast("Please select a score", 2000, isLight);
-          }
+          // if (ats === 50) {
+          //   showInfoToast("Please select a score", 2000, isLight);
+          // }
           try {
             setIsLoading(true);
           const data = {
@@ -64,6 +64,7 @@ function ProcessCard({ column, phases, job }) {
           showSuccessToast(response.message, 2000, isLight);
           } catch (error) {
             showErrorToast('Failed to update by ATS', 2000, isLight);
+            setIsLoading(false);
           }
           
         },
@@ -79,11 +80,11 @@ function ProcessCard({ column, phases, job }) {
             ? `\nThis will also fail applicants in csv with score lower than ${ats}%.`
             : ""),
         onConfirm: async () => {
-          if (ats === 50) {
-            showErrorToast(
-              "Please select a score",2000, isLight
-            );
-          }
+          // if (ats === 50) {
+          //   showErrorToast(
+          //     "Please select a score",2000, isLight
+          //   );
+          // }
           setIsLoading(true);
           try {
             const dataForm = new FormData();
