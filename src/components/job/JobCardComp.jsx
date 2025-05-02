@@ -49,18 +49,21 @@ const JobCardCompany = ({ job, isSelected }) => {
   
     const handleEditJob = (e) => {
       e.stopPropagation()
-      navigate(`/company/jobs/edit/${job?.id}`)
+      navigate(`/company/jobEdit/${job?.id}`)
     }
   
+    // const applicants_count = job?.applicants || 0;
     // Calculate applicants badge
+    console.log("job applications",);
     const getApplicantsBadge = () => {
-      const count = job?.applicants_count || 0
+      console.log("job id", job?.id);
+      console.log("job applications length", job?.id.applications?.length);
+      const count = job?.id.applications?.length || 0
       if (count === 0) return { text: "No applicants", className: "no-applicants" }
       if (count < 5) return { text: `${count} applicants`, className: "few-applicants" }
       if (count < 20) return { text: `${count} applicants`, className: "some-applicants" }
       return { text: `${count} applicants`, className: "many-applicants" }
     }
-  
     const applicantsBadge = getApplicantsBadge()
   
     return (
@@ -74,7 +77,7 @@ const JobCardCompany = ({ job, isSelected }) => {
         onClick={() => handleJobClick(job?.id)}
       >
         <div className="job-status-badge">
-          {job?.is_active ? (
+          {job?.status? (
             <span className="active-badge">Active</span>
           ) : (
             <span className="inactive-badge">Inactive</span>
@@ -140,29 +143,31 @@ const JobCardCompany = ({ job, isSelected }) => {
           </p>
         </div>
   
-        {job?.skills_required && job.skills_required.length > 0 && (
+        {/* {job?.skills_required && job.skills_required.length > 0 && (
           <div className="job-skills">
             {job.skills_required.slice(0, 3).map((skill, index) => (
               <div className="skill-tag" key={index}>
                 <FiStar />
                 <span>{skill}</span>
               </div>
-            ))}
+            ))} 
+
+
             {job.skills_required.length > 3 && (
               <div className="skill-tag more">
                 <span>+{job.skills_required.length - 3} more</span>
               </div>
-            )}
+            )} 
           </div>
-        )}
-  
-        <div className="job-card-footer company-footer">
-          <div className={`applicants-badge ${applicantsBadge.className}`}>
+        )} */}
+            {/* style={{height: "20.5rem" ,paddingBottom: "10rem"}} */}
+        <div className="job-card-footer company-footer" >
+          <div className={`applicants-badge ${getApplicantsBadge(job?.id).className}`}>
             <FiUsers />
-            <span>{applicantsBadge.text}</span>
+            <span>{getApplicantsBadge(job?.id).text}</span>
           </div>
   
-          <motion.button className="view-details-button" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+          <motion.button className="view-details-button" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} style={{paddingBottom: "1rem"}}>
             <span>Show the job details</span>
             <FiArrowRight />
           </motion.button>

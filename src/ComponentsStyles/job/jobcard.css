@@ -179,22 +179,24 @@
   
   .job-tag.date {
     color: var(--info-color);
-    background-color: var(--info-light);
+    /* background-color: var(--info-light); */
   }
   
   .job-tag.job-type {
     color: var(--primary-color);
-    background-color: var(--primary-light);
+    background-color: rgba(212, 49, 50, 0.1);
+    /* background-color: var(--primary-light); */
   }
   
   .job-tag.remote {
     color: var(--success-color);
-    background-color: var(--success-light);
+
+    /* background-color: var(--success-light); */
   }
   
   .job-tag.experience {
     color: var(--warning-color);
-    background-color: var(--warning-light);
+    /* background-color: var(--warning-light); */
   }
   
   .job-card-container:hover .job-tag {
@@ -372,14 +374,22 @@
   }
   
   .active-badge {
-    background-color: var(--success-light);
+    /* background-color: var(--success-light); */
     color: var(--success-color);
   }
   
   .inactive-badge {
-    background-color: var(--error-light);
+    /* background-color: var(--error-light); */
     color: var(--error-color);
+   
   }
+
+  /* .inactive-badge:hover { */
+    /* background-color: var(--error-light); */
+    /* color: var(--success-color); */
+    /* transform: scale(1.1); */
+    /* background-color: var(--error-light); */
+  /* } */
   
   .edit-button {
     position: absolute;
