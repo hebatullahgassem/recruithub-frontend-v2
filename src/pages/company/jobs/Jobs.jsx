@@ -1,10 +1,9 @@
-import { useNavigate, useLocation } from "react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import JobCardComp from "../../../components/job/jobCardComp"; 
+import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import JobCardCompany from "../../../components/job/JobCardCompany"; 
 import { useContext, useState } from "react";
 import { TextField, Button, Box, Typography, FormControlLabel, Checkbox } from "@mui/material";
 import { Add, Search, Refresh, CheckBox } from "@mui/icons-material"
-import { getApplicationsByUser } from "../../../services/Application";
 import { userContext } from "../../../context/UserContext";
 import { getAllJobs } from "../../../services/Job";
 import CustomPagination from "../../../components/pagination/pagination";
@@ -223,7 +222,7 @@ function CompanyJobs() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="job-card-wrapper"
                   >
-                    <JobCardComp job={job} index={index} />
+                    <JobCardCompany job={job} index={index} />
                   </motion.div>
                 ))}
               </div>
