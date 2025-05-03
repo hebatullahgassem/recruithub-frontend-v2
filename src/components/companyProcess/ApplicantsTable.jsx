@@ -56,7 +56,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
 
   const queryKey = ["applicants", page, rowsPerPage, phase, fetch];
   const queryFn = async () => {
-    const response = await axios.get(`http://127.0.0.1:8000/applications/`, {
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND}/applications/`, {
       params: { page, page_size: rowsPerPage, status: phase + 1, job: id }, //, company: 3
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -76,7 +76,6 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
     queryKey,
     queryFn,
     onSuccess: () => {
-      console.log("Data updated successfully");
       // Clear selection when data changes
       setSelected([]);
     },

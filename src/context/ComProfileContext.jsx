@@ -15,7 +15,7 @@ export const ComProfileProvider = ({ children }) => {
         return;
       }
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/user/profile/`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND}/user/profile/`, {
           headers: {
             Authorization: `Token ${token}`,
           },

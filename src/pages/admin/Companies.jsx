@@ -79,22 +79,17 @@ function AdminCompany() {
     // Unique query key including pagination parameters
     queryKey: ["unverifiedCompanies", page, rowsPerPage, searchQuery],
     queryFn: async () => {
-      // Pass current page and rowsPerPage to the API call
-      // API uses 1-based indexing for page, MUI uses 0-based
       const data = await getUnverifiedCompanies(page + 1, rowsPerPage, searchQuery);
-      console.log(data);
-      return data; // Expect { count, results }
+      return data;
     },
-    keepPreviousData: true, // Keep showing old data while fetching new page
-    staleTime: 5 * 60 * 1000, // Optional: Data considered fresh for 5 minutes
+    keepPreviousData: true,
+    staleTime: 5 * 60 * 1000,
   });
 
   if (isFetching) {
-    console.log('Loading...');
   }
   
   if (fetchError) {
-    console.error('Error:', fetchError);
   }
 
   // --- Data Mutation (Verification) ---
@@ -102,7 +97,6 @@ function AdminCompany() {
     mutationFn: verifyCompany, // The function that performs the PATCH request
     onSuccess: (data, companyId) => {
       showSuccessToast("Company verified successfully!", 2000, isLight);
-      console.log("Verification successful:", data);
       setVerificationStatus({
         message: data.message || `Company verified successfully!`,
         severity: "success",

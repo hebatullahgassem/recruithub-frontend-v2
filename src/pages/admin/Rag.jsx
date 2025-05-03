@@ -181,10 +181,7 @@ function AdminRag() {
   // --- Render Logic ---
   const rags = ragData?.results || [];
   const totalRags = ragData?.count || 0;
-  useEffect(() => {
-    
-    console.log(loading);
-  }, [loading]);
+
   return (
 <div
       style={{

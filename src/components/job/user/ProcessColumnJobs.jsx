@@ -3,10 +3,8 @@ import { useState } from "react";
 
 function ProcessColumnJobs({setter, column, phases, application}) {
     if(application.status){
-        console.log(application.status)
         setter(parseInt(application.status));
     }
-    console.log(application);
     return (
         
         <ToggleButtonGroup

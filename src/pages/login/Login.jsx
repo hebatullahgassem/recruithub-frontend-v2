@@ -40,16 +40,10 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   async function handleLogin() {
-    // e.preventDefault()
-    // setIsLoading(true)
-    // setError("")
     setIsLoading(true);
     try {
       const res = await loginUser(email, password);
-      console.log(res);
       refetchUser(res);
-      // setUser(res.user);
-      // setToken(res.token);
       showSuccessToast("Welcome back!", 2000, isLight);
       navigate("/");
     } catch (error) {

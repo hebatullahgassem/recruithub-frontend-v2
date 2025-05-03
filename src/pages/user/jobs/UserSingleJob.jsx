@@ -59,7 +59,6 @@ const UserSingleJob = () => {
         status: `1`,
       };
       const res = await createApplication(application);
-      console.log(res);
       showSuccessToast("Applying phase started your progress will be in saved section", 2000, isLight);
       userAppRefetch();
     } catch (error) {
@@ -75,9 +74,7 @@ const UserSingleJob = () => {
   } = useQuery({
     queryKey: ["company", companyId],
     queryFn: async () => {
-      // console.log({ filters: searchFilters, page, pageSize })
       const res = await getCompanyById(companyId);
-      console.log(res);
       setTotal(res.count);
       return res || {};
     },
@@ -99,7 +96,6 @@ const UserSingleJob = () => {
         page: 1,
         pageSize: 5,
       });
-      console.log(res);
       setTotal(res.count);
       return res?.data?.results || {};
     },
@@ -117,12 +113,10 @@ const UserSingleJob = () => {
         page,
         pageSize,
       });
-      // console.log(res)
       setTotal(res.count);
       return res.results[0] || {};
     },
   });
-  // console.log(userApp)
   const {
     data: jobsData,
     error: jobsError,
@@ -132,7 +126,6 @@ const UserSingleJob = () => {
     queryFn: async () => {
       try {
         const res = await getJobById(jobId);
-        // console.log(res);
         setCompanyId(res.company);
         return res;
       } catch (err) {
@@ -140,7 +133,6 @@ const UserSingleJob = () => {
       }
     },
   });
-  // console.log(jobsData);
   if (jobsLoading || userAppLoading) return <Loading />;
   if (userApp?.length === 0) return;
   if (userAppError) return <NotFound />;

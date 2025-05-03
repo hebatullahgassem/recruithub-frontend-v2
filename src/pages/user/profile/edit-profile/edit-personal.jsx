@@ -111,11 +111,9 @@ const EditPersonal = () => {
   }));
   useEffect(() => {
     if (userId) {
-      console.log(userId);
       AxiosApi.get(`user/jobseekers/${userId}/`)
         .then((res) => {
           const data = res.data;
-          console.log(data);
           setLocalData({
             name: data.name || "",
             email: data.email || "",
@@ -138,7 +136,6 @@ const EditPersonal = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setLocalData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -259,7 +256,6 @@ const EditPersonal = () => {
     setError(null);
     return true;
   };
-  console.log(localData);
 
   return (
     <Box

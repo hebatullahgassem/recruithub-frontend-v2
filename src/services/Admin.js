@@ -18,7 +18,6 @@ export const getUnverifiedCompanies = async (page = 1, pageSize = 10, searchQuer
 
 
 export const verifyCompany = async (companyId) => {
-    console.log(companyId);
   const response = await AxiosApi.patch(
     `user/admin/verify_company/?id=${companyId}`
   );
@@ -54,10 +53,8 @@ export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
   };
   
   export const createItianBulk = async (file) => {
-    console.log(file);
     const formData = new FormData();
     formData.append('file', file);
-    console.log(formData);
 
     const response = await AxiosApi.post("user/admin/create_itian/", formData, {
       headers: {

@@ -29,7 +29,6 @@ export const signupUser = async (userData) => {
 
 // Get Authenticated User Data
 export const getUser = async (token) => {
-  // console.log("Token:", token);  // Check if the token is valid and exists
 
   try {
     const response = await AxiosApi.get('user/profile/', {
@@ -37,11 +36,9 @@ export const getUser = async (token) => {
         Authorization: `Token ${token}`,
       },
     });
-    //console.log("User Data:", response.data.img); // Log the user data for debugging
     if (response?.data?.img?.startsWith("image/upload/")) {
       response.data.img = response.data.img.replace("image/upload/", "");
     }
-    console.log(response.data.img); // Log the user data for debugging
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -76,7 +73,6 @@ export const updateUserProfile = async (userId, formData) => {
         },
       }
     );
-    // console.log(response.data);
     return response;
   } catch (error) {
     console.error("Profile Update Error:", error);
@@ -86,7 +82,7 @@ export const updateUserProfile = async (userId, formData) => {
 
 //verifyy companyyy
 export const verifyCompany = async (companyId, token) => {
-  const res = await fetch(`http://127.0.0.1:8000/user/admin/verify_company/?id=${companyId}`, {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND}/user/admin/verify_company/?id=${companyId}`, {
     method: "PATCH", // or "PATCH"/"POST" if your view is like that
     headers: {
       Authorization: `Token ${token}`,
@@ -103,7 +99,6 @@ export const verifyCompany = async (companyId, token) => {
 };
 
 export const getCompanyById = async (id) => {
-  console.log("ID:", id);  // Check if the ID is valid and exists
   if(id === undefined || id == 0) return {};
   const response = await AxiosApi.get(`user/companies/${id}/`);
 

@@ -1,4 +1,3 @@
-console.log(import.meta.env);
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -162,8 +161,6 @@ function App() {
                           path="/applicant/jobs/:jobId"
                           element={<UserProtected><UserSingleJob /></UserProtected>}
                         />
-                        {/* <Route path="/application-form" element={<ApplicationForm />} /> */}                        {/* <Route path="/verfication-form" element={<VerificationForm />} />  */}
-
                         {/* Applicant Profile */}
                         <Route
                           path="/applicant/profile"

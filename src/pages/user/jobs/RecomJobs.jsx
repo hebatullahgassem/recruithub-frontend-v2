@@ -36,7 +36,6 @@ const RecommendedJobs = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { user, isLight } = useContext(userContext);
   
-  console.log("User:", user);
   const navigate = useNavigate();
   // const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +70,6 @@ const RecommendedJobs = () => {
         timeout: 10000,
       });
       const data = response.data;
-      console.log(data);
       setPagination((prev) => ({
         ...prev,
         totalPages: Math.ceil(data.total_results / pagination.pageSize),

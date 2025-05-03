@@ -53,8 +53,6 @@ const VerifyOTP = () => {
         email: email || stateEmail,
         otp: fullOtp,
       });
-      console.log("email", email || stateEmail);
-      console.log("otp", fullOtp);
 
       if (response.data.message === "OTP verified successfully!") {
         showSuccessToast("OTP Verified Successfully! You can now log in.", 2000, isLight);

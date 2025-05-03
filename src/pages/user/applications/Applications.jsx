@@ -107,7 +107,6 @@ const JobApplication = () => {
 
   const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value);
-    console.log(event.target.value);
     if (event.target.value == 7) {
       setFilters((prev) => ({
         ...prev,

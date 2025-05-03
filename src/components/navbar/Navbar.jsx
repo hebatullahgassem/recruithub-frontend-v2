@@ -437,7 +437,6 @@ function Navbar() {
                           {user?.user_type}
                         </Typography>
                       </Box>
-                      {/* {console.log('tttttttt',user?.img)} */}
                       <Avatar
                         src={user?.img}
                         alt="Profile"

@@ -135,7 +135,6 @@ function JobCard({ job, type, isSelected, refetch }) {
       showSuccessToast("Job unsaved successfully", 2000, isLight);
       refetch();
     } catch (err) {
-      console.log(err);
       showErrorToast("Failed to unsave job", 2000, isLight);
       refetch();
     }

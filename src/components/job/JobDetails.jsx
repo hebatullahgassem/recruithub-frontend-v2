@@ -7,23 +7,18 @@ import { TbCancel } from "react-icons/tb";
 import { FaEdit, FaMapMarkerAlt, FaRegClock, FaBriefcase, FaRegBuilding } from "react-icons/fa";
 import { IoIosCloudDone } from "react-icons/io";
 import { 
-MdOutlineWork,
-MdOutlineAttachMoney,
-MdBusinessCenter,
+// MdOutlineWork,
+// MdOutlineAttachMoney,
+// MdBusinessCenter,
 MdWorkOutline,
 MdOutlineBusinessCenter
  } from "react-icons/md";
 import { BsCalendarDate, BsLightningCharge } from "react-icons/bs";
-import { BsTools } from "react-icons/bs";
+// import { BsTools } from "react-icons/bs";
 import "../../ComponentsStyles/job/job_details.css";
 import { showConfirmToast, showErrorToast } from "../../confirmAlert/toastConfirm";
-// interface JobDetailsProps {
-//   job: any
-//   refetch: () => void
-// }
 
 function JobDetails({ job, refetch }) {
-  console.log(job);
   if (!job) return null;
   const { user, isLight } = useContext(userContext);
   const navigate = useNavigate();
@@ -40,9 +35,7 @@ function JobDetails({ job, refetch }) {
         message: "Are you sure you want to deactivate this job?", 
         onConfirm: async () => {
           // Implement the deactivation logic here
-          console.log("Deactivating job with ID:", id);
           const res = await patchJob(id, { status: 0 });
-          console.log(res);
           refetch();
         },
         isLight: isLight
@@ -55,9 +48,7 @@ function JobDetails({ job, refetch }) {
         message: "Are you sure you want to activate this job?", 
         onConfirm: async () => {
           // Implement the activation logic here
-          console.log("Activating job with ID:", id);
           const res = await patchJob(id, { status: 1 });
-          console.log(res);
           refetch();
         }
         ,isLight: isLight

@@ -157,8 +157,6 @@ const EditPersonalCom = () => {
     }
   };
 
-  // console.log("Image source:", localData.img);
-
 
   const validateForm = () => {
     const requiredFields = ["name", "location", "phone"];

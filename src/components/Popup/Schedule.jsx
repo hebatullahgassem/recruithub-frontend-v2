@@ -32,7 +32,6 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
   const [meetingLink, setMeetingLink] = useState("");
   const [loading, setLoading] = useState(false);
   const{isLight} = useContext(userContext)
-  console.log(phase)
   const isMobile = useMediaQuery("(max-width:768px)");
   // Populate state with applicant's existing interview details
   useEffect(() => {
@@ -66,20 +65,8 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         interview_link: meetingLink,
         phase,
       };
-      // if (phase === 3) {
-      //   updateData.interview_link = meetingLink;
-      //   updateData.interview_time =
-      //     dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
-      // } else if (phase === 4) {
-      //   updateData.hr_link = meetingLink;
-      //   updateData.hr_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
-      // } else if (phase === 5) {
-      //   updateData.offer_link = meetingLink;
-      //   updateData.offer_time = dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm");
-      // }
-      console.log(updateData)
       const response = await axios.patch(
-        `http://127.0.0.1:8000/applications/${applicant.id}/schedule_interview/`,
+        `${import.meta.env.VITE_BACKEND}/applications/${applicant.id}/schedule_interview/`,
         updateData,
         {
           headers: {
@@ -87,7 +74,6 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
           },
         }
       );
-      console.log("Update successful:", response.data);
       
       handleClose();
       const message = `Interview scheduled for ${applicant.user_name} on ${dayjs(
@@ -113,7 +99,7 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
       setLoading(true);
 
       const response = await axios.patch(
-        `http://127.0.0.1:8000/applications/${applicant.id}/set_assessment_link/`,
+        `${import.meta.env.VITE_BACKEND}/applications/${applicant.id}/set_assessment_link/`,
         { assessment_link: meetingLink },
         {
           headers: {
@@ -122,7 +108,6 @@ const CompanySchedule = ({ applicant, phase, handleClose }) => {
         }
       );
 
-      console.log("Assessment link updated successfully:", response.data);
       showSuccessToast("Assessment link updated successfully.", 2000, isLight);
       handleClose();
     } catch (error) {

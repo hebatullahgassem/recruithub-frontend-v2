@@ -50,7 +50,6 @@ function AnswerBox({ applicant, phase, next, fail }) {
                 ? (() => {
                     try {
                       const parsed = JSON.parse(answer.answer_text);
-                      console.log("Parsed answer:", parsed, Array.isArray(parsed));
                       return Array.isArray(parsed) ? parsed.join(", ").toString() : parsed.toString();
                     } catch {
                       return answer.answer_text.toString();

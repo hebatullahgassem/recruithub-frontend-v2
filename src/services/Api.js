@@ -13,7 +13,7 @@ export const AxiosApi = axios.create({
 // Function to get the reset token by email
 export const getResetToken = async (email) => {
   try {
-    const response = await axios.post(`${API_URL}/password-reset/get-token/`, { email });
+    const response = await axios.post(`${API_BASE_URL}/password-reset/get-token/`, { email });
     return response.data;  // Return the response data (which should include the token)
   } catch (error) {
     throw new Error('Unable to fetch the token. Please try again later.');
@@ -23,7 +23,7 @@ export const getResetToken = async (email) => {
 // Function to confirm password reset
 export const resetPassword = async (email, token, newPassword) => {
   try {
-    const response = await axios.post(`${API_URL}/password-reset/confirm/`, {
+    const response = await axios.post(`${API_BASE_URL}/password-reset/confirm/`, {
       email,
       token,
       new_password: newPassword,

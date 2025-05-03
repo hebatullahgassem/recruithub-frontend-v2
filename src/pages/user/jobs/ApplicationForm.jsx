@@ -36,8 +36,6 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
   const [cv, setCv] = useState(user.cv || null);
   const [cvNew, setCvNew] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // console.log("Questions data received:", questions);
-  console.log("Saved Answers:", answers);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const primaryColor = "#e53946"
   const backgroundColor = isLight ? "#ffffff" : "#121212"
@@ -95,7 +93,6 @@ const ApplicationForm = ({ questions, answers: savedAnswers, application, refetc
           return;
         }
         setUser(cvRes)
-        console.log("CV Upload Response:", cvRes);
         await patchApplication(application.id,{'status': '2'})
         showSuccessToast("Application submitted successfully", 2000, isLight);
         refetch()

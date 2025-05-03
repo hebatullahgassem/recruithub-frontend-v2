@@ -74,9 +74,6 @@ const EditEducation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log("User ID:", userId);
-  console.log("Education Data:", education);
-
   // Consistent Color Palette
   const primaryColor = isLight ? "#901b26" : "#d7323e"; // IIT Maroon
   const secondaryColor = isLight ? "#d7323e" : "#901b26"; // Complementary Gold

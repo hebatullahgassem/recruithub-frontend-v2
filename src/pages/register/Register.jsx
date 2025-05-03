@@ -132,7 +132,6 @@ const Register = () => {
         );
       }
     }
-    console.log(emailError, NatIdError, nameError, passwordError);
   };
 
   const handleUserTypeToggle = () => {
@@ -149,7 +148,6 @@ const Register = () => {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    console.log("Form submitted:", formData);
 
     const emailExists = await checkEmailExists(formData.email);
     if (emailExists) {

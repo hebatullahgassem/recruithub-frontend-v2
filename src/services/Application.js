@@ -14,7 +14,6 @@ export const getAllApplications = async () => {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
   });
-  console.log("Applications response:", response);
   return response.data;
 } catch (error) {
   console.error("Error fetching applications:", error);
@@ -26,7 +25,6 @@ export const getAllApplications = async () => {
 
 // Get Applications by User ID
 export const getApplicationsByUser = async ({ filters = {}, page = 1, pageSize = 10 }) => {
-  console.log(filters);
   const params = new URLSearchParams({
     ...filters,
     page,

@@ -70,14 +70,12 @@ function SingleJob() {
     queryKey: ["job", id],
     queryFn: async () => {
       const res = await getJobById(id);
-      console.log(res);
       return res;
     },
   });
   useEffect(() => {
     if (!user) return;
     if (!jobData) return;
-    console.log(user, jobData);
 
     if (
       user.user_type !== "COMPANY" ||

@@ -376,7 +376,6 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
     )
   }
 
-  console.log(applicationData)
   const appStatus = Number.parseInt(applicationData.status) - 1
 
   // Convert phaseTime to calendar events
@@ -459,8 +458,6 @@ const Meeting = ({ phase, clickedColumn, applicationData }) => {
         return <FaCalendarAlt className="phase-icon" />
     }
   }
-
-  console.log("Application :", appStatus, clickedColumn)
   return (
     <div className={`meeting-container ${isLight ? "light-mode" : "dark-mode"}`}>
       <Paper elevation={3} className="meeting-paper">

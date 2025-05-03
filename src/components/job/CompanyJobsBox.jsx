@@ -4,7 +4,6 @@ import { Link } from "react-router";
 
 const CompanyJobsBox = ({ profileData, job }) => {
   const { isLight } = useContext(userContext);
-  console.log("profileData",profileData);
   const textColor = isLight ? "#121212" : "#fff";
   const style = {
     card: {
@@ -29,7 +28,6 @@ const CompanyJobsBox = ({ profileData, job }) => {
     icon: { fill: textColor, width: "24px", height: "24px" },
   };
 
-  console.log(job);
   return (
     <div style={style.card} className="mt-2 rounded-lg p-4">
       <div>

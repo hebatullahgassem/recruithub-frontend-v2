@@ -43,7 +43,7 @@ function ForgotPassword() {
     e.preventDefault();  // prevent form refresh
     setIsSubmitting(true); 
     try {
-      await axios.post("http://127.0.0.1:8000/user/password-reset/", { email });
+      await axios.post(`${import.meta.env.VITE_BACKEND}/user/password-reset/`, { email });
       // setMessage("Password reset email sent. Please check your inbox.");
       // setError("");
       showSuccessToast("Password reset email sent. Please check your inbox.", 2000, isLight)
@@ -53,10 +53,7 @@ function ForgotPassword() {
       })
       setCountdown(30);
     } catch (err) {
-      // setError("Failed to send password reset email.");
-      // setMessage("");
       const errorMessage = err.response?.data?.error || "Failed to send password reset email."
-      console.log(err)
       showErrorToast(errorMessage, 2000, isLight)
       setStatus({
         type: "error",

@@ -12,22 +12,12 @@ export function UserContextProvider({ children }) {
   const [update, setUpdate] = useState({ user: {}, settings: {} });
 
   const refetchUser = async (tok) => {
-    console.log(tok);
     if (!token && !tok && !localStorage.getItem("token")) return; // Exit if no token
     try {
       const response = await getUser(tok || token);
-      // console.log(response);
-      // Safely parse JSON fields
-      // const parsedResponse = {
-      //   ...response,
-      //   skills: safeParseJSON(response.skills, []),
-      //   education: safeParseJSON(response.education, []),
-      //   experience: safeParseJSON(response.experience, []),
-      // };
       setUser(response);
       setToken(localStorage.getItem("token") || tok || token);
       setLoading(false);
-      console.log(response);
     } catch (error) {
       setLoading(false); 
       console.error("Error fetching user data:", error);

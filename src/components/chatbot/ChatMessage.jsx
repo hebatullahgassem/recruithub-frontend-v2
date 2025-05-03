@@ -7,7 +7,6 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
   const [isTyping, setIsTyping] = useState(false);
   const {isLight} = useContext(userContext)
   useEffect(() => {
-    console.log(response, isLast);
     if (isLast && response === "") {
       setIsTyping(true);
       return;
@@ -30,9 +29,6 @@ const ChatMessage = ({ question, response, isLast = false, quota }) => {
       setIsTyping(false);
     }
   }, [response, isLast]);
-  useEffect(() => {
-    console.log(isTyping);
-  }, [isTyping]);
   return (
     <div
       style={{

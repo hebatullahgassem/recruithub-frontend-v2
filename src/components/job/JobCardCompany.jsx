@@ -52,12 +52,8 @@ const JobCardCompany = ({ job, isSelected }) => {
       navigate(`/company/jobEdit/${job?.id}`)
     }
   
-    // const applicants_count = job?.applicants || 0;
     // Calculate applicants badge
-    console.log("job applications",);
     const getApplicantsBadge = () => {
-      console.log("job id", job?.id);
-      console.log("job applications length", job?.id.applications?.length);
       const count = job?.id.applications?.length || 0
       if (count === 0) return { text: "No applicants", className: "no-applicants" }
       if (count < 5) return { text: `${count} applicants`, className: "few-applicants" }

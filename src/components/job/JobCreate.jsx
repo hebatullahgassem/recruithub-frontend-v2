@@ -87,7 +87,6 @@ const JobCreate = () => {
     queryFn: async () => {
       if (jobId) {
         const res = await getJobById(jobId);
-        console.log(res);
         return res;
       } else return null;
     },
@@ -133,7 +132,6 @@ const JobCreate = () => {
     const updatedQuestions = [...questions];
     updatedQuestions[index][key] = value;
     setQuestions(updatedQuestions);
-    console.log(index, key, value);
   };
 
   const addChoice = (index) => {
@@ -185,7 +183,6 @@ const JobCreate = () => {
           company: `${user?.id}`,
         });
         setQuestions([]);
-        console.log("Job created successfully!", response.body);
         showSuccessToast("Job created successfully!", 2000, isLight);
         navigate("/company/jobs");
       } else {

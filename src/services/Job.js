@@ -20,9 +20,7 @@ export const getAllJobs = async ({filters = {}, page = 1, pageSize = 10}) => {
     page,
     page_size: pageSize,
   });
-  // console.log(filters)
   const response = await AxiosApi.get(`jobs/?${params.toString()}`);
-  // console.log(response)
   return response;
 };
 

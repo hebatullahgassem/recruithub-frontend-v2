@@ -3,7 +3,6 @@ import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 function Boolean({ question, setValue, answer, value }) {
   const filteredAnswer = answer.filter((item) => item.question === question.id);
   const isDisabled = filteredAnswer.length > 0;
-  console.log(value)
   return (
     <>
       <RadioGroup
