@@ -167,7 +167,7 @@ const JobCreate = () => {
     jobPayload.company = user?.id; // Ensure company ID is set correctly
 
     try {
-      const response = await fetch("http://localhost:8000/jobs/", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND}jobs/`, {
         // Adjust backend API
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +220,7 @@ const JobCreate = () => {
     jobPayload.company = user?.id; // Ensure company ID is set correctly
 
     try {
-      const response = await fetch(`http://localhost:8000/jobs/${jobId}/`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND}jobs/${jobId}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jobPayload),

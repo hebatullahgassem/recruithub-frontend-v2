@@ -55,7 +55,7 @@ const Register = () => {
   const checkEmailExists = async (email) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/check-email/",
+        `${import.meta.env.VITE_BACKEND}user/check-email/`,
         { email }
       );
       if (response.data.exists) {
@@ -238,7 +238,7 @@ const Register = () => {
   const handleEmailCheck = async () => {
     try {
       const emailCheckResponse = await axios.post(
-        "http://localhost:8000/user/check-email/",
+        `${import.meta.env.VITE_BACKEND}user/check-email/`,
         {
           email: formData.email,
         }
@@ -257,7 +257,7 @@ const Register = () => {
   const handleUsernameCheck = async () => {
     try {
       const usernameCheckResponse = await axios.post(
-        "http://localhost:8000/user/check-username/",
+        `${import.meta.env.VITE_BACKEND}user/check-username/`,
         {
           username: formData.username,
         }

@@ -49,7 +49,7 @@ const VerifyOTP = () => {
     const fullOtp = otp.join("");
     
     try {
-      const response = await axios.post("http://localhost:8000/user/verify-otp/", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}user/verify-otp/`, {
         email: email || stateEmail,
         otp: fullOtp,
       });
@@ -74,7 +74,7 @@ const VerifyOTP = () => {
     setSeconds(60);  // Reset the timer
 
     try {
-      const response = await axios.post("http://localhost:8000/user/resend-otp/", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}user/resend-otp/`, {
         email: email || stateEmail,
       });
       

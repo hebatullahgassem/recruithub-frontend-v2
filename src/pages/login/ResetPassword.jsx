@@ -28,7 +28,7 @@ const ResetPassword = () => {
     const fetchToken = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/user/password-reset/get-token/${email}/`
+          `${import.meta.env.VITE_BACKEND}user/password-reset/get-token/${email}/`
         );
         setToken(response.data.token);
       } catch (err) {
@@ -129,7 +129,7 @@ const ResetPassword = () => {
     // Proceed with password reset
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/password-reset/confirm/",
+        `${import.meta.env.VITE_BACKEND}user/password-reset/confirm/`,
         { email, token, new_password: newPassword }
       );
       setStatus({

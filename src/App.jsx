@@ -1,42 +1,24 @@
+console.log(import.meta.env);
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
-import JobCreate from "./components/job/JobCreate";
 import { ProfileProvider } from "./context/ProfileContext";
-import CompanyVerification from "./pages/admin/CompanyVerification.jsx";
 
 import { ComProfileProvider } from "./context/ComProfileContext";
 import { UserContextProvider } from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AxiosProvider from "./services/AxiosProvider";
-import Login from "./pages/login/Login";
-import VerifyOTP from "./pages/otp/VerifyOTP";
-import ForgotPassword from "./pages/login/ForgotPassword";
-import ResetPassword from "./pages/login/ResetPassword";
-import TalentProfile from "./pages/company/talents/TalentProfile";
-import ComProfile from "./pages/company/profile/ComProfile";
-import EditPersonalCom from "./pages/company/profile/edit-profile/EditPersonalCom.jsx";
-import VerificationForm from "./pages/register/verificationForm.jsx";
-// import Users from "./pages/admin/Users.jsx";
-import { Spinner } from "react-bootstrap";
-// import { ToastProvider } from "./confirmAlert/Toast";
 import { Toaster } from "react-hot-toast";
-// import ChatBot from "./components/chatbot/ChatBot.jsx";
 import PopupChatBot from "./components/chatbot/PopUpChatBot.jsx";
-import { LinearProgress, Typography } from "@mui/material";
 import Loading from "./pages/helpers/Loading.jsx";
 import CustomPopup from "./components/Popup/CustomPopup.jsx";
-import jobCardComp from "./components/job/JobCardComp.jsx";
 import CompanyProtected from "./ProtectedRoute/CompanyProtected.jsx";
 import UserProtected from "./ProtectedRoute/UserProtected.jsx";
 import AdminProtected from "./ProtectedRoute/AdminProtected.jsx";
 import AccountProtected from "./ProtectedRoute/AccountProtected.jsx";
-// import Dashboard from "./admin/Dashboard.jsx";
-// import Jobseekers from "./admin/Jobseekers.jsx";
-// import Companies from "./admin/Companies.jsx";
 
 function App() {
   const Home = React.lazy(() => import("./pages/home/Home"));
@@ -109,9 +91,6 @@ function App() {
   // const Users = React.lazy(() => import("./pages/admin/Users.jsx"));
   const JobCreate = React.lazy(() => import("./components/job/JobCreate"));
   const Accounts = React.lazy(() => import("./components/accounts/Accounts"));
-  const jobCardComp = React.lazy(() =>
-    import("./components/job/JobCardComp.jsx")
-  );
   return (
     <>
       <QueryClientProvider client={new QueryClient()}>
@@ -137,9 +116,6 @@ function App() {
                     <Suspense fallback={<Loading />}>
                       <Routes>
                         <Route path="/" element={<Home />} />
-                        {/* <Route path="/admin/users" element={<Users />} /> */}
-                        {/* <Route path="/admin/dashboard" element={<Dashboard />} />
-                      <Route path="/admin/jobseekers" element={<Jobseekers />} /> */}
                      
                         <Route
                           path="/forgot-password"

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const getUnverifiedCompanies = async (page = 1, pageSize = 10, searchQuery = "") => {
   const token = localStorage.getItem('token');
-  const response = await axios.get("http://localhost:8000/user/admin/company/", {
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND}user/admin/company/`, {
     params: {
       page: page,
       page_size: pageSize,
@@ -28,7 +28,7 @@ export const verifyCompany = async (companyId) => {
 // --- Itian Functions ---
 export const getItians = async (page = 1, pageSize = 10, searchQuery = "") => {
   const token = localStorage.getItem('token');
-    const response = await axios.get("http://localhost:8000/user/admin/itian/", {
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND}user/admin/itian/`, {
       params: {
         page: page,
         page_size: pageSize,

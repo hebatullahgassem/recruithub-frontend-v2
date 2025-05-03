@@ -4,7 +4,7 @@ import { AxiosApi } from "./Api";
 // Login Function
 export const loginUser = async (email, password) => {
 
-  const response = await axios.post("http://localhost:8000/user/token/", {
+  const response = await axios.post(`${import.meta.env.VITE_BACKEND}user/token/`, {
     email,
     password,
   });
@@ -20,7 +20,7 @@ export const loginUser = async (email, password) => {
 
 export const signupUser = async (userData) => {
   try {
-    const response = await axios.post("http://localhost:8000/user/register/", userData);
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND}user/register/`, userData);
     return response.data;
   } catch (error) {
     throw error;

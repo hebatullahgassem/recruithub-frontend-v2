@@ -143,7 +143,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
           // Perform bulk update
           const promises = selected.map((applicantId) =>
             axios.patch(
-              `http://localhost:8000/applications/${applicantId}/${endpoint}/`,
+              `${import.meta.env.VITE_BACKEND}applications/${applicantId}/${endpoint}/`,
               data,
               {
                 headers: {
@@ -229,7 +229,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
         if (phase < 5) {
           try {
             const response = await axios.patch(
-              `http://localhost:8000/applications/${applicant}/update_status/`,
+              `${import.meta.env.VITE_BACKEND}applications/${applicant}/update_status/`,
               { status: String(phase + 2) },
               {
                 headers: {
@@ -258,7 +258,7 @@ function ApplicantsTable({ phase, setFilters, fetch }) {
       onConfirm: async () => {
         try {
           const response = await axios.patch(
-            `http://localhost:8000/applications/${applicant}/update_status/`,
+            `${import.meta.env.VITE_BACKEND}applications/${applicant}/update_status/`,
             { fail: true, status: String(phase + 1) },
             {
               headers: {
