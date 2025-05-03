@@ -71,7 +71,7 @@ const CustomAutoComplete = ({
       "Lead",
       "Manager",
   ]
-  }else{
+  }else if(!options){
     options = [
       "Game Development",
       "Graphic Design",

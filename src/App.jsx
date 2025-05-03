@@ -17,14 +17,7 @@ import CustomPopup from "./components/Popup/CustomPopup.jsx";
 import CompanyProtected from "./ProtectedRoute/CompanyProtected.jsx";
 import UserProtected from "./ProtectedRoute/UserProtected.jsx";
 import AdminProtected from "./ProtectedRoute/AdminProtected.jsx";
-<<<<<<< Updated upstream
 import AccountProtected from "./ProtectedRoute/AccountProtected.jsx";
-=======
-import AccountProtected from "./ProtectedRoute/accountProtected.jsx";
-// import Dashboard from "./admin/Dashboard.jsx";
-// import Jobseekers from "./admin/Jobseekers.jsx";
-// import Companies from "./admin/Companies.jsx";
->>>>>>> Stashed changes
 
 function App() {
   const Home = React.lazy(() => import("./pages/home/Home"));
