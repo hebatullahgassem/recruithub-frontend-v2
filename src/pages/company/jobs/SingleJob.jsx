@@ -94,6 +94,37 @@ function SingleJob() {
         <CircularProgress size={60} sx={{ color: primaryColor }} />
       </Box>
     )
+
+    if (jobError)
+      return (
+        <Box
+          className={`single-job-container ${isLight ? "light-mode" : "dark-mode"}`}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "70vh",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography variant="h5" sx={{ color: primaryColor, fontWeight: 600 }}>
+            Error loading job data
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/company/jobs")}
+            sx={{
+              backgroundColor: primaryColor,
+              "&:hover": {
+                backgroundColor: "#c62a37",
+              },
+            }}
+          >
+            Back to Jobs
+          </Button>
+        </Box>
+      )
     if (jobError)
       return (
         <Box
@@ -126,132 +157,119 @@ function SingleJob() {
       )
 
   return (
-    <div
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        backgroundColor: theme.background,
-        color: theme.text,
-        transition: "background-color 0.3s ease, color 0.3s ease",
-        padding: "20px",
-      }}
-    >
-      <Box
+    <div className={`single-job-container ${isLight ? "light-mode" : "dark-mode"}`}>
+    <Box
       sx={{
-        padding: { xs: 6, sm: 6 },
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        color: theme.text,
-        width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+        width: { xs: "100%", sm: "95%", md: "90%", lg: "80%" },
         mx: "auto",
-        my: 4,
-        borderRadius: "12px",
-        boxShadow: theme.shadow,
-        transition: "all 0.3s ease",
+        my: 2,
       }}
+    >
+      <Paper
+        elevation={2}
+        className="job-details-card"
+        sx={{
+          backgroundColor: cardBackground,
+          borderRadius: "16px",
+          overflow: "hidden",
+          border: `1px solid ${borderColor}`,
+        }}
       >
-    <Paper
-      elevation={2}
-      className="job-details-card"
-      sx={{
-        backgroundColor: cardBackground,
-        borderRadius: "12px",
-        overflow: "hidden",
-        border: `1px solid ${borderColor}`,
-      }}
-    >
-      <JobDetails job={jobData} refetch={refetch} />
-    </Paper>
+         <div className="job-page-content">
+        <JobDetails job={jobData} refetch={refetch} />
+        </div>
+      </Paper>
 
-    <Paper
-      elevation={3}
-      className="recruitment-panel"
-      sx={{
-        backgroundColor: cardBackground,
-        borderRadius: "12px",
-        border: `1px solid ${borderColor}`,
-        mt: 3,
-      }}
-    >
-      <Box className="view-toggle">
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            px: 3,
-            py: 2,
-            borderBottom: `1px solid ${borderColor}`,
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 600, color: textColor }}>
-            Recruitment Process
-          </Typography>
+      <Paper
+        elevation={3}
+        className="recruitment-panel"
+        sx={{
+          backgroundColor: cardBackground,
+          borderRadius: "16px",
+          border: `1px solid ${borderColor}`,
+          mt: 3,
+        }}
+      >
+        <Box className="view-toggle">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              px: 3,
+              py: 2,
+              borderBottom: `1px solid ${borderColor}`,
+            }}
+          >
+            <Typography variant="h5" sx={{ fontWeight: 600, color: textColor }}>
+              Recruitment Process
+            </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Box
-              onClick={() => setCalender(false)}
-              className={`toggle-option ${!calender ? "active" : ""}`}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                backgroundColor: !calender ? `${primaryColor}10` : "transparent",
-                color: !calender ? primaryColor : textColor,
-                transition: "all 0.2s ease",
-                "&:hover": {
-                  backgroundColor: `${primaryColor}10`,
-                },
-              }}
-            >
-              <People fontSize="small" />
-              <Typography sx={{ fontWeight: 500, display: { xs: "none", sm: "block" } }}>Applicants</Typography>
-            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                onClick={() => setCalender(false)}
+                className={`toggle-option ${!calender ? "active" : ""}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: !calender ? `${primaryColor}10` : "transparent",
+                  color: !calender ? primaryColor : textColor,
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: `${primaryColor}10`,
+                  },
+                }}
+              >
+                <People fontSize="small" />
+                <Typography sx={{ fontWeight: 500, display: { xs: "none", sm: "block" } }}>Applicants</Typography>
+              </Box>
 
-            <DynamicSwitcher setter={setCalender} getter={calender} />
+              <DynamicSwitcher setter={setCalender} getter={calender} />
 
-            <Box
-              onClick={() => setCalender(true)}
-              className={`toggle-option ${calender ? "active" : ""}`}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                backgroundColor: calender ? `${primaryColor}10` : "transparent",
-                color: calender ? primaryColor : textColor,
-                transition: "all 0.2s ease",
-                "&:hover": {
-                  backgroundColor: `${primaryColor}10`,
-                },
-              }}
-            >
-              <CalendarMonth fontSize="small" />
-              <Typography sx={{ fontWeight: 500, display: { xs: "none", sm: "block" } }}>Meetings</Typography>
+              <Box
+                onClick={() => setCalender(true)}
+                className={`toggle-option ${calender ? "active" : ""}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: calender ? `${primaryColor}10` : "transparent",
+                  color: calender ? primaryColor : textColor,
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: `${primaryColor}10`,
+                  },
+                }}
+              >
+                <CalendarMonth fontSize="small" />
+                <Typography sx={{ fontWeight: 500, display: { xs: "none", sm: "block" } }}>Meetings</Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
 
-      <Box className="process-content">
-        {!calender ? (
-          <>
-            <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases} />
-            <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
-          </>
-        ) : (
-          <>
-            <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases.slice(2, 5)} />
-            <MeetingsTable column={clickedColumn} phases={phases.slice(2, 5)} />
-          </>
-        )}
-      </Box>
-    </Paper>
+        <Box className="process-content">
+          {!calender ? (
+            <>
+              <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases} />
+              <ProcessCard column={clickedColumn} phases={phases} job={jobData} />
+            </>
+          ) : (
+            <>
+              <ProcessColumn setter={setClickedColumn} column={clickedColumn} phases={phases.slice(2, 5)} />
+              <MeetingsTable column={clickedColumn} phases={phases.slice(2, 5)} />
+            </>
+          )}
+        </Box>
+      </Paper>
     </Box>
   </div>
   );
