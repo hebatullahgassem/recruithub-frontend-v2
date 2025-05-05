@@ -75,7 +75,6 @@ export function UserContextProvider({ children }) {
           branch: safeParseJSON(response.branch, []),
           grad_year: safeParseJSON(response.iti_grad_year, []),
         };
-        console.log(parsedResponse)
         setUser(parsedResponse);
       } catch (error) {
         console.error("Error fetching user data:", error);
