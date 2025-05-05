@@ -10,6 +10,33 @@ export const AxiosApi = axios.create({
   },
 });
 
+export const getTracks = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/user/tracks/`, {
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Unable to fetch tracks. Please try again later.');
+  }
+};
+
+export const getBranches = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/user/branches/`, {
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Unable to fetch branches. Please try again later.');
+  }
+};
+
+
 // Function to get the reset token by email
 export const getResetToken = async (email) => {
   try {

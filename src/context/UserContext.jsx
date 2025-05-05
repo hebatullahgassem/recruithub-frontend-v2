@@ -71,7 +71,11 @@ export function UserContextProvider({ children }) {
           skills: safeParseJSON(response.skills, []),
           education: safeParseJSON(response.education, []),
           experience: safeParseJSON(response.experience, []),
+          track: safeParseJSON(response.track, []),
+          branch: safeParseJSON(response.branch, []),
+          grad_year: safeParseJSON(response.iti_grad_year, []),
         };
+        console.log(parsedResponse)
         setUser(parsedResponse);
       } catch (error) {
         console.error("Error fetching user data:", error);

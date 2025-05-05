@@ -43,6 +43,9 @@ function App() {
   const EditCV = React.lazy(() =>
     import("./pages/user/profile/edit-profile/edit-cv")
   );
+  const EditITI = React.lazy(() =>
+    import("./pages/user/profile/edit-profile/edit-iti")
+  );
   const UserSaved = React.lazy(() => import("./pages/user/saved/Saved"));
   const UserApplications = React.lazy(() =>
     import("./pages/user/applications/Applications")
@@ -185,6 +188,10 @@ function App() {
                         <Route
                           path="/applicant/profile/edit-cv"
                           element={<UserProtected><EditCV /></UserProtected>}
+                        />
+                        <Route
+                          path="/applicant/profile/edit-iti"
+                          element={<UserProtected><EditITI /></UserProtected>}
                         />
                         <Route
                           path="/applicant/recommended"
