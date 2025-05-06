@@ -686,7 +686,7 @@ const UserProfile = () => {
 
                   {/* ITI Track and Branch Selection */}
                   {user.track && user.branch ? (
-                  <Container sx={{ mt: 2, p: 3, border: "1px solid #ccc", borderRadius: 2,  backgroundColor: isLight ? "white" : "transparent", border: isLight ? "1px solid #ccc" : "none"}}>
+                  <Container sx={{ mt: 2, p: 3, borderRadius: 2,  backgroundColor: isLight ? "white" : "transparent", border: isLight ? "1px solid #ccc" : "none"}}>
                     <Typography variant="subtitle1" gutterBottom>
                       <strong>Track:</strong> {user.track.name}
                     </Typography>
