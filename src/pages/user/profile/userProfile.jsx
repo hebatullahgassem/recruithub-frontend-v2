@@ -669,7 +669,7 @@ const UserProfile = () => {
 
               {/* ITI Section */}
               <Grow in={true} timeout={1200} style={{ backgroundColor: lightBackgroundColor }}>
-                <ProfileCard elevation={3} sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3 }}>
+                <ProfileCard elevation={3} sx={{ p: isMobile ? 2 : 3, mb: isMobile ? 2 : 3, color: isLight ? "gray" : "white", }}>
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
                     <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
                       <School sx={{ mr: 1, color: secondaryColor }} />
@@ -686,7 +686,7 @@ const UserProfile = () => {
 
                   {/* ITI Track and Branch Selection */}
                   {user.track && user.branch ? (
-                  <Container sx={{ mt: 2, p: 3, border: "1px solid #ccc", borderRadius: 2, backgroundColor: "#fafafa" }}>
+                  <Container sx={{ mt: 2, p: 3, border: "1px solid #ccc", borderRadius: 2,  backgroundColor: isLight ? "white" : "transparent", border: isLight ? "1px solid #ccc" : "none"}}>
                     <Typography variant="subtitle1" gutterBottom>
                       <strong>Track:</strong> {user.track.name}
                     </Typography>

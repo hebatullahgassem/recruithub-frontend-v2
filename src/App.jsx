@@ -78,6 +78,8 @@ function App() {
   // );
   const AdminCompany = React.lazy(() => import("./pages/admin/Companies.jsx"));
   const AdminItian = React.lazy(() => import("./pages/admin/Itian.jsx"));
+  const ItiInfo = React.lazy(() => import("./pages/admin/ItiInfo.jsx"));
+
   const AdminRag = React.lazy(() => import("./pages/admin/Rag.jsx"));
   const VerifyOTP = React.lazy(() => import("./pages/otp/VerifyOTP"));
   const ForgotPassword = React.lazy(() =>
@@ -139,7 +141,7 @@ function App() {
                         <Route path="/admin/rag" element={<AdminProtected><AdminRag /></AdminProtected>} />
 
                         <Route path="/admin/itians" element={<AdminProtected><AdminItian /></AdminProtected>} />
-                       
+                        <Route path="/admin/iti-info" element={<AdminProtected><ItiInfo /></AdminProtected>} />
 
                         {/* User Dashboard */}
                         <Route path="/applicant" element={<UserProtected><UserHome /></UserProtected>} />

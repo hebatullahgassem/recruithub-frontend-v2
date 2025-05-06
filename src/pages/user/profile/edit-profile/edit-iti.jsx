@@ -41,7 +41,6 @@ const EditITI = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const locationUserId = location.state?.userId;
   const userId = locationUserId || user?.id;
-
   const [tracks, setTracks] = useState([]);
   const [branches, setBranches] = useState([]);
   const [selectedTrackId, setSelectedTrackId] = useState("");
@@ -80,8 +79,8 @@ const EditITI = () => {
           AxiosApi.get(`user/jobseekers/${userId}/`),
         ]);
   
-        setTracks(trackRes.results);
-        setBranches(branchRes.results);
+        setTracks(trackRes);
+        setBranches(branchRes);
   
         const userData = userRes.data;
         setSelectedTrackId(userData.track?.id || "");
@@ -136,7 +135,27 @@ const EditITI = () => {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ py: 4 }}>
+    <div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: isLight ? "#transparent" : "#2d2829",
+        color: theme.text,
+        transition: "background-color 0.3s ease, color 0.3s ease",
+        padding: "20px",
+      }}
+    >
+    <Container maxWidth="sm" sx={{ 
+      py: 4, 
+      backgroundColor: isLight ? "#transparent" : "#2d2829", 
+      color: isLight ? "#2d2829" : "white", 
+      padding: { xs: 2, sm: 3 },
+          width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+          mx: "auto",
+          my: 4,
+          borderRadius: "12px",
+          boxShadow: theme.shadow,
+          transition: "all 0.3s ease", }}>
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h4"
@@ -157,7 +176,37 @@ const EditITI = () => {
       <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{
+              backgroundColor: isLight
+              ? "white"
+              : "rgba(255, 255, 255, 0.05)",
+            borderRadius: "8px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "8px",
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#882024",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#882024",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: isLight
+                ? "rgba(0, 0, 0, 0.6)"
+                : "rgba(255, 255, 255, 0.7)",
+              "&.Mui-focused": {
+                color: "white",
+              },
+            },
+            "& .MuiInputBase-input": {
+              color: theme.text,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: isLight
+                ? "rgba(0, 0, 0, 0.23)"
+                : "rgba(255, 255, 255, 0.23)",
+            },
+            }}>
               <InputLabel id="track-label">Track</InputLabel>
               <Select
                 labelId="track-label"
@@ -174,7 +223,37 @@ const EditITI = () => {
           </Grid>
 
           <Grid item xs={6}>
-          <FormControl fullWidth required>
+          <FormControl fullWidth required sx={{
+            backgroundColor: isLight
+            ? "white"
+            : "rgba(255, 255, 255, 0.05)",
+          borderRadius: "8px",
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "8px",
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#882024",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#882024",
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: isLight
+              ? "rgba(0, 0, 0, 0.6)"
+              : "rgba(255, 255, 255, 0.7)",
+            "&.Mui-focused": {
+              color: "white",
+            },
+          },
+          "& .MuiInputBase-input": {
+            color: theme.text,
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: isLight
+              ? "rgba(0, 0, 0, 0.23)"
+              : "rgba(255, 255, 255, 0.23)",
+          },
+          }}>
             <InputLabel id="track-grad">Graduation Year</InputLabel>
             <Select
               labelId="track-grad"
@@ -191,7 +270,37 @@ const EditITI = () => {
         </Grid>
 
           <Grid item xs={12}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{
+              backgroundColor: isLight
+              ? "white"
+              : "rgba(255, 255, 255, 0.05)",
+            borderRadius: "8px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "8px",
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#882024",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#882024",
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: isLight
+                ? "rgba(0, 0, 0, 0.6)"
+                : "rgba(255, 255, 255, 0.7)",
+              "&.Mui-focused": {
+                color: "white",
+              },
+            },
+            "& .MuiInputBase-input": {
+              color: theme.text,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: isLight
+                ? "rgba(0, 0, 0, 0.23)"
+                : "rgba(255, 255, 255, 0.23)",
+            },
+            }}>
               <InputLabel id="branch-label">Branch</InputLabel>
               <Select
                 labelId="branch-label"
@@ -232,6 +341,7 @@ const EditITI = () => {
         </Grid>
       </form>
     </Container>
+    </div>
   );
 };
 
